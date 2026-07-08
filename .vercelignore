@@ -1,0 +1,8 @@
+Turbology.xlsx
+ventas_data.json
+store2cocina.json
+build_ventas.py
+_inject_ventas_ui.py
+Turbology_con_cocina.csv
+*.csv
+_patch_*.py
