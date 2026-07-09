@@ -1,2 +1,5 @@
 .DS_Store
 _patch_*.py
+Turbology_prev.xlsx
+Turbology_fresh.xlsx
+D_data.json
