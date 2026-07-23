@@ -411,7 +411,7 @@ function update(){
  const pct=sz=>`<span class="warnc">${(100*nCC(sz)/cctot).toFixed(0)}% del total</span>`;
  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
  document.getElementById('kpis').innerHTML=[
-  {l:'Avg RTWT (4 sem. móviles)', v:A.rtwt==null?'–':`${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
+  {l:'Avg RTWT (4 sem. móviles)', v:A.rtwt==null?'–':`<span style="white-space:nowrap">${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
   {l:'Cobertura efectiva vs ideal', v:fmt(covRes,1)+'%', d:delta(1, (covCur!=null&&covRes!=null)?+(covRes-covCur).toFixed(1):null, false)+' pts vs asignada'},
   {l:'Marcas en 3.0 km (ideal)', v:nCC(3000)+' / '+cctot, d:pct(3000)},
   {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700)},
