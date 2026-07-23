@@ -12,8 +12,9 @@ import sys, json, csv, re, unicodedata, datetime, os
 import openpyxl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-XLSX = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "Turbology.xlsx")
+XLSX = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "KDS_ventas.xlsx")
 STORE2COC = os.path.join(HERE, "store2cocina.json")
+COC2OP = os.path.join(HERE, "cocina2ops.json")
 
 # ---- normalización de marcas (une ventas <-> RTWT) ----
 def norm(s):
@@ -54,6 +55,7 @@ def to_float(x):
 def main():
     wb = openpyxl.load_workbook(XLSX, read_only=True, data_only=True)
     store2coc = json.load(open(STORE2COC, encoding='utf-8')) if os.path.exists(STORE2COC) else {}
+    coc2op = json.load(open(COC2OP, encoding='utf-8')) if os.path.exists(COC2OP) else {}
 
     # ---------- RTWT / cobertura (CSV ya limpio, en metros, mapeado a cocina) ----------
     # Se usa Turbology_con_cocina.csv (misma data de la hoja Raw ya depurada:
@@ -75,7 +77,7 @@ def main():
         if wk_of.get(wk)!=maxd: continue
         brand=rget(r,'Marca'); coc=rget(r,'Cocina') or 'Otra'
         rtv=to_float(rget(r,'Avg RTWT (limpio)')); fin=to_float(rget(r,'Final Size (m)'))
-        rt_rows.append(dict(cb=canon(brand), coc=coc, city=rget(r,'Ciudad'), rt=rtv, fin=fin))
+        rt_rows.append(dict(cb=canon(brand), coc=coc, city=rget(r,'Ciudad'), rt=rtv, fin=fin, op=coc2op.get(coc)))
     rtwt_week = maxd.strftime('%d/%m/%Y') if maxd else '—'
 
     # filas RTWT semana actual y anterior (con ciudad); se indexan por ciudad en compute()
@@ -85,13 +87,15 @@ def main():
         for r in rtc:
             wk=r.get('Semana') or list(r.values())[0]
             if wk_of.get(wk)!=prevd: continue
-            rt_prev_rows.append(dict(cb=canon(rget(r,'Marca')), coc=rget(r,'Cocina') or 'Otra',
-                                     city=rget(r,'Ciudad'),
+            _coc=rget(r,'Cocina') or 'Otra'
+            rt_prev_rows.append(dict(cb=canon(rget(r,'Marca')), coc=_coc,
+                                     city=rget(r,'Ciudad'), op=coc2op.get(_coc),
                                      rt=to_float(rget(r,'Avg RTWT (limpio)')),
                                      fin=to_float(rget(r,'Final Size (m)'))))
 
-    # ---------- VENTAS (hoja Raw ventas) ----------
-    v = list(wb['Raw ventas'].iter_rows(values_only=True))
+    # ---------- VENTAS (KDS: hoja Export, incluye columna 'ops') ----------
+    vsheet = 'Export' if 'Export' in wb.sheetnames else ('Raw ventas' if 'Raw ventas' in wb.sheetnames else wb.sheetnames[0])
+    v = list(wb[vsheet].iter_rows(values_only=True))
     vh = [str(h).strip() if h else '' for h in v[0]]
     vi = {h:i for i,h in enumerate(vh)}
     def vcol(row,name):
@@ -103,7 +107,7 @@ def main():
             try: d=datetime.datetime.fromisoformat(str(d))
             except: continue
         days.add(d.date())
-        recs.append((d.date(), vcol(r,'city'), vcol(r,'kitchen_id'), vcol(r,'brand'), to_float(vcol(r,'Total orders')) or 0))
+        recs.append((d.date(), vcol(r,'city'), vcol(r,'kitchen_id'), vcol(r,'brand'), to_float(vcol(r,'Total orders')) or 0, vcol(r,'ops')))
     lastday=max(days); firstlw=lastday-datetime.timedelta(days=6)
     sales_week=f"{firstlw.strftime('%d/%m')}–{lastday.strftime('%d/%m/%Y')}"
     pfirst=firstlw-datetime.timedelta(days=7); plast=firstlw-datetime.timedelta(days=1)
@@ -113,7 +117,7 @@ def main():
     cocina_names=sorted(set(x['coc'] for x in rt_rows))
     def pretty(name): return name.title() if name.isupper() else name
     disp={}
-    for _,_,_,b,_ in lw_all: disp.setdefault(canon(b), pretty(b.strip()))
+    for _,_,_,b,_,_ in lw_all: disp.setdefault(canon(b), pretty(b.strip()))
 
     def indexrt(rows):
         bc={}
@@ -129,19 +133,21 @@ def main():
         fin=sum(d['fin'])/len(d['fin']) if d['fin'] else None
         return (rt,fin)
 
-    def compute(city):
-        inc=lambda rc: (city is None or rc==city)
-        lw=[x for x in lw_all if inc(x[1])]
+    def compute(scope):
+        kind,name=scope
+        incv=lambda x: (kind=='all') or (kind=='city' and x[1]==name) or (kind=='op' and x[5]==name)
+        incr=lambda r: (kind=='all') or (kind=='city' and r['city']==name) or (kind=='op' and r.get('op')==name)
+        lw=[x for x in lw_all if incv(x)]
         if not lw: return None
-        pw=[x for x in pw_all if inc(x[1])]
-        bc=indexrt([r for r in rt_rows if inc(r['city'])])
-        bcp=indexrt([r for r in rt_prev_rows if inc(r['city'])])
+        pw=[x for x in pw_all if incv(x)]
+        bc=indexrt([r for r in rt_rows if incr(r)])
+        bcp=indexrt([r for r in rt_prev_rows if incr(r)])
         agg=lambda k: aggf(bc,k); agg_prev=lambda k: aggf(bcp,k)
         bt={}
-        for _,_,_,b,o in lw: bt[canon(b)]=bt.get(canon(b),0)+o
+        for _,_,_,b,o,_ in lw: bt[canon(b)]=bt.get(canon(b),0)+o
         tot=sum(bt.values()) or 1
         bt_prev={}
-        for _,_,_,b,o in pw: bt_prev[canon(b)]=bt_prev.get(canon(b),0)+o
+        for _,_,_,b,o,_ in pw: bt_prev[canon(b)]=bt_prev.get(canon(b),0)+o
         pareto=[]; cum=0
         for cb,o in sorted(bt.items(), key=lambda x:-x[1]):
             cum+=o
@@ -149,7 +155,7 @@ def main():
                                pct=round(100*o/tot,1), cum=round(100*cum/tot,1)))
         top5=[p['cb'] for p in pareto[:5]]
         cbk={}
-        for _,_,kid,b,o in lw:
+        for _,_,kid,b,o,_ in lw:
             coc=kitchen_to_cocina(kid, cocina_names)
             cbk[(coc,canon(b))]=cbk.get((coc,canon(b)),0)+o
         cocinas=sorted(set(k[0] for k in cbk))
@@ -203,13 +209,17 @@ def main():
                     per_cocina=per_cocina, cocinas=cocinas)
 
     cities=sorted(set(x[1] for x in lw_all if x[1]))
-    data={'ALL':compute(None)}
+    ops=sorted(set(x[5] for x in lw_all if x[5]))
+    data={'ALL':compute(('all',None))}
     for c in cities:
-        rc=compute(c)
+        rc=compute(('city',c))
         if rc: data[c]=rc
+    for o in ops:
+        rc=compute(('op',o))
+        if rc: data['op::'+o]=rc
     payload=dict(sales_week=sales_week, rtwt_week=rtwt_week,
                  generated=datetime.date.today().isoformat(),
-                 cities=['ALL']+cities, data=data)
+                 cities=['ALL']+cities, ops=ops, data=data)
 
     json.dump(payload, open(os.path.join(HERE,'ventas_data.json'),'w'), ensure_ascii=False, indent=1)
 

@@ -7,7 +7,7 @@
 #   avg4w = promedio RTWT de las últimas 4 semanas (con dato).
 #   coverageResult = coverageCurrent  si avg4w<=8  else 0  (pierde cobertura + penalización).
 #   estados por avg4w: 🟢<2  🟡2-5  🟠5-8  🔴>8 (pierde)  ⚪ sin datos.
-import openpyxl, csv, json, sys, re, datetime
+import openpyxl, csv, json, sys, re, datetime, os
 from collections import defaultdict
 
 NEW = sys.argv[1] if len(sys.argv) > 1 else 'rt_data_v2.csv'
@@ -34,6 +34,9 @@ def rtclean(v):
     if v in (None, ''): return None
     v = float(v)
     return None if v > 60 else v            # descarta seriales de fecha / basura
+
+# ---- 0) mapeo cocina -> ops (del archivo KDS) ----
+coc2op = json.load(open('cocina2ops.json')) if os.path.exists('cocina2ops.json') else {}
 
 # ---- 1) historia (weeks 0..6) + ciudad, desde la fuente vieja ----
 s2c = json.load(open('store2cocina.json'))            # 'CO...' -> cocina
@@ -73,7 +76,7 @@ with open(NEW, encoding='utf-8') as f:
             v = rtclean(row.get(wk))
             rt[7+i] = v
             fin[7+i] = cc                        # polígono nuevo = coverageCurrent (fijo)
-        stores[key] = dict(b=b, k=coc, c=city_of.get(key,'—'), sid=key, cc=cc, fin=fin, rt=rt)
+        stores[key] = dict(b=b, k=coc, c=city_of.get(key,'—'), sid=key, cc=cc, fin=fin, rt=rt, op=coc2op.get(coc))
 
 D = dict(weeks=WEEKS, n4=len(NEW_WEEKS), stores=list(stores.values()))
 json.dump(D, open('D_v2.json','w'), ensure_ascii=False)
