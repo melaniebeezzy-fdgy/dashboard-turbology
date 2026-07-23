@@ -1,0 +1,559 @@
+brand,storeId,storeName,avg4w,weeksData,coverageCurrent,coverageResult,diffGoal,devPct,status,losesCoverage,trend,w1,w2,w3,w4
+Mañanero Diario - Turbo,900443500,Mañanero diario Chapinero - Turbo,30.791667,2,2100,0,28.791667,14.3958335,🔴 Crítico,Sí,Sin datos suficientes,51.816667,9.766667,,
+Desayuno Mi Tierrita - Turbo,900464390,Desayuno Mi Tierrita Cl 109 - Turbo,13.8,1,2100,0,11.8,5.9,🔴 Crítico,Sí,Sin datos suficientes,,13.8,,
+Mr Beast Burger - Turbo,900477182,Mr Beast Chico - Turbo,10.61661388,3,2100,0,8.616613876,4.308306938,🔴 Crítico,Sí,Empeorando,5.3800002,11.83095243,14.638889,
+la Cuadra Desayunos Caseros - Turbo,900467501,La Cuadra Desayunos Santa Mónica - Turbo,10.583333,1,2100,0,8.583333,4.2916665,🔴 Crítico,Sí,Sin datos suficientes,,,10.583333,
+Dembow - Turbo,900473646,Dembow - Santa Mónica - Turbo,9.7833335,2,2700,0,7.7833335,3.89166675,🔴 Crítico,Sí,Empeorando,0.9,,18.666667,
+la Cuadra Desayunos Caseros - Turbo,900467493,La Cuadra Desayunos Caseros Usaquen - Turbo,8.1,1,3000,0,6.1,3.05,🔴 Crítico,Sí,Sin datos suficientes,,8.1,,
+Dembow - Turbo,900475131,Dembow Cl 109 - Turbo,8.041667,2,2100,0,6.041667,3.0208335,🔴 Crítico,Sí,Sin datos suficientes,3.816667,12.266667,,
+la Cuadra Desayunos Caseros - Turbo,900467499,La Cuadra Desayunos Caceros - Villa del Prado - Turbo,7.966667,1,2400,2400,5.966667,2.9833335,🟠 Riesgo,No,Sin datos suficientes,,,,7.966667
+House Of Salads - Turbo,900445681,House Of Salad Santa Monica - Turbo,7.056250063,4,2100,2100,5.056250063,2.528125031,🟠 Riesgo,No,Empeorando,2.625,7.8875,7.12083325,10.591667
+Mr Beast Burger - Turbo,900407413,Mr Beast Santa Mónica (Cali Norte) - Turbo,6.87708325,4,2100,2100,4.87708325,2.438541625,🟠 Riesgo,No,Mejorando,7.825,8.858333333,6.808333,4.016666667
+Ñamgucheria Sandwiches - Turbo,900439224,Ñamguchería Santa Monica - Turbo,6.828261761,4,2100,2100,4.828261761,2.41413088,🟠 Riesgo,No,Empeorando,4.362121182,7.514814778,11.12222217,4.313888917
+Honest Food Fdl - Turbo,900472144,Honest Food Santa Monica - Turbo,6.827284859,4,2100,2100,4.827284859,2.41364243,🟠 Riesgo,No,Empeorando,3.2316667,9.284615308,4.478571571,10.31428586
+Pret Sandwich Bistro - Turbo,900416178,Pret Sándwich Bistro Santa Monica - Turbo,6.7916665,1,2400,2400,4.7916665,2.39583325,🟠 Riesgo,No,Sin datos suficientes,,6.7916665,,
+Acpm Corrientazo - Turbo,900464911,Acpm Corrientazo Chapinero - Turbo,6.5,1,2400,2400,4.5,2.25,🟠 Riesgo,No,Sin datos suficientes,,6.5,,
+Desayunos de la Abuela - Turbo,900446316,Desayunos de la Abuela Santa Monica - Turbo,6.154340281,4,2100,2100,4.154340281,2.077170141,🟠 Riesgo,No,Empeorando,4.025,4.893749875,5.17777775,10.5208335
+Casa Arabe - Turbo,900477839,Casa Árabe Kennedy - Turbo,6.003703778,3,2400,2400,4.003703778,2.001851889,🟠 Riesgo,No,Mejorando,5.116667,11.25,1.644444333,
+Bottaniko - Turbo,900443516,Bottaniko - Colina - Turbo,5.9875,4,2400,2400,3.9875,1.99375,🟠 Riesgo,No,Empeorando,0.316667,6.5,12.55,4.583333
+Burrito Cantina - Turbo,900467382,Burrito Cantina Santa Mónica (Cali Norte) - Turbo,5.902777667,3,2700,2700,3.902777667,1.951388833,🟠 Riesgo,No,Mejorando,1.4,12.808333,,3.5
+Burritos & Co - Turbo,900476014,Burritos & Co Chico - Turbo,5.780555458,4,2400,2400,3.780555458,1.890277729,🟠 Riesgo,No,Estable,6.9,3.9166665,11.42222233,0.883333
+Dembow - Turbo,900476018,Dembow Chico - Turbo,5.766667,1,2100,2100,3.766667,1.8833335,🟠 Riesgo,No,Sin datos suficientes,5.766667,,,
+Cacerola - Turbo,900416212,Cacerola Chapinero - Turbo,5.736111167,3,2400,2400,3.736111167,1.868055583,🟠 Riesgo,No,Estable,4.4833335,7.1666665,,5.5583335
+Casa Arabe - Turbo,900477843,Casa Árabe Chapinero - Turbo,5.641782382,4,2700,2700,3.641782382,1.820891191,🟠 Riesgo,No,Estable,5.50972225,5.091666667,6.185185111,5.7805555
+Mañanero Diario - Turbo,900475202,Mañanero Diario Cl 109 - Turbo,5.541666583,2,3000,3000,3.541666583,1.770833292,🟠 Riesgo,No,Sin datos suficientes,7.383333,3.700000167,,
+Ñamgucheria Sandwiches - Turbo,900440314,Ñamgucheria Chicó - Turbo,5.530043292,4,2400,2400,3.530043292,1.765021646,🟠 Riesgo,No,Empeorando,4.138,6.010784353,5.7949999,6.176388917
+Numa Cocina Mediterranea - Turbo,900463764,Numa - Cocina Mediterranea Colina - Turbo,5.4625,2,2400,2400,3.4625,1.73125,🟠 Riesgo,No,Sin datos suficientes,8.025,2.9,,
+Señor Burrito. - Turbo,900467421,Señor Burrito - Villa del Prado - Turbo,5.325,1,2100,2100,3.325,1.6625,🟠 Riesgo,No,Sin datos suficientes,,5.325,,
+la Cuadra Desayunos Caseros - Turbo,900470911,La Cuadra Desayunos Caseros Andes - Turbo,5.216667,2,2100,2100,3.216667,1.6083335,🟠 Riesgo,No,Mejorando,10.216667,,,0.216667
+Dembow - Turbo,900473653,Dembow - Kennedy - Turbo,5.2,1,3000,3000,3.2,1.6,🟠 Riesgo,No,Sin datos suficientes,,,5.2,
+Local Cocina Consciente - Turbo,900477104,Local - Cocina Consciente Chapinero - Turbo,5.175925889,3,2100,2100,3.175925889,1.587962944,🟠 Riesgo,No,Empeorando,0.4083335,8.4916665,6.627777667,
+The Breakfast Club - Turbo,900475210,The Breakfast Club Santa Monica - Turbo,5.157958979,4,2100,2100,3.157958979,1.57897949,🟠 Riesgo,No,Mejorando,4.629629667,6.715277917,6.864706,2.422222333
+Foodology Court - Turbo,900465148,Foodology 93 - Turbo Calle 93 #45a-16,5.133333333,3,2400,2400,3.133333333,1.566666667,🟠 Riesgo,No,Empeorando,5.383333,2.5,,7.516667
+la Cuadra Desayunos Caseros - Turbo,900470908,La Cuadra Desayunos Caseros Kennedy - Turbo,5.111111,3,2100,2100,3.111111,1.5555555,🟠 Riesgo,No,Mejorando,0.233333,14.783333,,0.316667
+Pret Sandwich Bistro - Turbo,900464394,Pret Sandwich Bistro Cl 109 - Turbo,5.095833,2,2100,2100,3.095833,1.5479165,🟠 Riesgo,No,Mejorando,7.958333,,,2.233333
+La Cuadra - Turbo,900416195,La Cuadra Santa Monica - Cali - Turbo,5.064537361,4,2700,2700,3.064537361,1.53226868,🟠 Riesgo,No,Mejorando,3.47666664,8.494736789,4.998412714,3.2883333
+Dembow - Turbo,900473654,Dembow - Colina - Turbo,5.05,2,2100,2100,3.05,1.525,🟠 Riesgo,No,Mejorando,,6.683333,,3.416667
+Selvatiko. - Turbo,900475123,Selvatiko. Laureles - Turbo,5.0083335,1,2400,2400,3.0083335,1.50416675,🟠 Riesgo,No,Sin datos suficientes,,,5.0083335,
+Mr Beast Burger - Turbo,900420303,Mr Beast Kennedy - Turbo,5.008219467,4,2100,2100,3.008219467,1.504109733,🟠 Riesgo,No,Mejorando,5.778703778,6.901388875,3.925862138,3.426923077
+Mr Beast Burger - Turbo,900475371,Mr Beast Cl 109 - Turbo,4.981911278,4,2100,2100,2.981911278,1.490955639,🟡 Atención,No,Estable,3.650877263,6.012121182,5.109091,5.155555667
+Pret Sandwich Bistro - Turbo,900470306,Pret Sandwich Bistro Chico - Turbo,4.9708335,2,2700,2700,2.9708335,1.48541675,🟡 Atención,No,Sin datos suficientes,,,0.166667,9.775
+Ñamgucheria Sandwiches - Turbo,900439230,Ñamguchería Villa del Prado - Turbo,4.808914471,4,2100,2100,2.808914471,1.404457235,🟡 Atención,No,Estable,3.776388917,6.537777767,4.175000042,4.746491158
+Señor Burrito. - Turbo,900467426,Señor Burrito Chapinero - Turbo,4.777777792,4,2400,2400,2.777777792,1.388888896,🟡 Atención,No,Empeorando,2.511111,4.161111,1.980555667,10.4583335
+Desayuno Mi Tierrita - Turbo,900465165,Desayuno Mi Tierrita Santa Monica Cali - Turbo,4.720370333,3,2100,2100,2.720370333,1.360185167,🟡 Atención,No,Estable,4.461111,,4.783333,4.916667
+Foodology Court - Turbo,900465146,Foodology Chapinero - Turbo Cra. 8 #66-88,4.711805667,4,2700,2700,2.711805667,1.355902833,🟡 Atención,No,Estable,3.316667,6.42916675,2.54583325,6.555555667
+Pret Sandwich Bistro - Turbo,900416171,Pret Sandwich Bistro San Fernando - Turbo,4.6541665,2,3000,3000,2.6541665,1.32708325,🟡 Atención,No,Sin datos suficientes,5.383333,3.925,,
+Ñamgucheria Sandwiches - Turbo,900439225,Ñamguchería Chapinero - Turbo,4.642190122,4,2400,2400,2.642190122,1.321095061,🟡 Atención,No,Mejorando,3.836231848,6.380246963,3.376587262,4.975694417
+Foodology Court - Turbo,900465153,Foodology Cabecera - Turbo,4.620370444,3,2700,2700,2.620370444,1.310185222,🟡 Atención,No,Empeorando,0,3.566667,10.29444433,
+Sanduches el Jefe - Turbo,900419504,Sandwich el Jefe Santa Monica - Turbo Poke Cali 2639,4.6145835,4,2700,2700,2.6145835,1.30729175,🟡 Atención,No,Empeorando,3.916667,2.1083335,7.5083335,4.925
+Mr Beast Burger - Turbo,900409678,Mr Beast Chapinero - Turbo,4.526815038,4,2400,2400,2.526815038,1.263407519,🟡 Atención,No,Empeorando,4.075,3.503787909,4.038888867,6.489583375
+Mañanero Diario - Turbo,900443498,Mañanero Diario Santa Mónica (Cali Norte) - Turbo,4.49166675,2,3000,3000,2.49166675,1.245833375,🟡 Atención,No,Empeorando,1.9333335,,7.05,
+Ñamgucheria Sandwiches - Turbo,900463788,Ñamgucheria Cl 109 - Turbo,4.465976257,4,2400,2400,2.465976257,1.232988129,🟡 Atención,No,Mejorando,4.03733332,5.726666667,3.813580222,4.286324821
+Ñamgucheria Sandwiches - Turbo,900439221,Ñamguchería Barranquilla Norte - Turbo,4.430451726,4,2400,2400,2.430451726,1.215225863,🟡 Atención,No,Estable,5.761904714,3.423684158,4.420833417,4.115384615
+Green House Fd - Turbo,900438450,Green House Santa Monica - Turbo,4.404776376,4,2700,2700,2.404776376,1.202388188,🟡 Atención,No,Mejorando,3.874479188,6.070512808,4.056383,3.617730511
+Brunch & Munch - Turbo,900407412,Brunch And Munch Santa Monica - Cali - Turbo,4.339379099,4,2100,2100,2.339379099,1.169689549,🟡 Atención,No,Estable,6.127777778,2.585294118,5.5077778,3.1366667
+Ñamgucheria Sandwiches - Turbo,900439227,Ñamguchería San Fernando - Turbo,4.335763887,4,2400,2400,2.335763887,1.167881943,🟡 Atención,No,Estable,1.9916665,6.7208335,4.663888833,3.966666714
+Desayuno Mi Tierrita - Turbo,900465163,Desayuno Mi Tierrita Chapinero - Turbo,4.319791625,4,2100,2100,2.319791625,1.159895813,🟡 Atención,No,Mejorando,4.9833335,6.575,5.4375,0.283333
+Brunch & Munch - Turbo,900420519,Brunch And Munch - Kennedy - Turbo,4.313494971,4,2100,2100,2.313494971,1.156747486,🟡 Atención,No,Mejorando,5.4694445,6.206410385,1.40625,4.171875
+Honest Food Fdl - Turbo,900475462,Honest Food Kennedy - Turbo,4.274503943,4,2700,2700,2.274503943,1.137251972,🟡 Atención,No,Mejorando,2.733333286,8.933333333,2.436111083,2.995238071
+The Breakfast Club - Turbo,900475207,The Breakfast Club Kennedy - Turbo,4.204226243,4,2700,2700,2.204226243,1.102113121,🟡 Atención,No,Estable,4.825,3.914285857,3.2133334,4.864285714
+Numa Cocina Mediterranea - Turbo,900476062,Cocina Mediterranea Kennedy - Turbo,4.196527875,4,2400,2400,2.196527875,1.098263938,🟡 Atención,No,Mejorando,5.0083335,7.700000333,0.1,3.977777667
+Selvatiko. - Turbo,900475124,Selvatiko. Colina - Turbo,4.166666667,3,2700,2700,2.166666667,1.083333333,🟡 Atención,No,Mejorando,,6.2,4.6416665,1.6583335
+The Breakfast Club - Turbo,900475288,The Breakfast Club San Fernando - Turbo,4.136111056,3,2400,2400,2.136111056,1.068055528,🟡 Atención,No,Estable,2.116666667,6.3666665,,3.925
+Cinnabon - Turbo,900415448,Cinnabon Chicó - Turbo,4.097633302,4,2700,2700,2.097633302,1.048816651,🟡 Atención,No,Empeorando,2.5795833,2.818589808,4.989259311,6.003100791
+Desayuno Mi Tierrita - Turbo,900476019,Desayuno Mi Tierrita Chico - Turbo,4.05,1,2400,2400,2.05,1.025,🟡 Atención,No,Sin datos suficientes,4.05,,,
+Dembow - Turbo,900473655,Dembow - San Fernando - Turbo,4.0333335,2,2700,2700,2.0333335,1.01666675,🟡 Atención,No,Sin datos suficientes,0.416667,7.65,,
+Brunch & Munch - Turbo,900420483,Brunch & Munch - Chicó - Turbo,4.017130182,4,2700,2700,2.017130182,1.008565091,🟡 Atención,No,Empeorando,2.460416663,3.066485467,5.440298478,5.101320119
+Frost By Oreo - Turbo,900407399,Frost By Oreo Santa Mónica (Cali Norte) - Turbo,3.99583325,4,2700,2700,1.99583325,0.997916625,🟡 Atención,No,Mejorando,0,12.533333,3.45,0
+Pret Sandwich Bistro - Turbo,900416177,Pret Sandwich Bistro Villa del Prado - Turbo,3.9916665,2,2700,2700,1.9916665,0.99583325,🟡 Atención,No,Sin datos suficientes,,,1.033333,6.95
+Sanduches el Jefe - Turbo,900419503,Sandwich El Jefe Castellana - Turbo,3.988889167,3,2100,2100,1.988889167,0.9944445833,🟡 Atención,No,Mejorando,4.6833335,,6.366667,0.916667
+Casa Arabe - Turbo,900477854,Casa Árabe Cl 109 - Turbo,3.956805567,4,2100,2100,1.956805567,0.9784027833,🟡 Atención,No,Estable,5.858333333,2.761111333,2.4966666,4.711111
+Señor Burrito. - Turbo,900471310,Señor Burrito Kennedy - Turbo,3.952777667,3,2700,2700,1.952777667,0.9763888333,🟡 Atención,No,Mejorando,2.725,8.483333,0.65,
+Brunch & Munch - Turbo,900481032,Brunch & Munch - Cartagena - Turbo,3.9516665,4,2100,2100,1.9516665,0.97583325,🟡 Atención,No,Estable,5.0933332,2.4899998,4.39,3.833333
+Alba Vegetarian - Turbo,900472649,Alba Vegetarian - Ingenio - Turbo,3.8916665,2,2400,2400,1.8916665,0.94583325,🟡 Atención,No,Empeorando,,0.75,,7.033333
+Mr Beast Burger - Turbo,900481990,Mr Beast Cartagena - Turbo,3.852847173,4,2400,2400,1.852847173,0.9264235865,🟡 Atención,No,Estable,4.472222167,2.604166625,4.98,3.3549999
+Honest Food Fdl - Turbo,900472139,Honest Food San Fernando - Turbo,3.837599125,4,2700,2700,1.837599125,0.9187995623,🟡 Atención,No,Mejorando,2.050000167,7.283333308,3.347618857,2.669444167
+Pret Sandwich Bistro - Turbo,900481996,Pret Sandwich Bistro Cartagena - Turbo,3.833333,2,2100,2100,1.833333,0.9166665,🟡 Atención,No,Estable,,3.533333,,4.133333
+Green House Fd - Turbo,900438441,Green House Chico - Turbo,3.8,1,2400,2400,1.8,0.9,🟡 Atención,No,Sin datos suficientes,,,3.8,
+Ñamgucheria Sandwiches - Turbo,900473582,Ñamguchería Kennedy - Turbo,3.789989141,4,2700,2700,1.789989141,0.8949945706,🟡 Atención,No,Mejorando,4.868181727,4.339393909,3.644047571,2.308333357
+House Of Salads - Turbo,900445682,House Of Salad Chico - Turbo,3.776587171,3,3000,3000,1.776587171,0.8882935857,🟡 Atención,No,Estable,,3.958333,4.504761714,2.8666668
+The Breakfast Club - Turbo,900475209,The Breakfast Club Ingenio - Turbo,3.7666665,2,2100,2100,1.7666665,0.88333325,🟡 Atención,No,Mejorando,,5.1,,2.433333
+Mr Beast Burger - Turbo,900405271,Mr Beast Villa Del Prado - Turbo,3.748056559,4,2400,2400,1.748056559,0.8740282794,🟡 Atención,No,Estable,4.57625,3.345762661,3.216228053,3.853985522
+Acpm Corrientazo - Turbo,900473537,Acpm Corrientazo Ingenio - Turbo,3.718888867,3,2400,2400,1.718888867,0.8594444333,🟡 Atención,No,Mejorando,7.116667,2.3066666,,1.733333
+Mr Beast Burger - Turbo,900405269,Mr Beast Barranquilla Norte - Turbo Urgencias Eps Sanitas 284,3.706801981,4,2400,2400,1.706801981,0.8534009907,🟡 Atención,No,Estable,3.351282077,4.45,3.233333182,3.792592667
+Pret Sandwich Bistro - Turbo,900442051,Pret Sandwich Bistro Colina - Turbo,3.644444583,2,2700,2700,1.644444583,0.8222222917,🟡 Atención,No,Mejorando,,4.6833335,2.605555667,
+Ñamgucheria Sandwiches - Turbo,900473581,Ñamguchería Ingenio Calle 83c - Turbo,3.636126419,4,2400,2400,1.636126419,0.8180632096,🟡 Atención,No,Estable,5.15,2.189743692,2.633333556,4.571428429
+Ñamgucheria Sandwiches - Turbo,900481992,Ñamguchería Cartagena - Turbo,3.632638902,4,2700,2700,1.632638902,0.8163194511,🟡 Atención,No,Empeorando,3.205555583,3.125,4.116666692,4.083333333
+Ñamgucheria Sandwiches - Turbo,900439228,Ñamguchería Colina - Turbo,3.61529735,4,2400,2400,1.61529735,0.8076486749,🟡 Atención,No,Estable,3.305882471,3.817222267,3.498611083,3.839473579
+Almuerzos D´la Casa - Turbo,900471212,Almuerzos D´la Casa - Colina - Turbo,3.595833267,4,2400,2400,1.595833267,0.7979166333,🟡 Atención,No,Empeorando,2.383333,2.0333334,3.461111,6.505555667
+Green House Fd - Turbo,900463819,Green House Cl 109 - Turbo,3.592263626,4,2400,2400,1.592263626,0.796131813,🟡 Atención,No,Mejorando,4.632017526,3.5766666,3.350370378,2.81
+Pret Sandwich Bistro - Turbo,900473669,Pret Sandwich Bistro Kennedy - Turbo,3.5916665,2,3000,3000,1.5916665,0.79583325,🟡 Atención,No,Sin datos suficientes,4.25,2.933333,,
+Brunch & Munch - Turbo,900409672,Brunch & Munch Chapinero - Turbo,3.587243831,4,2400,2400,1.587243831,0.7936219154,🟡 Atención,No,Estable,4.302546292,2.880392118,3.450438645,3.715598269
+Burritos & Co - Turbo,900410573,Burritos And Co Cali - Turbo,3.581031779,4,2400,2400,1.581031779,0.7905158893,🟡 Atención,No,Estable,3.365,4.200000091,4.197222167,2.561904857
+The Breakfast Club - Turbo,900475286,The Breakfast Club Calle 93 - Turbo,3.557453736,4,2700,2700,1.557453736,0.7787268681,🟡 Atención,No,Empeorando,2.442592444,2.138889,4.5716667,5.0766668
+Honest Food Fdl - Turbo,900472137,Honest Food Chapinero - Turbo,3.555252145,4,2700,2700,1.555252145,0.7776260726,🟡 Atención,No,Mejorando,4.576388889,4.227027081,3.05,2.367592611
+Cinnabon - Turbo,900407398,Cinnabon Santa Mónica (Cali Norte) - Turbo,3.529536963,4,3000,3000,1.529536963,0.7647684813,🟡 Atención,No,Empeorando,3.797222167,2.4616666,6.059259333,1.79999975
+Casa Arabe - Turbo,900477846,Casa Árabe Ingenio - Turbo,3.527777667,3,2700,2700,1.527777667,0.7638888333,🟡 Atención,No,Estable,,3.066667,4.083333,3.433333
+Desayunos de la Abuela - Turbo,900446320,Desayunos de la Abuela Chico - Turbo,3.498446974,4,3000,3000,1.498446974,0.749223487,🟡 Atención,No,Empeorando,1.36,3.041666714,4.38,5.212121182
+Mr Beast Burger - Turbo,900488966,Mr Beast Burger Arrecife - Turbo,3.492937154,4,2700,2700,1.492937154,0.746468577,🟡 Atención,No,Mejorando,4.187581706,4.644326277,2.041156449,3.098684184
+The Breakfast Club - Turbo,900463743,The Breakfast Club Cl 109 - Turbo,3.492901758,4,2400,2400,1.492901758,0.7464508789,🟡 Atención,No,Mejorando,5.046428643,4.871296444,2.221739087,1.832142857
+Desayunos de la Abuela - Turbo,900446310,Desayunos de la Abuela Colina - Turbo,3.489338212,4,2400,2400,1.489338212,0.7446691062,🟡 Atención,No,Mejorando,4.330555333,4.115686294,1.396296333,4.114814889
+La Cuadra - Turbo,900420510,La Cuadra - Colina - Turbo,3.483214374,4,2400,2400,1.483214374,0.7416071871,🟡 Atención,No,Mejorando,2.7708335,5.062500125,0.7261905714,5.3733333
+The Breakfast Club - Turbo,900475284,The Breakfast Club Chapinero - Turbo,3.479828183,4,2700,2700,1.479828183,0.7399140917,🟡 Atención,No,Estable,1.962745088,4.549224884,3.12129625,4.286046512
+The Breakfast Club - Turbo,900475213,The Breakfast Club Chico - Turbo,3.474688897,4,2700,2700,1.474688897,0.7373444487,🟡 Atención,No,Empeorando,2.11666681,3.463636364,4.369841333,3.948611083
+Selvatiko. - Turbo,900475359,Selvatiko Cl 109 - Turbo,3.465277833,3,2700,2700,1.465277833,0.7326389167,🟡 Atención,No,Mejorando,3.6458335,4.5,2.25,
+La Cuadra - Turbo,900420509,La Cuadra - Kennedy - Turbo,3.465017334,4,2700,2700,1.465017334,0.7325086672,🟡 Atención,No,Mejorando,3.058333167,6.7944444,2.262500083,1.744791688
+Desayunos de la Abuela - Turbo,900446311,Desayunos de la Abuela Chapinero - Turbo,3.454123393,4,2700,2700,1.454123393,0.7270616966,🟡 Atención,No,Empeorando,3.08030303,2.255714286,3.431904829,5.048571429
+Desayunos de la Abuela - Turbo,900463744,Desayunos de la Abuela Cl 109 - Turbo,3.421135556,4,2400,2400,1.421135556,0.7105677782,🟡 Atención,No,Mejorando,3.78645825,5.07133332,3.069607941,1.757142714
+Avocalia Turbo,900407400,Avocalia Santa Monica - Cali - Turbo,3.416585264,4,2700,2700,1.416585264,0.708292632,🟡 Atención,No,Estable,3.088372163,3.919047635,3.780851021,2.878070237
+Numa Cocina Mediterranea - Turbo,900463747,Numa Cocina Mediterranea Chapinero - Turbo,3.403015686,3,2400,2400,1.403015686,0.7015078429,🟡 Atención,No,Mejorando,4.502380857,5.3233332,0.383333,
+Ñamgucheria Sandwiches - Turbo,900473584,Ñamguchería Andes - Turbo,3.381025484,4,2400,2400,1.381025484,0.6905127418,🟡 Atención,No,Estable,3.338095357,3.039247258,2.695833375,4.450925944
+Local Cocina Consciente - Turbo,900477097,Local - Cocina Consciente San Fernando - Turbo,3.375,3,2400,2400,1.375,0.6875,🟡 Atención,No,Mejorando,1.825,6.3,2,
+Alba Vegetarian - Turbo,900443009,Alba Vegetarian - Chapinero - Turbo,3.337499928,4,2700,2700,1.337499928,0.6687499639,🟡 Atención,No,Empeorando,2.327777778,2.8966666,5.205555333,2.92
+Monteverde - Turbo,900450778,Monteverde Santa Monica - Turbo,3.26083335,4,2400,2400,1.26083335,0.630416675,🟡 Atención,No,Mejorando,1.8,5.6166668,4.3666665,1.2600001
+la Cuadra Desayunos Caseros - Turbo,900464912,La Cuadra Desayunos Caseros Chapinero - Turbo,3.241667,2,2400,2400,1.241667,0.6208335,🟡 Atención,No,Sin datos suficientes,1.916667,4.566667,,
+Bottaniko - Turbo,900464153,Bottaniko Cl 109 - Turbo,3.237037056,3,3000,3000,1.237037056,0.6185185278,🟡 Atención,No,Estable,2.8166665,3.544444667,3.35,
+Desayunos de la Abuela - Turbo,900473560,Desayunos de la Abuela Kennedy - Turbo,3.197291763,4,2400,2400,1.197291763,0.5986458813,🟡 Atención,No,Estable,1.71,4.9666668,1.85,4.26250025
+Avocalia Turbo,900409671,Avocalia Chapinero - Turbo,3.182006126,4,2700,2700,1.182006126,0.5910030632,🟡 Atención,No,Estable,3.098393566,3.704947875,2.561458391,3.363224674
+Dembow - Turbo,900473649,Dembow - Calle 93 - Turbo,3.180555667,3,2700,2700,1.180555667,0.5902778333,🟡 Atención,No,Mejorando,,5.566667,3.975,0
+House Of Salads - Turbo,900476069,House Of Salads Ingenio - Turbo,3.177083375,4,2400,2400,1.177083375,0.5885416875,🟡 Atención,No,Mejorando,6.75,0.4833335,1.8,3.675
+Foodology Court - Turbo,900465138,Foodology Cl 109 - Turbo Cl. 109 #15-28,3.162963,3,3000,3000,1.162963,0.5814815,🟡 Atención,No,Mejorando,4.588889,2.45,,2.45
+Cacerola - Turbo,900416210,Cacerola Barranquilla - Turbo,3.126388917,4,2700,2700,1.126388917,0.5631944583,🟡 Atención,No,Empeorando,0,1.380555667,11.125,0
+Brunch & Munch - Turbo,900405255,Brunch & Munch Barranquilla - Turbo,3.117116667,4,2400,2400,1.117116667,0.5585583333,🟡 Atención,No,Estable,2.836363636,2.774603238,4.3616665,2.495833292
+Mr Beast Burger - Turbo,900409677,Mr Beast Castellana - Turbo,3.106346023,4,2400,2400,1.106346023,0.5531730116,🟡 Atención,No,Estable,3.4925001,3.070138875,2.354902059,3.507843059
+Alba Vegetarian - Turbo,900443011,Alba Vegetarian - Santa Monica - Turbo,3.101388833,4,3000,3000,1.101388833,0.5506944167,🟡 Atención,No,Empeorando,1.3916665,3.044444333,6.25,1.7194445
+Mr Beast Burger - Turbo,900420302,Mr Beast Colina - Turbo,3.08308883,4,2400,2400,1.08308883,0.541544415,🟡 Atención,No,Mejorando,2.838288297,4.195578265,2.318918919,2.979569839
+Desayunos de la Abuela - Turbo,900472679,Desayunos de la Abuela Ingenio - Turbo,3.07916675,2,2700,2700,1.07916675,0.539583375,🟡 Atención,No,Mejorando,3.7083335,,,2.45
+Honest Food Fdl - Turbo,900463745,Honest Food Cl 109 - Turbo,3.078854559,4,2700,2700,1.078854559,0.5394272793,🟡 Atención,No,Mejorando,4.607526839,3.722413793,2.157407444,1.828070158
+House Of Salads - Turbo,900481978,House Of Salads Cartagena - Turbo,3.077777833,4,3000,3000,1.077777833,0.5388889167,🟡 Atención,No,Estable,1.255555667,4.844444667,3.711111,2.5
+Cacerola - Turbo,900416208,Cacerola - Villa del Prado  - Turbo,3.060416625,4,2400,2400,1.060416625,0.5302083125,🟡 Atención,No,Empeorando,0.4083335,0.183333,9,2.65
+Foodology Court - Turbo,900465150,Foodology Barranquilla Nte - Turbo Cra. 45 #85-168,3.041666667,4,2700,2700,1.041666667,0.5208333333,🟡 Atención,No,Mejorando,3.966667,4.938888667,1.827778,1.433333
+Ñamgucheria Sandwiches - Turbo,900439229,Ñamguchería Castellana - Turbo,3.026182899,4,2400,2400,1.026182899,0.5130914494,🟡 Atención,No,Estable,2.68999992,2.663809486,3.746376826,3.004545364
+Green House Fd - Turbo,900438452,Green House Chapinero - Turbo,3.020695922,4,2700,2700,1.020695922,0.5103479611,🟡 Atención,No,Estable,2.770643886,3.595327121,2.737242778,2.979569903
+Burritos & Co - Turbo,900420642,Burritos And Co - Kennedy - Turbo,3.015541995,4,2700,2700,1.015541995,0.5077709974,🟡 Atención,No,Mejorando,2.906535961,5.504609915,2.092198574,1.558823529
+The Breakfast Club - Turbo,900475281,The Breakfast Club Colina - Turbo,2.981816709,4,2400,2400,0.9818167086,0.4909083543,🟡 Atención,No,Mejorando,1.606862765,5.176811565,2.350925944,2.79266656
+Green House Fd - Turbo,900438446,Green House Kennedy - Turbo,2.971942606,4,2700,2700,0.9719426063,0.4859713031,🟡 Atención,No,Mejorando,3.79666668,4.533333296,1.956790037,1.600980412
+Ñamgucheria Sandwiches - Turbo,900488970,Ñamgucheria Arrecife - Turbo,2.9550829,4,2700,2700,0.9550829001,0.47754145,🟡 Atención,No,Estable,2.23416665,3.505000033,3.338636227,2.74252869
+Bottaniko - Turbo,900443509,Bottaniko Santa Monica - Cali - Turbo,2.926851667,3,2700,2700,0.9268516667,0.4634258333,🟡 Atención,No,Empeorando,2.405555333,2.699999667,3.675,
+Desayunos de la Abuela - Turbo,900446308,Desayunos de la Abuela Barranquilla - Turbo CHURNEADO,2.91473835,4,2700,2700,0.9147383503,0.4573691751,🟡 Atención,No,Estable,3.377586103,2.247979788,4.488690464,1.544697045
+Desayunos de la Abuela - Turbo,900446318,Desayunos de la Abuela Villa Del Prado - Turbo,2.906379144,4,2400,2400,0.9063791438,0.4531895719,🟡 Atención,No,Estable,1.457407444,4.157692231,2.7333334,3.2770835
+The Breakfast Club - Turbo,900475212,The Breakfast Club Andes - Turbo,2.871292145,4,2400,2400,0.8712921446,0.4356460723,🟡 Atención,No,Empeorando,1.90416675,2.400980412,3.573077,3.606944417
+Mr Beast Burger - Turbo,900405272,Mr Beast San Fernando - Turbo,2.809565065,4,2400,2400,0.8095650655,0.4047825327,🟡 Atención,No,Empeorando,2.43958325,2.38333325,2.319047429,4.096296333
+Monteverde - Turbo,900463719,Monteverde Cl 109 - Turbo,2.808402278,4,3000,3000,0.8084022784,0.4042011392,🟡 Atención,No,Mejorando,3.756410346,3.782945767,2.010919621,1.683333379
+Bottaniko - Turbo,900443507,Bottaniko Chapinero - Turbo,2.791666625,4,2700,2700,0.791666625,0.3958333125,🟡 Atención,No,Estable,4,2.25,4.3333335,0.583333
+Desayuno Mi Tierrita - Turbo,900465161,Desayuno Mi Tierrita - 93 - Turbo,2.783333,1,3000,3000,0.783333,0.3916665,🟡 Atención,No,Sin datos suficientes,,,,2.783333
+Alba Vegetarian - Turbo,900473540,Alba Vegetarian - Kennedy Calle 26 Sur #72c 258 - Turbo,2.769444333,3,3000,3000,0.7694443333,0.3847221667,🟡 Atención,No,Empeorando,,2.2083335,1.5666665,4.533333
+Mr Beast Burger - Turbo,900428938,Mr Beast Andes - Turbo,2.767906787,4,2700,2700,0.7679067867,0.3839533934,🟡 Atención,No,Estable,3.240476286,2.282539667,1.745833417,3.802777778
+Sanduches el Jefe - Turbo,900427117,Sandwich El Jefe Bucaramanga - Turbo,2.755605214,4,2700,2700,0.7556052143,0.3778026071,🟡 Atención,No,Mejorando,3.055555333,3.257142857,1.055555667,3.654167
+The Breakfast Club - Turbo,900475287,The Breakfast Club Villa Del Prado - Turbo,2.748570552,4,2400,2400,0.7485705523,0.3742852761,🟡 Atención,No,Estable,2.263333333,3.391176353,2.37083325,2.968939273
+Alba Vegetarian - Turbo,900475345,Alba Vegetarian Cl 109 - Turbo,2.746354156,4,2700,2700,0.7463541563,0.3731770781,🟡 Atención,No,Mejorando,1.24166675,6.825,1.552083375,1.3666665
+Vicio - Turbo,900407402,Vicio Santa Mónica (Cali Norte) - Turbo,2.7458335,2,3000,3000,0.7458335,0.37291675,🟡 Atención,No,Empeorando,0.875,,,4.616667
+Cacerola - Turbo,900464389,Cacerola Cl 109 - Turbo,2.715624938,4,2700,2700,0.7156249375,0.3578124688,🟡 Atención,No,Empeorando,3.0916665,1.49583325,2.458333,3.816667
+Monteverde - Turbo,900476065,Monteverde Kennedy - Turbo,2.692708274,4,2700,2700,0.6927082738,0.3463541369,🟡 Atención,No,Mejorando,2.74999975,4.19583325,1.991666667,1.833333429
+Desayunos de la Abuela - Turbo,900488283,Desayunos de la Abuela Arrecife - Turbo,2.681944417,4,2700,2700,0.6819444167,0.3409722083,🟡 Atención,No,Empeorando,1.866667,1.816666333,4.922222,2.122222333
+La Cuadra - Turbo,900416198,La Cuadra - Villa del Prado - Turbo,2.681232813,4,2400,2400,0.6812328125,0.3406164063,🟡 Atención,No,Estable,2.690476,3.075641154,2.13958325,2.819230846
+Brunch & Munch - Turbo,900488275,Brunch & Munch Arrecife - Turbo,2.680551557,4,2700,2700,0.6805515566,0.3402757783,🟡 Atención,No,Estable,3.18133328,2.583333333,1.933928571,3.023611042
+Desayuno Mi Tierrita - Turbo,900465156,Desayuno Mi Tierrita Barranquilla - Turbo,2.678869089,4,2100,2100,0.6788690893,0.3394345446,🟡 Atención,No,Empeorando,0.95,1.6666665,3.841667,4.257142857
+Numa Cocina Mediterranea - Turbo,900463755,Cocina Mediterranea Barranquilla - Turbo,2.675925889,3,2400,2400,0.6759258889,0.3379629444,🟡 Atención,No,Estable,3.133333333,2.65,2.244444333,
+Brunch & Munch - Turbo,900465171,Brunch & Munch Cl 109 - Turbo,2.670176537,4,2400,2400,0.670176537,0.3350882685,🟡 Atención,No,Mejorando,2.703639851,3.906093204,2.155092574,1.915880519
+Almuerzos D´la Casa - Turbo,900479595,Almuerzos D´la Casa - Cartagena - Turbo,2.65413689,4,2700,2700,0.6541368896,0.3270684448,🟡 Atención,No,Mejorando,4.254166625,2.752381,1.333333333,2.2766666
+Selvatiko. - Turbo,900476479,Selvatiko Chico - Turbo,2.6444445,3,3000,3000,0.6444445,0.32222225,🟡 Atención,No,Empeorando,0.55,,2.516667,4.8666665
+Pret Sandwich Bistro - Turbo,900442050,Pret Sandwich Bistro Cabecera - Turbo,2.6305555,3,3000,3000,0.6305555,0.31527775,🟡 Atención,No,Estable,0.283333,4.975,,2.6333335
+Sanduches el Jefe - Turbo,900419501,Sandwich el Jefe Villa Del Prado - Turbo Carrera 55  243,2.61666675,2,2400,2400,0.61666675,0.308333375,🟡 Atención,No,Mejorando,,3.65,1.5833335,
+Dembow - Turbo,900473651,Dembow - Villa Del Prado - Turbo,2.611111,3,2400,2400,0.611111,0.3055555,🟡 Atención,No,Empeorando,2.466667,1.133333,,4.233333
+Señor Burrito. - Turbo,900464393,Señor Burrito 109 - Turbo,2.6108333,4,3000,3000,0.6108333,0.30541665,🟡 Atención,No,Estable,4.233333,1.4866666,2.016667,2.7066666
+Burritos & Co - Turbo,900410665,Burritos And Co Chapinero - Turbo,2.605371234,4,2700,2700,0.6053712344,0.3026856172,🟡 Atención,No,Estable,2.028014191,3.237735811,2.031871298,3.123863636
+Brunch & Munch - Turbo,900426740,Brunch & Munch Andes - Turbo,2.60151877,4,2400,2400,0.6015187697,0.3007593849,🟡 Atención,No,Empeorando,2.317521308,1.962962956,2.608536537,3.517054279
+Green House Fd - Turbo,900438447,Green House Villa Del Prado - Turbo Cra. 55  243,2.59183685,4,2700,2700,0.5918368499,0.295918425,🟡 Atención,No,Estable,2.35625,3.355769269,1.68768113,2.967647
+Sanduches el Jefe - Turbo,900419502,Sandwich El Jefe Chapinero - Turbo,2.585416708,4,3000,3000,0.5854167083,0.2927083542,🟡 Atención,No,Estable,0.3166665,4.722222333,1.8194445,3.4833335
+la Cuadra Desayunos Caseros - Turbo,900467494,La Cuadra Desayunos Caseros Barranquilla Norte - Turbo,2.566667,1,2700,2700,0.566667,0.2833335,🟡 Atención,No,Sin datos suficientes,2.566667,,,
+Brunch & Munch - Turbo,900405252,Brunch & Munch Cali - San Fernando - Turbo,2.555026516,3,2100,2100,0.5550265159,0.2775132579,🟡 Atención,No,Mejorando,2.709523714,3.8444445,1.111111333,
+Foodology Court - Turbo,900488781,Foodology Arrecife - Turbo,2.533333,1,1,1,0.533333,0.2666665,🟡 Atención,No,Sin datos suficientes,,,2.533333,
+Mr Beast Burger - Turbo,900428937,Mr Beast Bucaramanga - Turbo,2.508597745,4,3000,3000,0.5085977454,0.2542988727,🟡 Atención,No,Estable,2.1899999,2.853846154,2.188461615,2.802083313
+Avocalia Turbo,900420304,Avocalia - Kennedy - Turbo,2.496706868,4,2700,2700,0.4967068678,0.2483534339,🟡 Atención,No,Mejorando,2.777777795,3.706383,1.78600004,1.716666636
+Avocalia Turbo,900405546,Avocalia - Villa Del Prado - Turbo,2.496160594,4,2400,2400,0.4961605942,0.2480802971,🟡 Atención,No,Estable,1.85875005,2.716260098,2.424011288,2.985620941
+Sanduches el Jefe - Turbo,900419506,Sandwich El Jefe San Fernando - Turbo,2.4916668,3,3000,3000,0.4916668,0.2458334,🟡 Atención,No,Empeorando,0.85,2.0333334,,4.591667
+Desayuno Mi Tierrita - Turbo,900470918,Desayuno Mi Tierrita Andes - Turbo,2.489814861,3,2400,2400,0.4898148611,0.2449074306,🟡 Atención,No,Empeorando,,0.19166675,0.8333335,6.444444333
+La Cuadra - Turbo,900464605,La Cuadra Cl 109 - Turbo,2.488042366,4,2700,2700,0.4880423663,0.2440211832,🟡 Atención,No,Mejorando,3.114358969,3.424178366,1.466013098,1.947619032
+Acpm Corrientazo - Turbo,900470917,Acpm Corrientazo Kennedy - Turbo,2.45,1,2700,2700,0.45,0.225,🟡 Atención,No,Sin datos suficientes,,2.45,,
+Numa Cocina Mediterranea - Turbo,900463748,Cocina Mediterranea Cabecera - Turbo,2.443148189,3,2400,2400,0.4431481889,0.2215740944,🟡 Atención,No,Empeorando,1.8933334,2.2916665,3.144444667,
+Green House Fd - Turbo,900488845,Green House Arrecife - Turbo,2.440285897,4,2700,2700,0.4402858968,0.2201429484,🟡 Atención,No,Estable,3.033333361,2.204273538,2.0896825,2.433854188
+Acpm Corrientazo - Turbo,900467510,Acpm Corrientazo Villa Del Prado - Turbo,2.438889,3,2400,2400,0.438889,0.2194445,🟡 Atención,No,Mejorando,,6.216667,0.533333,0.566667
+House Of Salads - Turbo,900445673,House Of Salad Chapinero - Turbo,2.438148153,4,2400,2400,0.4381481528,0.2190740764,🟡 Atención,No,Mejorando,3.264814778,5.06,0.7333335,0.6944443333
+Mañanero Diario - Turbo,900488961,Mañanero Diario Arrecife - Turbo,2.428472,4,2700,2700,0.428472,0.214236,🟡 Atención,No,Estable,2.258333,2.127777667,3.033333,2.294444333
+Alba Vegetarian - Turbo,900488270,Alba Vegetarian Arrecife - Turbo,2.424603232,4,2700,2700,0.4246032321,0.2123016161,🟡 Atención,No,Empeorando,1.026190429,1.3208335,4.4125,2.938889
+Desayunos de la Abuela - Turbo,900473561,Desayunos de la Abuela Andes - Turbo,2.412040109,4,2400,2400,0.4120401093,0.2060200547,🟡 Atención,No,Estable,1.432051308,2.669047643,2.657894737,2.88916675
+Green House Fd - Turbo,900438442,Green House Colina - Turbo,2.411312561,4,2400,2400,0.4113125607,0.2056562804,🟡 Atención,No,Estable,2.266666625,2.6761905,1.767777733,2.934615385
+La Cuadra - Turbo,900416199,La Cuadra - Chapinero - Turbo,2.385059131,4,2700,2700,0.3850591315,0.1925295657,🟡 Atención,No,Mejorando,3.736021419,2.697777767,1.196913519,1.909523821
+Acpm Corrientazo - Turbo,900467512,Acpm Corrientazo Manila - Turbo,2.383333333,3,3000,3000,0.3833333333,0.1916666667,🟡 Atención,No,Empeorando,0.9,,5.766667,0.483333
+Ñamgucheria Sandwiches - Turbo,900440620,Ñamguchería Bucaramanga. - Turbo,2.37830107,4,3000,3000,0.37830107,0.189150535,🟡 Atención,No,Estable,2.055882412,2.33800004,2.918627412,2.200694417
+Bottaniko - Turbo,900443511,Bottaniko - Villa del Prado - Turbo,2.374536917,3,2700,2700,0.3745369167,0.1872684583,🟡 Atención,No,Estable,3.733333,1.311111,2.07916675,
+Brunch & Munch - Turbo,900410119,Brunch & Munch Villa del Prado  - Turbo,2.36202541,4,2700,2700,0.3620254097,0.1810127049,🟡 Atención,No,Estable,1.834444333,3.356944375,2.427083375,1.829629556
+Desayunos de la Abuela - Turbo,900446306,Desayunos de la Abuela San Fernando - Turbo,2.35333355,4,2700,2700,0.35333355,0.176666775,🟡 Atención,No,Empeorando,3.3800002,0.216667,2.966667,2.85
+Mr Beast Burger - Turbo,900476815,Mr Beast Ingenio - Turbo,2.352841892,4,2400,2400,0.3528418923,0.1764209462,🟡 Atención,No,Estable,1.960256385,2.066666722,3.0844444,2.300000063
+Sanduches el Jefe - Turbo,900419499,Sandwich el Jefe Barranquilla - Turbo Cra. 45  353,2.350641122,4,2700,2700,0.3506411218,0.1753205609,🟡 Atención,No,Estable,2.566666833,2.236111333,2.047222167,2.552564154
+Foodology Court - Turbo,900465149,Foodology San Fernando - Turbo Carrera 38 #5e-9,2.35,3,2700,2700,0.35,0.175,🟡 Atención,No,Mejorando,,6.416667,0.25,0.383333
+Burritos & Co - Turbo,900464311,Burritos & Co Cl 109 - Turbo,2.343369267,4,2700,2700,0.3433692672,0.1716846336,🟡 Atención,No,Estable,2.264285762,2.960784294,2.0757575,2.072649513
+Casa Arabe - Turbo,900477842,Casa Árabe Calle 93 - Turbo,2.340699414,4,2400,2400,0.3406994137,0.1703497068,🟡 Atención,No,Estable,2.11041675,2.569047571,1.366666667,3.316666667
+House Of Salads - Turbo,900445677,House Of Salad Villa del Prado - Turbo,2.333769836,4,2700,2700,0.3337698357,0.1668849179,🟡 Atención,No,Estable,0.4805555,4.5166668,1.4949999,2.842857143
+Pret Sandwich Bistro - Turbo,900416174,Pret Sándwich Bistro Manila - Turbo,2.333333333,3,3000,3000,0.3333333333,0.1666666667,🟡 Atención,No,Mejorando,3.25,1.983333,1.766667,
+Brunch & Munch - Turbo,900426741,Brunch & Munch Bucaramanga - Turbo,2.31676031,4,2700,2700,0.31676031,0.158380155,🟡 Atención,No,Estable,2.966666647,1.8814286,3.198214286,1.220731707
+Señor Burrito. - Turbo,900467425,Señor Burrito Barranquilla Norte - Turbo,2.315575515,4,3000,3000,0.3155755149,0.1577877574,🟡 Atención,No,Estable,3.21666675,2.017857143,2.636111167,1.391667
+Pret Sandwich Bistro - Turbo,900472664,Pret Sandwich Bistro Ingenio - Turbo,2.2933334,2,2100,2100,0.2933334,0.1466667,🟡 Atención,No,Empeorando,0,,4.5866668,
+Foodology Court - Turbo,900465154,Foodology Villa Del Prado - Turbo Cra. 55 #172-27,2.283333,1,3000,3000,0.283333,0.1416665,🟡 Atención,No,Sin datos suficientes,2.283333,,,
+Pret Sandwich Bistro - Turbo,900416172,Pret Sandwich Bistro Chapinero - Turbo,2.269907361,3,2400,2400,0.2699073611,0.1349536806,🟡 Atención,No,Estable,1.422222333,2.98749975,2.4,
+Pret Sandwich Bistro - Turbo,900416549,Pret Sandwich Bistro 93 - Turbo,2.253819417,4,3000,3000,0.2538194167,0.1269097083,🟡 Atención,No,Estable,0.95,3.0875,0.083333,4.894444667
+Alba Vegetarian - Turbo,900475346,Alba Vegetarian Chico - Turbo,2.2458335,2,3000,3000,0.2458335,0.12291675,🟡 Atención,No,Estable,,2.4083335,2.0833335,
+Almuerzos D´la Casa - Turbo,900475129,Almuerzos D` La Casa - Kennedy - Turbo,2.2166665,2,2700,2700,0.2166665,0.10833325,🟡 Atención,No,Mejorando,3.95,,0.483333,
+Numa Cocina Mediterranea - Turbo,900476060,Cocina Mediterranea Ingenio - Turbo,2.2166665,2,2400,2400,0.2166665,0.10833325,🟡 Atención,No,Estable,,2.533333,1.9,
+House Of Salads - Turbo,900488856,House Of Salads Arrecife - Turbo,2.202777708,4,3000,3000,0.2027777083,0.1013888542,🟡 Atención,No,Estable,2.7166665,1.425,2.827777833,1.8416665
+Avocalia Turbo,900464312,Avocalia Cl 109 - Turbo,2.201341008,4,3000,3000,0.2013410082,0.1006705041,🟡 Atención,No,Mejorando,2.435312494,2.914646465,1.755526746,1.699878328
+Sanduches el Jefe - Turbo,900420512,Sandwich el Jefe Colina - Turbo,2.1972225,3,2700,2700,0.1972225,0.09861125,🟡 Atención,No,Estable,3.166667,1.516667,1.9083335,
+Señor Burrito. - Turbo,900488996,Señor Burrito Arrecife - Turbo,2.190036574,4,2700,2700,0.1900365741,0.09501828707,🟡 Atención,No,Mejorando,3.531818273,1.786,2.285185167,1.157142857
+Green House Fd - Turbo,900438449,Green House Parque 93 - Turbo,2.163491987,4,2700,2700,0.163491987,0.08174599348,🟡 Atención,No,Empeorando,1.702272705,1.628294558,2.544697,2.778703685
+Honest Food Fdl - Turbo,900472141,Honest Food Barranquilla - Turbo,2.159315034,4,2700,2700,0.1593150343,0.07965751716,🟡 Atención,No,Mejorando,3.905303,1.722807,1.481372471,1.527777667
+Numa Cocina Mediterranea - Turbo,900463749,Cocina Mediterranea Laureles - Turbo,2.150000083,4,2700,2700,0.1500000833,0.07500004167,🟡 Atención,No,Empeorando,1.733333333,0.8083335,5.2,0.8583335
+Numa Cocina Mediterranea - Turbo,900476061,Cocina Mediterranea Andes - Turbo,2.14601187,4,2100,2100,0.1460118696,0.07300593482,🟡 Atención,No,Empeorando,1.830952286,0.9880951429,0.99166675,4.7733333
+Local Cocina Consciente - Turbo,900477106,Local - Cocina Consciente Barranquilla - Turbo,2.13333325,2,2100,2100,0.13333325,0.066666625,🟡 Atención,No,Mejorando,3.9666665,,0.3,
+Burritos & Co - Turbo,900410574,Burritos And Co - Calle 174 - Turbo,2.129319514,4,2400,2400,0.1293195142,0.0646597571,🟡 Atención,No,Estable,2.167117162,2.76666666,1.646341463,1.937152771
+Casa Arabe - Turbo,900477847,Casa Árabe Villa Del Prado - Turbo,2.121626833,3,2100,2100,0.1216268333,0.06081341667,🟡 Atención,No,Mejorando,,3.4791665,0.183333,2.702381
+Sanduches el Jefe - Turbo,900420513,Sandwich el Jefe Kennedy - Turbo,2.1166665,2,2700,2700,0.1166665,0.05833325,🟡 Atención,No,Mejorando,3.8,,0.433333,
+Avocalia Turbo,900410780,Avocalia Chicó - Turbo,2.116522751,4,3000,3000,0.1165227512,0.05826137561,🟡 Atención,No,Empeorando,1.437288119,1.534920627,2.85438096,2.639501299
+Doritos Locos By Dorito - Turbo,900472112,Doritos Locos By Dorito Chapinero - Turbo,2.11083345,3,3000,3000,0.11083345,0.055416725,🟡 Atención,No,Empeorando,1.2866668,,3.02916675,2.0166668
+Desayuno Mi Tierrita - Turbo,900465157,Desayuno Mi Tierrita Laureles - Turbo,2.107615853,4,2700,2700,0.1076158528,0.05380792639,🟡 Atención,No,Empeorando,1.012963111,2.1708335,3.4433334,1.8033334
+Cinnabon - Turbo,900463784,Cinnabon Cl 109 - Turbo,2.097368615,4,3000,3000,0.09736861451,0.04868430726,🟡 Atención,No,Mejorando,3.135620902,1.820952386,1.607716037,1.825185133
+Desayuno Mi Tierrita - Turbo,900488770,Desayuno Mi Tierrita Arrecife - Turbo,2.093154786,4,2700,2700,0.09315478571,0.04657739286,🟡 Atención,No,Estable,2.597619143,2.2416665,1.1333335,2.4
+Mr Beast Burger - Turbo,900405270,Mr Beast Laureles - Turbo,2.092153331,4,2700,2700,0.09215333074,0.04607666537,🟡 Atención,No,Estable,2.452592556,1.98455278,1.488759674,2.442708313
+Green House Fd - Turbo,900438451,Green House Barranquilla - Turbo,2.078752704,4,2700,2700,0.07875270366,0.03937635183,🟡 Atención,No,Estable,2.42978727,2.001002451,2.602294717,1.281926377
+Señor Burrito. - Turbo,900467417,Señor Burrito Santa Monica - Turbo,2.075694563,4,3000,3000,0.0756945625,0.03784728125,🟡 Atención,No,Mejorando,1.8541665,3.55416675,0.566667,2.327778
+Desayunos de la Abuela - Turbo,900446276,Desayunos de la Abuela Calle 93 - Turbo,2.0666665,3,2400,2400,0.0666665,0.03333325,🟡 Atención,No,Empeorando,1.3,,1.283333,3.6166665
+Numa Cocina Mediterranea - Turbo,900488968,Numa Cocina Mediterranea Arrecife - Turbo,2.064270819,4,2700,2700,0.06427081875,0.03213540938,🟡 Atención,No,Mejorando,2.8633334,2.32916675,1.547916625,1.5166665
+Desayuno Mi Tierrita - Turbo,900465167,Desayuno Mi Tierrita - Cabecera - Turbo,2.05972225,4,3000,3000,0.05972225,0.029861125,🟡 Atención,No,Mejorando,5.366666667,1.622222333,0.3,0.95
+la Cuadra Desayunos Caseros - Turbo,900464914,la Cuadra - Cl 109 - Turbo,2.055555667,3,2400,2400,0.05555566667,0.02777783333,🟡 Atención,No,Empeorando,0.2,,0.516667,5.45
+House Of Salads - Turbo,900445607,House Of Salad Calle 93 - Turbo,2.053075446,4,2400,2400,0.05307544643,0.02653772321,🟡 Atención,No,Estable,1.304762,2.288095286,0.8,3.8194445
+Foodology Court - Turbo,900465144,Foodology Laureles - Turbo Calle 32f #66b-254,2.047916542,4,3000,3000,0.04791654167,0.02395827083,🟡 Atención,No,Mejorando,5.45,0.925,0.9333331667,0.883333
+Honest Food Fdl - Turbo,900472133,Honest Food Villa Del Prado - Turbo,2.042968775,4,2400,2400,0.04296877475,0.02148438737,🟡 Atención,No,Estable,1.650000077,2.416666647,2.29375,1.811458375
+Mañanero Diario - Turbo,900443497,Mañanero diario Colina - Turbo,2.041666833,3,3000,3000,0.04166683333,0.02083341667,🟡 Atención,No,Empeorando,1.1583335,0.766667,,4.2
+Desayuno Mi Tierrita - Turbo,900465166,Desayuno Mi Tierrita - Colina - Turbo,2.0283334,2,2400,2400,0.0283334,0.0141667,🟡 Atención,No,Empeorando,1.35,,2.7066668,
+Foodology Court - Turbo,900465145,Foodology Colina - Turbo Carrera 53 #137a-26,2.025,1,2700,2700,0.025,0.0125,🟡 Atención,No,Sin datos suficientes,,2.025,,
+Bottaniko - Turbo,900443515,Bottaniko Barranquilla - Turbo,2.01041675,4,3000,3000,0.01041675,0.005208375,🟡 Atención,No,Estable,1.85,2.075,1.8333335,2.2833335
+Brunch & Munch - Turbo,900409673,Brunch & Munch Castellana - Turbo,2.003465383,4,2400,2400,0.003465382966,0.001732691483,🟡 Atención,No,Estable,2.9291665,0.6851853333,2.474509824,1.924999875
+Pret Sandwich Bistro - Turbo,900416173,Pret Sándwich Bistro Laureles - Turbo Calle,2.002083313,4,3000,3000,0.0020833125,0.00104165625,🟡 Atención,No,Estable,2.7333335,2.00833325,0.6,2.6666665
+Numa Cocina Mediterranea - Turbo,900463762,Cocina Mediterranea Villa Del Prado - Turbo,2.000416633,4,2100,2100,0.0004166333333,0.0002083166667,🟡 Atención,No,Mejorando,2.588889167,2.936111167,1.8933332,0.583333
+Casa Arabe - Turbo,900477855,Casa Árabe San Fernando - Turbo,1.979166667,4,2400,2400,-0.02083333333,-0.01041666667,🟢 Saludable,No,Estable,1.813888833,2.144444333,2.6,1.3583335
+The Breakfast Club - Turbo,900475211,The Breakfast Club Barranquilla - Turbo,1.976736889,4,2700,2700,-0.02326311088,-0.01163155544,🟢 Saludable,No,Estable,2.30999995,1.204597724,2.939899,1.452450882
+Almuerzos D´la Casa - Turbo,900471209,Almuerzos D´la Casa - 93 - Turbo,1.975,3,2400,2400,-0.025,-0.0125,🟢 Saludable,No,Mejorando,2.425,2.85,0.65,
+Honest Food Fdl - Turbo,900472142,Honest Food Colina - Turbo,1.971940505,4,2400,2400,-0.02805949476,-0.01402974738,🟢 Saludable,No,Empeorando,1.452564,1.556410385,2.337878636,2.540909
+Alba Vegetarian - Turbo,900443013,Alba Vegetarian - Colina - Turbo Carrera 53  264,1.966666688,4,2700,2700,-0.0333333125,-0.01666665625,🟢 Saludable,No,Empeorando,0.925,1.90833325,3.95,1.0833335
+Señor Burrito. - Turbo,900467418,Señor Burrito 93 - Turbo,1.962499875,4,2100,2100,-0.037500125,-0.0187500625,🟢 Saludable,No,Empeorando,1.033333,0.2166665,4.366667,2.233333
+Cacerola - Turbo,900416211,Cacerola Laureles - Turbo,1.961111333,3,3000,3000,-0.03888866667,-0.01944433333,🟢 Saludable,No,Empeorando,0.916667,1.25,,3.716667
+Bottaniko - Turbo,900443505,Bottaniko Cali - San Fernando - Turbo,1.961111,3,2400,2400,-0.038889,-0.0194445,🟢 Saludable,No,Mejorando,0.6,4.9,0.383333,
+Monteverde - Turbo,900450773,Monteverde Villa Del Prado - Turbo,1.943439579,4,2700,2700,-0.0565604209,-0.02828021045,🟢 Saludable,No,Estable,1.340972208,2.6708333,2.101851778,1.66010103
+The Breakfast Club - Turbo,900475208,The Breakfast Club Cabecera - Turbo,1.937835908,4,2700,2700,-0.06216409153,-0.03108204577,🟢 Saludable,No,Mejorando,2.587719316,2.315476143,1.264814944,1.583333231
+Mr Beast Burger - Turbo,900405268,Mr Beast Manila - Turbo,1.934488644,4,3000,3000,-0.06551135606,-0.03275567803,🟢 Saludable,No,Estable,1.9291666,2.228787909,2.3633334,1.216666667
+Cinnabon Foodology - Turbo,900410068,Cinnabon Chapinero - Turbo,1.93213534,4,2700,2700,-0.0678646604,-0.0339323302,🟢 Saludable,No,Estable,1.742592593,1.602020152,2.025595214,2.3583334
+Honest Food Fdl - Turbo,900472138,Honest Food Calle 93 - Turbo,1.920291314,4,2400,2400,-0.07970868559,-0.0398543428,🟢 Saludable,No,Estable,1.863043478,1.291269857,2.327777867,2.199074056
+la Cuadra Desayunos Caseros - Turbo,900467497,La Cuadra Desayunos Caseros 93 - Turbo,1.916667,1,3000,3000,-0.083333,-0.0416665,🟢 Saludable,No,Sin datos suficientes,,,1.916667,
+Avocalia Turbo,900405544,Avocalia Cali - San Fernando - Turbo,1.915463601,4,2400,2400,-0.08453639933,-0.04226819967,🟢 Saludable,No,Estable,1.973717962,1.460144957,1.822435885,2.4055556
+Almuerzos D´la Casa - Turbo,900471210,Almuerzos D´la Casa - Chapinero - Turbo,1.9095833,4,3000,3000,-0.0904167,-0.04520835,🟢 Saludable,No,Estable,0.9,3.111111,2.897222,0.7300002
+Helados San Jerónimo - Turbo,900407396,Heladería San Jerónimo Santa Mónica (Cali Norte) - Turbo,1.9083335,3,3000,3000,-0.0916665,-0.04583325,🟢 Saludable,No,Empeorando,,0,5.616667,0.1083335
+Alba Vegetarian - Turbo,900476064,Alba Vegetarian Villa Del Prado - Turbo,1.903124938,4,2400,2400,-0.0968750625,-0.04843753125,🟢 Saludable,No,Estable,1.24583325,2.8166665,3.116667,0.433333
+La Cuadra - Turbo,900481970,La Cuadra - Cartagena - Turbo,1.888212574,4,2400,2400,-0.1117874263,-0.05589371313,🟢 Saludable,No,Mejorando,3.442424182,1.780769231,1.142156882,1.1875
+Dembow - Turbo,900473647,Dembow - Barranquilla Nte - Turbo,1.875,2,3000,3000,-0.125,-0.0625,🟢 Saludable,No,Empeorando,,0.583333,3.166667,
+Monteverde - Turbo,900450779,Monteverde Chapinero - Turbo,1.870409502,4,2700,2700,-0.1295904982,-0.06479524908,🟢 Saludable,No,Empeorando,1.226041625,1.574305542,2.326388958,2.354901882
+La Cuadra - Turbo,900488957,la Cuadra Arrecife - Turbo,1.85735619,4,2700,2700,-0.1426438101,-0.07132190503,🟢 Saludable,No,Mejorando,2.444144135,2.180158619,1.411788634,1.393333371
+Foodology Court - Turbo,900473569,Foodology Ingenio - Turbo,1.847361163,4,3000,3000,-0.1526388375,-0.07631941875,🟢 Saludable,No,Empeorando,1.719444667,0.5033334,0.7083333333,4.45833325
+la Cuadra Desayunos Caseros - Turbo,900467500,La Cuadra Desayunos Caseros Manila - Turbo,1.847222222,3,3000,3000,-0.1527777778,-0.07638888889,🟢 Saludable,No,Estable,,1.775,0.2166666667,3.55
+Dembow - Turbo,900473643,Dembow - Laureles - Turbo,1.845370556,3,3000,3000,-0.1546294444,-0.07731472222,🟢 Saludable,No,Estable,0.9583335,2.494444667,2.0833335,
+Avocalia Turbo,900420305,Avocalia - Colina - Turbo,1.839841733,4,2700,2700,-0.1601582673,-0.08007913363,🟢 Saludable,No,Estable,1.600892804,2.677966051,1.460040217,1.62046786
+Casa Arabe - Turbo,900477849,Casa Árabe Colina - Turbo,1.824305583,4,2400,2400,-0.1756944167,-0.08784720833,🟢 Saludable,No,Empeorando,1.4,1.155555667,1.566666667,3.175
+Brunch & Munch - Turbo,900405253,Brunch & Munch Laureles - Turbo,1.81743898,4,3000,3000,-0.1825610198,-0.09128050992,🟢 Saludable,No,Estable,1.238095245,1.795454545,1.528750025,2.707456105
+Burritos & Co - Turbo,900481037,Burritos & Co - Cartagena - Turbo,1.816974142,4,2700,2700,-0.1830258576,-0.09151292878,🟢 Saludable,No,Estable,1.870289957,1.446078471,1.728947368,2.222580774
+Green House Fd - Turbo,900481820,Green House Cartagena - Turbo,1.815014564,4,2700,2700,-0.1849854359,-0.09249271796,🟢 Saludable,No,Estable,1.802032488,1.710569024,2.052380971,1.695075773
+Burritos & Co - Turbo,900410572,Burritos And Co 93 - Turbo,1.788983137,4,2700,2700,-0.2110168634,-0.1055084317,🟢 Saludable,No,Estable,1.438571457,2.058630982,1.71527775,1.943452357
+Alba Vegetarian - Turbo,900443008,Alba Vegetarian - Laureles - Turbo,1.787599333,4,2700,2700,-0.2124006667,-0.1062003333,🟢 Saludable,No,Estable,1.461111333,2.7208335,1.497619,1.4708335
+Dembow - Turbo,900473650,Dembow - Andes - Turbo,1.77916675,2,2700,2700,-0.22083325,-0.110416625,🟢 Saludable,No,Empeorando,,0.7916665,2.766667,
+House Of Salads - Turbo,900476070,House Of Salads Andes - Turbo,1.778905575,4,3000,3000,-0.2210944245,-0.1105472123,🟢 Saludable,No,Estable,1.615686294,1.446153923,1.9191667,2.134615385
+Monteverde - Turbo,900450774,Monteverde Barranquilla - Turbo,1.772982873,4,3000,3000,-0.2270171268,-0.1135085634,🟢 Saludable,No,Estable,2.505031434,1.619208983,2.126950298,0.8407407778
+Avocalia Turbo,900405547,Avocalia Barranquilla - Turbo,1.770668127,4,2700,2700,-0.2293318732,-0.1146659366,🟢 Saludable,No,Estable,2.2842857,1.348214304,1.983072906,1.467099597
+House Of Salads - Turbo,900476073,House Of Salads Cabecera - Turbo,1.761805375,4,3000,3000,-0.238194625,-0.1190973125,🟢 Saludable,No,Mejorando,1.683333167,3.905555333,0.65,0.808333
+House Of Salads - Turbo,900445671,House Of Salad San Fernando - Turbo,1.759027833,4,3000,3000,-0.2409721667,-0.1204860833,🟢 Saludable,No,Estable,1.877778,2.325,1.305555333,1.527778
+Ñamgucheria Sandwiches - Turbo,900439222,Ñamguchería Laureles - Turbo,1.755857702,4,3000,3000,-0.2441422984,-0.1220711492,🟢 Saludable,No,Estable,1.182142929,2.480303091,1.737499969,1.623484818
+Avocalia Turbo,900488273,Avocalia Arrecife - Turbo,1.752819811,4,2700,2700,-0.2471801891,-0.1235900946,🟢 Saludable,No,Estable,1.834102554,1.691762425,2.102564062,1.382850203
+la Cuadra Desayunos Caseros - Turbo,900481966,La Cuadra Desayunos Caseros Cartagena - Turbo,1.733333,1,3000,3000,-0.266667,-0.1333335,🟢 Saludable,No,Sin datos suficientes,,,1.733333,
+Helados San Jerónimo - Turbo,900420291,Heladería San Jerónimo Kennedy - Turbo,1.715972188,4,3000,3000,-0.2840278125,-0.1420139063,🟢 Saludable,No,Mejorando,4.125,1.92916675,0.497222,0.3125
+Cinnabon - Turbo,900426807,Cinnabon Bucaramanga - Turbo,1.713821005,4,3000,3000,-0.2861789948,-0.1430894974,🟢 Saludable,No,Estable,0.8999999091,2.367543789,1.903124938,1.684615385
+Cacerola - Turbo,900473675,Cacerola - Andes - Turbo,1.708333,3,2100,2100,-0.291667,-0.1458335,🟢 Saludable,No,Empeorando,0.483333,1.858333,,2.783333
+Burritos & Co - Turbo,900473554,Burritos & Co - Ingenio - Turbo,1.705705472,4,2400,2400,-0.2942945278,-0.1471472639,🟢 Saludable,No,Estable,1.419540241,1.854761964,1.577142857,1.971376826
+Selvatiko. - Turbo,900475116,Selvatiko. Chapinero - Turbo,1.7,1,2700,2700,-0.3,-0.15,🟢 Saludable,No,Sin datos suficientes,,,1.7,
+Selvatiko. - Turbo,900475118,Selvatiko. Villa del prado - Turbo,1.698958375,4,2700,2700,-0.301041625,-0.1505208125,🟢 Saludable,No,Mejorando,0.316667,4.0916665,1.05,1.3375
+Desayunos de la Abuela - Turbo,900446313,Desayunos de la Abuela Cabecera - Turbo,1.69113405,4,2700,2700,-0.3088659497,-0.1544329748,🟢 Saludable,No,Estable,2.1391666,0.8409090909,2.401851815,1.382608696
+Mañanero Diario - Turbo,900475199,Mañanero Kennedy - Turbo,1.6791665,2,2400,2400,-0.3208335,-0.16041675,🟢 Saludable,No,Empeorando,,1.258333,2.1,
+Burritos & Co - Turbo,900410569,Burritos & CO Cali - San Fernando - Turbo,1.677318981,4,2700,2700,-0.3226810193,-0.1613405097,🟢 Saludable,No,Estable,0.975,1.772222333,2.023958375,1.938095214
+Desayuno Mi Tierrita - Turbo,900470919,Desayunos Mi Tierrita - Kennedy - Turbo,1.6666665,2,2100,2100,-0.3333335,-0.16666675,🟢 Saludable,No,Sin datos suficientes,0.783333,2.55,,
+Green House Fd - Turbo,900438444,Green House San Fernando - Turbo,1.655059472,4,2400,2400,-0.3449405283,-0.1724702641,🟢 Saludable,No,Estable,1.572222167,2.285416625,1.325694417,1.436904679
+Frost By Oreo - Turbo,900400262,Frost By Oreo Castellana - Turbo,1.647222083,4,2700,2700,-0.3527779167,-0.1763889583,🟢 Saludable,No,Empeorando,1.033333,0,4.4,1.155555333
+Bottaniko - Turbo,900443512,Bottaniko Manila - Medellin - Turbo,1.642117763,4,3000,3000,-0.357882237,-0.1789411185,🟢 Saludable,No,Estable,1.045238143,2.677778,0.6287879091,2.216667
+Casa Arabe - Turbo,900488281,Casa Arabe Arrecife - Turbo,1.641666833,2,1,1,-0.3583331667,-0.1791665833,🟢 Saludable,No,Sin datos suficientes,,,1.416667,1.866666667
+Desayunos de la Abuela - Turbo,900446317,Desayunos de la Abuela Laureles - Turbo,1.633605012,4,3000,3000,-0.3663949883,-0.1831974941,🟢 Saludable,No,Estable,1.235507174,2.134482828,1.230303045,1.934127
+Monteverde - Turbo,900489032,Monteverde Arrecife - Turbo,1.633068259,4,2700,2700,-0.3669317409,-0.1834658705,🟢 Saludable,No,Estable,2.0383334,0.6166665556,1.493939636,2.383333444
+Alba Vegetarian - Turbo,900479519,Alba Vegetarian - Cartagena Calle 24a 329 - Turbo,1.625,1,3000,3000,-0.375,-0.1875,🟢 Saludable,No,Sin datos suficientes,,,,1.625
+la Cuadra Desayunos Caseros - Turbo,900470909,La Cuadra Desayunos Caseros Laureles - Turbo,1.620833375,4,2700,2700,-0.379166625,-0.1895833125,🟢 Saludable,No,Empeorando,0.1166665,1.7833335,2.2583335,2.325
+Casa Arabe - Turbo,900477844,Casa Árabe Andes - Turbo,1.618055628,4,2700,2700,-0.381944372,-0.190972186,🟢 Saludable,No,Mejorando,2.166666833,2.016666545,1.2666668,1.022222333
+Frost By Oreo - Turbo,900419498,Frost By Oreo Chico - Turbo,1.616919153,4,3000,3000,-0.383080847,-0.1915404235,🟢 Saludable,No,Estable,1.3533332,1.5133332,0.6954545455,2.905555667
+Avocalia Turbo,900401242,Avocalia - Castellana - Turbo,1.613993241,4,2400,2400,-0.3860067587,-0.1930033793,🟢 Saludable,No,Estable,1.807222167,1.694961209,1.498397442,1.455392147
+Burrito Cantina - Turbo,900470960,Burrito Cantina Kennedy - Turbo,1.605555333,3,2700,2700,-0.3944446667,-0.1972223333,🟢 Saludable,No,Estable,,1.533333,1.9,1.383333
+Cinnabon - Turbo,900416553,Cinnabon Villa Del Prado - Turbo,1.605533643,4,2700,2700,-0.3944663567,-0.1972331784,🟢 Saludable,No,Estable,1.50733332,2.267094026,1.72469137,0.9230158571
+Almuerzos D´la Casa - Turbo,900471208,Almuerzos D´la Casa - Santa Monica - Turbo,1.598958313,4,2400,2400,-0.4010416875,-0.2005208438,🟢 Saludable,No,Empeorando,0,2.0166665,3.92916675,0.45
+Dembow - Turbo,900473644,Dembow - Manila - Turbo,1.598611167,3,3000,3000,-0.4013888333,-0.2006944167,🟢 Saludable,No,Estable,3.016667,0,1.7791665,
+Doritos Locos By Dorito - Turbo,900473565,Doritos Locos By Dorito Kennedy - Turbo,1.587499958,4,2400,2400,-0.4125000417,-0.2062500208,🟢 Saludable,No,Mejorando,0.1,4.319444167,0.3,1.630555667
+La Cuadra - Turbo,900416192,La Cuadra - Castellana - Turbo,1.582348459,4,2400,2400,-0.4176515409,-0.2088257705,🟢 Saludable,No,Mejorando,3.106060636,1.791111067,1.171111133,0.261111
+Avocalia Turbo,900480008,Avocalia - Cartagena - Turbo,1.576243138,4,2700,2700,-0.423756862,-0.211878431,🟢 Saludable,No,Estable,1.637387378,1.499186951,1.466666625,1.701731597
+Honest Food Fdl - Turbo,900488848,Honest Food Arrecife - Turbo,1.57020564,4,2700,2700,-0.42979436,-0.21489718,🟢 Saludable,No,Estable,1.449999958,2.230128115,0.989583375,1.611111111
+Acpm Corrientazo - Turbo,900467504,Acpm Corrientazo San Fernando - Turbo,1.5583335,2,3000,3000,-0.4416665,-0.22083325,🟢 Saludable,No,Estable,,1.8583335,1.2583335,
+Desayuno Mi Tierrita - Turbo,900465162,Desayunos Mi Tierrita - Villa del prado - Turbo,1.549999917,4,2100,2100,-0.4500000833,-0.2250000417,🟢 Saludable,No,Estable,0.9,1.488888667,0.483333,3.327778
+Señor Burrito. - Turbo,900467423,Señor Burrito Laureles - Turbo,1.545763908,4,3000,3000,-0.4542360917,-0.2271180458,🟢 Saludable,No,Estable,2.063888833,1.64583325,1.8233333,0.65000025
+la Cuadra Desayunos Caseros - Turbo,900473694,la Cuadra Desayunos Caceros - Ingenio - Turbo,1.5416665,2,2700,2700,-0.4583335,-0.22916675,🟢 Saludable,No,Sin datos suficientes,,,2.883333,0.2
+Burrito Cantina - Turbo,900467378,Burrito Cantina Colina - Turbo,1.538889,3,2100,2100,-0.461111,-0.2305555,🟢 Saludable,No,Empeorando,0.5,1.05,,3.066667
+Avocalia Turbo,900427112,Avocalia Bucaramanga - Turbo,1.532523766,4,3000,3000,-0.4674762342,-0.2337381171,🟢 Saludable,No,Estable,1.545502651,1.934027764,1.291269821,1.359294827
+Vicio - Turbo,900426529,Vicio Andes - Turbo,1.526736104,4,2700,2700,-0.4732638958,-0.2366319479,🟢 Saludable,No,Mejorando,3.925,1.67916675,0.4694443333,0.03333333333
+Monteverde - Turbo,900476066,Monteverde Andes - Turbo,1.520271141,4,2700,2700,-0.4797288591,-0.2398644296,🟢 Saludable,No,Estable,1.709259333,1.725926,0.8685184444,1.777380786
+Alba Vegetarian - Turbo,900443017,Alba Vegetarian - Calle 93 - Turbo,1.513333375,4,2700,2700,-0.486666625,-0.2433333125,🟢 Saludable,No,Estable,3.0583335,0.625,0,2.37
+Mañanero Diario - Turbo,900443493,Mañanero diario San Fernando - Turbo,1.50833325,2,2700,2700,-0.49166675,-0.245833375,🟢 Saludable,No,Empeorando,,0,3.0166665,
+Green House Fd - Turbo,900438445,Green House Bucaramanga - Turbo,1.503954834,4,2700,2700,-0.4960451655,-0.2480225828,🟢 Saludable,No,Estable,1.793478391,1.269444333,1.798484848,1.154411765
+Burritos & Co - Turbo,900410570,Burritos & Co Barranquilla - Turbo,1.500229318,4,2700,2700,-0.4997706819,-0.249885341,🟢 Saludable,No,Estable,1.594968604,1.490650415,1.495918347,1.419379907
+Monteverde - Turbo,900450767,Monteverde Colina - Turbo,1.49458438,4,2700,2700,-0.50541562,-0.25270781,🟢 Saludable,No,Mejorando,2.129885034,1.686507952,1.252777833,0.9091667
+Burrito Cantina - Turbo,900488277,Burrito Cantina Arrecife - Turbo,1.490396843,4,2700,2700,-0.5096031571,-0.2548015786,🟢 Saludable,No,Estable,2.3266668,1.157142857,1.511111,0.9666667143
+Acpm Corrientazo - Turbo,900470916,Acpm Corrientazo Andes - Turbo,1.484259222,3,3000,3000,-0.5157407778,-0.2578703889,🟢 Saludable,No,Mejorando,0.716667,3.327777667,0.408333,
+Honest Food Fdl - Turbo,900475461,Honest Food Ingenio - Turbo,1.477837959,4,2400,2400,-0.5221620414,-0.2610810207,🟢 Saludable,No,Estable,1.049074111,1.340625125,2.320370444,1.201282154
+Almuerzos D´la Casa - Turbo,900477128,Almuerzos D´la Casa Cl 109 - Turbo,1.4666667,4,2700,2700,-0.5333333,-0.26666665,🟢 Saludable,No,Mejorando,1.65,3,0.3733334,0.8433334
+Bottaniko - Turbo,900475791,Bottaniko - Andes - Turbo,1.4666665,2,3000,3000,-0.5333335,-0.26666675,🟢 Saludable,No,Estable,1.4,,1.533333,
+Avocalia Turbo,900473671,Avocalia Andes Mp - Turbo,1.463021863,4,2700,2700,-0.5369781367,-0.2684890683,🟢 Saludable,No,Estable,1.230416675,1.537857114,1.325352141,1.758461523
+Burrito Cantina - Turbo,900467385,Burrito Cantina Laureles - Turbo,1.461805708,4,2700,2700,-0.5381942917,-0.2690971458,🟢 Saludable,No,Empeorando,0.191667,1.872222333,1.1,2.6833335
+Almuerzos D´la Casa - Turbo,900471207,Almuerzos D´la Casa - Laureles - Turbo,1.455034671,4,3000,3000,-0.5449653292,-0.2724826646,🟢 Saludable,No,Estable,1.1916666,1.83958325,2.422222333,0.3666665
+Mañanero Diario - Turbo,900476020,Mañanero Diario Chico - Turbo,1.45,1,3000,3000,-0.55,-0.275,🟢 Saludable,No,Sin datos suficientes,,1.45,,
+La Cuadra - Turbo,900426536,La Cuadra - Andes - Turbo,1.444371372,4,2700,2700,-0.555628628,-0.277814314,🟢 Saludable,No,Empeorando,0.9312500625,1.095424843,1.453191468,2.297619114
+La Cuadra - Turbo,900416200,La Cuadra Cali - San Fernando - Turbo,1.436550705,4,3000,3000,-0.5634492952,-0.2817246476,🟢 Saludable,No,Estable,0.9608527209,1.840530341,1.186486486,1.758333271
+Frost By Oreo - Turbo,900426531,Frost by Oreo Bucaramanga - Turbo,1.434722188,4,3000,3000,-0.5652778125,-0.2826389063,🟢 Saludable,No,Empeorando,0.2625,0.238889,4.508333,0.72916675
+Acpm Corrientazo - Turbo,900488269,Acpm Corrientazo Arrecife - Turbo,1.433958419,4,2700,2700,-0.5660415813,-0.2830207906,🟢 Saludable,No,Estable,1.902222267,1.504444533,0.87916675,1.450000125
+Acpm Corrientazo - Turbo,900467513,Acpm Corrientazo Colina - Turbo,1.4333335,1,3000,3000,-0.5666665,-0.28333325,🟢 Saludable,No,Sin datos suficientes,,1.4333335,,
+Selvatiko. - Turbo,900482001,Selvatiko. Cartagena - Turbo,1.433333,1,2400,2400,-0.566667,-0.2833335,🟢 Saludable,No,Sin datos suficientes,1.433333,,,
+Brunch & Munch - Turbo,900409674,Brunch & Munch Usaquen - Turbo,1.429828954,4,3000,3000,-0.5701710464,-0.2850855232,🟢 Saludable,No,Estable,1.410909109,1.196009394,1.426190449,1.686206862
+Mr Beast Burger - Turbo,900409679,Mr Beast Usaquén - Turbo,1.423398624,4,3000,3000,-0.5766013757,-0.2883006879,🟢 Saludable,No,Estable,1.324999923,1.198718,1.282098741,1.887777833
+Acpm Corrientazo - Turbo,900479517,Acpm Corrientazo Cartagena - Turbo,1.423105955,4,2700,2700,-0.5768940455,-0.2884470227,🟢 Saludable,No,Empeorando,0.5333333333,0.7090908182,0.4166666667,4.033333
+Ñamgucheria Sandwiches - Turbo,900439223,Ñamguchería Manila - Turbo,1.409582897,4,3000,3000,-0.5904171032,-0.2952085516,🟢 Saludable,No,Estable,1.394827586,1.492929242,1.516092034,1.234482724
+The Breakfast Club - Turbo,900475214,The Breakfast Club Laurele - Turbo,1.403585965,4,2700,2700,-0.5964140345,-0.2982070173,🟢 Saludable,No,Estable,1.402136692,1.591823887,1.489430878,1.130952405
+Honest Food Fdl - Turbo,900481826,Honest Food Cartagena - Turbo,1.394314029,4,2700,2700,-0.6056859708,-0.3028429854,🟢 Saludable,No,Estable,1.621428571,0.901282,1.610606091,1.443939455
+Cinnabon - Turbo,900476080,Cinnabon Colina - Turbo,1.366978077,4,2400,2400,-0.6330219235,-0.3165109617,🟢 Saludable,No,Estable,0.9986111667,1.8377778,0.7423076923,1.889215647
+Honest Food Fdl - Turbo,900475459,Honest Food Andes - Turbo,1.365696108,4,2400,2400,-0.6343038922,-0.3171519461,🟢 Saludable,No,Estable,0.9731884348,1.603921588,1.17028987,1.715384538
+Numa Cocina Mediterranea - Turbo,900463746,Numa Cocina Mediterranea Calle 93 - Turbo,1.354861104,4,2400,2400,-0.6451388958,-0.3225694479,🟢 Saludable,No,Mejorando,3.294444667,1.49166675,0.333333,0.3
+The Breakfast Club - Turbo,900475289,The Breakfast Club Usaquen - Turbo,1.340891747,4,3000,3000,-0.6591082528,-0.3295541264,🟢 Saludable,No,Estable,1.357575727,0.9769607941,0.8058824118,2.223148056
+Avocalia Turbo,900472745,Avocalia - Ingenio - Turbo,1.332231223,4,2400,2400,-0.6677687766,-0.3338843883,🟢 Saludable,No,Estable,1.228571429,1.382575636,1.344444429,1.3733334
+Selvatiko. - Turbo,900475117,Selvatiko. Manila - Turbo,1.323750025,4,3000,3000,-0.676249975,-0.3381249875,🟢 Saludable,No,Estable,1.6133332,1.4733334,2.05,0.1583335
+Frost By Oreo - Turbo,900475372,Frost By Oreo Cl 109 - Turbo,1.321458413,4,3000,3000,-0.6785415875,-0.3392707938,🟢 Saludable,No,Estable,1.9958335,0.86666675,1.0366668,1.3866666
+House Of Salads - Turbo,900445676,House Of Salad Colina - Turbo,1.312222292,4,2700,2700,-0.6877777083,-0.3438888542,🟢 Saludable,No,Mejorando,2.685,0.7027778333,0.9861111667,0.8750001667
+Vicio - Turbo,900405131,Vicio San Fernando - Turbo,1.31041675,2,2700,2700,-0.68958325,-0.344791625,🟢 Saludable,No,Mejorando,,1.9208335,0.7,
+Cinnabon - Turbo,900405124,Cinnabon San Fernando - Turbo,1.294039359,4,2700,2700,-0.7059606414,-0.3529803207,🟢 Saludable,No,Estable,0.54583325,1.339583375,1.690740667,1.600000143
+Burritos & Co - Turbo,900420641,Burritos And Co - Colina - Turbo,1.292047791,4,2700,2700,-0.7079522091,-0.3539761046,🟢 Saludable,No,Estable,1.288141019,1.924122803,0.8945238286,1.061403513
+Burritos & Co - Turbo,900426540,Burritos & Co Andes - Turbo,1.283939288,4,2700,2700,-0.7160607124,-0.3580303562,🟢 Saludable,No,Estable,1.440909109,1.083333355,1.364506148,1.247008538
+Honest Food Fdl - Turbo,900472132,Honest Food Laureles - Turbo,1.283379219,4,2700,2700,-0.7166207815,-0.3583103907,🟢 Saludable,No,Estable,1.217878836,1.345045081,1.288541688,1.282051269
+Cacerola - Turbo,900473673,Cacerola - Colina - Turbo,1.283333,1,2400,2400,-0.716667,-0.3583335,🟢 Saludable,No,Sin datos suficientes,,,1.283333,
+Green House Fd - Turbo,900438443,Green House Laureles - Turbo,1.279742111,4,2700,2700,-0.7202578893,-0.3601289446,🟢 Saludable,No,Estable,1.027240172,1.334374988,1.453240764,1.304112519
+Alba Vegetarian - Turbo,900475221,Alba Vegetarian - Andes - Turbo,1.268055458,4,2400,2400,-0.7319445417,-0.3659722708,🟢 Saludable,No,Empeorando,0.75,0.8388888333,1.033333,2.45
+Honest Food Fdl - Turbo,900472134,Honest Food Cabecera - Turbo,1.25957789,4,3000,3000,-0.7404221101,-0.370211055,🟢 Saludable,No,Estable,1.464285571,1.445454545,0.7833333,1.345238143
+Doritos Locos By Dorito - Turbo,900488774,Doritosclocos By Doritos Arrecife - Turbo,1.258333375,4,2700,2700,-0.741666625,-0.3708333125,🟢 Saludable,No,Mejorando,0.9,3.2333335,0.566667,0.333333
+Cinnabon - Turbo,900475098,Cinnabon Ingenio - Turbo,1.242113094,4,2700,2700,-0.7578869063,-0.3789434531,🟢 Saludable,No,Mejorando,2.541666625,1.297619,0.3833335,0.74583325
+Mañanero Diario - Turbo,900443495,Mañanero diario Manila - Turbo,1.229629667,3,3000,3000,-0.7703703333,-0.3851851667,🟢 Saludable,No,Mejorando,1.466666667,1.505555667,0.7166666667,
+Monteverde - Turbo,900476067,Monteverde Ingenio - Turbo,1.227048694,4,2700,2700,-0.7729513063,-0.3864756531,🟢 Saludable,No,Estable,1.211111,0.616667,1.5283334,1.552083375
+La Cuadra - Turbo,900416197,La Cuadra Barranquilla Norte - Turbo,1.222955633,4,2700,2700,-0.777044367,-0.3885221835,🟢 Saludable,No,Estable,1.587943277,1.027907,1.175555556,1.1004167
+Brunch & Munch - Turbo,900472747,Brunch & Munch - Ingenio - Turbo,1.222222083,4,2400,2400,-0.7777779167,-0.3888889583,🟢 Saludable,No,Estable,0.233333,1.705555333,0.6,2.35
+House Of Salads - Turbo,900445675,House Of Salad Barranquilla - Turbo,1.221597225,4,2400,2400,-0.778402775,-0.3892013875,🟢 Saludable,No,Estable,0.3916665,2.5875,0.313889,1.5933334
+Cacerola - Turbo,900416206,Cacerola Manila - Medellin - Turbo,1.2203705,3,3000,3000,-0.7796295,-0.38981475,🟢 Saludable,No,Empeorando,0.7833335,0.316667,2.561111,
+Burrito Cantina - Turbo,900467383,Burrito Cantina San Fernando - Turbo,1.214814889,3,3000,3000,-0.7851851111,-0.3925925556,🟢 Saludable,No,Estable,1.155555667,0.922222,1.566667,
+Alba Vegetarian - Turbo,900443010,Alba Vegetarian - Cabecera - Turbo,1.2087499,4,2700,2700,-0.7912501,-0.39562505,🟢 Saludable,No,Estable,1.833333,1.15,1.3266666,0.525
+Señor Burrito. - Turbo,900471311,Señor Burrito Andes - Turbo,1.201389042,4,2400,2400,-0.7986109583,-0.3993054792,🟢 Saludable,No,Estable,0.95,0.8833335,1.955555667,1.016667
+Burritos & Co - Turbo,900488278,Burritos & Co Arrecife - Turbo,1.2,1,3000,3000,-0.8,-0.4,🟢 Saludable,No,Sin datos suficientes,,1.2,,
+Acpm Corrientazo - Turbo,900464913,Acpm Corrientazo Cl 109 - Turbo,1.1958335,3,2400,2400,-0.8041665,-0.40208325,🟢 Saludable,No,Mejorando,0,3.066667,0.5208335,
+Pret Sandwich Bistro - Turbo,900416176,Pret Sandwich Bistro Barranquilla Nte - Turbo,1.193518583,3,3000,3000,-0.8064814167,-0.4032407083,🟢 Saludable,No,Estable,,1.66666675,0.438889,1.475
+Burrito Cantina - Turbo,900473552,Burrito Cantina Ingenio - Turbo,1.189583333,3,2400,2400,-0.8104166667,-0.4052083333,🟢 Saludable,No,Estable,2.1083335,0.733333,,0.7270835
+Acpm Corrientazo - Turbo,900467511,Acpm Corrientazo Castellana - Turbo,1.1833335,2,2100,2100,-0.8166665,-0.40833325,🟢 Saludable,No,Empeorando,,0.316667,2.05,
+Bottaniko - Turbo,900443514,Bottaniko - Bucaramanga - Turbo,1.180555583,3,3000,3000,-0.8194444167,-0.4097222083,🟢 Saludable,No,Mejorando,3.116667,,0.24166675,0.183333
+Monteverde - Turbo,900482005,Monteverde Cartagena - Turbo,1.17100684,4,2700,2700,-0.8289931604,-0.4144965802,🟢 Saludable,No,Estable,1.4133332,1.069444333,0.8033332,1.397916625
+Sanduches el Jefe - Turbo,900419500,Sandwich El Jefe Laureles - Turbo,1.160276024,4,3000,3000,-0.8397239762,-0.4198619881,🟢 Saludable,No,Estable,1.248148,1.321428429,1.51875,0.5527776667
+Helados San Jerónimo - Turbo,900488984,Helados San Jerónimo Arrecife - Turbo,1.156574056,4,2700,2700,-0.8434259444,-0.4217129722,🟢 Saludable,No,Estable,1.3666665,1.28,1.227777833,0.7518518889
+Señor Burrito. - Turbo,900467419,Señor Burrito San Fernando - Turbo,1.142013792,4,2700,2700,-0.8579862083,-0.4289931042,🟢 Saludable,No,Estable,2.0958335,0.425,1.658333,0.3888886667
+Desayunos de la Abuela - Turbo,900446309,Desayunos de la Abuela Manila - Turbo,1.140367867,4,3000,3000,-0.8596321331,-0.4298160666,🟢 Saludable,No,Estable,0.4961749016,1.670833317,1.101129949,1.2933333
+Frost By Oreo - Turbo,900475353,Frost By Oreo Ingenio - Turbo,1.138888833,3,3000,3000,-0.8611111667,-0.4305555833,🟢 Saludable,No,Empeorando,0,,1.8166665,1.6
+Monteverde - Turbo,900449821,MonteVerde Calle 93 - Turbo,1.137009495,4,2400,2400,-0.8629905048,-0.4314952524,🟢 Saludable,No,Estable,1.622222111,0.491666625,1.453846154,0.9803030909
+Monteverde - Turbo,900450772,Monteverde San Fernando - Turbo,1.136741472,4,2700,2700,-0.8632585276,-0.4316292638,🟢 Saludable,No,Empeorando,0.4016667,0.5522222667,1.023076923,2.57
+Selvatiko. - Turbo,900475119,Selvatiko. Cabecera - Turbo,1.1333335,2,2700,2700,-0.8666665,-0.43333325,🟢 Saludable,No,Sin datos suficientes,,,0.35,1.916667
+Selvatiko. - Turbo,900475114,Selvatiko. Santa Monica - Turbo,1.133333,1,2700,2700,-0.866667,-0.4333335,🟢 Saludable,No,Sin datos suficientes,,,1.133333,
+The Breakfast Club - Turbo,900475283,The Breakfast Club Manila - Turbo,1.128921351,4,3000,3000,-0.8710786487,-0.4355393243,🟢 Saludable,No,Estable,1.032420068,0.9946180417,0.79458335,1.694063945
+Almuerzos D´la Casa - Turbo,900471211,Almuerzos D´la Casa - San Fernando - Turbo,1.117638933,4,2700,2700,-0.8823610667,-0.4411805333,🟢 Saludable,No,Mejorando,1.477777667,2.0733334,0.5361111667,0.3833335
+Mañanero Diario - Turbo,900443504,Mañanero diario Bucaramanga - Turbo,1.1166665,3,3000,3000,-0.8833335,-0.44166675,🟢 Saludable,No,Mejorando,,2.283333,0.525,0.5416665
+Monteverde - Turbo,900450764,Monteverde Laureles - Turbo Calle 32F,1.110709955,4,2700,2700,-0.8892900445,-0.4446450223,🟢 Saludable,No,Estable,1.176356674,0.9179825263,1.1171875,1.231313121
+Foodology Court - Turbo,900471303,Foodology Andes - Turbo,1.1,1,2400,2400,-0.9,-0.45,🟢 Saludable,No,Sin datos suficientes,,1.1,,
+Numa Cocina Mediterranea - Turbo,900463760,Cocina Mediterranea Usaquen - Turbo,1.090740889,3,2400,2400,-0.9092591111,-0.4546295556,🟢 Saludable,No,Empeorando,0.6,0.9055556667,1.766667,
+La Cuadra - Turbo,900416193,La Cuadra - Laureles - Turbo,1.067448249,4,2700,2700,-0.9325517513,-0.4662758757,🟢 Saludable,No,Estable,0.9124999375,1.495312469,0.9011110667,0.9608695217
+Burrito Cantina - Turbo,900470961,Burrito Cantina Andes - Turbo,1.0625,2,2700,2700,-0.9375,-0.46875,🟢 Saludable,No,Estable,,0.841667,1.283333,
+Señor Burrito. - Turbo,900467422,Señor Burrito Colina - Turbo,1.056944417,4,3000,3000,-0.9430555833,-0.4715277917,🟢 Saludable,No,Estable,1.433333333,0.7444443333,0.35,1.7
+Avocalia Turbo,900405766,Avocalia Laureles - Turbo,1.054815808,4,3000,3000,-0.9451841916,-0.4725920958,🟢 Saludable,No,Estable,1.126215281,1.0354902,1.253289447,0.8042683049
+Cinnabon - Turbo,900396466,Cinnabon Laureles - Turbo,1.053684935,4,3000,3000,-0.9463150654,-0.4731575327,🟢 Saludable,No,Estable,0.8745613947,1.087037,0.8671052895,1.386036054
+Cinnabon - Turbo,900414571,Cinnabon Barranquilla Norte - Turbo,1.043755525,4,3000,3000,-0.9562444752,-0.4781222376,🟢 Saludable,No,Estable,0.8209876667,1.520238071,0.8930555833,0.9407407778
+Almuerzos D´la Casa - Turbo,900471204,Almuerzos D´la Casa - Cabecera - Turbo,1.041666813,4,2700,2700,-0.9583331875,-0.4791665938,🟢 Saludable,No,Estable,1.066666667,1.116667,1.35416675,0.6291668333
+Sanduches el Jefe - Turbo,900419507,Sandwich El Jefe Manila - Turbo,1.021875025,4,3000,3000,-0.978124975,-0.4890624875,🟢 Saludable,No,Estable,0.8666666667,0.4958335,0.6583333333,2.0666666
+House Of Salads - Turbo,900445679,House Of Salad Laureles - Turbo,1.021577378,4,3000,3000,-0.978422622,-0.489211311,🟢 Saludable,No,Estable,1.05,0.7753969048,1.25138875,1.009523857
+House Of Salads - Turbo,900445683,House Of Salad Manila - Turbo,1.013888852,4,3000,3000,-0.9861111479,-0.493055574,🟢 Saludable,No,Estable,0.6055555,1.162499875,1.488888867,0.7986111667
+Bottaniko - Turbo,900443506,Bottaniko Laureles - Turbo,1.011111167,4,3000,3000,-0.9888888333,-0.4944444167,🟢 Saludable,No,Empeorando,0.2055556667,1.044444667,1.794444333,1
+Burritos & Co - Turbo,900426541,Burritos & Co Bucaramanga - Turbo,1.007595422,4,3000,3000,-0.9924045782,-0.4962022891,🟢 Saludable,No,Estable,0.9437500104,1.101747315,0.8794643214,1.105420041
+Desayuno Mi Tierrita - Turbo,900465160,Desayuno Mi Tierrita Manila - Turbo,1.004861167,4,3000,3000,-0.9951388333,-0.4975694167,🟢 Saludable,No,Estable,1.075,1.4333335,0.3583335,1.152777667
+Brunch & Munch - Turbo,900405254,Brunch & Munch Manila - Medellin - Turbo,0.9973023822,4,3000,3000,-1.002697618,-0.5013488089,🟢 Saludable,No,Estable,0.6362573246,1.224320978,0.7535623588,1.375068868
+Burrito Cantina - Turbo,900467386,Burrito Cantina Barranquilla Norte - Turbo,0.9902779167,3,2700,2700,-1.009722083,-0.5048610417,🟢 Saludable,No,Estable,,1.38749975,1.316667,0.266667
+Dembow - Turbo,900473645,Dembow - Chapinero - Turbo,0.9875,2,2400,2400,-1.0125,-0.50625,🟢 Saludable,No,Sin datos suficientes,1.1,0.875,,
+La Cuadra - Turbo,900426535,La Cuadra - Bucaramanga - Turbo,0.9785301894,4,3000,3000,-1.021469811,-0.5107349053,🟢 Saludable,No,Estable,0.8605610297,1.294827586,0.8260317238,0.9327004177
+Foodology Court - Turbo,900465147,Foodology Manila - Turbo Cra. 42 #10-65,0.9656251458,4,3000,3000,-1.034374854,-0.5171874271,🟢 Saludable,No,Estable,0.27083325,1.533333333,0.391667,1.666667
+Mañanero Diario - Turbo,900443494,Mañanero diario Laureles - Turbo,0.9558332,2,3000,3000,-1.0441668,-0.5220834,🟢 Saludable,No,Empeorando,0.3533334,,1.558333,
+Burritos & Co - Turbo,900410568,Burritos And Co Laureles - Turbo,0.9551109023,4,2700,2700,-1.044889098,-0.5224445489,🟢 Saludable,No,Estable,0.9512232477,1.071148437,1.02240143,0.7756704943
+Frost By Oreo - Turbo,900488841,Frost By Oreo Arrecife - Turbo,0.9538889,4,2700,2700,-1.0461111,-0.52305555,🟢 Saludable,No,Estable,1.15,0.6766666,0.6305555,1.3583335
+Bottaniko - Turbo,900472880,Bottaniko - Ingenio - Turbo,0.95,1,2400,2400,-1.05,-0.525,🟢 Saludable,No,Sin datos suficientes,0.95,,,
+Desayuno Mi Tierrita - Turbo,900465158,Desayuno Mi Tierrita Usaquén - Turbo,0.9416665,1,3000,3000,-1.0583335,-0.52916675,🟢 Saludable,No,Sin datos suficientes,0.9416665,,,
+Almuerzos D´la Casa - Turbo,900475128,Almuerzos D` la Casa - Ingenio - Turbo,0.9390972125,4,3000,3000,-1.060902788,-0.5304513938,🟢 Saludable,No,Empeorando,0.225,0.8466666,1.0305555,1.65416675
+Mañanero Diario - Turbo,900475200,Mañanero Andes - Turbo,0.922222125,4,3000,3000,-1.077777875,-0.5388889375,🟢 Saludable,No,Empeorando,0,0.822222,0.533333,2.3333335
+Avocalia Turbo,900401243,Avocalia Usaquén - Turbo,0.9213749425,4,3000,3000,-1.078625057,-0.5393125287,🟢 Saludable,No,Estable,0.8506060909,1.20163398,0.3581081351,1.275151564
+Vicio - Turbo,900489022,Vicio Arrecife - Turbo,0.920833375,4,2700,2700,-1.079166625,-0.5395833125,🟢 Saludable,No,Estable,0.666667,0.975,2.0416665,0
+Cacerola - Turbo,900416207,Cacerola Santa Monica - Cali - Turbo,0.916667,1,3000,3000,-1.083333,-0.5416665,🟢 Saludable,No,Sin datos suficientes,,,0.916667,
+Mañanero Diario - Turbo,900443502,Mañanero diario Villa del Prado - Turbo,0.916667,2,2700,2700,-1.083333,-0.5416665,🟢 Saludable,No,Estable,1.016667,,0.816667,
+Vicio - Turbo,900400178,Vicio Castellana - Turbo,0.9166666667,3,2700,2700,-1.083333333,-0.5416666667,🟢 Saludable,No,Empeorando,0,0,,2.75
+Honest Food Fdl - Turbo,900472136,Honest Food Usaquen - Turbo,0.9138773656,4,3000,3000,-1.086122634,-0.5430613172,🟢 Saludable,No,Estable,0.3416666818,0.847916625,1.1455556,1.320370556
+Alba Vegetarian - Turbo,900443016,Alba Vegetarian - San Fernando - Turbo,0.8851852111,3,2700,2700,-1.114814789,-0.5574073944,🟢 Saludable,No,Estable,1.4166668,0.6888888333,0.55,
+Vicio - Turbo,900420288,Vicio Kennedy - Turbo,0.88333325,2,2700,2700,-1.11666675,-0.558333375,🟢 Saludable,No,Mejorando,,1.4666665,0.3,
+Foodology Court - Turbo,900471304,Foodology Kennedy - Turbo,0.883333,1,3000,3000,-1.116667,-0.5583335,🟢 Saludable,No,Sin datos suficientes,,,0.883333,
+Burritos & Co - Turbo,900410576,Burritos & Co Manila - Medellin - Turbo,0.88217914,4,3000,3000,-1.11782086,-0.55891043,🟢 Saludable,No,Estable,0.9053691007,1.096226428,0.7385964662,0.7885245656
+Monteverde - Turbo,900450776,Monteverde Manila - Turbo,0.8803876086,4,3000,3000,-1.119612391,-0.5598061957,🟢 Saludable,No,Estable,0.6679011667,0.8359259111,0.81936275,1.198360607
+Dembow - Turbo,900473642,Dembow - Cabecera - Turbo,0.875,2,3000,3000,-1.125,-0.5625,🟢 Saludable,No,Empeorando,,0,1.75,
+Frost By Oreo - Turbo,900400261,Frost By Oreo Usaquén - Turbo,0.87041665,4,3000,3000,-1.12958335,-0.564791675,🟢 Saludable,No,Estable,0.0566666,1.616666667,0.08333333333,1.725
+la Cuadra Desayunos Caseros - Turbo,900470910,La Cuadra Desayunos Caseros Cabecera - Turbo,0.8694441667,3,3000,3000,-1.130555833,-0.5652779167,🟢 Saludable,No,Estable,0.333333,1.233333,1.0416665,
+Honest Food Fdl - Turbo,900472143,Honest Food Manila - Turbo,0.8436421971,4,3000,3000,-1.156357803,-0.5781789015,🟢 Saludable,No,Estable,0.6847826522,1.022881305,0.5035714643,1.163333367
+Green House Fd - Turbo,900438448,Green House Usaquen - Turbo,0.837782547,4,3000,3000,-1.162217453,-0.5811087265,🟢 Saludable,No,Estable,0.6454861042,1.027435908,0.7397727273,0.938435449
+Selvatiko. - Turbo,900475115,Selvatiko. Barranquilla Norte - Turbo,0.8333335,2,2700,2700,-1.1666665,-0.58333325,🟢 Saludable,No,Sin datos suficientes,,,1.25,0.416667
+Cacerola - Turbo,900473672,Cacerola - Cabecera - Turbo,0.833333,1,2100,2100,-1.166667,-0.5833335,🟢 Saludable,No,Sin datos suficientes,0.833333,,,
+Ñamgucheria Sandwiches - Turbo,900439226,Ñamguchería Usaquen - Turbo,0.8247360744,4,3000,3000,-1.175263926,-0.5876319628,🟢 Saludable,No,Estable,0.4942982632,0.8169491864,1.086363568,0.90133328
+Almuerzos D´la Casa - Turbo,900471213,Almuerzos D´la Casa - Manila - Turbo,0.8064583167,4,3000,3000,-1.193541683,-0.5967708417,🟢 Saludable,No,Estable,0.6849999,1.026388833,0.4366667,1.077777833
+Casa Arabe - Turbo,900477856,Casa Árabe Usaquen - Turbo,0.799097175,4,3000,3000,-1.200902825,-0.6004514125,🟢 Saludable,No,Estable,1.4033332,0.5250001667,0.5305553333,0.7375
+La Cuadra - Turbo,900416194,La Cuadra - Usaquén - Turbo,0.7956155483,4,3000,3000,-1.204384452,-0.6021922258,🟢 Saludable,No,Estable,0.51309525,0.5650001,0.6521738696,1.452192974
+Helados San Jerónimo - Turbo,900426595,Heladería San Jerónimo Andes - Turbo,0.7749999875,4,3000,3000,-1.225000013,-0.6125000063,🟢 Saludable,No,Estable,0.2125,0.80416675,0.8,1.2833332
+Monteverde - Turbo,900450765,Monteverde Cabecera - Turbo,0.7747221972,4,3000,3000,-1.225277803,-0.6126389014,🟢 Saludable,No,Estable,1.2044444,0.7888888889,0.435416625,0.670138875
+Frost By Oreo - Turbo,900409684,Frost By Oreo Chapinero - Turbo,0.7700164851,4,2700,2700,-1.229983515,-0.6149917574,🟢 Saludable,No,Estable,0.668889,1.434722083,0.7523808571,0.224074
+La Cuadra - Turbo,900416201,La Cuadra Manila - Medellin - Turbo,0.7595692273,4,3000,3000,-1.240430773,-0.6202153864,🟢 Saludable,No,Estable,0.6124338889,0.7907103607,0.6646198596,0.9705128
+Alba Vegetarian - Turbo,900443012,Alba Vegetarian - Usaquen - Turbo,0.7576389583,4,3000,3000,-1.242361042,-0.6211805208,🟢 Saludable,No,Estable,0.3,0.9333335,1.372222333,0.425
+Selvatiko. - Turbo,900475113,Selvatiko. Kennedy - Turbo,0.75,2,3000,3000,-1.25,-0.625,🟢 Saludable,No,Estable,0.666667,,0.833333,
+Señor Burrito. - Turbo,900482004,Señor Burrito Cartagena - Turbo,0.7479166875,4,2400,2400,-1.252083313,-0.6260416563,🟢 Saludable,No,Mejorando,1.15,1.34166675,0.5,0
+Burrito Cantina - Turbo,900467384,Burrito Cantina Bucaramanga - Turbo,0.7381944583,4,2700,2700,-1.261805542,-0.6309027708,🟢 Saludable,No,Estable,1.344444333,0.7083335,0.9,0
+Bottaniko - Turbo,900475790,Bottaniko - Kennedy - Turbo,0.733333,1,3000,3000,-1.266667,-0.6333335,🟢 Saludable,No,Sin datos suficientes,,0.733333,,
+Foodology Court - Turbo,900481814,Foodology Cartagena - Turbo,0.733333,1,3000,3000,-1.266667,-0.6333335,🟢 Saludable,No,Sin datos suficientes,,,,0.733333
+Burritos & Co - Turbo,900410575,Burritos & Co Usaquen - Turbo,0.7310210957,4,3000,3000,-1.268978904,-0.6344894521,🟢 Saludable,No,Estable,0.3735294706,0.8724137931,0.73583335,0.9423077692
+Avocalia Turbo,900405545,Avocalia - Manila - Turbo,0.7299903143,4,3000,3000,-1.270009686,-0.6350048428,🟢 Saludable,No,Estable,0.4937036944,0.951966264,0.6993859579,0.7749053409
+Mañanero Diario - Turbo,900443496,Mañanero Diario Usaquén - Turbo,0.725,4,3000,3000,-1.275,-0.6375,🟢 Saludable,No,Mejorando,0.483333,1.916667,0.5,0
+Sanduches el Jefe - Turbo,900419505,Sandwich el Jefe Usaquen - Turbo Calle 120A #3A11 236,0.7186110333,4,3000,3000,-1.281388967,-0.6406944833,🟢 Saludable,No,Estable,0.333333,0.5466668,1.127777667,0.8666666667
+Acpm Corrientazo - Turbo,900467505,Acpm Corrientazo Laureles - Turbo,0.7027777778,3,2700,2700,-1.297222222,-0.6486111111,🟢 Saludable,No,Estable,0.2333333333,,0.691667,1.183333
+Desayunos Colombianos - Turbo,900480301,Desayunos Colombianos Ingenio - Turbo,0.7,2,2400,2400,-1.3,-0.65,🟢 Saludable,No,Sin datos suficientes,1.066667,0.333333,,
+Señor Burrito. - Turbo,900467424,Señor Burrito Cabecera - Turbo,0.6879464107,4,2700,2700,-1.312053589,-0.6560267946,🟢 Saludable,No,Estable,0.8476191429,0.2166665,1.5458335,0.1416665
+Cinnabon - Turbo,900402238,Cinnabon Usaquén - Turbo,0.6841044098,4,3000,3000,-1.31589559,-0.6579477951,🟢 Saludable,No,Estable,0.5705555333,0.4480391176,0.7390350789,0.9787879091
+Alba Vegetarian - Turbo,900443014,Alba Vegetarian - Manila - Turbo,0.6641616667,4,3000,3000,-1.335838333,-0.6679191667,🟢 Saludable,No,Empeorando,0.347619,0.05416675,0.87708325,1.377777667
+Helados San Jerónimo - Turbo,900400750,Heladería San Jerónimo Castellana - Turbo Calle 93  247,0.6625378455,4,3000,3000,-1.337462155,-0.6687310773,🟢 Saludable,No,Estable,1.5733333,0.38,0.3649999,0.3318181818
+Pret Sandwich Bistro - Turbo,900416175,Pret Sándwich Bistro Usaquen - Turbo,0.6513890417,4,3000,3000,-1.348610958,-0.6743054792,🟢 Saludable,No,Estable,1.205555667,0.3833335,0.816667,0.2
+Foodology Court - Turbo,900465151,Foodology Usaquen - Turbo Cl. 120a #3,0.65,2,3000,3000,-1.35,-0.675,🟢 Saludable,No,Sin datos suficientes,,,0.466667,0.833333
+Almuerzos D´la Casa - Turbo,900471203,Almuerzos D´la Casa - Barranquilla Norte - Turbo,0.6357905717,4,3000,3000,-1.364209428,-0.6821047142,🟢 Saludable,No,Estable,0.8987179231,0.7,0.311111,0.6333333636
+Acpm Corrientazo - Turbo,900467508,Acpm Corrientazo Barranquilla Norte - Turbo,0.6318054667,4,3000,3000,-1.368194533,-0.6840972667,🟢 Saludable,No,Estable,0.725,0.2133332,1.194444333,0.3944443333
+Frost By Oreo - Turbo,900410135,Frost By Oreo Barranquilla Norte - Turbo,0.6227678393,4,3000,3000,-1.377232161,-0.6886160804,🟢 Saludable,No,Estable,0.40833325,0.8238095714,0.6380952857,0.62083325
+Helados San Jerónimo - Turbo,900409698,Heladería San Jerónimo Chapinero - Turbo,0.611267644,4,3000,3000,-1.388732356,-0.694366178,🟢 Saludable,No,Estable,0.8366666,0.7984848182,0.4868421579,0.323077
+Frost By Oreo - Turbo,900405219,Frost By Oreo Villa Del Prado - Turbo,0.6086111583,4,3000,3000,-1.391388842,-0.6956944208,🟢 Saludable,No,Estable,0.3444443333,0.5566668,0.80416675,0.72916675
+Bottaniko - Turbo,900488274,Bottaniko Arrecife - Turbo,0.6,1,3000,3000,-1.4,-0.7,🟢 Saludable,No,Sin datos suficientes,,,,0.6
+Señor Burrito. - Turbo,900473587,Señor Burrito - Ingenio - Turbo,0.5888886667,3,2100,2100,-1.411111333,-0.7055556667,🟢 Saludable,No,Estable,0.283333,1.1416665,0.3416665,
+Cinnabon - Turbo,900405125,Cinnabon Manila - Turbo,0.5881362206,4,3000,3000,-1.411863779,-0.7059318897,🟢 Saludable,No,Estable,0.5892361458,0.5064971695,0.60499998,0.651811587
+Mañanero Diario - Turbo,900443503,Mañanero diario Barranquilla Norte - Turbo CHURNEADO,0.57916675,2,2700,2700,-1.42083325,-0.710416625,🟢 Saludable,No,Sin datos suficientes,,,0.3416665,0.816667
+Alba Vegetarian - Turbo,900443015,Alba Vegetarian - Norte - Turbo,0.570833375,4,2700,2700,-1.429166625,-0.7145833125,🟢 Saludable,No,Estable,0.2666665,0.516667,0,1.5
+Helados San Jerónimo - Turbo,900410462,Heladería San Jerónimo Barranquilla Norte - Turbo,0.5602054907,4,3000,3000,-1.439794509,-0.7198972547,🟢 Saludable,No,Estable,0.342857,0.8974359231,0.6023809286,0.3981481111
+Selvatiko. - Turbo,900472668,Selvatiko. Ingenio - Turbo,0.55,1,2400,2400,-1.45,-0.725,🟢 Saludable,No,Sin datos suficientes,,,,0.55
+Doritos Locos By Dorito - Turbo,900473563,Doritos Locos By Dorito Andes - Turbo,0.5445285783,4,3000,3000,-1.455471422,-0.7277357109,🟢 Saludable,No,Estable,0.7925925556,0.7537036667,0,0.6318180909
+Frost By Oreo - Turbo,900426530,Frost by Oreo Andes - Turbo,0.537559533,4,3000,3000,-1.462440467,-0.7312202335,🟢 Saludable,No,Estable,0.4133334,0.7619048571,0.416666625,0.55833325
+Helados San Jerónimo - Turbo,900426594,Heladería San Jerónimo Bucaramanga - Turbo,0.5355901542,4,3000,3000,-1.464409846,-0.7322049229,🟢 Saludable,No,Estable,0.38958325,1.0333332,0.3944443333,0.3249998333
+Mañanero Diario - Turbo,900481971,Mañanero Cartagena - Turbo,0.5333335,2,2700,2700,-1.4666665,-0.73333325,🟢 Saludable,No,Sin datos suficientes,1.05,0.016667,,
+Burrito Cantina - Turbo,900467381,Burrito Cantina Usaquén - Turbo,0.533333,2,3000,3000,-1.466667,-0.7333335,🟢 Saludable,No,Estable,0.333333,,,0.733333
+Señor Burrito. - Turbo,900467416,Señor Burrito Usaquen - Turbo,0.5197916042,4,3000,3000,-1.480208396,-0.7401041979,🟢 Saludable,No,Estable,0.7166666667,0.15,0.47916675,0.733333
+Helados San Jerónimo - Turbo,900420290,San Jeronomio - Colina - Turbo,0.5136008737,4,3000,3000,-1.486399126,-0.7431995632,🟢 Saludable,No,Estable,0.3284313529,0.8972221667,0.527083375,0.3016666
+Vicio - Turbo,900420289,Vicio Colina - Turbo,0.5121031083,4,3000,3000,-1.487896892,-0.7439484458,🟢 Saludable,No,Estable,0.25,0.3888888333,0.642857,0.7666666
+Almuerzos D´la Casa - Turbo,900464931,Almuerzos D´la Casa - Usaquen - Turbo,0.5029762024,4,3000,3000,-1.497023798,-0.7485118988,🟢 Saludable,No,Estable,0.9055556667,0.2452381429,0,0.861111
+Mañanero Diario - Turbo,900475198,Mañanero Ingenio - Turbo,0.5,1,2400,2400,-1.5,-0.75,🟢 Saludable,No,Sin datos suficientes,,,0.5,
+Acpm Corrientazo - Turbo,900467507,Acpm Corrientazo Bucaramanga - Turbo,0.4986113333,2,2700,2700,-1.501388667,-0.7506943333,🟢 Saludable,No,Estable,,0.791667,0.2055556667,
+Monteverde - Turbo,900450766,Monteverde Usaquen - Turbo,0.4948926647,4,3000,3000,-1.505107335,-0.7525536677,🟢 Saludable,No,Estable,0.1616666,0.598958375,0.3074072222,0.9115384615
+House Of Salads - Turbo,900445678,House Of Salad Usaquen - Turbo,0.4745237905,4,2700,2700,-1.52547621,-0.7627381048,🟢 Saludable,No,Estable,0.25,1.071428429,0.2333333333,0.3433334
+Vicio - Turbo,900405129,Vicio Villa Del Prado - Turbo,0.468055375,4,3000,3000,-1.531944625,-0.7659723125,🟢 Saludable,No,Estable,0.8166665,0.4166663333,0.261111,0.3777776667
+Local Cocina Consciente - Turbo,900489031,Local Cocina Consciente Arrecife - Turbo,0.466667,2,2700,2700,-1.533333,-0.7666665,🟢 Saludable,No,Estable,,0.266667,0.666667,
+Cacerola - Turbo,900416213,Cacerola Usaquen - Turbo,0.4583335,2,3000,3000,-1.5416665,-0.77083325,🟢 Saludable,No,Mejorando,0.916667,,0,
+Pret Sandwich Bistro - Turbo,900488980,Pret Sandwich Bistro Arrecife - Turbo,0.45,1,1,1,-1.55,-0.775,🟢 Saludable,No,Sin datos suficientes,,,,0.45
+Helados San Jerónimo - Turbo,900405135,Heladería San Jerónimo Laureles - Turbo,0.4425694083,4,3000,3000,-1.557430592,-0.7787152958,🟢 Saludable,No,Estable,0.3541665,0.3833331667,0.7944446667,0.2383333
+Dembow - Turbo,900473656,Dembow - Usaquen - Turbo,0.427083375,2,3000,3000,-1.572916625,-0.7864583125,🟢 Saludable,No,Sin datos suficientes,0.25,0.60416675,,
+Almuerzos D´la Casa - Turbo,900473543,Almuerzos D´la Casa - Andes - Turbo,0.42166675,2,3000,3000,-1.57833325,-0.789166625,🟢 Saludable,No,Empeorando,,0.0333335,0.81,
+Frost By Oreo - Turbo,900420277,Frost By Oreo Kennedy - Turbo,0.4118055417,4,2700,2700,-1.588194458,-0.7940972292,🟢 Saludable,No,Estable,0.3,0.366667,0.672222,0.3083331667
+Doritos Locos By Dorito - Turbo,900472107,Doritos Locos By Dorito Calle 93 - Turbo,0.3953571768,4,2400,2400,-1.604642823,-0.8023214116,🟢 Saludable,No,Estable,0.34166675,0.3083335,0.1047618571,0.8266666
+Doritos Locos By Dorito - Turbo,900472102,Doritos Locos By Dorito Usaquen - Turbo,0.3895834554,4,3000,3000,-1.610416545,-0.8052082723,🟢 Saludable,No,Estable,0.5666665714,0.416667,0.35416675,0.2208335
+Helados San Jerónimo - Turbo,900414572,Heladería San Jerónimo Villa Del Prado - Turbo,0.3876388333,4,3000,3000,-1.612361167,-0.8061805833,🟢 Saludable,No,Estable,0.525,0.24,0.5055553333,0.28
+Vicio - Turbo,900396759,Vicio Laureles - Turbo,0.3847621973,4,3000,3000,-1.615237803,-0.8076189014,🟢 Saludable,No,Estable,0.2518517778,0.33,0.2863636364,0.670833375
+Burrito Cantina - Turbo,900465172,Burrito Cantina Cl 109 - Turbo,0.383333,1,2100,2100,-1.616667,-0.8083335,🟢 Saludable,No,Sin datos suficientes,,0.383333,,
+Frost By Oreo - Turbo,900396768,Frost By Oreo Laureles - Turbo,0.3562423796,4,3000,3000,-1.64375762,-0.8218788102,🟢 Saludable,No,Estable,0.4217949231,0.3541666667,0.3309524286,0.3180555
+Cacerola - Turbo,900416214,Cacerola Castellana - Turbo,0.3291665,2,2100,2100,-1.6708335,-0.83541675,🟢 Saludable,No,Sin datos suficientes,0.183333,0.475,,
+Helados San Jerónimo - Turbo,900400749,San Jeronimo - Usaquén - Turbo,0.3214127439,4,3000,3000,-1.678587256,-0.839293628,🟢 Saludable,No,Estable,0.09545454545,0.4801587143,0.5621210909,0.147916625
+Helados San Jerónimo - Turbo,900405136,Heladería San Jerónimo San Fernando - Turbo,0.3145833125,4,3000,3000,-1.685416688,-0.8427083438,🟢 Saludable,No,Estable,0.5,0,0.11666675,0.6416665
+Frost By Oreo - Turbo,900420276,Frost by Oreo Colina - Turbo,0.31041665,4,3000,3000,-1.68958335,-0.844791675,🟢 Saludable,No,Estable,0,0.3533332,0.4133334,0.475
+Señor Burrito. - Turbo,900467427,Señor Burrito Manila - Turbo,0.30833335,4,3000,3000,-1.69166665,-0.845833325,🟢 Saludable,No,Estable,0.8833334,0,0.35,0
+Frost By Oreo - Turbo,900405217,Frost By Oreo San Fernando - Turbo,0.30833325,2,3000,3000,-1.69166675,-0.845833375,🟢 Saludable,No,Sin datos suficientes,,,0.333333,0.2833335
+Vicio - Turbo,900400179,Vicio Usaquén - Turbo,0.275926,3,3000,3000,-1.724074,-0.862037,🟢 Saludable,No,Estable,0.5,,0.327778,0
+Bottaniko - Turbo,900443508,Bottaniko - Cll 93 - Turbo,0.266667,3,2100,2100,-1.733333,-0.8666665,🟢 Saludable,No,Estable,0.166667,0.316667,,0.316667
+Frost By Oreo - Turbo,900405218,Frost By Oreo Manila - Turbo,0.2454860994,4,3000,3000,-1.754513901,-0.8772569503,🟢 Saludable,No,Estable,0.09861108333,0.3116666,0.1666667143,0.405
+Helados San Jerónimo - Turbo,900481999,Heladería San Jerónimo Cartagena - Turbo,0.2157408056,3,3000,3000,-1.784259194,-0.8921295972,🟢 Saludable,No,Estable,0.34166675,0.3055556667,0,
+Vicio - Turbo,900405130,Vicio Manila - Turbo,0.1969939853,4,3000,3000,-1.803006015,-0.9015030074,🟢 Saludable,No,Estable,0.01944441667,0.3545454545,0.2242424545,0.1897436154
+Vicio - Turbo,900409686,Vicio Chapinero - Turbo,0.1770833333,4,2700,2700,-1.822916667,-0.9114583333,🟢 Saludable,No,Estable,0.125,0.4055556667,0.1777776667,0
+Vicio - Turbo,900482006,Vicio Cartagena - Turbo,0.15416675,4,3000,3000,-1.84583325,-0.922916625,🟢 Saludable,No,Estable,0,0,0.616667,0
+Helados San Jerónimo - Turbo,900405137,Heladería San Jerónimo Manila - Turbo,0.1306018694,4,3000,3000,-1.869398131,-0.9346990653,🟢 Saludable,No,Estable,0,0.2407407778,0.2816667,0
+Selvatiko. - Turbo,900475121,Selvatiko. Andes - Turbo,0.116667,1,2400,2400,-1.883333,-0.9416665,🟢 Saludable,No,Sin datos suficientes,,0.116667,,
+Acpm Corrientazo - Turbo,900467506,Acpm Corrientazo Usaquén - Turbo,0.116667,1,3000,3000,-1.883333,-0.9416665,🟢 Saludable,No,Sin datos suficientes,,,0.116667,
+Burrito Cantina - Turbo,900467377,Burrito Cantina Manila - Turbo,0,2,3000,3000,-2,-1,🟢 Saludable,No,Estable,,0,0,
+Bottaniko - Turbo,900443510,Bottaniko Usaquen - Turbo,0,1,3000,3000,-2,-1,🟢 Saludable,No,Sin datos suficientes,0,,,
+Vicio - Turbo,900410120,Vicio Barranquilla Norte - Turbo,0,1,3000,3000,-2,-1,🟢 Saludable,No,Sin datos suficientes,,,,0
+Bottaniko - Turbo,900480013,Bottaniko - Cartagena - Turbo,0,1,2100,2100,-2,-1,🟢 Saludable,No,Sin datos suficientes,,,0,
+Cacerola - Turbo,900416209,Cacerola Cali - San Fernando - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Brunch & Munch - Turbo,900420520,Brunch And Munch - Colina - Turbo,,0,1,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos de la Abuela - Turbo,900446319,Desayunos de la Abuela Usaquen - Turbo,,0,2100,,,,⚪ Sin datos,N/A,N/A,,,,
+Foodology Court - Turbo,900465152,Foodology Santa Mónica Clo - Turbo Calle 34 Norte 2bn 33,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayuno Mi Tierrita - Turbo,900465164,Desayuno Mi Tierrita San Fernando Cali - Turbo,,0,1,,,,⚪ Sin datos,N/A,N/A,,,,
+Selvatiko. - Turbo,900465173,Selvatiko. 93 - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
+Burrito Cantina - Turbo,900467379,Burrito Cantina Villa del Prado - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Burrito Cantina - Turbo,900467387,Burrito Cantina Castellana - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
+la Cuadra Desayunos Caseros - Turbo,900467495,La Cuadra Desayunos San Fernando - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Acpm Corrientazo - Turbo,900467509,Acpm Corrientazo Santa Mónica (Cali Norte) - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Vicio - Turbo,900473606,Vicio Ingenio - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Dembow - Turbo,900473657,Dembow - Ingenio - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Pret Sandwich Bistro - Turbo,900473670,Pret Sandwich Bistro Andes - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
+Cacerola - Turbo,900473674,Cacerola - Kennedy - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Cacerola - Turbo,900473676,Cacerola Chico - Turbo,,0,1,,,,⚪ Sin datos,N/A,N/A,,,,
+Selvatiko. - Turbo,900475120,Selvatiko. San Fernando - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
+House Of Salads - Turbo,900476071,House Of Salads Kennedy - Turbo,,0,2100,,,,⚪ Sin datos,N/A,N/A,,,,
+Local Cocina Consciente - Turbo,900477107,Local - Cocina Consciente Calle 93 - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480284,Desayunos Colombianos Villa Del Prado - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480285,Desayunos Colombianos Kennedy - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480288,Desayunos Colombianos Manila - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480289,Desayunos Colombianos Calle 109 - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480290,Desayunos Colombianos San Fernando - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480291,Desayunos Colombianos Cabecera - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480292,Desayunos Colombianos Andes - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480294,Desayunos Colombianos Chapinero - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480295,Desayunos Colombianos Usaquen - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480296,Desayunos Colombianos Calle 93 - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480297,Desayunos Colombianos Chico - Turbo,,0,1,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480298,Desayunos Colombianos Laureles - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480299,Desayunos Colombianos Santa Monica - Turbo,,0,1,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayunos Colombianos - Turbo,900480300,Desayunos Colombianos Barranquilla - Turbo,,0,2700,,,,⚪ Sin datos,N/A,N/A,,,,
+Burrito Cantina - Turbo,900481034,Burrito Cantina Cartagena - Turbo,,0,2100,,,,⚪ Sin datos,N/A,N/A,,,,
+Desayuno Mi Tierrita - Turbo,900481379,Desayuno Mi Tierrita Cartagena - Turbo,,0,2400,,,,⚪ Sin datos,N/A,N/A,,,,
+la Cuadra Desayunos Caseros - Turbo,900488956,la Cuadra Desayunos Arrecife - Turbo,,0,3000,,,,⚪ Sin datos,N/A,N/A,,,,
