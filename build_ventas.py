@@ -224,7 +224,7 @@ def main():
     json.dump(payload, open(os.path.join(HERE,'ventas_data.json'),'w'), ensure_ascii=False, indent=1)
 
     # ---- inyecta el bloque de datos en index.html (entre marcadores) ----
-    idx=os.path.join(HERE,'index.html')
+    idx=os.path.join(HERE,'index_co.html')
     if os.path.exists(idx):
         html=open(idx,encoding='utf-8').read()
         A='/*VENTAS_DATA_START*/'; B='/*VENTAS_DATA_END*/'

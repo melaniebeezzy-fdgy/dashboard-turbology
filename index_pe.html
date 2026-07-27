@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foodology · Turbo Perú</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<style>
+:root{--primary:#090e3e;--navy:#0E2841;--navy2:#242F42;--navy3:#153D64;--blue:#156082;--blue2:#0B769F;--sky:#0F9ED5;--plum:#96607D;--bg:#E8E8E8;--card:#fff;--tx:#242F42;--mut:#5d6b80;--bd:#d5dae3;--good:#156082;--bad:#96607D;--topbar:56px;--side:220px;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Poppins',system-ui,sans-serif}
+h1{font-size:21px;font-weight:700;color:var(--primary)}h1 span{color:var(--sky)}
+.sub{color:var(--mut);font-size:12.5px;margin:4px 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));grid-auto-rows:1fr;gap:12px;margin-bottom:20px}
+#pe-kpis{grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-template-columns:none}
+.kpi{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--sky);border-radius:10px;padding:10px 14px;box-shadow:0 2px 8px rgba(36,47,66,.06);display:flex;flex-direction:column}
+.kpi .l{color:var(--mut);font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;line-height:1.35;min-height:2.7em}
+.kpi .v{font-size:20px;font-weight:700;margin:3px 0 1px;color:var(--primary)}
+.kpi .d{font-size:11px;font-weight:600}
+.warnc{color:var(--plum)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;align-items:stretch}
+.grid .card{display:flex;flex-direction:column}.grid .card .scroll{flex:1}.grid .card .chartbox{flex:1}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
+@media(max-width:600px){#pe-kpis{grid-auto-flow:row;grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(36,47,66,.06)}
+.card h2{font-size:14.5px;margin-bottom:4px;color:var(--primary);font-weight:600}
+.card .hint{color:var(--mut);font-size:12px;margin-bottom:12px}
+.chartbox{position:relative;height:360px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{color:var(--mut);text-align:left;font-weight:600;padding:7px 8px;border-bottom:2px solid var(--bd)}
+th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--sky)}
+td{padding:6px 8px;border-bottom:1px solid #e6e9f0}tr:hover td{background:#f2f6fa}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10.5px;font-weight:600;color:#fff;white-space:nowrap}
+.scroll{max-height:420px;overflow-y:auto;overflow-x:auto}
+.sdot{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:-1px;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+table.dense{font-size:11px}table.dense th{padding:5px 6px}table.dense td{padding:4px 6px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.vcard{border:1px solid #e4e8ef;border-radius:12px;padding:12px 14px;background:#fff}
+.vcard .vb{font-weight:700;color:var(--navy2);font-size:14px;margin-bottom:2px}
+.vcard .vo{font-size:22px;font-weight:700;color:#156082}
+.vcard .vm{font-size:11px;color:var(--mut);margin-top:4px;line-height:1.5}
+.vsel{padding:6px 10px;border:1px solid #cfd6e0;border-radius:8px;font-family:Poppins;font-size:13px;background:#fff}
+.rk{display:inline-block;min-width:20px;font-weight:700}
+tr.sev-bad td{background:rgba(192,57,43,.10)}tr.sev-warn td{background:rgba(217,154,27,.10)}
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar);z-index:50;background:var(--primary);display:flex;align-items:center;gap:14px;padding:0 18px}
+#topbar .t{color:#fff;font-size:14.5px;font-weight:600}#topbar .t span{color:var(--sky)}
+#topbar select{background:var(--navy3);color:#fff;border:1px solid #2b3f63;border-radius:8px;padding:6px 10px;font-size:12.5px;font-family:inherit;margin-left:8px}
+#topbar img{height:30px;margin-left:auto}
+#side{position:fixed;top:var(--topbar);left:0;bottom:0;width:var(--side);background:var(--navy);z-index:40;padding:16px 10px}
+#side a{display:block;color:#cfd8e6;text-decoration:none;font-size:13px;font-weight:500;padding:9px 14px;border-radius:8px;margin-bottom:3px}
+#side a:hover{background:var(--navy3);color:#fff}
+#main{padding:calc(var(--topbar) + 22px) 26px 30px calc(var(--side) + 26px)}
+#pe-resumen,#pe-zonas,#pe-poligonos{scroll-margin-top:72px}
+</style></head><body>
+<div id="topbar"><div class="t">Foodology <span>· Turbo Perú</span></div><select id="selZona"></select><img src="https://images.squarespace-cdn.com/content/v1/5e711db98f62f46196625761/a203a1da-a389-43ad-969f-44fecfd3a6a6/Logo_Blanco+-+copia.png?format=750w"></div>
+<nav id="side">
+  <div style="color:#7d8ca3;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;padding:14px 14px 6px">Reporte · Perú</div>
+  <a href="#pe-resumen">Resumen ejecutivo</a>
+  <a href="#pe-poligonos">Polígonos & zonas</a>
+  <a href="#pe-zonas">Fuera de cobertura</a>
+</nav>
+<main id="main">
+  <h1 id="pe-resumen">Resumen ejecutivo <span id="pe-hWk" style="font-size:14px;color:var(--mut)"></span></h1>
+  <div class="sub">Turbo Perú (Lima) · Evaluación por la <b>última semana</b> (29-jun vs 22-jun). Cobertura = polígono asignado; cae a <b>0%</b> si el RTWT de la última semana supera <b>8 min</b>. Filtro por zona en la barra superior.</div>
+  <div class="kpis" id="pe-kpis"></div>
+
+  <div class="grid" id="pe-trend">
+    <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">Promedio de RTWT por semana (jun 8 – jun 29). La cobertura se evalúa con la <b>última semana</b>. Estados: 🟢&lt;2 · 🟡2–5 · 🟠5–8 · 🔴&gt;8.</div><div class="chartbox" style="height:300px"><canvas id="pe-chRt"></canvas></div></div>
+    <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Cobertura efectiva vs. el ideal de 3.0 km (100%). Perú tiene un solo corte de cobertura (última semana).</div><div class="chartbox" style="height:300px"><canvas id="pe-chCov"></canvas></div></div>
+  </div>
+
+  <div class="grid" id="pe-poligonos">
+    <div class="card"><h2 id="pe-distTitle">Distribución de polígonos por zona</h2><div class="hint">Nº de tiendas por tamaño de polígono (km).</div><div class="chartbox" style="height:360px"><canvas id="pe-chDist"></canvas></div></div>
+    <div class="card"><h2>Zonas — última semana</h2><div class="hint">RTWT de la última semana, estado y cobertura efectiva. Clic en encabezados para ordenar.</div><div class="scroll"><table id="pe-tbZona"></table></div></div>
+  </div>
+
+  <h1 id="pe-vpareto" style="margin-top:8px">Órdenes <span>· por marca y zona</span> <span id="pe-vWk" style="font-size:14px;color:var(--mut)"></span></h1>
+  <div class="sub">Órdenes de la última semana vs. la anterior (WoW). RTWT y polígonos son del cierre más reciente.</div>
+  <div class="kpis" id="pe-vKpis"></div>
+  <div class="card" style="margin-bottom:14px"><h2>Pareto de marcas — órdenes</h2><div class="hint">Barras = órdenes por marca (desc); línea = % acumulado. Top 5 resaltadas; línea punteada = 80%.</div><div class="chartbox" style="height:340px"><canvas id="pe-chPareto"></canvas></div></div>
+  <div class="card" style="margin-bottom:14px" id="pe-vtop5"><h2>Top 5 marcas — cobertura & RTWT</h2><div class="hint">Semáforo RTWT (última semana). «Mejor/peor zona» por RTWT.</div><div class="vgrid" id="pe-vTop5"></div></div>
+  <div class="grid" id="pe-alertas">
+    <div class="card" id="pe-zonas"><h2>🔴 Tiendas fuera de cobertura (penalizadas)</h2><div class="hint">RTWT de la última semana <b>&gt; 8 min</b> → <b>0% de cobertura</b>. Requieren plan de acción.</div><div class="scroll"><table id="pe-tbLost" class="dense"></table></div></div>
+    <div class="card"><h2>📈 RTWT en aumento (2+ semanas seguidas)</h2><div class="hint">Tiendas cuyo RTWT lleva <b>2 o más semanas seguidas subiendo</b> hasta la más reciente. Cada flecha = 1 semana.</div><div class="scroll"><table id="pe-tbRising" class="dense"></table></div></div>
+  </div>
+  <div class="grid" id="pe-alertas2">
+    <div class="card"><h2>🔴 Tiendas en polígono mínimo (1.0 km)</h2><div class="hint">Tiendas cuya <b>cobertura efectiva</b> es de <b>1.0 km</b>, el polígono mínimo.</div><div class="scroll"><table id="pe-tb1km" class="dense"></table></div></div>
+    <div class="card"><h2>Marcas con peor RTWT — última semana</h2><div class="hint">Promedio de RTWT de la semana más reciente (29-jun) por marca.</div><div class="scroll"><table id="pe-tbBrand" class="dense"></table></div></div>
+  </div>
+
+  <div class="grid" id="pe-vzona" style="grid-template-columns:1fr 1fr">
+    <div class="card"><h2>Top marcas por zona</h2><div class="hint">Elige una zona para ver sus marcas más vendidas.</div><div style="margin:8px 0"><select id="pe-vZonaSel" class="vsel"></select></div><div class="scroll"><table id="pe-vZonaTable" class="dense"></table></div></div>
+    <div class="card"><h2>¿Dónde flojean las marcas top?</h2><div class="hint">Para cada marca top: en qué puesto va dentro de cada zona y cómo está su RTWT y polígono. Filas <span style="color:#c0392b;font-weight:700">rojas</span> = RTWT&gt;3 o polígono ≤1 km; <span style="color:#d99a1b;font-weight:700">ámbar</span> = alerta.</div><div style="margin:8px 0"><select id="pe-vBrandSel" class="vsel"></select> <span id="pe-vBrandSum" style="font-size:12px;color:var(--mut)"></span></div><div class="scroll" id="pe-vProblemas"></div></div>
+  </div>
+</main>
+<script>
+/*PE_DATA_START*/const PE={"ideal": 3000, "LV": [1000, 2100, 2400, 2700, 3000], "zonas": ["Gonzáles Prada", "La Molina", "Otra", "San Isidro", "Surquillo"], "weeks": ["Jun 8", "Jun 15", "Jun 22", "Jun 29"], "week": "29-jun", "prev_week": "22-jun", "sales_week": "13/07–19/07/2026", "sales_prev": "06/07–12/07", "data": {"ALL": {"kpi": {"rtwt": 5.0, "rtwt_lw": 5.21, "drt": -0.22, "cov": 75.9, "cov_asg": 80.2, "n_stores": 43, "n_cocinas": 5, "dist": {"1000": 9, "2100": 0, "2400": 11, "2700": 5, "3000": 18}, "tot": 43, "lose": 3, "alerts": {"rt3": 30, "poly1": 9}}, "stack": {"labels": ["Gonzáles Prada", "Otra", "La Molina", "San Isidro", "Surquillo"], "series": {"1000": [7, 1, 1, 0, 0], "2100": [0, 0, 0, 0, 0], "2400": [0, 0, 3, 5, 3], "2700": [0, 0, 3, 1, 1], "3000": [0, 0, 4, 6, 8]}, "tot": [7, 1, 11, 12, 12]}, "weekly": [4.71, 5.36, 5.21, 5.0], "cocinas": [{"k": "Gonzáles Prada", "city": "Lima", "n": 7, "rtwt": 4.17, "drt": null, "cov": 28.6, "lose": 1}, {"k": "Otra", "city": "Lima", "n": 1, "rtwt": null, "drt": null, "cov": 33.3, "lose": 0}, {"k": "La Molina", "city": "Lima", "n": 11, "rtwt": 6.5, "drt": 1.11, "cov": 73.6, "lose": 2}, {"k": "San Isidro", "city": "Lima", "n": 12, "rtwt": 4.53, "drt": -0.53, "cov": 90.8, "lose": 0}, {"k": "Surquillo", "city": "Lima", "n": 12, "rtwt": 4.38, "drt": -0.85, "cov": 94.2, "lose": 0}], "lost": [{"b": "Brunch & Munch", "k": "La Molina", "rt": 14.95, "cc": 1500.0, "res": 0}, {"b": "Mr Beast Burger", "k": "Gonzáles Prada", "rt": 10.825000000000014, "cc": 1000.0, "res": 0}, {"b": "Green House", "k": "La Molina", "rt": 8.66666666666667, "cc": 3000.0, "res": 0}], "rising": [{"b": "Green House", "k": "La Molina", "inc": 3, "path": [5.13, 6.18, 7.46, 8.67], "last": 8.67}, {"b": "Poke For The People San Isidro", "k": "La Molina", "inc": 2, "path": [0.62, 3.7, 7.24], "last": 7.24}, {"b": "The Egg Spot", "k": "La Molina", "inc": 3, "path": [2.17, 4.81, 6.47, 7.16], "last": 7.16}, {"b": "Criollazo Comida Peruana", "k": "La Molina", "inc": 3, "path": [4.54, 4.9, 6.47, 6.86], "last": 6.86}, {"b": "Mr Beast Burger", "k": "La Molina", "inc": 2, "path": [1.5, 2.81, 3.62], "last": 3.62}], "min1": [{"b": "Bitute", "k": "Gonzáles Prada", "rt": 3.42}, {"b": "Brunch & Munch", "k": "Gonzáles Prada", "rt": 3.19}, {"b": "Almuerzos de la Casa", "k": "Gonzáles Prada", "rt": 2.54}, {"b": "Avocalia", "k": "Gonzáles Prada", "rt": 0.89}, {"b": "Criollazo Comida Peruana", "k": "Gonzáles Prada", "rt": null}, {"b": "Sushi By Noz", "k": "Otra", "rt": null}, {"b": "Simply Poke", "k": "Gonzáles Prada", "rt": null}], "brand_worst": [{"brand": "Brunch & Munch", "rt": 8.27, "n": 4}, {"brand": "Mr Beast Burger", "rt": 6.22, "n": 4}, {"brand": "Green House", "rt": 5.75, "n": 3}, {"brand": "The Egg Spot", "rt": 5.27, "n": 3}, {"brand": "Poke For The People San Isidro", "rt": 4.98, "n": 3}, {"brand": "Criollazo Comida Peruana", "rt": 4.84, "n": 3}, {"brand": "Avocalia", "rt": 4.18, "n": 4}, {"brand": "Bitute", "rt": 3.91, "n": 4}, {"brand": "Almuerzos de la Casa", "rt": 3.72, "n": 4}, {"brand": "Simply Poke", "rt": 2.4, "n": 3}], "ventas": {"pareto": [{"brand": "Bitute", "orders": 619, "pct": 67.7, "cum": 67.7}, {"brand": "Almuerzos de la Casa", "orders": 78, "pct": 8.5, "cum": 76.2}, {"brand": "Avocalia", "orders": 63, "pct": 6.9, "cum": 83.1}, {"brand": "Criollazo", "orders": 50, "pct": 5.5, "cum": 88.5}, {"brand": "Poke For The People", "orders": 35, "pct": 3.8, "cum": 92.3}, {"brand": "Green House", "orders": 20, "pct": 2.2, "cum": 94.5}, {"brand": "Brunch & Munch", "orders": 18, "pct": 2.0, "cum": 96.5}, {"brand": "Simply Poke", "orders": 14, "pct": 1.5, "cum": 98.0}, {"brand": "The Egg Spot", "orders": 13, "pct": 1.4, "cum": 99.5}, {"brand": "Mr Beast Burger", "orders": 4, "pct": 0.4, "cum": 99.9}, {"brand": "Vicio", "orders": 1, "pct": 0.1, "cum": 100.0}], "top5": ["Bitute", "Almuerzos de la Casa", "Avocalia", "Criollazo", "Poke For The People"], "top5_detail": [{"brand": "Bitute", "orders": 619, "wow": 3.5, "avg_rt": 4.07, "avg_cov": 100.0, "best": "San Isidro", "worst": "La Molina", "rows": [{"coc": "San Isidro", "orders": 370, "rank": 1, "nbrands": 10, "rt": 3.27, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "Surquillo", "orders": 180, "rank": 1, "nbrands": 10, "rt": 3.78, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "La Molina", "orders": 69, "rank": 1, "nbrands": 9, "rt": 5.17, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Almuerzos de la Casa", "orders": 78, "wow": -18.8, "avg_rt": 4.11, "avg_cov": 93.3, "best": "San Isidro", "worst": "La Molina", "rows": [{"coc": "San Isidro", "orders": 53, "rank": 2, "nbrands": 10, "rt": 3.21, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "Surquillo", "orders": 15, "rank": 3, "nbrands": 10, "rt": 4.1, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "La Molina", "orders": 10, "rank": 2, "nbrands": 9, "rt": 5.03, "size": 2400, "cov": 80, "sev": "bad"}]}, {"brand": "Avocalia", "orders": 63, "wow": 37.0, "avg_rt": 5.28, "avg_cov": 86.7, "best": "La Molina", "worst": "Surquillo", "rows": [{"coc": "San Isidro", "orders": 50, "rank": 3, "nbrands": 10, "rt": 5.76, "size": 2400, "cov": 80, "sev": "bad"}, {"coc": "La Molina", "orders": 8, "rank": 3, "nbrands": 9, "rt": 3.71, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "Surquillo", "orders": 5, "rank": 7, "nbrands": 10, "rt": 6.36, "size": 2400, "cov": 80, "sev": "bad"}]}, {"brand": "Criollazo", "orders": 50, "wow": -18.0, "avg_rt": 4.84, "avg_cov": 96.7, "best": "Surquillo", "worst": "La Molina", "rows": [{"coc": "San Isidro", "orders": 26, "rank": 4, "nbrands": 10, "rt": 4.05, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "Surquillo", "orders": 17, "rank": 2, "nbrands": 10, "rt": 3.61, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "La Molina", "orders": 7, "rank": 4, "nbrands": 9, "rt": 6.86, "size": 2700, "cov": 90, "sev": "bad"}]}, {"brand": "Poke For The People", "orders": 35, "wow": -23.9, "avg_rt": 4.98, "avg_cov": 96.7, "best": "Surquillo", "worst": "La Molina", "rows": [{"coc": "San Isidro", "orders": 26, "rank": 5, "nbrands": 10, "rt": 4.52, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "Surquillo", "orders": 7, "rank": 5, "nbrands": 10, "rt": 3.18, "size": 3000, "cov": 100, "sev": "bad"}, {"coc": "La Molina", "orders": 2, "rank": 9, "nbrands": 9, "rt": 7.24, "size": 2700, "cov": 90, "sev": "bad"}]}], "per_zona": {"La Molina": [{"brand": "Bitute", "orders": 69, "pct": 62.7}, {"brand": "Almuerzos de la Casa", "orders": 10, "pct": 9.1}, {"brand": "Avocalia", "orders": 8, "pct": 7.3}, {"brand": "Criollazo", "orders": 7, "pct": 6.4}, {"brand": "Green House", "orders": 6, "pct": 5.5}], "San Isidro": [{"brand": "Bitute", "orders": 370, "pct": 66.4}, {"brand": "Almuerzos de la Casa", "orders": 53, "pct": 9.5}, {"brand": "Avocalia", "orders": 50, "pct": 9.0}, {"brand": "Criollazo", "orders": 26, "pct": 4.7}, {"brand": "Poke For The People", "orders": 26, "pct": 4.7}], "Surquillo": [{"brand": "Bitute", "orders": 180, "pct": 72.6}, {"brand": "Criollazo", "orders": 17, "pct": 6.9}, {"brand": "Almuerzos de la Casa", "orders": 15, "pct": 6.0}, {"brand": "Brunch & Munch", "orders": 12, "pct": 4.8}, {"brand": "Poke For The People", "orders": 7, "pct": 2.8}]}, "zonas_v": ["La Molina", "San Isidro", "Surquillo"], "total_orders": 915, "n_brands": 11, "top5_share": 92.3, "n80": 3}}, "Gonzáles Prada": {"kpi": {"rtwt": 4.17, "rtwt_lw": null, "drt": null, "cov": 28.6, "cov_asg": 33.3, "n_stores": 7, "n_cocinas": 1, "dist": {"1000": 7, "2100": 0, "2400": 0, "2700": 0, "3000": 0}, "tot": 7, "lose": 1, "alerts": {"rt3": 3, "poly1": 7}}, "stack": {"labels": ["Gonzáles Prada"], "series": {"1000": [7], "2100": [0], "2400": [0], "2700": [0], "3000": [0]}, "tot": [7]}, "weekly": [null, null, null, 4.17], "cocinas": [{"k": "Gonzáles Prada", "city": "Lima", "n": 7, "rtwt": 4.17, "drt": null, "cov": 28.6, "lose": 1}], "lost": [{"b": "Mr Beast Burger", "k": "Gonzáles Prada", "rt": 10.825000000000014, "cc": 1000.0, "res": 0}], "rising": [], "min1": [{"b": "Bitute", "k": "Gonzáles Prada", "rt": 3.42}, {"b": "Brunch & Munch", "k": "Gonzáles Prada", "rt": 3.19}, {"b": "Almuerzos de la Casa", "k": "Gonzáles Prada", "rt": 2.54}, {"b": "Avocalia", "k": "Gonzáles Prada", "rt": 0.89}, {"b": "Criollazo Comida Peruana", "k": "Gonzáles Prada", "rt": null}, {"b": "Simply Poke", "k": "Gonzáles Prada", "rt": null}], "brand_worst": [{"brand": "Mr Beast Burger", "rt": 10.83, "n": 1}, {"brand": "Bitute", "rt": 3.42, "n": 1}, {"brand": "Brunch & Munch", "rt": 3.19, "n": 1}, {"brand": "Almuerzos de la Casa", "rt": 2.54, "n": 1}, {"brand": "Avocalia", "rt": 0.89, "n": 1}], "ventas": {"pareto": [], "top5": [], "top5_detail": [], "per_zona": {}, "zonas_v": [], "total_orders": 0, "n_brands": 0, "top5_share": 0, "n80": 0}}, "La Molina": {"kpi": {"rtwt": 6.5, "rtwt_lw": 5.39, "drt": 1.11, "cov": 73.6, "cov_asg": 87.3, "n_stores": 11, "n_cocinas": 1, "dist": {"1000": 1, "2100": 0, "2400": 3, "2700": 3, "3000": 4}, "tot": 11, "lose": 2, "alerts": {"rt3": 9, "poly1": 1}}, "stack": {"labels": ["La Molina"], "series": {"1000": [1], "2100": [0], "2400": [3], "2700": [3], "3000": [4]}, "tot": [11]}, "weekly": [4.42, 4.79, 5.39, 6.5], "cocinas": [{"k": "La Molina", "city": "Lima", "n": 11, "rtwt": 6.5, "drt": 1.11, "cov": 73.6, "lose": 2}], "lost": [{"b": "Brunch & Munch", "k": "La Molina", "rt": 14.95, "cc": 1500.0, "res": 0}, {"b": "Green House", "k": "La Molina", "rt": 8.66666666666667, "cc": 3000.0, "res": 0}], "rising": [{"b": "Green House", "k": "La Molina", "inc": 3, "path": [5.13, 6.18, 7.46, 8.67], "last": 8.67}, {"b": "Poke For The People San Isidro", "k": "La Molina", "inc": 2, "path": [0.62, 3.7, 7.24], "last": 7.24}, {"b": "The Egg Spot", "k": "La Molina", "inc": 3, "path": [2.17, 4.81, 6.47, 7.16], "last": 7.16}, {"b": "Criollazo Comida Peruana", "k": "La Molina", "inc": 3, "path": [4.54, 4.9, 6.47, 6.86], "last": 6.86}, {"b": "Mr Beast Burger", "k": "La Molina", "inc": 2, "path": [1.5, 2.81, 3.62], "last": 3.62}], "min1": [], "brand_worst": [{"brand": "Brunch & Munch", "rt": 14.95, "n": 1}, {"brand": "Green House", "rt": 8.67, "n": 1}, {"brand": "Poke For The People San Isidro", "rt": 7.24, "n": 1}, {"brand": "The Egg Spot", "rt": 7.16, "n": 1}, {"brand": "Criollazo Comida Peruana", "rt": 6.86, "n": 1}, {"brand": "Bitute", "rt": 5.17, "n": 1}, {"brand": "Almuerzos de la Casa", "rt": 5.03, "n": 1}, {"brand": "Avocalia", "rt": 3.71, "n": 1}, {"brand": "Mr Beast Burger", "rt": 3.62, "n": 1}, {"brand": "Simply Poke", "rt": 2.59, "n": 1}], "ventas": {"pareto": [{"brand": "Bitute", "orders": 69, "pct": 62.7, "cum": 62.7}, {"brand": "Almuerzos de la Casa", "orders": 10, "pct": 9.1, "cum": 71.8}, {"brand": "Avocalia", "orders": 8, "pct": 7.3, "cum": 79.1}, {"brand": "Criollazo", "orders": 7, "pct": 6.4, "cum": 85.5}, {"brand": "Green House", "orders": 6, "pct": 5.5, "cum": 90.9}, {"brand": "The Egg Spot", "orders": 3, "pct": 2.7, "cum": 93.6}, {"brand": "Mr Beast Burger", "orders": 3, "pct": 2.7, "cum": 96.4}, {"brand": "Brunch & Munch", "orders": 2, "pct": 1.8, "cum": 98.2}, {"brand": "Poke For The People", "orders": 2, "pct": 1.8, "cum": 100.0}], "top5": ["Bitute", "Almuerzos de la Casa", "Avocalia", "Criollazo", "Green House"], "top5_detail": [{"brand": "Bitute", "orders": 69, "wow": -2.8, "avg_rt": 5.17, "avg_cov": 100.0, "best": "La Molina", "worst": "La Molina", "rows": [{"coc": "La Molina", "orders": 69, "rank": 1, "nbrands": 9, "rt": 5.17, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Almuerzos de la Casa", "orders": 10, "wow": 25.0, "avg_rt": 5.03, "avg_cov": 80.0, "best": "La Molina", "worst": "La Molina", "rows": [{"coc": "La Molina", "orders": 10, "rank": 2, "nbrands": 9, "rt": 5.03, "size": 2400, "cov": 80, "sev": "bad"}]}, {"brand": "Avocalia", "orders": 8, "wow": 14.3, "avg_rt": 3.71, "avg_cov": 100.0, "best": "La Molina", "worst": "La Molina", "rows": [{"coc": "La Molina", "orders": 8, "rank": 3, "nbrands": 9, "rt": 3.71, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Criollazo", "orders": 7, "wow": -22.2, "avg_rt": 6.86, "avg_cov": 90.0, "best": "La Molina", "worst": "La Molina", "rows": [{"coc": "La Molina", "orders": 7, "rank": 4, "nbrands": 9, "rt": 6.86, "size": 2700, "cov": 90, "sev": "bad"}]}, {"brand": "Green House", "orders": 6, "wow": 200.0, "avg_rt": 8.67, "avg_cov": 0.0, "best": "La Molina", "worst": "La Molina", "rows": [{"coc": "La Molina", "orders": 6, "rank": 5, "nbrands": 9, "rt": 8.67, "size": null, "cov": 0, "sev": "bad"}]}], "per_zona": {"La Molina": [{"brand": "Bitute", "orders": 69, "pct": 62.7}, {"brand": "Almuerzos de la Casa", "orders": 10, "pct": 9.1}, {"brand": "Avocalia", "orders": 8, "pct": 7.3}, {"brand": "Criollazo", "orders": 7, "pct": 6.4}, {"brand": "Green House", "orders": 6, "pct": 5.5}]}, "zonas_v": ["La Molina"], "total_orders": 110, "n_brands": 9, "top5_share": 90.9, "n80": 4}}, "Otra": {"kpi": {"rtwt": null, "rtwt_lw": null, "drt": null, "cov": 33.3, "cov_asg": 33.3, "n_stores": 1, "n_cocinas": 1, "dist": {"1000": 1, "2100": 0, "2400": 0, "2700": 0, "3000": 0}, "tot": 1, "lose": 0, "alerts": {"rt3": 0, "poly1": 1}}, "stack": {"labels": ["Otra"], "series": {"1000": [1], "2100": [0], "2400": [0], "2700": [0], "3000": [0]}, "tot": [1]}, "weekly": [13.44, null, null, null], "cocinas": [{"k": "Otra", "city": "Lima", "n": 1, "rtwt": null, "drt": null, "cov": 33.3, "lose": 0}], "lost": [], "rising": [], "min1": [{"b": "Sushi By Noz", "k": "Otra", "rt": null}], "brand_worst": [], "ventas": {"pareto": [], "top5": [], "top5_detail": [], "per_zona": {}, "zonas_v": [], "total_orders": 0, "n_brands": 0, "top5_share": 0, "n80": 0}}, "San Isidro": {"kpi": {"rtwt": 4.53, "rtwt_lw": 5.06, "drt": -0.53, "cov": 90.8, "cov_asg": 90.8, "n_stores": 12, "n_cocinas": 1, "dist": {"1000": 0, "2100": 0, "2400": 5, "2700": 1, "3000": 6}, "tot": 12, "lose": 0, "alerts": {"rt3": 9, "poly1": 0}}, "stack": {"labels": ["San Isidro"], "series": {"1000": [0], "2100": [0], "2400": [5], "2700": [1], "3000": [6]}, "tot": [12]}, "weekly": [4.69, 5.81, 5.06, 4.53], "cocinas": [{"k": "San Isidro", "city": "Lima", "n": 12, "rtwt": 4.53, "drt": -0.53, "cov": 90.8, "lose": 0}], "lost": [], "rising": [], "min1": [], "brand_worst": [{"brand": "Brunch & Munch", "rt": 7.05, "n": 1}, {"brand": "Avocalia", "rt": 5.76, "n": 1}, {"brand": "The Egg Spot", "rt": 5.49, "n": 1}, {"brand": "Green House", "rt": 5.14, "n": 1}, {"brand": "Poke For The People San Isidro", "rt": 4.52, "n": 1}, {"brand": "Mr Beast Burger", "rt": 4.1, "n": 1}, {"brand": "Criollazo Comida Peruana", "rt": 4.05, "n": 1}, {"brand": "Bitute", "rt": 3.27, "n": 1}, {"brand": "Almuerzos de la Casa", "rt": 3.21, "n": 1}, {"brand": "Simply Poke", "rt": 2.69, "n": 1}], "ventas": {"pareto": [{"brand": "Bitute", "orders": 370, "pct": 66.4, "cum": 66.4}, {"brand": "Almuerzos de la Casa", "orders": 53, "pct": 9.5, "cum": 75.9}, {"brand": "Avocalia", "orders": 50, "pct": 9.0, "cum": 84.9}, {"brand": "Criollazo", "orders": 26, "pct": 4.7, "cum": 89.6}, {"brand": "Poke For The People", "orders": 26, "pct": 4.7, "cum": 94.3}, {"brand": "Green House", "orders": 11, "pct": 2.0, "cum": 96.2}, {"brand": "Simply Poke", "orders": 11, "pct": 2.0, "cum": 98.2}, {"brand": "The Egg Spot", "orders": 5, "pct": 0.9, "cum": 99.1}, {"brand": "Brunch & Munch", "orders": 4, "pct": 0.7, "cum": 99.8}, {"brand": "Vicio", "orders": 1, "pct": 0.2, "cum": 100.0}], "top5": ["Bitute", "Almuerzos de la Casa", "Avocalia", "Criollazo", "Poke For The People"], "top5_detail": [{"brand": "Bitute", "orders": 370, "wow": 2.2, "avg_rt": 3.27, "avg_cov": 100.0, "best": "San Isidro", "worst": "San Isidro", "rows": [{"coc": "San Isidro", "orders": 370, "rank": 1, "nbrands": 10, "rt": 3.27, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Almuerzos de la Casa", "orders": 53, "wow": -14.5, "avg_rt": 3.21, "avg_cov": 100.0, "best": "San Isidro", "worst": "San Isidro", "rows": [{"coc": "San Isidro", "orders": 53, "rank": 2, "nbrands": 10, "rt": 3.21, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Avocalia", "orders": 50, "wow": 51.5, "avg_rt": 5.76, "avg_cov": 80.0, "best": "San Isidro", "worst": "San Isidro", "rows": [{"coc": "San Isidro", "orders": 50, "rank": 3, "nbrands": 10, "rt": 5.76, "size": 2400, "cov": 80, "sev": "bad"}]}, {"brand": "Criollazo", "orders": 26, "wow": -7.1, "avg_rt": 4.05, "avg_cov": 100.0, "best": "San Isidro", "worst": "San Isidro", "rows": [{"coc": "San Isidro", "orders": 26, "rank": 4, "nbrands": 10, "rt": 4.05, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Poke For The People", "orders": 26, "wow": -10.3, "avg_rt": 4.52, "avg_cov": 100.0, "best": "San Isidro", "worst": "San Isidro", "rows": [{"coc": "San Isidro", "orders": 26, "rank": 5, "nbrands": 10, "rt": 4.52, "size": 3000, "cov": 100, "sev": "bad"}]}], "per_zona": {"San Isidro": [{"brand": "Bitute", "orders": 370, "pct": 66.4}, {"brand": "Almuerzos de la Casa", "orders": 53, "pct": 9.5}, {"brand": "Avocalia", "orders": 50, "pct": 9.0}, {"brand": "Criollazo", "orders": 26, "pct": 4.7}, {"brand": "Poke For The People", "orders": 26, "pct": 4.7}]}, "zonas_v": ["San Isidro"], "total_orders": 557, "n_brands": 10, "top5_share": 94.3, "n80": 3}}, "Surquillo": {"kpi": {"rtwt": 4.38, "rtwt_lw": 5.23, "drt": -0.85, "cov": 94.2, "cov_asg": 94.2, "n_stores": 12, "n_cocinas": 1, "dist": {"1000": 0, "2100": 0, "2400": 3, "2700": 1, "3000": 8}, "tot": 12, "lose": 0, "alerts": {"rt3": 9, "poly1": 0}}, "stack": {"labels": ["Surquillo"], "series": {"1000": [0], "2100": [0], "2400": [3], "2700": [1], "3000": [8]}, "tot": [12]}, "weekly": [4.14, 5.5, 5.23, 4.38], "cocinas": [{"k": "Surquillo", "city": "Lima", "n": 12, "rtwt": 4.38, "drt": -0.85, "cov": 94.2, "lose": 0}], "lost": [], "rising": [], "min1": [], "brand_worst": [{"brand": "Brunch & Munch", "rt": 7.89, "n": 1}, {"brand": "Avocalia", "rt": 6.36, "n": 1}, {"brand": "Mr Beast Burger", "rt": 6.34, "n": 1}, {"brand": "Almuerzos de la Casa", "rt": 4.1, "n": 1}, {"brand": "Bitute", "rt": 3.78, "n": 1}, {"brand": "Criollazo Comida Peruana", "rt": 3.61, "n": 1}, {"brand": "Green House", "rt": 3.45, "n": 1}, {"brand": "Poke For The People San Isidro", "rt": 3.18, "n": 1}, {"brand": "The Egg Spot", "rt": 3.16, "n": 1}, {"brand": "Simply Poke", "rt": 1.93, "n": 1}], "ventas": {"pareto": [{"brand": "Bitute", "orders": 180, "pct": 72.6, "cum": 72.6}, {"brand": "Criollazo", "orders": 17, "pct": 6.9, "cum": 79.4}, {"brand": "Almuerzos de la Casa", "orders": 15, "pct": 6.0, "cum": 85.5}, {"brand": "Brunch & Munch", "orders": 12, "pct": 4.8, "cum": 90.3}, {"brand": "Poke For The People", "orders": 7, "pct": 2.8, "cum": 93.1}, {"brand": "The Egg Spot", "orders": 5, "pct": 2.0, "cum": 95.2}, {"brand": "Avocalia", "orders": 5, "pct": 2.0, "cum": 97.2}, {"brand": "Green House", "orders": 3, "pct": 1.2, "cum": 98.4}, {"brand": "Simply Poke", "orders": 3, "pct": 1.2, "cum": 99.6}, {"brand": "Mr Beast Burger", "orders": 1, "pct": 0.4, "cum": 100.0}], "top5": ["Bitute", "Criollazo", "Almuerzos de la Casa", "Brunch & Munch", "Poke For The People"], "top5_detail": [{"brand": "Bitute", "orders": 180, "wow": 9.1, "avg_rt": 3.78, "avg_cov": 100.0, "best": "Surquillo", "worst": "Surquillo", "rows": [{"coc": "Surquillo", "orders": 180, "rank": 1, "nbrands": 10, "rt": 3.78, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Criollazo", "orders": 17, "wow": -29.2, "avg_rt": 3.61, "avg_cov": 100.0, "best": "Surquillo", "worst": "Surquillo", "rows": [{"coc": "Surquillo", "orders": 17, "rank": 2, "nbrands": 10, "rt": 3.61, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Almuerzos de la Casa", "orders": 15, "wow": -42.3, "avg_rt": 4.1, "avg_cov": 100.0, "best": "Surquillo", "worst": "Surquillo", "rows": [{"coc": "Surquillo", "orders": 15, "rank": 3, "nbrands": 10, "rt": 4.1, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Brunch & Munch", "orders": 12, "wow": 0.0, "avg_rt": 7.89, "avg_cov": 100.0, "best": "Surquillo", "worst": "Surquillo", "rows": [{"coc": "Surquillo", "orders": 12, "rank": 4, "nbrands": 10, "rt": 7.89, "size": 3000, "cov": 100, "sev": "bad"}]}, {"brand": "Poke For The People", "orders": 7, "wow": -50.0, "avg_rt": 3.18, "avg_cov": 100.0, "best": "Surquillo", "worst": "Surquillo", "rows": [{"coc": "Surquillo", "orders": 7, "rank": 5, "nbrands": 10, "rt": 3.18, "size": 3000, "cov": 100, "sev": "bad"}]}], "per_zona": {"Surquillo": [{"brand": "Bitute", "orders": 180, "pct": 72.6}, {"brand": "Criollazo", "orders": 17, "pct": 6.9}, {"brand": "Almuerzos de la Casa", "orders": 15, "pct": 6.0}, {"brand": "Brunch & Munch", "orders": 12, "pct": 4.8}, {"brand": "Poke For The People", "orders": 7, "pct": 2.8}]}, "zonas_v": ["Surquillo"], "total_orders": 248, "n_brands": 10, "top5_share": 93.1, "n80": 3}}}};/*PE_DATA_END*/
+const LV=PE.LV, IDEAL=PE.ideal;
+const scol={3000:'#0E2841',2700:'#153D64',2400:'#156082',2100:'#0B769F',1000:'#96607D'};
+const lcol={3000:'#8FB8E8',2700:'#9FD8F0',2400:'#FFD98E',2100:'#FFE9C0',1000:'#2B1622'};
+let ZONA='ALL';
+const km=m=>m==null?'–':(m/1000).toFixed(1);
+const fmt=(x,d=1)=>x==null?'–':x.toFixed(d);
+const stcol=a=>a==null?'#8b96ab':(a<2?'#1e8e5a':(a<5?'#d99a1b':(a<=8?'#e67e22':'#c0392b')));
+const stlabel=a=>a==null?'⚪ Sin datos':(a<2?'🟢 Saludable':(a<5?'🟡 Atención':(a<=8?'🟠 Riesgo':'🔴 Crítico')));
+const rt4fmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(v)}"></span>`;
+function delta(v,goodDown){if(v==null)return '–';const good=goodDown?v<0:v>0;const ar=v>0?'▲':(v<0?'▼':'•');return `<span style="color:${v==0?'var(--mut)':(good?'var(--good)':'var(--bad)')}">${ar} ${Math.abs(v).toFixed(2)}</span>`;}
+const sub=()=>PE.data[ZONA]||PE.data.ALL;
+const selZona=document.getElementById('selZona');
+selZona.innerHTML='<option value="ALL">🗺️ Todas las zonas</option>'+PE.zonas.map(z=>`<option>${z}</option>`).join('');
+selZona.onchange=()=>{ZONA=selZona.value; render();};
+let chD=null;
+let sortK={key:'cov',dir:1};
+function sortRows(rows,st){const k=st.key,d=st.dir;return [...rows].sort((a,b)=>{let av=a[k],bv=b[k];if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;if(typeof av==='string')return av.localeCompare(bv)*d;return (av<bv?-1:av>bv?1:0)*d;});}
+window.peSortZ=k=>{if(sortK.key===k)sortK.dir*=-1;else{sortK.key=k;sortK.dir=(k==='k')?1:-1;}renderZona();};
+function renderKpis(){
+  const k=sub().kpi, tot=k.tot||1; const nD=s=>k.dist[String(s)]||0;
+  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
+  const pct=s=>`<span class="warnc">${Math.round(100*nD(s)/tot)}% del total</span>`;
+  const cards=[
+   {l:'Avg RTWT (última semana)', v:k.rtwt==null?'–':`<span style="white-space:nowrap">${k.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(k.rtwt)}"></span></span>`, d:`<span style="color:${stcol(k.rtwt)}">${stlabel(k.rtwt)}</span> · ${delta(k.drt,true)} vs sem. ant.`},
+   {l:'Cobertura efectiva vs ideal', v:fmt(k.cov,1)+'%', d:k.cov_asg!=null?`asignada ${fmt(k.cov_asg,1)}% · 0% si penalizada`:'polígono efectivo'},
+   {l:'Marcas en 3.0 km (ideal)', v:nD(3000)+' / '+tot, d:pct(3000)},
+   {l:'Marcas en 2.7 km', v:nD(2700)+' / '+tot, d:pct(2700)},
+   {l:'Marcas en 2.4 km', v:nD(2400)+' / '+tot, d:pct(2400)},
+   {l:'Marcas en 2.1 km (alerta)', v:pink(nD(2100)+' / '+tot), d:pct(2100)},
+   {l:'Marcas en 1.0 km (crítico)', v:pink(nD(1000)+' / '+tot), d:pct(1000)},
+   {l:'Tiendas que pierden cobertura', v:pink(k.lose), d:'<span class="warnc">RTWT última semana &gt; 8 min → 0% + penalización</span>'},
+  ];
+  document.getElementById('pe-kpis').innerHTML=cards.map(c=>`<div class="kpi"><div class="l">${c.l}</div><div class="v">${c.v}</div><div class="d">${c.d}</div></div>`).join('');
+}
+function renderDist(){
+  const S=sub().stack;
+  const ds=[...LV].reverse().map(s=>({label:(s/1000).toFixed(1)+' km',_size:s,data:S.series[String(s)],backgroundColor:scol[s],stack:'s'}));
+  if(chD)chD.destroy();
+  chD=new Chart(document.getElementById('pe-chDist'),{type:'bar',data:{labels:S.labels,datasets:ds},
+   options:{maintainAspectRatio:false,layout:{padding:{top:4}},
+    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:8,font:{size:11}}},
+     tooltip:{callbacks:{label:c=>{const t=S.tot[c.dataIndex]||1;return `${c.dataset.label}: ${c.raw} (${Math.round(100*c.raw/t)}%)`}}},
+     datalabels:{display:ctx=>{const t=S.tot[ctx.dataIndex]||1;return ctx.dataset.data[ctx.dataIndex]/t>=0.12},color:ctx=>ctx.dataset._size===1000?'#96607D':(lcol[ctx.dataset._size]||'#fff'),font:{size:9,weight:'700'},formatter:(v,ctx)=>{const t=S.tot[ctx.dataIndex]||1;return Math.round(100*v/t)+'%'}}},
+    scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{font:{size:10}}}}}});
+}
+function renderZona(){
+  const D=sub(); const cols=[{k:'k',l:'Zona'},{k:'n',l:'Tiendas',num:1},{k:'rtwt',l:'RTWT',num:1},{k:'drt',l:'Δ RTWT',num:1},{k:'cov',l:'Cob. efectiva',num:1},{k:'lose',l:'Penaliz.',num:1}];
+  const ar=k=>sortK.key===k?(sortK.dir===1?' ↑':' ↓'):'';
+  const head='<tr>'+cols.map(c=>`<th class="${c.num?'num ':''}sortable" onclick="peSortZ('${c.k}')">${c.l}${ar(c.k)}</th>`).join('')+'</tr>';
+  document.getElementById('pe-tbZona').innerHTML=head+sortRows(D.cocinas,sortK).map(r=>
+    `<tr><td>${r.k}</td><td class="num">${r.n}</td><td class="num">${rt4fmt(r.rtwt)}</td><td class="num">${delta(r.drt,true)}</td><td class="num">${fmt(r.cov,1)}%</td><td class="num">${r.lose?('<span style="color:var(--plum);font-weight:700">'+r.lose+'</span>'):'0'}</td></tr>`).join('');
+}
+function renderLost(){
+  const lc=sub().lost;
+  document.getElementById('pe-tbLost').innerHTML='<tr><th>Marca</th><th>Zona</th><th class="num">RTWT última</th><th class="num">Polígono efectivo</th></tr>'+
+   (lc.length?lc.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num"><span class="pill" style="background:#96607D">${r.rt.toFixed(1)} min</span></td><td class="num"><span class="pill" style="background:#96607D">0 km · 0%</span></td></tr>`).join('')
+    :'<tr><td colspan="4" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda fuera de cobertura ✓</td></tr>');
+}
+function renderRising(){
+  const rr=sub().rising||[];
+  document.getElementById('pe-tbRising').innerHTML='<tr><th>Marca</th><th>Zona</th><th class="num"># sem.</th><th class="num">Evolución RTWT (min)</th></tr>'+
+   (rr.length?rr.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num">${r.inc}</td><td class="num"><span class="pill" style="background:#96607D">${r.path.map(v=>v.toFixed(1)).join('→')}</span></td></tr>`).join('')
+    :'<tr><td colspan="4" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda con RTWT subiendo 2+ semanas ✓</td></tr>');
+}
+function renderMin1(){
+  const m=sub().min1||[];
+  document.getElementById('pe-tb1km').innerHTML='<tr><th>Marca</th><th>Zona</th><th class="num">RTWT última</th><th class="num">Polígono efectivo</th></tr>'+
+   (m.length?m.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num">${rt4fmt(r.rt)}</td><td class="num"><span class="pill" style="background:#96607D">1.0 km</span></td></tr>`).join('')
+    :'<tr><td colspan="4" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda en polígono de 1.0 km</td></tr>');
+}
+function renderBrandWorst(){
+  const b=sub().brand_worst||[];
+  document.getElementById('pe-tbBrand').innerHTML='<tr><th>Marca</th><th class="num">RTWT última</th><th class="num">Tiendas</th></tr>'+
+   b.map(r=>`<tr><td>${r.brand}</td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${r.n}</td></tr>`).join('');
+}
+function renderVKpis(){
+  const V=sub().ventas;
+  const cards=[
+   {l:'Órdenes (semana)',v:(V.total_orders||0).toLocaleString('es'),d:PE.sales_week||''},
+   {l:'Marcas activas',v:V.n_brands,d:'con ventas en la semana'},
+   {l:'Peso del Top 5',v:(V.top5_share||0)+'%',d:'de las órdenes'},
+   {l:'Marcas para el 80%',v:V.n80,d:'según Pareto'},
+  ];
+  document.getElementById('pe-vKpis').innerHTML=cards.map(k=>`<div class="kpi"><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
+}
+let chRt=null;
+function renderRt(){
+  const w=sub().weekly||[];
+  if(chRt)chRt.destroy();
+  chRt=new Chart(document.getElementById('pe-chRt'),{type:'line',data:{labels:PE.weeks||[],datasets:[{data:w,borderColor:'#0F9ED5',backgroundColor:'rgba(15,158,213,.15)',tension:.3,fill:true,pointRadius:3,pointBackgroundColor:'#156082'}]},
+   options:{maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:false},datalabels:{align:'top',anchor:'end',offset:2,color:'#345964',font:{size:10,weight:'600'},clip:false,formatter:v=>v==null?'':v.toFixed(2)}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}}});
+}
+let chCov=null;
+function renderCov(){
+  const k=sub().kpi; const wk=PE.weeks||[]; const data=wk.map((_,i)=>i===wk.length-1?k.cov:null);
+  if(chCov)chCov.destroy();
+  chCov=new Chart(document.getElementById('pe-chCov'),{type:'line',data:{labels:wk,datasets:[{data:data,borderColor:'#153D64',backgroundColor:'rgba(21,61,100,.15)',tension:.3,fill:true,pointRadius:5,pointBackgroundColor:'#153D64',spanGaps:true}]},
+   options:{maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:false},datalabels:{align:'top',anchor:'end',offset:2,color:'#153D64',font:{size:11,weight:'700'},clip:false,formatter:v=>v==null?'':v.toFixed(1)+'%'}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{min:50,max:100,ticks:{callback:v=>v+'%',font:{size:10}}}}}});
+}
+let chP=null;
+function renderPareto(){
+  const V=sub().ventas, P=V.pareto, top=new Set(V.top5);
+  if(chP)chP.destroy();
+  chP=new Chart(document.getElementById('pe-chPareto'),{data:{labels:P.map(p=>p.brand),
+    datasets:[{type:'bar',order:2,label:'Órdenes',data:P.map(p=>p.orders),yAxisID:'y',backgroundColor:P.map(p=>top.has(p.brand)?'#156082':'#c9d3df'),borderWidth:1},
+      {type:'line',order:1,label:'% acum.',data:P.map(p=>p.cum),yAxisID:'y1',borderColor:'#c0392b',backgroundColor:'#c0392b',tension:.25,pointRadius:2,fill:false},
+      {type:'line',order:0,label:'80%',data:P.map(()=>80),yAxisID:'y1',borderColor:'#d99a1b',borderDash:[6,4],pointRadius:0,borderWidth:1.5,fill:false}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false},
+     tooltip:{callbacks:{label:c=>c.dataset.type==='bar'?` ${c.raw} órdenes (${P[c.dataIndex].pct}%)`:(c.datasetIndex===1?` acum ${c.raw}%`:'')}}},
+    scales:{x:{ticks:{font:{size:9},maxRotation:70,minRotation:55,autoSkip:false}},y:{beginAtZero:true,title:{display:true,text:'Órdenes'},ticks:{font:{size:10}}},y1:{position:'right',min:0,max:100,grid:{display:false},ticks:{callback:v=>v+'%',font:{size:10}}}}}});
+}
+function renderTop5(){
+  const V=sub().ventas;
+  document.getElementById('pe-vTop5').innerHTML=V.top5_detail.map(d=>{
+    const wow=d.wow==null?'':`<span style="font-size:12px;font-weight:600;color:${d.wow>0?'#1e8e5a':(d.wow<0?'#c0392b':'#7a869a')}">${d.wow>0?'▲':(d.wow<0?'▼':'•')} ${Math.abs(d.wow)}%</span>`;
+    return `<div class="vcard"><div class="vb">${d.brand}</div><div class="vo">${d.orders.toLocaleString('es')} <span style="font-size:12px;color:var(--mut)">órd.</span> ${wow}</div>
+    <div class="vm">Cobertura <b style="color:#156082;font-size:14px">${d.avg_cov==null?'–':d.avg_cov+'%'}</b><br>RTWT ${rt4fmt(d.avg_rt)}<br>
+    <span style="color:#1e8e5a">▲ mejor: <b>${d.best||'–'}</b></span> · <span style="color:#c0392b">▼ peor: <b>${d.worst||'–'}</b></span></div></div>`;
+  }).join('') || '<div style="color:var(--mut);font-size:12px">Sin órdenes en este alcance.</div>';
+}
+function renderVZona(){
+  const V=sub().ventas; const s=document.getElementById('pe-vZonaSel'); const pv=s.value;
+  s.innerHTML=V.zonas_v.map(z=>`<option>${z}</option>`).join('');
+  s.value=V.zonas_v.includes(pv)?pv:(V.zonas_v[0]||'');
+  drawVZona();
+}
+function drawVZona(){
+  const V=sub().ventas; const z=document.getElementById('pe-vZonaSel').value; const rows=V.per_zona[z]||[];
+  document.getElementById('pe-vZonaTable').innerHTML='<tr><th>#</th><th>Marca</th><th class="num">Órdenes</th><th class="num">% zona</th></tr>'+
+    rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td>${r.brand}</td><td class="num">${r.orders}</td><td class="num">${r.pct}%</td></tr>`).join('');
+}
+const pillSize=s=>s==null?'<span class="pill" style="background:#eee;color:#888">s/d</span>':`<span class="pill" style="background:${scol[s]||'#888'};color:${lcol[s]||'#fff'}">${(s/1000).toFixed(1)} km</span>`;
+function renderVBrand(){
+  const V=sub().ventas; const s=document.getElementById('pe-vBrandSel'); const pv=+s.value||0;
+  s.innerHTML=V.top5_detail.map((d,i)=>`<option value="${i}">${d.brand}</option>`).join('');
+  if(!V.top5_detail.length){document.getElementById('pe-vProblemas').innerHTML='<div style="color:var(--mut);font-size:12px;padding:6px 0">Sin órdenes en este alcance.</div>';document.getElementById('pe-vBrandSum').innerHTML='';return;}
+  s.value=String(pv<V.top5_detail.length?pv:0);
+  drawVBrand();
+}
+function drawVBrand(){
+  const V=sub().ventas; const d=V.top5_detail[+document.getElementById('pe-vBrandSel').value]; if(!d)return;
+  const nb=d.rows.filter(r=>r.sev==='bad').length, nw=d.rows.filter(r=>r.sev==='warn').length;
+  document.getElementById('pe-vBrandSum').innerHTML=`${nb} crítica(s) · ${nw} en alerta · ${d.rows.length} zonas`;
+  document.getElementById('pe-vProblemas').innerHTML='<table class="dense"><tr><th>Zona</th><th class="num">Órdenes</th><th>Puesto</th><th class="num">RTWT</th><th class="num">Polígono</th><th class="num">Cobert.</th></tr>'+
+    d.rows.map(r=>`<tr class="sev-${r.sev}"><td>${r.coc}</td><td class="num">${r.orders}</td><td><span class="rk">#${r.rank}</span><span style="color:var(--mut)">/${r.nbrands}</span></td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td><td class="num">${r.cov==null?'–':r.cov+'%'}</td></tr>`).join('')+'</table>';
+}
+document.getElementById('pe-vZonaSel').onchange=drawVZona;
+document.getElementById('pe-vBrandSel').onchange=drawVBrand;
+function render(){
+  document.getElementById('pe-hWk').textContent='· sem. '+(PE.week||'')+(ZONA!=='ALL'?' · '+ZONA:'');
+  const vw=document.getElementById('pe-vWk'); if(vw) vw.textContent='· '+(PE.sales_week||'')+(PE.sales_prev?(' vs '+PE.sales_prev):'')+(ZONA!=='ALL'?' · '+ZONA:'');
+  document.getElementById('pe-distTitle').textContent=ZONA==='ALL'?'Distribución de polígonos por zona':'Distribución — '+ZONA;
+  renderKpis(); renderRt(); renderCov(); renderDist(); renderZona(); renderLost();
+  renderRising(); renderMin1(); renderBrandWorst();
+  renderVKpis(); renderPareto(); renderTop5(); renderVZona(); renderVBrand();
+}
+Chart.register(ChartDataLabels);
+Chart.defaults.color='#5d6b80';Chart.defaults.borderColor='#d5dae3';Chart.defaults.font.family='Poppins';
+render();
+</script>
+</body></html>

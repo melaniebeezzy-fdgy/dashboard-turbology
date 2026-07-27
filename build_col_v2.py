@@ -97,9 +97,9 @@ from collections import Counter
 print('coverageCurrent dist:', Counter(s['cc'] for s in stores.values()))
 
 if '--inject' in sys.argv:
-    idx = open('index.html', encoding='utf-8').read()
+    idx = open('index_co.html', encoding='utf-8').read()
     payload = 'const D=' + json.dumps(D, ensure_ascii=False) + ';'
     new = re.sub(r'const D=\{.*?\};', lambda m: payload, idx, count=1, flags=re.S)
     assert new != idx and 'const D={' in new
-    open('index.html','w',encoding='utf-8').write(new)
+    open('index_co.html','w',encoding='utf-8').write(new)
     print('const D (v2) inyectado en index.html')
