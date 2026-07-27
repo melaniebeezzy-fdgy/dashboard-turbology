@@ -37,6 +37,7 @@ css = '''
 #kpis .kpi,#mx-kpis .kpi,#pe-kpis .kpi{min-height:118px}
 #pe-trend .card,#pe-poligonos .card{height:400px}#pe-trend .card .chartbox,#pe-poligonos .card .chartbox{flex:1}#pe-poligonos .card .scroll{max-height:none}
 #pe-alertas .card,#pe-alertas2 .card{height:420px}#pe-alertas .card .scroll,#pe-alertas2 .card .scroll{flex:1;max-height:none}
+#mx-trend .card{height:400px}#mx-trend .card .chartbox{flex:1}
 @media(max-width:600px){#mx-kpis,#pe-kpis{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:1fr 1fr}}
 '''
 h = h.replace('</style>', css + '</style>', 1)

@@ -168,9 +168,10 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
   <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Promedio del polígono vs. el ideal de 3.0 km (100%).</div><div class="chartbox" style="min-height:280px"><canvas id="chCov"></canvas></div></div>
 </div>
 <div class="grid" id="poligonos">
-  <div class="card"><h2>Distribución de polígonos por semana</h2><div class="hint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div><div id="distDetail"></div></div>
+  <div class="card"><h2>Distribución de polígonos por semana</h2><div class="hint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div></div>
   <div class="card"><h2>Ciudades — promedio móvil 4 semanas</h2><div class="hint">RTWT promedio de las últimas 4 semanas (22 jun–13 jul), estado y cobertura efectiva. Clic en encabezados para ordenar y en la cobertura para el detalle.</div><div class="scroll"><table id="tbCity"></table></div></div>
 </div>
+<div id="distDetail"></div>
 <div class="card" style="margin-bottom:14px" id="cocinas"><h2>Cocinas — RTWT (4 semanas) y cobertura efectiva</h2><div class="hint">RTWT promedio móvil de 4 semanas, estado (🟢🟡🟠🔴) y cobertura efectiva (0% si penalizada). Clic en cualquier encabezado para ordenar. Clic en la cobertura para el detalle por marca.</div><div class="scroll"><table id="tbCocina"></table></div></div>
 <div class="card" style="margin-bottom:14px"><h2>Mapa de calor — % cobertura por cocina y semana</h2><div class="hint">Escala continua: vino &lt; 70% → malva → verde azulado → azul → azul oscuro ≥ 98%. Cada punto porcentual cambia el tono.</div><div class="hscroll"><table class="hm" id="tbHeat"></table></div><div id="heatDetail"></div></div>
 <!--VENTAS_HTML_START-->

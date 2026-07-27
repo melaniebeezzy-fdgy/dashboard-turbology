@@ -12,6 +12,7 @@ warnings.filterwarnings('ignore')
 DETALLE = sys.argv[1] if len(sys.argv) > 1 else 'FOODOLOGY.xlsx'
 PROP = 'mx_polygon_proposal.xlsx'
 KDS = 'KDS_ventas_mx.xlsx'
+RTWTF = 'MX_rtwt.xlsx'
 LV = [1000, 2100, 2400, 2700, 3000]
 IDEAL = 3000
 
@@ -24,7 +25,10 @@ def avg(a):
     a = [x for x in a if x is not None]; return sum(a)/len(a) if a else None
 def lvl(m): return min(LV, key=lambda l: abs(l-m)) if m is not None else None
 CITY_MAP = {'Ciudad de México': 'CDMX', 'Merida': 'Mérida'}
+# override de ciudad por cocina (para unificar cocinas que vienen con ciudad distinta entre fuentes)
+CITY_OVERRIDE = {'Saltillo Centro': 'CDMX'}
 def ncity(c): return CITY_MAP.get(str(c), str(c))
+def city_for(coc, raw): return CITY_OVERRIDE.get(coc, ncity(raw))
 
 s2c = json.load(open('store2cocina_mx.json'))
 coc2op = json.load(open('cocina2ops_mx.json')) if os.path.exists('cocina2ops_mx.json') else {}
@@ -53,8 +57,9 @@ for r in ws.iter_rows(min_row=2, values_only=True):
     if not sid: continue
     coc = s2c.get(str(sid), '—')
     stores.append(dict(sid=str(sid), b=stripbrand(col(r, 'Brand Name')), k=coc,
-        c=ncity(col(r, 'City Name') or '—'), op=coc2op.get(coc),
+        c=city_for(coc, col(r, 'City Name') or '—'), op=coc2op.get(coc),
         rt=num(col(r, 'Avg. RTWT')), rtlw=num(col(r, 'LW_RTWT')),
+        cur=to_m(col(r, 'Current Size')),
         fin=to_m(col(r, 'FINAL SIZE')), prop=prop_of.get(str(sid))))
 
 # ---- ventas KDS (WoW) ----
@@ -80,7 +85,8 @@ if os.path.exists(KDS):
         d = vc(r, 'date')
         if not isinstance(d, datetime.datetime): continue
         o = num(vc(r, 'Total orders')) or 0
-        vrecs.append((d.date(), ncity(vc(r, 'city')), kit2coc(vc(r, 'kitchen_id')),
+        _c = kit2coc(vc(r, 'kitchen_id'))
+        vrecs.append((d.date(), city_for(_c, vc(r, 'city')), _c,
                       str(vc(r, 'brand') or ''), o, vc(r, 'ops')))
 days = [x[0] for x in vrecs]
 lastday = max(days) if days else None
@@ -97,6 +103,36 @@ bdisp = {}
 for x in lw_all + pw_all:
     b = x[3]; bdisp.setdefault(norm(b), b.title())
 
+# ---- RTWT semanal (KDS time mx: diario -> semanal por lunes) ----
+rtrows = []   # (wi, city, coc, op, rtwt)
+MXW = []
+if os.path.exists(RTWTF):
+    wr = openpyxl.load_workbook(RTWTF, read_only=True, data_only=True)
+    wsr = wr['Export']
+    Hr = {c: i for i, c in enumerate(next(wsr.iter_rows(min_row=1, max_row=1, values_only=True)))}
+    def rc(r, n):
+        i = Hr.get(n); return r[i] if i is not None and i < len(r) else None
+    raw = []; mondays = set()
+    for r in wsr.iter_rows(min_row=2, values_only=True):
+        d = rc(r, 'date')
+        if not isinstance(d, datetime.datetime): continue
+        rtv = num(rc(r, 'RTWT'))
+        if rtv is None: continue
+        mon = (d - datetime.timedelta(days=d.weekday())).date()
+        mondays.add(mon)
+        coc = kit2coc(rc(r, 'kitchen_id'))
+        raw.append((mon, city_for(coc, rc(r, 'city')), coc, coc2op.get(coc), rtv))
+    ws_sorted = sorted(mondays)
+    widx = {m: i for i, m in enumerate(ws_sorted)}
+    MXW = [m.strftime('%b %-d') for m in ws_sorted]
+    for mon, city, coc, op, rtv in raw:
+        rtrows.append((widx[mon], city, coc, op, rtv))
+NW = len(MXW)
+
+# ---- solo cocinas con data real (RTWT turbo internas o ventas); descarta el resto ----
+valid_cocs = {x[2] for x in rtrows} | {x[2] for x in vrecs}
+stores = [s for s in stores if s['k'] in valid_cocs and s['k'] not in ('—', None)]
+
 CITIES = sorted({s['c'] for s in stores})
 OPS = sorted({s['op'] for s in stores if s['op']})
 
@@ -106,43 +142,51 @@ def compute(kind, name):
     st = [s for s in stores if incs(s)]
     fins = [s['fin'] for s in st if s['fin'] is not None]
     props = [s['prop'] for s in st if s['prop'] is not None]
-    rts = [s['rt'] for s in st if s['rt'] is not None]
-    rtwt = avg(rts); rtwt_lw = avg([s['rtlw'] for s in st if s['rtlw'] is not None])
     cov = 100*avg(fins)/IDEAL if fins else None
     cov_prop = 100*avg(props)/IDEAL if props else None
+    curs = [s['cur'] for s in st if s.get('cur') is not None]
+    cov_prev = 100*avg(curs)/IDEAL if curs else None
     dist = Counter(lvl(f) for f in fins); tot = len(fins)
-    alerts = dict(rt3=sum(1 for x in rts if x > 3), poly1=dist.get(1000, 0))
+    # ---- RTWT semanal (de KDS time mx) filtrado por scope ----
+    rrs = [x for x in rtrows if kind == 'all' or (kind == 'city' and x[1] == name) or (kind == 'op' and x[3] == name)]
+    L = NW - 1
+    wk_net = []
+    for w in range(NW):
+        vv = [x[4] for x in rrs if x[0] == w]; wk_net.append(round(avg(vv), 2) if vv else None)
+    rtwt = wk_net[L] if NW else None
+    rtwt_lw = wk_net[L-1] if NW > 1 else None
+    def rt_lp(keyidx, key):
+        la = [x[4] for x in rrs if x[0] == L and x[keyidx] == key]
+        pr = [x[4] for x in rrs if x[0] == L-1 and x[keyidx] == key]
+        return avg(la), avg(pr)
+    rt3 = sum(1 for x in rrs if x[0] == L and x[4] > 3)
+    alerts = dict(rt3=rt3, poly1=dist.get(1000, 0))
 
-    # distribución apilada (por ciudad si ALL; por cocina si un solo scope)
-    gkey = (lambda s: s['c']) if len({s['c'] for s in st}) > 1 else (lambda s: s['k'])
-    gg = defaultdict(list)
-    for s in st:
-        if s['fin'] is not None: gg[gkey(s)].append(s)
-    glabels = sorted(gg.keys(), key=lambda k: 100*avg([x['fin'] for x in gg[k]])/IDEAL)
-    stack = {str(l): [] for l in LV}; stack_tot = []
-    for lab in glabels:
-        d = Counter(lvl(x['fin']) for x in gg[lab])
-        for l in LV: stack[str(l)].append(d.get(l, 0))
-        stack_tot.append(sum(d.values()))
+    # distribución de polígonos POR FECHA: semana anterior (Current Size) vs actual (FINAL SIZE)
+    d_prev = Counter(lvl(s['cur']) for s in st if s.get('cur') is not None)
+    d_curr = Counter(lvl(s['fin']) for s in st if s['fin'] is not None)
+    glabels = ([MXW[-2], MXW[-1]] if NW >= 2 else ['Anterior', 'Actual'])
+    stack = {str(l): [d_prev.get(l, 0), d_curr.get(l, 0)] for l in LV}
+    stack_tot = [sum(d_prev.values()), sum(d_curr.values())]
 
-    def grp_rows(keyf):
+    def grp_rows(keyf, keyidx):
         by = defaultdict(list)
         for s in st: by[keyf(s)].append(s)
         out = []
         for k, v in by.items():
             f = [x['fin'] for x in v if x['fin'] is not None]
             pp = [x['prop'] for x in v if x['prop'] is not None]
-            rr = avg([x['rt'] for x in v if x['rt'] is not None])
-            rl = avg([x['rtlw'] for x in v if x['rtlw'] is not None])
+            rr, rl = rt_lp(keyidx, k)     # RTWT última vs anterior (KDS semanal)
             out.append(dict(k=k, city=Counter(x['c'] for x in v).most_common(1)[0][0],
                 n=len(v), rtwt=None if rr is None else round(rr, 2),
                 drt=None if (rr is None or rl is None) else round(rr-rl, 2),
                 cov=None if not f else round(100*avg(f)/IDEAL, 1),
-                cov_prop=None if not pp else round(100*avg(pp)/IDEAL, 1)))
+                cov_prop=None if not pp else round(100*avg(pp)/IDEAL, 1),
+                dt=[dict(b=x['b'], fin=x['fin'], prop=x['prop']) for x in v]))
         out.sort(key=lambda x: x['cov'] if x['cov'] is not None else 999)
         return out
-    cocinas = grp_rows(lambda s: s['k'])
-    cities = grp_rows(lambda s: s['c'])
+    cocinas = grp_rows(lambda s: s['k'], 2)   # keyidx 2 = cocina en rtrows
+    cities = grp_rows(lambda s: s['c'], 1)    # keyidx 1 = ciudad en rtrows
 
     # ---- ventas KDS (última vs anterior) ----
     lw = [x for x in lw_all if incv(x)]; pw = [x for x in pw_all if incv(x)]
@@ -156,7 +200,7 @@ def compute(kind, name):
     bycoc = defaultdict(list)
     for s in st: bycoc[s['k']].append(s)
     for k, v in bycoc.items():
-        coc_rt[k] = avg([x['rt'] for x in v if x['rt'] is not None])
+        coc_rt[k] = rt_lp(2, k)[0]     # RTWT última semana por cocina (KDS)
         f = [x['fin'] for x in v if x['fin'] is not None]
         coc_cov[k] = round(100*avg(f)/IDEAL) if f else None
         coc_fin = {k: (lvl(avg([x['fin'] for x in v if x['fin'] is not None])) if any(x['fin'] is not None for x in v) else None) for k, v in bycoc.items()}
@@ -213,6 +257,8 @@ def compute(kind, name):
                  n_cocinas=len({s['k'] for s in st}),
                  dist={str(l): dist.get(l, 0) for l in LV}, tot=tot, alerts=alerts),
         stack=dict(labels=glabels, series=stack, tot=stack_tot),
+        weekly_rt=wk_net,
+        weekly_cov=([None]*(NW-2) + [None if cov_prev is None else round(cov_prev, 1), None if cov is None else round(cov, 1)]) if NW >= 2 else ([None if cov is None else round(cov, 1)]),
         cities=cities, cocinas=cocinas,
         pareto=pareto, top5=top5, top5_detail=top5_detail,
         per_cocina=per_cocina, coc_list=coc_list)
@@ -226,7 +272,7 @@ for r in ws.iter_rows(min_row=2, values_only=True):
     u = col(r, 'UPDATED_AT_UTC')
     if u: updated = str(u)[:10]; break
 
-MX = dict(updated=updated, ideal=IDEAL, LV=LV, cities=CITIES, ops=OPS,
+MX = dict(updated=updated, ideal=IDEAL, LV=LV, cities=CITIES, ops=OPS, weeks=MXW,
           sales_week=sales_week, prev_week=prevlabel, data=data)
 json.dump(MX, open('mx_data.json', 'w'), ensure_ascii=False)
 k = data['ALL']['kpi']
