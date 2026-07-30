@@ -131,7 +131,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
   <div class="kpis" id="kpis"></div>
 
   <div class="grid" id="trend">
-    <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">RTWT promedio: semana pasada vs. actual. Estados: 🟢&lt;2 · 🟡2–5 · 🟠5–8 · 🔴&gt;8.</div><div class="chartbox" style="height:300px"><canvas id="chRt"></canvas></div></div>
+    <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">RTWT promedio: semana pasada vs. actual. Estados: 🟢≤2 · 🟡2–3 · 🟠3–8 · 🔴≥8.</div><div class="chartbox" style="height:300px"><canvas id="chRt"></canvas></div></div>
     <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Cobertura vs. el ideal de 3.0 km (100%). Semana anterior (Current Size) vs. actual (FINAL SIZE).</div><div class="chartbox" style="height:300px"><canvas id="chCov"></canvas></div></div>
   </div>
 
@@ -140,21 +140,16 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
     <div class="card"><h2 id="cityTitle">Ciudades — estado actual</h2><div class="hint">RTWT actual vs. semana pasada (Δ). Clic en encabezados para ordenar.</div><div class="scroll"><table id="tbCity"></table></div></div>
   </div>
 
-  <div class="card" style="margin-bottom:14px" id="cocinas"><h2>Cocinas — RTWT y cobertura (actual vs. semana pasada)</h2><div class="hint">Clic en cualquier encabezado para ordenar (asc/desc). Δ azul = mejoró, vino = empeoró. Semáforo RTWT: <span style="color:#1e8e5a;font-weight:700">&lt;2</span> · <span style="color:#d99a1b;font-weight:700">2–3</span> · <span style="color:#c0392b;font-weight:700">&gt;3</span>.</div><div class="scroll"><table id="tbCoc"></table></div></div>
+  <div class="card" style="margin-bottom:14px" id="cocinas"><h2>Cocinas — RTWT y cobertura (actual vs. semana pasada)</h2><div class="hint">Clic en cualquier encabezado para ordenar (asc/desc). Δ azul = mejoró, vino = empeoró. Semáforo RTWT: <span style="color:#1e8e5a;font-weight:700">≤2</span> · <span style="color:#d99a1b;font-weight:700">2–3</span> · <span style="color:#e67e22;font-weight:700">3–8</span> · <span style="color:#c0392b;font-weight:700">≥8</span>.</div><div class="scroll"><table id="tbCoc"></table></div></div>
 
   <div class="card" style="margin-bottom:14px" id="heat"><h2>Mapa de calor — cobertura por cocina</h2><div class="hint">Cobertura por cocina: <b>Actual</b> (polígono actual) vs <b>Propuesta</b> (Size Proposal, semana más reciente). Escala continua: vino &lt; 70% → azul oscuro ≥ 98%.</div><div class="hscroll"><table class="hm" id="tbHeat"></table></div><div id="heatDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
 
   <h1 id="vpareto" style="margin-top:8px">Órdenes <span>· por marca y cocina</span> <span id="vWk" style="font-size:14px;color:var(--mut)"></span></h1>
   <div class="sub">Órdenes de la semana por marca y cocina. Se aplica el filtro de ciudad. RTWT y polígonos son del cierre más reciente.</div>
 
-  <div class="card" style="margin-bottom:14px">
-    <h2>Pareto de marcas — órdenes</h2>
-    <div class="hint">Barras = órdenes por marca (desc); línea = % acumulado. Las <b>5 marcas top</b> resaltadas; la línea punteada marca el 80%.</div>
-    <div class="chartbox" style="height:360px"><canvas id="chPareto"></canvas></div>
-  </div>
 
   <div class="card" style="margin-bottom:14px" id="vtop5"><h2>Top 5 marcas — cobertura & RTWT</h2>
-    <div class="hint">Semáforo RTWT: <span style="color:#1e8e5a;font-weight:700">&lt;2</span> · <span style="color:#d99a1b;font-weight:700">2–3</span> · <span style="color:#c0392b;font-weight:700">&gt;3</span>. «Mejor/peor cocina» por RTWT. Cobertura = polígono final vs. 3.0 km.</div>
+    <div class="hint">Semáforo RTWT: <span style="color:#1e8e5a;font-weight:700">≤2</span> · <span style="color:#d99a1b;font-weight:700">2–3</span> · <span style="color:#e67e22;font-weight:700">3–8</span> · <span style="color:#c0392b;font-weight:700">≥8</span>. «Mejor/peor cocina» por RTWT. Cobertura = polígono final vs. 3.0 km.</div>
     <div class="vgrid" id="vTop5Cards"></div>
   </div>
 
@@ -193,7 +188,7 @@ const lcol={3000:'#8FB8E8',2700:'#9FD8F0',2400:'#FFD98E',2100:'#FFE9C0',1000:'#2
 let CITY='ALL';
 let OPS='ALL';
 const km=m=>m==null?'–':(m/1000).toFixed(1);
-const rtcol=v=>v==null?'#888':(v<2?'#1e8e5a':(v<=3?'#d99a1b':'#c0392b'));
+const rtcol=v=>v==null?'#888':(v<=2?'#1e8e5a':(v<=3?'#d99a1b':(v<8?'#e67e22':'#c0392b')));
 const rtfmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${rtcol(v)}"></span>`;
 const fmt=(x,d=1)=>x==null?'–':x.toFixed(d);
 const pillSize=s=>s==null?'<span class="pill" style="background:#eee;color:#888">s/d</span>':`<span class="pill" style="background:${scol[s]||'#888'};color:${lcol[s]||'#fff'}">${(s/1000).toFixed(1)} km</span>`;
@@ -290,11 +285,10 @@ function renderTop5(){
     const nb=d.rows.filter(r=>r.sev==='bad').length;
     const wow=d.wow==null?'':`<span style="font-size:12px;font-weight:600;color:${d.wow>0?'#1e8e5a':(d.wow<0?'#c0392b':'#7a869a')}">${d.wow>0?'▲':(d.wow<0?'▼':'•')} ${Math.abs(d.wow)}%</span>`;
     return `<div class="vcard"><div class="vb">${d.brand}</div>
-      <div class="vo">${d.orders.toLocaleString('es')} <span style="font-size:12px;color:var(--mut)">órd.</span> ${wow}</div>
+      <div class="vo">${d.orders.toLocaleString('es')} <span style="font-size:13px;font-weight:600;color:var(--mut)">órdenes</span> ${wow}</div>
       <div class="vm">Cobertura <b style="color:#156082;font-size:14px">${d.avg_cov==null?'–':d.avg_cov+'%'}</b><br>
       RTWT ${rtfmt(d.avg_rt)}<br>
-      <span style="color:#1e8e5a">▲ mejor: <b>${d.best||'–'}</b></span> · <span style="color:#c0392b">▼ peor: <b>${d.worst||'–'}</b></span>
-      ${nb?`<br><span class="warnc">${nb} cocina(s) con RTWT/polígono crítico</span>`:''}</div></div>`;
+      <span style="color:#1e8e5a">▲ mejor: <b>${d.best||'–'}</b></span> · <span style="color:#c0392b">▼ peor: <b>${d.worst||'–'}</b></span></div></div>`;
   }).join('');
 }
 function renderCocSel(){
@@ -310,7 +304,7 @@ function drawCoc(){
    rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td>${r.brand}</td><td class="num">${r.orders}</td><td class="num">${r.pct}%</td></tr>`).join('');
 }
 let pSort={key:'orders',dir:-1};
-window.vSortProb=k=>{if(pSort.key===k)pSort.dir*=-1;else{pSort.key=k;pSort.dir=(k==='coc')?1:-1;}drawProb();};
+window.vSortProbMx=k=>{if(pSort.key===k)pSort.dir*=-1;else{pSort.key=k;pSort.dir=(k==='coc')?1:-1;}drawProb();};
 function renderBrandSel(){
   const D=sub(); const s=document.getElementById('vBrandSel'); const pv=+s.value||0;
   s.innerHTML=D.top5_detail.map((d,i)=>`<option value="${i}">${d.brand}</option>`).join('');
@@ -322,12 +316,12 @@ function drawProb(){
   const D=sub(); const d=D.top5_detail[+document.getElementById('vBrandSel').value]; if(!d)return;
   const nb=d.rows.filter(r=>r.sev==='bad').length, nw=d.rows.filter(r=>r.sev==='warn').length;
   document.getElementById('vBrandSum').innerHTML=`${nb} crítica(s) · ${nw} en alerta · ${d.rows.length} cocinas`;
-  const cols=[{k:'coc',l:'Cocina'},{k:'orders',l:'Órdenes',num:1},{k:'rank',l:'Puesto',num:1},{k:'rt',l:'RTWT',num:1},{k:'size',l:'Polígono',num:1},{k:'cov',l:'Cobert.',num:1}];
+  const cols=[{k:'coc',l:'Cocina'},{k:'orders',l:'Órdenes',num:1},{k:'rt',l:'RTWT',num:1},{k:'size',l:'Polígono',num:1},{k:'cov',l:'Cobert.',num:1}];
   const ar=k=>pSort.key===k?(pSort.dir===1?' ↑':' ↓'):'';
   const rows=[...d.rows].sort((a,b)=>{const k=pSort.key;let av=a[k],bv=b[k];if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;if(typeof av==='string')return av.localeCompare(bv)*pSort.dir;return (av-bv)*pSort.dir;});
-  const head='<tr>'+cols.map(c=>`<th class="${c.num?'num ':''}sortable" onclick="vSortProb('${c.k}')">${c.l}${ar(c.k)}</th>`).join('')+'</tr>';
+  const head='<tr>'+cols.map(c=>`<th class="${c.num?'num ':''}sortable" onclick="vSortProbMx('${c.k}')">${c.l}${ar(c.k)}</th>`).join('')+'</tr>';
   document.getElementById('vProblemas').innerHTML='<table class="dense">'+head+
-   rows.map(r=>`<tr class="sev-${r.sev}"><td>${r.coc}</td><td class="num">${r.orders}</td><td><span class="rk">#${r.rank==null?'–':r.rank}</span><span style="color:var(--mut)">/${r.nbrands}</span></td><td class="num">${rtfmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td><td class="num">${r.cov==null?'–':r.cov+'%'}</td></tr>`).join('')+'</table>';
+   rows.map(r=>`<tr class="sev-${r.sev}"><td>${r.coc}</td><td class="num">${r.orders}</td><td class="num">${rtfmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td><td class="num">${r.cov==null?'–':r.cov+'%'}</td></tr>`).join('')+'</table>';
 }
 
 function renderKpis(){
@@ -388,7 +382,7 @@ function render(){
   document.getElementById('cityTitle').textContent = OPS!=='ALL'?('Ops: '+OPS):(CITY==='ALL'?'Ciudades — estado actual':'Ciudad: '+CITY);
   const vw=document.getElementById('vWk'); if(vw) vw.textContent='· '+(MX.sales_week||'')+(MX.prev_week?(' vs '+MX.prev_week):'')+' '+scopeTag;
   renderKpis(); renderMxRt(); renderMxCov(); renderDist(); renderCity(); renderCoc(); renderHeat();
-  renderPareto(); renderTop5(); renderCocSel(); renderBrandSel();
+  renderTop5(); renderCocSel(); renderBrandSel();
 }
 document.getElementById('fUpd').textContent=MX.updated||'—';
 document.getElementById('vCocinaSel').onchange=drawCoc;

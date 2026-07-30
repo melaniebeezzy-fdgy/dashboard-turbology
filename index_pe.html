@@ -65,7 +65,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)}tr.sev-warn td{background:rgba(217,
   <div class="kpis" id="pe-kpis"></div>
 
   <div class="grid" id="pe-trend">
-    <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">Promedio de RTWT por semana (jun 8 – jun 29). La cobertura se evalúa con la <b>última semana</b>. Estados: 🟢&lt;2 · 🟡2–5 · 🟠5–8 · 🔴&gt;8.</div><div class="chartbox" style="height:300px"><canvas id="pe-chRt"></canvas></div></div>
+    <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">Promedio de RTWT por semana (jun 8 – jun 29). La cobertura se evalúa con la <b>última semana</b>. Estados: 🟢≤2 · 🟡2–3 · 🟠3–8 · 🔴≥8.</div><div class="chartbox" style="height:300px"><canvas id="pe-chRt"></canvas></div></div>
     <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Cobertura efectiva vs. el ideal de 3.0 km (100%). Perú tiene un solo corte de cobertura (última semana).</div><div class="chartbox" style="height:300px"><canvas id="pe-chCov"></canvas></div></div>
   </div>
 
@@ -76,8 +76,6 @@ tr.sev-bad td{background:rgba(192,57,43,.10)}tr.sev-warn td{background:rgba(217,
 
   <h1 id="pe-vpareto" style="margin-top:8px">Órdenes <span>· por marca y zona</span> <span id="pe-vWk" style="font-size:14px;color:var(--mut)"></span></h1>
   <div class="sub">Órdenes de la última semana vs. la anterior (WoW). RTWT y polígonos son del cierre más reciente.</div>
-  <div class="kpis" id="pe-vKpis"></div>
-  <div class="card" style="margin-bottom:14px"><h2>Pareto de marcas — órdenes</h2><div class="hint">Barras = órdenes por marca (desc); línea = % acumulado. Top 5 resaltadas; línea punteada = 80%.</div><div class="chartbox" style="height:340px"><canvas id="pe-chPareto"></canvas></div></div>
   <div class="card" style="margin-bottom:14px" id="pe-vtop5"><h2>Top 5 marcas — cobertura & RTWT</h2><div class="hint">Semáforo RTWT (última semana). «Mejor/peor zona» por RTWT.</div><div class="vgrid" id="pe-vTop5"></div></div>
   <div class="grid" id="pe-alertas">
     <div class="card" id="pe-zonas"><h2>🔴 Tiendas fuera de cobertura (penalizadas)</h2><div class="hint">RTWT de la última semana <b>&gt; 8 min</b> → <b>0% de cobertura</b>. Requieren plan de acción.</div><div class="scroll"><table id="pe-tbLost" class="dense"></table></div></div>
@@ -101,8 +99,8 @@ const lcol={3000:'#8FB8E8',2700:'#9FD8F0',2400:'#FFD98E',2100:'#FFE9C0',1000:'#2
 let ZONA='ALL';
 const km=m=>m==null?'–':(m/1000).toFixed(1);
 const fmt=(x,d=1)=>x==null?'–':x.toFixed(d);
-const stcol=a=>a==null?'#8b96ab':(a<2?'#1e8e5a':(a<5?'#d99a1b':(a<=8?'#e67e22':'#c0392b')));
-const stlabel=a=>a==null?'⚪ Sin datos':(a<2?'🟢 Saludable':(a<5?'🟡 Atención':(a<=8?'🟠 Riesgo':'🔴 Crítico')));
+const stcol=a=>a==null?'#8b96ab':(a<=2?'#1e8e5a':(a<=3?'#d99a1b':(a<8?'#e67e22':'#c0392b')));
+const stlabel=a=>a==null?'⚪ Sin datos':(a<=2?'🟢 Saludable':(a<=3?'🟡 Atención':(a<8?'🟠 Riesgo':'🔴 Crítico')));
 const rt4fmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(v)}"></span>`;
 function delta(v,goodDown){if(v==null)return '–';const good=goodDown?v<0:v>0;const ar=v>0?'▲':(v<0?'▼':'•');return `<span style="color:${v==0?'var(--mut)':(good?'var(--good)':'var(--bad)')}">${ar} ${Math.abs(v).toFixed(2)}</span>`;}
 const sub=()=>PE.data[ZONA]||PE.data.ALL;
@@ -210,7 +208,7 @@ function renderTop5(){
   const V=sub().ventas;
   document.getElementById('pe-vTop5').innerHTML=V.top5_detail.map(d=>{
     const wow=d.wow==null?'':`<span style="font-size:12px;font-weight:600;color:${d.wow>0?'#1e8e5a':(d.wow<0?'#c0392b':'#7a869a')}">${d.wow>0?'▲':(d.wow<0?'▼':'•')} ${Math.abs(d.wow)}%</span>`;
-    return `<div class="vcard"><div class="vb">${d.brand}</div><div class="vo">${d.orders.toLocaleString('es')} <span style="font-size:12px;color:var(--mut)">órd.</span> ${wow}</div>
+    return `<div class="vcard"><div class="vb">${d.brand}</div><div class="vo">${d.orders.toLocaleString('es')} <span style="font-size:13px;font-weight:600;color:var(--mut)">órdenes</span> ${wow}</div>
     <div class="vm">Cobertura <b style="color:#156082;font-size:14px">${d.avg_cov==null?'–':d.avg_cov+'%'}</b><br>RTWT ${rt4fmt(d.avg_rt)}<br>
     <span style="color:#1e8e5a">▲ mejor: <b>${d.best||'–'}</b></span> · <span style="color:#c0392b">▼ peor: <b>${d.worst||'–'}</b></span></div></div>`;
   }).join('') || '<div style="color:var(--mut);font-size:12px">Sin órdenes en este alcance.</div>';
@@ -234,12 +232,18 @@ function renderVBrand(){
   s.value=String(pv<V.top5_detail.length?pv:0);
   drawVBrand();
 }
+let pePSort={key:'orders',dir:-1};
+window.vSortProbPe=function(k){if(pePSort.key===k)pePSort.dir*=-1;else{pePSort.key=k;pePSort.dir=(k==='coc')?1:-1;}drawVBrand();};
 function drawVBrand(){
   const V=sub().ventas; const d=V.top5_detail[+document.getElementById('pe-vBrandSel').value]; if(!d)return;
   const nb=d.rows.filter(r=>r.sev==='bad').length, nw=d.rows.filter(r=>r.sev==='warn').length;
   document.getElementById('pe-vBrandSum').innerHTML=`${nb} crítica(s) · ${nw} en alerta · ${d.rows.length} zonas`;
-  document.getElementById('pe-vProblemas').innerHTML='<table class="dense"><tr><th>Zona</th><th class="num">Órdenes</th><th>Puesto</th><th class="num">RTWT</th><th class="num">Polígono</th><th class="num">Cobert.</th></tr>'+
-    d.rows.map(r=>`<tr class="sev-${r.sev}"><td>${r.coc}</td><td class="num">${r.orders}</td><td><span class="rk">#${r.rank}</span><span style="color:var(--mut)">/${r.nbrands}</span></td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td><td class="num">${r.cov==null?'–':r.cov+'%'}</td></tr>`).join('')+'</table>';
+  const cols=[{k:'coc',l:'Zona'},{k:'orders',l:'Órdenes',num:1},{k:'rt',l:'RTWT',num:1},{k:'size',l:'Polígono',num:1},{k:'cov',l:'Cobert.',num:1}];
+  const ar=k=>pePSort.key===k?(pePSort.dir===1?' ↑':' ↓'):'';
+  const rows=[...d.rows].sort((a,b)=>{const k=pePSort.key;let av=a[k],bv=b[k];if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;if(typeof av==='string')return av.localeCompare(bv)*pePSort.dir;return (av-bv)*pePSort.dir;});
+  const head='<tr>'+cols.map(c=>`<th class="${c.num?'num ':''}sortable" onclick="vSortProbPe('${c.k}')" title="Ordenar">${c.l}${ar(c.k)}</th>`).join('')+'</tr>';
+  document.getElementById('pe-vProblemas').innerHTML='<table class="dense">'+head+
+    rows.map(r=>`<tr class="sev-${r.sev}"><td>${r.coc}</td><td class="num">${r.orders}</td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td><td class="num">${r.cov==null?'–':r.cov+'%'}</td></tr>`).join('')+'</table>';
 }
 document.getElementById('pe-vZonaSel').onchange=drawVZona;
 document.getElementById('pe-vBrandSel').onchange=drawVBrand;
@@ -249,7 +253,7 @@ function render(){
   document.getElementById('pe-distTitle').textContent=ZONA==='ALL'?'Distribución de polígonos por zona':'Distribución — '+ZONA;
   renderKpis(); renderRt(); renderCov(); renderDist(); renderZona(); renderLost();
   renderRising(); renderMin1(); renderBrandWorst();
-  renderVKpis(); renderPareto(); renderTop5(); renderVZona(); renderVBrand();
+  renderTop5(); renderVZona(); renderVBrand();
 }
 Chart.register(ChartDataLabels);
 Chart.defaults.color='#5d6b80';Chart.defaults.borderColor='#d5dae3';Chart.defaults.font.family='Poppins';

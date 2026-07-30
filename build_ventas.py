@@ -163,7 +163,12 @@ def main():
         for coc in cocinas:
             items=sorted([(cb,o) for (c,cb),o in cbk.items() if c==coc], key=lambda x:-x[1])
             tt=sum(o for _,o in items) or 1
-            per_cocina[coc]=[dict(brand=disp.get(cb,cb), cb=cb, orders=round(o), pct=round(100*o/tt,1)) for cb,o in items[:5]]
+            per_cocina[coc]=[]
+            for cb,o in items[:5]:
+                rtv,finv=agg((cb,coc))
+                per_cocina[coc].append(dict(brand=disp.get(cb,cb), cb=cb, orders=round(o), pct=round(100*o/tt,1),
+                                            rt=None if rtv is None else round(rtv,2),
+                                            size=None if finv is None else round(finv)))
             for i,(cb,o) in enumerate(items): rank_in[(coc,cb)]=(i+1,round(o),len(items))
         top5_detail=[]
         for cb in top5:
