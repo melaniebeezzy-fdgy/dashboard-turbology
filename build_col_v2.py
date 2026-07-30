@@ -14,9 +14,9 @@ NEW = sys.argv[1] if len(sys.argv) > 1 else 'rt_data_v2.csv'
 OLD = 'Turbology.xlsx'
 
 # ---- semanas ----
-HIST = ['May 4','May 11','May 18','May 25','Jun 1','Jun 8','Jun 15']   # de la fuente vieja
-HIST_DATES = ['2026-05-04','2026-05-11','2026-05-18','2026-05-25','2026-06-01','2026-06-08','2026-06-15']
-NEW_WEEKS = ['Jun 22','Jun 29','Jul 6','Jul 13','Jul 20']             # Jun22 (rt_data) + 4 semanas del dashboard nuevo
+HIST = ['May 10','May 17','May 24','May 31','Jun 7','Jun 14','Jun 21']  # etiqueta = último día (domingo) de cada semana
+HIST_DATES = ['2026-05-04','2026-05-11','2026-05-18','2026-05-25','2026-06-01','2026-06-08','2026-06-15']  # fechas reales (lunes) para el match
+NEW_WEEKS = ['Jun 28','Jul 5','Jul 12','Jul 19','Jul 26']            # último día de cada semana (Jun22..Jul20 -> +6d)
 WEEKS = HIST + NEW_WEEKS                                               # 12 semanas
 NW = len(WEEKS)
 N4 = 4                                                                 # ventana móvil fija de 4 semanas (Jun 29–Jul 20)
