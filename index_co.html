@@ -359,12 +359,12 @@ function alertsOf(st){ const big=[],consec=[],one=[];
 let WC=[],KC=[],GK={},HK=[];
 function showHeat(hi,wi){
   const k=HK[hi]; if(k==null)return;
-  const last=(wi===LI);
-  const sizeOf=s=>last?covResult(s):(s.fin[wi]!=null?LV[lvlIdx(s.fin[wi])]:null);
+  const res=(wi>=LI-1);                                                         // Jul 19 y Jul 26 reflejan el coverageResult (mismo estado)
+  const sizeOf=s=>res?covResult(s):(s.fin[wi]!=null?LV[lvlIdx(s.fin[wi])]:null);
   const st=(GK[k]||[]).map(s=>{
-    const sz=sizeOf(s);                                                         // polígono efectivo esta semana (0 si penalizada)
+    const sz=sizeOf(s);                                                         // polígono efectivo (0 si penalizada)
     const szp=(wi>0&&s.fin[wi-1]!=null)?LV[lvlIdx(s.fin[wi-1])]:null;           // asignado semana anterior
-    const drop=(szp!=null&&sz!=null&&sz<szp)?[szp,sz]:null;                     // cayó si el efectivo es más chico que el de la semana pasada
+    const drop=(wi===LI-1&&szp!=null&&sz!=null&&sz<szp)?[szp,sz]:null;          // caída se muestra en la semana del 19
     return {b:s.b,rt:s.rt[wi],sz,drop};
   }).filter(x=>x.sz!=null&&x.sz!==3000)
     .sort((a,b)=>(a.sz-b.sz)||a.b.localeCompare(b.b));
@@ -412,6 +412,7 @@ function update(){
  const covCur=(()=>{const a=st.map(s=>s.cc).filter(x=>x!=null);return a.length?100*avg(a)/3000:null;})();
  const covRes=A.cov;
  if(o.cov[LI]!=null && covRes!=null) o.cov[LI]=+covRes.toFixed(1);   // semana más reciente = coverageResult
+ if(o.cov[LI]!=null && o.cov[LI-1]!=null) o.cov[LI-1]=o.cov[LI];      // sem. pasada = misma cobertura (el polígono no cambió; coverageCurrent viene desfasado)
  const cctot=st.filter(s=>s.cc!=null).length||1;
  const nCC=sz=>st.filter(s=>s.cc!=null&&LV[lvlIdx(s.cc)]===sz).length;
  const al=alertsOf(st);
@@ -442,7 +443,7 @@ function update(){
  const gk=groupBy(st.filter(s=>!HIDDEN.includes(s.k)),s=>s.k);
  const kagg={}; Object.keys(gk).forEach(k=>kagg[k]=weekly(gk[k]));
  // heatmap: la semana más reciente usa cobertura efectiva (coverageResult, 0% si penalizada)
- Object.keys(gk).forEach(k=>{const cr=gk[k].map(covResult).filter(x=>x!=null); if(cr.length&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+(100*avg(cr)/3000).toFixed(1);});
+ Object.keys(gk).forEach(k=>{const cr=gk[k].map(covResult).filter(x=>x!=null); if(cr.length&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+(100*avg(cr)/3000).toFixed(1); if(kagg[k].cov[LI]!=null&&kagg[k].cov[LI-1]!=null) kagg[k].cov[LI-1]=kagg[k].cov[LI];});
  const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),lose:a.lose}})
    .filter(r=>r.n>3).sort((a,b)=>(a.cov??999)-(b.cov??999));
  KC=kc; renderComb();
