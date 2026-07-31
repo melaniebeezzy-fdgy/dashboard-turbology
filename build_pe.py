@@ -10,8 +10,9 @@ import openpyxl, json, sys, re, unicodedata, datetime, os, warnings
 from collections import Counter, defaultdict
 warnings.filterwarnings('ignore')
 
-RTWT = 'PE_rtwt.xlsx'
-COB = 'PE_cobertura.xlsx'
+RTWT = 'PE_rtwt_v2.xlsx'
+COB = 'PE_cobertura_v2.xlsx'        # snapshot ACTUAL (hoy)
+COB_PREV = 'PE_cobertura.xlsx'      # snapshot ANTERIOR (archivo previo)
 KDS = 'KDS_ventas_pe.xlsx'
 LV = [1000, 2100, 2400, 2700, 3000]
 IDEAL = 3000
@@ -40,21 +41,34 @@ def bdisp(b):
 # ---- RTWT (última=29-jun col5, anterior=22-jun col4) ----
 wb = openpyxl.load_workbook(RTWT, read_only=True, data_only=True)
 rows = [list(r) for r in wb['Resumen'].iter_rows(values_only=True)]
+hdri = next(i for i, r in enumerate(rows) if r and str(r[0]).strip() == 'BRAND_NAME')
+hdr = rows[hdri]
+wk_cols = [j for j, c in enumerate(hdr) if isinstance(c, datetime.datetime)]
+def eow(d): return (d + datetime.timedelta(days=6)).strftime('%b %-d')   # etiqueta = domingo (último día de la semana)
+WEEKS = [eow(hdr[j]) for j in wk_cols]
+NW = len(WEEKS)
 rt = {}; curbrand = None
-for r in rows[4:]:
+for r in rows[hdri+1:]:
     if r[0] and str(r[0]).strip() and str(r[0]) != 'Total general': curbrand = r[0]
     if r[1]:
-        rt[(bkey(curbrand), zona(r[1]))] = [num(r[2]), num(r[3]), num(r[4]), num(r[5])]  # jun8,15,22,29
-WEEKS = ['Jun 8', 'Jun 15', 'Jun 22', 'Jun 29']
+        rt[(bkey(curbrand), zona(r[1]))] = [num(r[j]) if j < len(r) else None for j in wk_cols]
 
 # ---- cobertura ----
+# snapshot ANTERIOR de cobertura, por STORE_ID
+prevcov = {}
+if os.path.exists(COB_PREV):
+    wcp = openpyxl.load_workbook(COB_PREV, read_only=True, data_only=True)
+    for r in list(wcp['Base'].iter_rows(values_only=True))[1:]:
+        if r[3] is not None: prevcov[str(r[3])] = to_m(r[5])
+
 wc = openpyxl.load_workbook(COB, read_only=True, data_only=True)
 stores = {}
 for r in list(wc['Base'].iter_rows(values_only=True))[1:]:
     if not r[3]: continue
     z = zona(r[4]); k = (bkey(r[2]), z)
-    wk = rt.get(k, [None, None, None, None])
-    stores[str(r[3])] = dict(b=bdisp(r[2]), k=z, c='Lima', cc=to_m(r[5]), rtw=wk, rt=wk[3], rtlw=wk[2])
+    wk = rt.get(k, [None]*NW)
+    stores[str(r[3])] = dict(b=bdisp(r[2]), k=z, c='Lima', cc=to_m(r[5]), cc_prev=prevcov.get(str(r[3])),
+                             rtw=wk, rt=wk[-1], rtlw=wk[-2])
 
 ST = list(stores.values())
 ZONAS = sorted({s['k'] for s in ST})
@@ -88,8 +102,7 @@ if days:
     for x in lw_all + pw_all: vdisp.setdefault(bnorm(x[2]), bshow(x[2]))
 
 def covResult(s):
-    if s['cc'] is None: return None
-    return 0 if (s['rt'] is not None and s['rt'] > 8) else s['cc']
+    return s['cc']   # Perú NO penaliza: cobertura = polígono asignado real
 
 # índice tienda por (primer token de marca, zona) para el detalle de ventas
 def ftok(b):
@@ -109,7 +122,38 @@ def compute(kind, name):
     dist = Counter(lvl(f) for f in fins); tot = len(fins)
     lose = sum(1 for s in st if s['rt'] is not None and s['rt'] > 8)
     alerts = dict(rt3=sum(1 for x in rts if x > 3), poly1=dist.get(1000, 0))
-    weekly = [ (lambda a: round(a, 2) if a is not None else None)(avg([s['rtw'][w] for s in st if s.get('rtw')])) for w in range(4) ]
+    weekly = [ (lambda a: round(a, 2) if a is not None else None)(avg([s['rtw'][w] for s in st if s.get('rtw') and w < len(s['rtw'])])) for w in range(NW) ]
+    # cobertura: dos snapshots reales — Anterior (archivo previo, asignada) vs Actual (hoy, efectiva)
+    pv_g = [s['cc_prev'] for s in st if s.get('cc_prev') is not None]
+    cov_prev = round(100*avg(pv_g)/IDEAL, 1) if pv_g else None
+    cov_series = [cov_prev, None if cov is None else round(cov, 1)]
+    # mapa de calor: zona (fila) x snapshot [Anterior, Actual] + detalle de marcas fuera de 3.0 km
+    heat_cols = [WEEKS[-2], WEEKS[-1]]
+    zheat = sorted({s['k'] for s in st})
+    heat_cov = []; heat_detail = []
+    for z in zheat:
+        zs = [s for s in st if s['k'] == z]
+        pv = [s['cc_prev'] for s in zs if s.get('cc_prev') is not None]
+        cov_a = round(100*avg(pv)/IDEAL, 1) if pv else None
+        det_a = []
+        for s in zs:
+            if s.get('cc_prev') is None: continue
+            szl = lvl(s['cc_prev'])
+            if szl != 3000: det_a.append(dict(b=s['b'], sz=szl, rt=None if s['rt'] is None else round(s['rt'], 2), drop=None))
+        det_a.sort(key=lambda x: (x['sz'], x['b']))
+        cv = [covResult(s) for s in zs if covResult(s) is not None]
+        cov_c = round(100*avg(cv)/IDEAL, 1) if cv else None
+        det_c = []
+        for s in zs:
+            cr = covResult(s)
+            if cr is None: continue
+            szl = 0 if cr == 0 else lvl(cr)
+            cp = s.get('cc_prev'); dr = None
+            if cp is not None and szl not in (0, None) and lvl(cp) is not None and szl < lvl(cp): dr = [lvl(cp), szl]
+            if szl != 3000: det_c.append(dict(b=s['b'], sz=szl, rt=None if s['rt'] is None else round(s['rt'], 2), drop=dr))
+        det_c.sort(key=lambda x: (x['sz'], x['b']))
+        heat_cov.append([cov_a, cov_c]); heat_detail.append([det_a, det_c])
+    heat = dict(zonas=zheat, cols=heat_cols, cov=heat_cov, detail=heat_detail)
     # distribución apilada por zona
     gg = defaultdict(list)
     for s in st:
@@ -138,10 +182,10 @@ def compute(kind, name):
                 key=lambda x: -x['rt'])
     # RTWT en aumento (2+ semanas seguidas subiendo, hasta la última: jun 29 = índice 3)
     rising = []
-    L = 3
+    L = NW - 1
     for s in st:
         w = s.get('rtw') or []
-        if len(w) < 4 or w[L] is None or w[L-1] is None or not (w[L] > w[L-1]): continue
+        if len(w) < 2 or w[L] is None or w[L-1] is None or not (w[L] > w[L-1]): continue
         i = L; path = [w[L]]; inc = 0
         while i-1 >= 0 and w[i-1] is not None and w[i] > w[i-1]:
             path.insert(0, round(w[i-1], 2)); inc += 1; i -= 1
@@ -155,6 +199,20 @@ def compute(kind, name):
     for s in st:
         if s['rt'] is not None: byb[s['b']].append(s['rt'])
     brand_worst = sorted([dict(brand=b, rt=round(avg(v), 2), n=len(v)) for b, v in byb.items()], key=lambda x: -x['rt'])[:15]
+    # marca–zona penalizadas / con RTWT crítico (última semana > 3), peor → mejor
+    gbz = defaultdict(list)
+    for s in st: gbz[(s['b'], s['k'])].append(s)
+    brand_zona = []
+    for (b, kz), g in gbz.items():
+        rr = avg([x['rt'] for x in g if x['rt'] is not None])
+        if rr is None or rr <= 3: continue
+        rl = avg([x['rtlw'] for x in g if x['rtlw'] is not None])
+        cr = [covResult(x) for x in g if covResult(x) is not None]
+        brand_zona.append(dict(b=b, k=kz, rt=round(rr, 2),
+                               rtlw=None if rl is None else round(rl, 2),
+                               res=round(avg(cr)) if cr else None,
+                               rt_last=round(rr, 2)))
+    brand_zona.sort(key=lambda x: -x['rt'])
     # ---- ventas KDS (última vs anterior) ----
     vinc = lambda x: kind == 'all' or (kind == 'zona' and x[1] == name)
     lw = [x for x in lw_all if vinc(x)]; pw = [x for x in pw_all if vinc(x)]
@@ -173,7 +231,11 @@ def compute(kind, name):
     for z in zonas_v:
         items = sorted([(cb, o) for (zz, cb), o in cbz.items() if zz == z], key=lambda x: -x[1])
         tt = sum(o for _, o in items) or 1
-        per_zona[z] = [dict(brand=vdisp.get(cb, cb), orders=round(o), pct=round(100*o/tt, 1)) for cb, o in items[:5]]
+        per_zona[z] = []
+        for cb, o in items[:5]:
+            rtv, cc_, cr = sidx.get((cb.split()[0] if cb else '', z), (None, None, None))
+            per_zona[z].append(dict(brand=vdisp.get(cb, cb), orders=round(o), pct=round(100*o/tt, 1),
+                                    rt=None if rtv is None else round(rtv, 2), size=cr))
         for i, (cb, o) in enumerate(items): rankz[(z, cb)] = (i+1, round(o), len(items))
     top5_detail = []
     for cb in top5c:
@@ -210,13 +272,16 @@ def compute(kind, name):
                  n_stores=len(st), n_cocinas=len({s['k'] for s in st}),
                  dist={str(l): dist.get(l, 0) for l in LV}, tot=tot, lose=lose, alerts=alerts),
         stack=dict(labels=glabels, series=stack, tot=stack_tot),
-        weekly=weekly,
-        cocinas=cocinas, lost=lc, rising=rising, min1=min1, brand_worst=brand_worst, ventas=ventas)
+        weekly=weekly, cov_series=cov_series, heat=heat,
+        cocinas=cocinas, lost=lc, rising=rising, min1=min1, brand_worst=brand_worst, brand_zona=brand_zona, ventas=ventas)
 
 data = {'ALL': compute('all', None)}
 for z in ZONAS: data[z] = compute('zona', z)
-PE = dict(ideal=IDEAL, LV=LV, zonas=ZONAS, weeks=WEEKS, week='29-jun', prev_week='22-jun',
-          sales_week=sales_week, sales_prev=prev_week, data=data)
+PE = dict(ideal=IDEAL, LV=LV, zonas=ZONAS, weeks=WEEKS, cov_labels=[WEEKS[-2], WEEKS[-1]], week=WEEKS[-1], prev_week=WEEKS[-2],
+          sales_week=sales_week, sales_prev=prev_week,
+          stores=[dict(b=s['b'], k=s['k'], c=s['c'], cc=s['cc'], cc_prev=s.get('cc_prev'),
+                       rt=s['rt'], rtlw=s['rtlw'], rtw=s['rtw']) for s in ST],
+          data=data)
 json.dump(PE, open('pe_data.json', 'w'), ensure_ascii=False)
 k = data['ALL']['kpi']
 print('PE | zonas', ZONAS, '| tiendas', len(ST))

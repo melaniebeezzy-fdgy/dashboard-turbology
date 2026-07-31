@@ -97,22 +97,32 @@ def main():
     vsheet = 'Export' if 'Export' in wb.sheetnames else ('Raw ventas' if 'Raw ventas' in wb.sheetnames else wb.sheetnames[0])
     v = list(wb[vsheet].iter_rows(values_only=True))
     vh = [str(h).strip() if h else '' for h in v[0]]
-    vi = {h:i for i,h in enumerate(vh)}
+    vi = {h.lower():i for i,h in enumerate(vh)}     # insensible a mayúsculas ('Date'/'date')
     def vcol(row,name):
-        i=vi.get(name); return row[i] if (i is not None and i<len(row)) else None
+        i=vi.get(name.lower()); return row[i] if (i is not None and i<len(row)) else None
+    has_date = 'date' in vi
     recs=[]; days=set()
     for r in v[1:]:
-        d=vcol(r,'date')
-        if not isinstance(d, datetime.datetime):
-            try: d=datetime.datetime.fromisoformat(str(d))
-            except: continue
-        days.add(d.date())
-        recs.append((d.date(), vcol(r,'city'), vcol(r,'kitchen_id'), vcol(r,'brand'), to_float(vcol(r,'Total orders')) or 0, vcol(r,'ops')))
-    lastday=max(days); firstlw=lastday-datetime.timedelta(days=6)
-    sales_week=f"{firstlw.strftime('%d/%m')}–{lastday.strftime('%d/%m/%Y')}"
-    pfirst=firstlw-datetime.timedelta(days=7); plast=firstlw-datetime.timedelta(days=1)
-    lw_all=[x for x in recs if firstlw<=x[0]<=lastday]
-    pw_all=[x for x in recs if pfirst<=x[0]<=plast]
+        brand=vcol(r,'brand')
+        if brand in (None, ''): continue
+        dd=None
+        if has_date:
+            d=vcol(r,'date')
+            if not isinstance(d, datetime.datetime):
+                try: d=datetime.datetime.fromisoformat(str(d))
+                except: continue
+            dd=d.date(); days.add(dd)
+        recs.append((dd, vcol(r,'city'), vcol(r,'kitchen_id'), brand, to_float(vcol(r,'Total orders')) or 0, vcol(r,'ops')))
+    if has_date and days:
+        lastday=max(days); firstlw=lastday-datetime.timedelta(days=6)
+        sales_week=f"{firstlw.strftime('%d/%m')}–{lastday.strftime('%d/%m/%Y')}"
+        pfirst=firstlw-datetime.timedelta(days=7); plast=firstlw-datetime.timedelta(days=1)
+        lw_all=[x for x in recs if firstlw<=x[0]<=lastday]
+        pw_all=[x for x in recs if pfirst<=x[0]<=plast]
+    else:
+        # archivo sin fechas: totales actuales, sin comparativo WoW
+        sales_week='acumulado (KDS 30 jul)'
+        lw_all=recs; pw_all=[]
 
     cocina_names=sorted(set(x['coc'] for x in rt_rows))
     def pretty(name): return name.title() if name.isupper() else name
