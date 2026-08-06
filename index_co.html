@@ -183,6 +183,10 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
   <div class="card"><h2>Marcas–cocinas penalizadas y con RTWT crítico</h2><div class="hint">Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas (12 jul–2 ago) en 🟠 naranja (3–8) o 🔴 crítico/penalizado (≥8 → 0% cobertura). Ordenadas de peor a mejor.</div><div class="scroll"><table id="tbBrand" class="dense"></table></div></div>
   <div class="card"><h2>📈 RTWT en aumento (2+ semanas seguidas)</h2><div class="hint">Tiendas cuyo RTWT lleva <b>2 o más semanas seguidas subiendo</b> y que <b>en la semana más reciente sigue subiendo</b>. Si la última semana bajó, no aparece. Cada flecha = 1 semana.</div><div class="scroll"><table id="tbConsec" class="dense"></table></div></div>
 </div>
+<div class="grid" id="alertas2">
+  <div class="card"><h2>🔀 Marcas que cambiaron de polígono</h2><div class="hint">Tiendas cuyo <b>polígono efectivo</b> cambió vs la semana pasada: <b>subió</b> (se recuperó de la penalización) o <b>bajó</b> (entró en penalización). Ant → act.</div><div class="scroll"><table id="tbPolyChg" class="dense"></table></div></div>
+  <div class="card"><h2>📉 RTWT mejorando (candidatas a subir polígono)</h2><div class="hint">RTWT bajando <b>2+ semanas seguidas</b> (últimas 4) o <b>RTWT 4 sem &lt; 2 min</b> sin polígono de 3.0 km. Se ve la evolución, el promedio y el polígono.</div><div class="scroll"><table id="tbRtImp" class="dense"></table></div></div>
+</div>
 <!--VENTAS_HTML_START-->
 <h1 id="vpareto">Ventas <span>· última semana</span> <span id="vWk" style="font-size:14px;color:var(--mut)"></span></h1>
 <div class="sub">Órdenes totales por marca y cocina de la última semana (20–26 jul). Se aplica el <b>filtro de ciudad</b> de la barra superior. RTWT y polígonos son del cierre más reciente.</div>
@@ -467,6 +471,32 @@ function update(){
  document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">RTWT 4 sem</th><th class="num">RTWT últ. sem</th><th class="num">Polígono efectivo</th></tr>'+
   (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=8?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td><td class="num">${rt4fmt(r.rtLast)}</td><td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>')}</td></tr>`).join('')
    :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>');
+
+  // ---- marcas que cambiaron de polígono efectivo (sem pasada vs actual) ----
+  const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
+  const pchg=st.filter(s=>{const a=covResultPrev(s),b=covResult(s);return a!=null&&b!=null&&a!==b;})
+    .map(s=>({b:s.b,k:s.k,c:s.c,from:covResultPrev(s),to:covResult(s),rt:avg4(s)}))
+    .sort((x,y)=>(x.to-x.from)-(y.to-y.from));
+  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">RTWT 4 sem</th></tr>'+
+   (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td></tr>`).join('')
+    :'<tr><td colspan="6" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin cambios de polígono en la última semana ✓</td></tr>');
+
+  // ---- RTWT mejorando: bajando 2+ semanas, o avg 4 sem < 2 min sin polígono 3.0 km ----
+  const Lw=W.length-1; const rimp=[];
+  st.forEach(s=>{
+    let i=Lw, path=(s.rt[Lw]!=null?[s.rt[Lw]]:[]), dec=0;
+    while(i-1>=0 && s.rt[i]!=null && s.rt[i-1]!=null && s.rt[i]<s.rt[i-1]){ path.unshift(s.rt[i-1]); dec++; i--; }
+    const a4=avg4(s);
+    const low=(a4!=null && a4<2 && s.cc!=null && lvlIdx(s.cc)!==4);
+    if(dec>=2 || low){
+      let ev; if(dec>=2){ev=path.slice(-4);} else {ev=[]; for(let w=Math.max(0,Lw-3);w<=Lw;w++) if(s.rt[w]!=null) ev.push(s.rt[w]);}
+      rimp.push({b:s.b,k:s.k,ev:ev.map(x=>+x.toFixed(2)),a4:a4==null?null:+a4.toFixed(2),cc:s.cc});
+    }
+  });
+  rimp.sort((x,y)=>(x.a4==null?9:x.a4)-(y.a4==null?9:y.a4));
+  document.getElementById('tbRtImp').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">Evolución RTWT (min)</th><th class="num">RTWT 4 sem</th><th class="num">Polígono</th></tr>'+
+   (rimp.length?rimp.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num"><span class="pill" style="background:#1e8e5a">${r.ev.join(' → ')}</span></td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${r.cc==null?'–':`<span class="pill" style="background:${scol[r.cc]||'#345964'}">${km(r.cc)} km</span>`}</td></tr>`).join('')
+    :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin marcas mejorando en este alcance</td></tr>');
 }
 
 // ---------- drill-down cobertura ----------
