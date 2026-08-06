@@ -13,6 +13,7 @@ import openpyxl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 XLSX = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "KDS_ventas.xlsx")
+XLSX_LIST = sys.argv[1:] if len(sys.argv) > 1 else [XLSX]   # uno o varios KDS (se concatenan)
 STORE2COC = os.path.join(HERE, "store2cocina.json")
 COC2OP = os.path.join(HERE, "cocina2ops.json")
 
@@ -93,32 +94,35 @@ def main():
                                      rt=to_float(rget(r,'Avg RTWT (limpio)')),
                                      fin=to_float(rget(r,'Final Size (m)'))))
 
-    # ---------- VENTAS (KDS: hoja Export, incluye columna 'ops') ----------
-    vsheet = 'Export' if 'Export' in wb.sheetnames else ('Raw ventas' if 'Raw ventas' in wb.sheetnames else wb.sheetnames[0])
-    v = list(wb[vsheet].iter_rows(values_only=True))
-    vh = [str(h).strip() if h else '' for h in v[0]]
-    vi = {h.lower():i for i,h in enumerate(vh)}     # insensible a mayúsculas ('Date'/'date')
-    def vcol(row,name):
-        i=vi.get(name.lower()); return row[i] if (i is not None and i<len(row)) else None
-    has_date = 'date' in vi
-    recs=[]; days=set()
-    for r in v[1:]:
-        brand=vcol(r,'brand')
-        if brand in (None, ''): continue
-        dd=None
-        if has_date:
-            d=vcol(r,'date')
-            if not isinstance(d, datetime.datetime):
-                try: d=datetime.datetime.fromisoformat(str(d))
-                except: continue
-            dd=d.date(); days.add(dd)
-        recs.append((dd, vcol(r,'city'), vcol(r,'kitchen_id'), brand, to_float(vcol(r,'Total orders')) or 0, vcol(r,'ops')))
+    # ---------- VENTAS (uno o varios KDS: hoja Export) ----------
+    recs=[]; days=set(); has_date=False
+    for _fp in XLSX_LIST:
+        _wb = wb if _fp == XLSX else openpyxl.load_workbook(_fp, read_only=True, data_only=True)
+        _sh = 'Export' if 'Export' in _wb.sheetnames else ('Raw ventas' if 'Raw ventas' in _wb.sheetnames else _wb.sheetnames[0])
+        _v = list(_wb[_sh].iter_rows(values_only=True))
+        _vi = {str(h).strip().lower():i for i,h in enumerate(_v[0]) if h}
+        def _c(row,name,_vi=_vi):
+            i=_vi.get(name.lower()); return row[i] if (i is not None and i<len(row)) else None
+        _hasd = 'date' in _vi
+        if _hasd: has_date=True
+        for r in _v[1:]:
+            brand=_c(r,'brand')
+            if brand in (None, ''): continue
+            dd=None
+            if _hasd:
+                d=_c(r,'date')
+                if not isinstance(d, datetime.datetime):
+                    try: d=datetime.datetime.fromisoformat(str(d))
+                    except: continue
+                dd=d.date(); days.add(dd)
+            kit=_c(r,'kitchen_id') or _c(r,'kitchen')     # nombre/id de cocina (según export)
+            recs.append((dd, _c(r,'city'), kit, brand, to_float(_c(r,'Total orders')) or 0, _c(r,'ops')))
     if has_date and days:
         lastday=max(days); firstlw=lastday-datetime.timedelta(days=6)
         sales_week=f"{firstlw.strftime('%d/%m')}–{lastday.strftime('%d/%m/%Y')}"
         pfirst=firstlw-datetime.timedelta(days=7); plast=firstlw-datetime.timedelta(days=1)
-        lw_all=[x for x in recs if firstlw<=x[0]<=lastday]
-        pw_all=[x for x in recs if pfirst<=x[0]<=plast]
+        lw_all=[x for x in recs if x[0] is not None and firstlw<=x[0]<=lastday]
+        pw_all=[x for x in recs if x[0] is not None and pfirst<=x[0]<=plast]
     else:
         # archivo sin fechas: totales actuales, sin comparativo WoW
         sales_week='acumulado (KDS 30 jul)'
