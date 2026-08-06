@@ -58,41 +58,20 @@ def main():
     store2coc = json.load(open(STORE2COC, encoding='utf-8')) if os.path.exists(STORE2COC) else {}
     coc2op = json.load(open(COC2OP, encoding='utf-8')) if os.path.exists(COC2OP) else {}
 
-    # ---------- RTWT / cobertura (CSV ya limpio, en metros, mapeado a cocina) ----------
-    # Se usa Turbology_con_cocina.csv (misma data de la hoja Raw ya depurada:
-    # RTWT sin códigos de error y Final Size en metros). Última semana disponible.
-    rtc_path = os.path.join(HERE, 'Turbology_con_cocina.csv')
-    rtc = list(csv.DictReader(open(rtc_path, encoding='utf-8-sig')))
-    def rget(row,*names):
-        for n in names:
-            if n in row: return row[n]
-        return None
-    def parse_wk(s):
-        try: return datetime.datetime.strptime(s.strip(),'%d/%m/%Y')
-        except: return None
-    wk_of={r.get('Semana') or list(r.values())[0]: parse_wk(r.get('Semana') or list(r.values())[0]) for r in rtc}
-    maxd=max((d for d in wk_of.values() if d), default=None)
-    rt_rows=[]
-    for r in rtc:
-        wk=r.get('Semana') or list(r.values())[0]
-        if wk_of.get(wk)!=maxd: continue
-        brand=rget(r,'Marca'); coc=rget(r,'Cocina') or 'Otra'
-        rtv=to_float(rget(r,'Avg RTWT (limpio)')); fin=to_float(rget(r,'Final Size (m)'))
-        rt_rows.append(dict(cb=canon(brand), coc=coc, city=rget(r,'Ciudad'), rt=rtv, fin=fin, op=coc2op.get(coc)))
-    rtwt_week = maxd.strftime('%d/%m/%Y') if maxd else '—'
-
-    # filas RTWT semana actual y anterior (con ciudad); se indexan por ciudad en compute()
-    prevd=max((d for d in wk_of.values() if d and d<maxd), default=None)
-    rt_prev_rows=[]
-    if prevd is not None:
-        for r in rtc:
-            wk=r.get('Semana') or list(r.values())[0]
-            if wk_of.get(wk)!=prevd: continue
-            _coc=rget(r,'Cocina') or 'Otra'
-            rt_prev_rows.append(dict(cb=canon(rget(r,'Marca')), coc=_coc,
-                                     city=rget(r,'Ciudad'), op=coc2op.get(_coc),
-                                     rt=to_float(rget(r,'Avg RTWT (limpio)')),
-                                     fin=to_float(rget(r,'Final Size (m)'))))
+    # ---------- RTWT / cobertura: data ACTUAL (const D = D_v2.json) ----------
+    # Usa la misma data que el resto del dashboard: RTWT de la última semana vs la anterior,
+    # y el polígono asignado (cc). Así las cards de ventas quedan consistentes con la cobertura real.
+    Dj = json.load(open(os.path.join(HERE, 'D_v2.json'), encoding='utf-8'))
+    DW = Dj['weeks']; LIw = len(DW) - 1
+    rt_rows=[]; rt_prev_rows=[]
+    for s in Dj['stores']:
+        cb=canon(s.get('b')); coc=s.get('k') or 'Otra'; city=s.get('c'); op=s.get('op'); cc=s.get('cc')
+        _rt=s.get('rt', [])
+        rt_cur = _rt[LIw]   if LIw   < len(_rt) else None
+        rt_prv = _rt[LIw-1] if LIw-1 < len(_rt) else None
+        rt_rows.append(dict(cb=cb, coc=coc, city=city, rt=rt_cur, fin=cc, op=op))
+        rt_prev_rows.append(dict(cb=cb, coc=coc, city=city, rt=rt_prv, fin=cc, op=op))
+    rtwt_week = DW[LIw]
 
     # ---------- VENTAS (uno o varios KDS: hoja Export) ----------
     recs=[]; days=set(); has_date=False
