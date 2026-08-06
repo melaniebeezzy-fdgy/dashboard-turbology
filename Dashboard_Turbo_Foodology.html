@@ -6,6 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
  --primary:#090e3e; --navy:#0E2841; --navy2:#242F42; --navy3:#153D64;
@@ -97,6 +98,8 @@ table.dense .pill{font-size:9.5px;padding:1px 6px}
 .newtag.gray{background:#8b96ab}
 .covlink{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;color:var(--blue2);font-weight:600}
 .covlink:hover{color:var(--sky)}
+.dlbtn{border:1px solid var(--bd);background:#fff;color:var(--blue2);font:600 11px Poppins;padding:5px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.dlbtn:hover{background:#eef3f9}
 .tgl{display:inline-flex;border:1px solid #d5dae3;border-radius:8px;overflow:hidden}
 .tgl button{border:none;background:#fff;color:var(--mut);font:600 10.5px Poppins;padding:3px 9px;cursor:pointer;transition:background .12s}
 .tgl button:not(.on):hover{background:#f1f4f9}
@@ -216,7 +219,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 </div>
 <div class="grid" id="alertas2">
   <div class="card"><h2>🔀 Marcas que cambiaron de polígono</h2><div class="hint">Tiendas cuyo <b>polígono efectivo</b> cambió vs la semana pasada: <b>subió</b> (se recuperó de la penalización) o <b>bajó</b> (entró en penalización). Ant → act.</div><div class="scroll"><table id="tbPolyChg" class="dense"></table></div></div>
-  <div class="card"><h2>📉 RTWT mejorando (candidatas a subir polígono)</h2><div class="hint">RTWT bajando <b>2+ semanas seguidas</b> (últimas 4) o <b>RTWT 4 sem &lt; 2 min</b> sin polígono de 3.0 km. Se ve la evolución, el promedio y el polígono.</div><div class="scroll"><table id="tbRtImp" class="dense"></table></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">📉 RTWT mejorando (candidatas a subir polígono)</h2><button class="dlbtn" onclick="dlRtImp()">⬇ Excel</button></div><div class="hint">RTWT bajando <b>2+ semanas seguidas</b> (últimas 4) o <b>RTWT 4 sem &lt; 2 min</b>, <b>excluyendo</b> las que ya tienen polígono de 3.0 km. Se ve la evolución, el promedio y el polígono.</div><div class="scroll"><table id="tbRtImp" class="dense"></table></div></div>
 </div>
 <!--VENTAS_HTML_START-->
 <h1 id="vpareto">Ventas <span>· última semana</span> <span id="vWk" style="font-size:14px;color:var(--mut)"></span></h1>
@@ -603,13 +606,15 @@ function update(){
     let i=Lw, path=(s.rt[Lw]!=null?[s.rt[Lw]]:[]), dec=0;
     while(i-1>=0 && s.rt[i]!=null && s.rt[i-1]!=null && s.rt[i]<s.rt[i-1]){ path.unshift(s.rt[i-1]); dec++; i--; }
     const a4=avg4(s);
-    const low=(a4!=null && a4<2 && s.cc!=null && lvlIdx(s.cc)!==4);
-    if(dec>=2 || low){
+    const notFull=(s.cc!=null && lvlIdx(s.cc)!==4);           // excluye polígono de 3.0 km
+    const improving=(dec>=2) || (a4!=null && a4<2);
+    if(notFull && improving){
       let ev; if(dec>=2){ev=path.slice(-4);} else {ev=[]; for(let w=Math.max(0,Lw-3);w<=Lw;w++) if(s.rt[w]!=null) ev.push(s.rt[w]);}
-      rimp.push({b:s.b,k:s.k,ev:ev.map(x=>+x.toFixed(2)),a4:a4==null?null:+a4.toFixed(2),cc:s.cc});
+      rimp.push({b:s.b,k:s.k,c:s.c,ev:ev.map(x=>+x.toFixed(2)),a4:a4==null?null:+a4.toFixed(2),cc:s.cc});
     }
   });
   rimp.sort((x,y)=>(x.a4==null?9:x.a4)-(y.a4==null?9:y.a4));
+  window.RIMP=rimp;
   document.getElementById('tbRtImp').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">Evolución RTWT (min)</th><th class="num">RTWT 4 sem</th><th class="num">Polígono</th></tr>'+
    (rimp.length?rimp.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num"><span class="pill" style="background:#1e8e5a">${r.ev.join(' → ')}</span></td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${r.cc==null?'–':`<span class="pill" style="background:${scol[r.cc]||'#345964'}">${km(r.cc)} km</span>`}</td></tr>`).join('')
     :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin marcas mejorando en este alcance</td></tr>');
@@ -659,6 +664,20 @@ window.showLost=function(){
    (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num"><span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span></td><td class="num">${r.wd}/4</td></tr>`).join('')
     :'<tr><td colspan="7" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda pierde cobertura en este alcance ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
+};
+window.dlRtImp=function(){
+  const data=window.RIMP||[];
+  const aoa=[['Marca','Cocina','Ciudad','Evolución RTWT (min)','RTWT 4 sem','Polígono (km)']];
+  data.forEach(r=>aoa.push([r.b,r.k,r.c,r.ev.join(' → '),r.a4,r.cc==null?'':+(r.cc/1000).toFixed(1)]));
+  const scope=(typeof OPS!=='undefined'&&OPS!=='ALL')?OPS:((typeof CITY!=='undefined'&&CITY!=='ALL')?CITY:'todas');
+  if(typeof XLSX==='undefined'){ // fallback CSV si no cargó SheetJS
+    const csv=aoa.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+    const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+    a.download='RTWT_mejorando_'+scope.replace(/[^\w]+/g,'_')+'.csv'; a.click(); return;
+  }
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:26},{wch:20},{wch:14},{wch:26},{wch:12},{wch:12}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'RTWT mejorando');
+  XLSX.writeFile(wb,'RTWT_mejorando_'+scope.replace(/[^\w]+/g,'_')+'.xlsx');
 };
 function closeModal(){document.getElementById('modalBg').classList.remove('open')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
