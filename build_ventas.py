@@ -82,22 +82,30 @@ def main():
         _vi = {str(h).strip().lower():i for i,h in enumerate(_v[0]) if h}
         def _c(row,name,_vi=_vi):
             i=_vi.get(name.lower()); return row[i] if (i is not None and i<len(row)) else None
-        _hasd = 'date' in _vi
-        if _hasd: has_date=True
+        _datecol = 'date' if 'date' in _vi else ('week_year' if 'week_year' in _vi else None)
+        _shift = 6 if _datecol == 'week_year' else 0     # week_year = lunes -> domingo (nuestra convención)
+        if _datecol: has_date=True
         for r in _v[1:]:
-            brand=_c(r,'brand')
+            brand=_c(r,'brand') or _c(r,'brand_name')
             if brand in (None, ''): continue
             dd=None
-            if _hasd:
-                d=_c(r,'date')
+            if _datecol:
+                d=_c(r,_datecol)
                 if not isinstance(d, datetime.datetime):
                     try: d=datetime.datetime.fromisoformat(str(d))
                     except: continue
-                dd=d.date(); days.add(dd)
+                dd=(d+datetime.timedelta(days=_shift)).date(); days.add(dd)
             kit=_c(r,'kitchen_id') or _c(r,'kitchen')     # nombre/id de cocina (según export)
-            recs.append((dd, _c(r,'city'), kit, brand, to_float(_c(r,'Total orders')) or 0, _c(r,'ops')))
+            orders=to_float(_c(r,'Total orders')) or to_float(_c(r,'orders')) or 0
+            recs.append((dd, _c(r,'city'), kit, brand, orders, _c(r,'ops')))
     if has_date and days:
-        lastday=max(days); firstlw=lastday-datetime.timedelta(days=6)
+        # totales por semana; descarta la última semana si está incompleta (< 50% de la anterior)
+        _wtot={}
+        for _x in recs:
+            if _x[0] is not None: _wtot[_x[0]]=_wtot.get(_x[0],0)+_x[4]
+        _sd=sorted(_wtot)
+        while len(_sd)>=2 and _wtot[_sd[-1]] < 0.5*_wtot[_sd[-2]]: _sd.pop()
+        lastday=_sd[-1]; firstlw=lastday-datetime.timedelta(days=6)
         sales_week=f"{firstlw.strftime('%d/%m')}–{lastday.strftime('%d/%m/%Y')}"
         pfirst=firstlw-datetime.timedelta(days=7); plast=firstlw-datetime.timedelta(days=1)
         lw_all=[x for x in recs if x[0] is not None and firstlw<=x[0]<=lastday]
