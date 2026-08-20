@@ -7,7 +7,7 @@
 #   avg4w = promedio RTWT de las últimas 4 semanas (con dato).
 #   coverageResult = coverageCurrent  si avg4w<=8  else 0  (pierde cobertura + penalización).
 #   estados por avg4w: 🟢<2  🟡2-5  🟠5-8  🔴>8 (pierde)  ⚪ sin datos.
-import openpyxl, csv, json, sys, re, datetime, os
+import openpyxl, csv, json, sys, re, datetime, os, unicodedata, difflib
 from collections import defaultdict
 
 NEW = sys.argv[1] if len(sys.argv) > 1 else 'rt_data_v2.csv'
@@ -168,6 +168,76 @@ with open(NEW, encoding='utf-8') as f:
         rt[14] = rtclean(fw[3])                                                   # 10-ago (Aug 16) — nueva semana
         for i in range(8, 15): fin[i] = cc                                        # polígono actual = coverageCurrent (fijo)
         stores[key] = dict(b=b, k=coc, c=city_of.get(key,'—'), sid=key, cc=cc, fin=fin, rt=rt, op=coc2op.get(coc))
+
+# ---- histórico de polígono por semana (el archivo no trae fecha; estampamos la semana que actualizamos) ----
+# poly_history.json: { "<semana>": { "<storeId>": polígono_m } }. Se estampa SIEMPRE la semana más reciente
+# con el coverageCurrent de hoy y se CONSERVAN las semanas anteriores ya guardadas (para tener histórico fechado).
+PH_PATH = 'poly_history.json'
+poly_history = json.load(open(PH_PATH, encoding='utf-8')) if os.path.exists(PH_PATH) else {}
+LIw = NW - 1
+for w in range(8, NW):                       # semanas con coverageCurrent (Jun 29 en adelante)
+    wl = WEEKS[w]
+    if w == LIw or wl not in poly_history:   # estampa la más reciente; rellena por primera vez las que falten
+        poly_history[wl] = {st['sid']: st['cc'] for st in stores.values()}
+    ph = poly_history.get(wl, {})
+    for st in stores.values():
+        if st['sid'] in ph: st['fin'][w] = ph[st['sid']]
+json.dump(poly_history, open(PH_PATH, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
+print('poly_history: %d semanas guardadas (última estampada: %s)' % (len(poly_history), WEEKS[LIw]))
+
+# ---- GMV por marca-cocina (prom. últimas 4 semanas) para métrica de $ perdido por cobertura ----
+MKT = 'marketing_stores.xlsx'
+if os.path.exists(MKT):
+    def _sac(x): return ''.join(c for c in unicodedata.normalize('NFD', str(x or '')) if unicodedata.category(c) != 'Mn')
+    def _canon(b):
+        n = _sac(b).lower(); n = re.sub(r'\bturbo\b', ' ', n)
+        return ' '.join(re.sub(r'[^a-z0-9 ]', ' ', n).split())
+    def _cn(x): return re.sub(r'[^a-z0-9 ]', ' ', _sac(x).lower()).strip()
+    _cocs = sorted({s['k'] for s in stores.values()})
+    def _k2c(kid):
+        base = re.sub(r'^\s*\d+\s*', '', str(kid)).strip().replace(' CINNABON', ''); nb = _cn(base)
+        for c in _cocs:
+            cn = _cn(c)
+            if cn == nb or nb in cn or cn.split(' /')[0] == nb: return c
+        return base.title()
+    wbm = openpyxl.load_workbook(MKT, read_only=True, data_only=True)
+    vm = list(wbm['Export'].iter_rows(values_only=True))
+    hm = {str(h).strip().lower(): i for i, h in enumerate(vm[0]) if h}
+    def _c(row, n): i = hm.get(n); return row[i] if (i is not None and i < len(row)) else None
+    gmv = defaultdict(lambda: defaultdict(float)); wall = set()
+    for r in vm[1:]:
+        w = _c(r, 'week_year'); b = _c(r, 'brand_name'); k = _c(r, 'kitchen')
+        if not isinstance(w, datetime.datetime) or not b or not k: continue
+        try: gv = float(_c(r, 'gmv_nac') or 0)
+        except: gv = 0
+        gmv[(_canon(b), _k2c(k))][w.date()] += gv; wall.add(w.date())
+    last4 = set(sorted(wall)[-4:])
+    keys_by_coc = defaultdict(list)
+    for (cb, coc) in gmv: keys_by_coc[coc].append(cb)
+    def _matchkey(cb, coc):
+        cands = keys_by_coc.get(coc, [])
+        if cb in cands: return (cb, coc)
+        for c in cands:
+            if c.startswith(cb + ' ') or cb.startswith(c + ' ') or cb in c or c in cb: return (c, coc)
+        best = None; bs = 0
+        for c in cands:
+            rr = difflib.SequenceMatcher(None, cb, c).ratio()
+            if rr > bs: bs = rr; best = c
+        return (best, coc) if bs >= 0.6 else None
+    def _eowlbl(d): return (d + datetime.timedelta(days=6)).strftime('%b %-d')   # lunes -> etiqueta domingo
+    widx = {WEEKS[i]: i for i in range(NW)}
+    for s in stores.values():
+        mk = _matchkey(_canon(s['b']), s['k'])
+        s['g'] = None; s['gw'] = [None]*NW
+        if mk and mk in gmv:
+            wd = gmv[mk]
+            vals = [v for d, v in wd.items() if d in last4]
+            if vals: s['g'] = round(sum(vals) / len(vals))
+            for d, v in wd.items():
+                lbl = _eowlbl(d)
+                if lbl in widx: s['gw'][widx[lbl]] = round(v)
+    print('GMV asignado a %d/%d tiendas | prom últimas 4 sem: %s' %
+          (sum(1 for s in stores.values() if s.get('g')), len(stores), [str(x) for x in sorted(wall)[-4:]]))
 
 D = dict(weeks=WEEKS, n4=N4, stores=list(stores.values()))
 json.dump(D, open('D_v2.json','w'), ensure_ascii=False)
