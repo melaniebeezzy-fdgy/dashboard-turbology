@@ -16,7 +16,7 @@ OLD = 'Turbology.xlsx'
 # ---- semanas ----
 HIST = ['May 10','May 17','May 24','May 31','Jun 7','Jun 14','Jun 21']  # etiqueta = último día (domingo) de cada semana
 HIST_DATES = ['2026-05-04','2026-05-11','2026-05-18','2026-05-25','2026-06-01','2026-06-08','2026-06-15']  # fechas reales (lunes) para el match
-NEW_WEEKS = ['Jun 28','Jul 5','Jul 12','Jul 19','Jul 26','Aug 2','Aug 9']  # último día de cada semana (Jun22..Aug03 -> +6d)
+NEW_WEEKS = ['Jun 28','Jul 5','Jul 12','Jul 19','Jul 26','Aug 2','Aug 9','Aug 16']  # último día de cada semana (Jun22..Aug10 -> +6d)
 WEEKS = HIST + NEW_WEEKS                                               # 12 semanas
 NW = len(WEEKS)
 N4 = 4                                                                 # ventana móvil fija de 4 semanas (Jun 29–Jul 20)
@@ -117,6 +117,24 @@ if os.path.exists(UP3):
             up3[re.sub(r'\D','',str(_o['storeId']))] = _o
     print('dashboard v3: %d tiendas (13-jul..03-ago, RTWT+cobertura)' % len(up3))
 
+# ---- dashboard más reciente (20-jul..10-ago, RTWT + coverageCurrent) ----
+UP4 = 'foodology_rt_dashboard_v4.html'
+up4 = {}
+if os.path.exists(UP4):
+    _h4 = open(UP4, encoding='utf-8', errors='replace').read()
+    for _m in re.finditer(r'"storeId"', _h4):
+        _i = _m.start(); _s = _h4.rfind('{', 0, _i); _d = 0; _e = None
+        for _j in range(_s, len(_h4)):
+            if _h4[_j] == '{': _d += 1
+            elif _h4[_j] == '}':
+                _d -= 1
+                if _d == 0: _e = _j + 1; break
+        try: _o = json.loads(_h4[_s:_e])
+        except: continue
+        if 'w4' in _o and 'storeId' in _o:
+            up4[re.sub(r'\D','',str(_o['storeId']))] = _o
+    print('dashboard v4: %d tiendas (20-jul..10-ago, RTWT+cobertura)' % len(up4))
+
 stores = {}
 with open(NEW, encoding='utf-8') as f:
     for row in csv.DictReader(f):
@@ -131,21 +149,24 @@ with open(NEW, encoding='utf-8') as f:
         rt[7] = rtclean(row.get('w1')); fin[7] = cc_old
         u = up.get(key)      # 29-jun..20-jul + coverageCurrent
         u2 = up2.get(key)    # 06-jul..27-jul (solo RTWT)
-        u3 = up3.get(key)    # 13-jul..03-ago (RTWT + coverageCurrent) — el más reciente
-        # cobertura: del más reciente que la traiga (v3 > viejo); si no, cc_old
-        _c = (u3.get('coverageCurrent') if u3 else None) or (u.get('coverageCurrent') if u else None)
+        u3 = up3.get(key)    # 13-jul..03-ago (RTWT + coverageCurrent)
+        u4 = up4.get(key)    # 20-jul..10-ago (RTWT + coverageCurrent) — el más reciente
+        pick = lambda *xs: next((x for x in xs if x is not None), None)
+        # cobertura: del más reciente que la traiga; si no, cc_old
+        _c = pick(u4.get('coverageCurrent') if u4 else None, u3.get('coverageCurrent') if u3 else None, u.get('coverageCurrent') if u else None)
         cc = to_m(_c) if _c not in (None,'') else cc_old
         ow = [u.get('w1'), u.get('w2'), u.get('w3'), u.get('w4')] if u else [None]*4      # 29jun,06jul,13jul,20jul
         nw = [u2.get('w1'), u2.get('w2'), u2.get('w3'), u2.get('w4')] if u2 else [None]*4   # 06jul,13jul,20jul,27jul
         tw = [u3.get('w1'), u3.get('w2'), u3.get('w3'), u3.get('w4')] if u3 else [None]*4   # 13jul,20jul,27jul,03ago
-        pick = lambda *xs: next((x for x in xs if x is not None), None)
+        fw = [u4.get('w1'), u4.get('w2'), u4.get('w3'), u4.get('w4')] if u4 else [None]*4   # 20jul,27jul,03ago,10ago
         rt[8]  = rtclean(ow[0])                                                   # 29-jun (Jul 5)
         rt[9]  = rtclean(pick(nw[0], ow[1]))                                      # 06-jul (Jul 12)
         rt[10] = rtclean(pick(tw[0], nw[1], ow[2]))                              # 13-jul (Jul 19)
-        rt[11] = rtclean(pick(tw[1], nw[2], ow[3]))                              # 20-jul (Jul 26)
-        rt[12] = rtclean(pick(tw[2], nw[3]))                                     # 27-jul (Aug 2)
-        rt[13] = rtclean(tw[3])                                                   # 03-ago (Aug 9) — nueva semana
-        for i in range(8, 14): fin[i] = cc                                        # polígono actual = coverageCurrent (fijo)
+        rt[11] = rtclean(pick(fw[0], tw[1], nw[2], ow[3]))                       # 20-jul (Jul 26)
+        rt[12] = rtclean(pick(fw[1], tw[2], nw[3]))                              # 27-jul (Aug 2)
+        rt[13] = rtclean(pick(fw[2], tw[3]))                                     # 03-ago (Aug 9)
+        rt[14] = rtclean(fw[3])                                                   # 10-ago (Aug 16) — nueva semana
+        for i in range(8, 15): fin[i] = cc                                        # polígono actual = coverageCurrent (fijo)
         stores[key] = dict(b=b, k=coc, c=city_of.get(key,'—'), sid=key, cc=cc, fin=fin, rt=rt, op=coc2op.get(coc))
 
 D = dict(weeks=WEEKS, n4=N4, stores=list(stores.values()))
@@ -154,7 +175,7 @@ json.dump(D, open('D_v2.json','w'), ensure_ascii=False)
 # ---- reporte rápido ----
 def avg(a):
     a=[x for x in a if x is not None]; return sum(a)/len(a) if a else None
-last4 = lambda s: avg(s['rt'][10:14])
+last4 = lambda s: avg(s['rt'][11:15])
 allavg = avg([last4(s) for s in stores.values() if last4(s) is not None])
 lose = sum(1 for s in stores.values() if (last4(s) or 0) > 8)
 covres = [0 if (last4(s) or 0) > 8 else s['cc'] for s in stores.values() if s['cc'] is not None]
