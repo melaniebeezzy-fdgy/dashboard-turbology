@@ -155,6 +155,8 @@ def main():
             pareto.append(dict(brand=disp.get(cb,cb), cb=cb, orders=round(o),
                                pct=round(100*o/tot,1), cum=round(100*cum/tot,1)))
         top5=[p['cb'] for p in pareto[:5]]
+        EXTRA_PINNED=['cinnabon']   # marcas fijas que se muestran aunque no estén en el top 5
+        brands_det=top5+[cb for cb in EXTRA_PINNED if cb in bt and cb not in top5]
         cbk={}
         for _,_,kid,b,o,_ in lw:
             coc=kitchen_to_cocina(kid, cocina_names)
@@ -172,7 +174,7 @@ def main():
                                             size=None if finv is None else round(finv)))
             for i,(cb,o) in enumerate(items): rank_in[(coc,cb)]=(i+1,round(o),len(items))
         top5_detail=[]
-        for cb in top5:
+        for cb in brands_det:
             rows=[]
             for coc in cocinas:
                 o=cbk.get((coc,cb))

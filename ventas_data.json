@@ -1,7 +1,7 @@
 {
  "sales_week": "17/08–23/08/2026",
  "rtwt_week": "Aug 23",
- "generated": "2026-08-26",
+ "generated": "2026-08-27",
  "cities": [
   "ALL",
   "Barranquilla",
@@ -1260,6 +1260,151 @@
        "rt": 0.7,
        "size": 2400,
        "cov": 80.0,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 466,
+     "wow": 27.0,
+     "orders_prev": 367,
+     "avg_rt": 1.77,
+     "avg_cov": 94.6,
+     "drt": -0.01,
+     "dcov": -0.0,
+     "best": "Usaquén",
+     "worst": "Chicó",
+     "rows": [
+      {
+       "coc": "Manila",
+       "orders": 74,
+       "rank": 6,
+       "nbrands": 34,
+       "rt": 0.83,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Laureles",
+       "orders": 66,
+       "rank": 4,
+       "nbrands": 32,
+       "rt": 0.67,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chicó",
+       "orders": 62,
+       "rank": 3,
+       "nbrands": 15,
+       "rt": 4.56,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 55,
+       "rank": 7,
+       "nbrands": 30,
+       "rt": 2.17,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Barranquilla",
+       "orders": 51,
+       "rank": 4,
+       "nbrands": 34,
+       "rt": 1.05,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 39,
+       "rank": 4,
+       "nbrands": 30,
+       "rt": 1.51,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 28,
+       "rank": 6,
+       "nbrands": 29,
+       "rt": 0.4,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Colina",
+       "orders": 24,
+       "rank": 6,
+       "nbrands": 31,
+       "rt": 0.96,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chapinero",
+       "orders": 22,
+       "rank": 9,
+       "nbrands": 36,
+       "rt": 2.46,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Cabecera (Bga)",
+       "orders": 20,
+       "rank": 7,
+       "nbrands": 27,
+       "rt": 2.0,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Santa Mónica",
+       "orders": 10,
+       "rank": 5,
+       "nbrands": 25,
+       "rt": 2.7,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Ingenio",
+       "orders": 8,
+       "rank": 6,
+       "nbrands": 21,
+       "rt": 1.89,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "San Fernando",
+       "orders": 7,
+       "rank": 6,
+       "nbrands": 20,
+       "rt": 1.83,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       }
      ]
@@ -3395,6 +3540,81 @@
        "sev": "ok"
       }
      ]
+    },
+    {
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 230,
+     "wow": 22.3,
+     "orders_prev": 188,
+     "avg_rt": 2.01,
+     "avg_cov": 91.7,
+     "drt": 0.27,
+     "dcov": 0.0,
+     "best": "Usaquén",
+     "worst": "Chicó",
+     "rows": [
+      {
+       "coc": "Chicó",
+       "orders": 62,
+       "rank": 3,
+       "nbrands": 15,
+       "rt": 4.56,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 55,
+       "rank": 7,
+       "nbrands": 30,
+       "rt": 2.17,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 39,
+       "rank": 4,
+       "nbrands": 30,
+       "rt": 1.51,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 28,
+       "rank": 6,
+       "nbrands": 29,
+       "rt": 0.4,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Colina",
+       "orders": 24,
+       "rank": 6,
+       "nbrands": 31,
+       "rt": 0.96,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chapinero",
+       "orders": 22,
+       "rank": 9,
+       "nbrands": 36,
+       "rt": 2.46,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "warn"
+      }
+     ]
     }
    ],
    "per_cocina": {
@@ -4204,6 +4424,31 @@
        "sev": "ok"
       }
      ]
+    },
+    {
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 20,
+     "wow": 33.3,
+     "orders_prev": 15,
+     "avg_rt": 2.0,
+     "avg_cov": 100.0,
+     "drt": 0.62,
+     "dcov": 0.0,
+     "best": "Cabecera (Bga)",
+     "worst": "Cabecera (Bga)",
+     "rows": [
+      {
+       "coc": "Cabecera (Bga)",
+       "orders": 20,
+       "rank": 7,
+       "nbrands": 27,
+       "rt": 2.0,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      }
+     ]
     }
    ],
    "per_cocina": {
@@ -4688,6 +4933,51 @@
        "rt": null,
        "size": null,
        "cov": null,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 25,
+     "wow": 13.6,
+     "orders_prev": 22,
+     "avg_rt": 2.14,
+     "avg_cov": 93.3,
+     "drt": -0.69,
+     "dcov": -0.0,
+     "best": "San Fernando",
+     "worst": "Santa Mónica",
+     "rows": [
+      {
+       "coc": "Santa Mónica",
+       "orders": 10,
+       "rank": 5,
+       "nbrands": 25,
+       "rt": 2.7,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Ingenio",
+       "orders": 8,
+       "rank": 6,
+       "nbrands": 21,
+       "rt": 1.89,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "San Fernando",
+       "orders": 7,
+       "rank": 6,
+       "nbrands": 20,
+       "rt": 1.83,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       }
      ]
