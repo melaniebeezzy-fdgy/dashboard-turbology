@@ -133,6 +133,12 @@ if os.path.exists('mx_gmv.csv'):
     for row in csv.DictReader(open('mx_gmv.csv')):
         coc = kit2coc(row['kitchen'])
         if row['week'] in MONS: gmvw[coc][MONS.index(row['week'])] = num(row['gmv'])
+# GMV por marca-cocina (última semana) para la Oportunidad a nivel marca-cocina
+gmv_bc = {}
+if os.path.exists('mx_gmv_brand.csv'):
+    for row in csv.DictReader(open('mx_gmv_brand.csv')):
+        key = (kit2coc(row['kitchen']), norm(row['brand']))
+        gmv_bc[key] = gmv_bc.get(key, 0) + (num(row['gmv']) or 0)
 
 # ---------- agregador por scope ----------
 def compute(kind, name):
@@ -195,6 +201,17 @@ def compute(kind, name):
             covpct=round(100*_r, 1) if _r is not None else None,
             lost=round(_lo or 0), addpct=round(100*(_lo/_g), 1) if (_lo and _g) else 0))
     lostrows.sort(key=lambda x: -x['lost'])
+    # Oportunidad a nivel marca-cocina (polígono por tienda vs su máximo)
+    lostrows_bc = []
+    for s in st:
+        if s['fin'] is None or not s.get('mx') or s['fin'] >= s['mx']: continue
+        g = gmv_bc.get((s['k'], norm(s['b'])))
+        if not g: continue
+        lo = g*(s['mx']/s['fin'] - 1)
+        lostrows_bc.append(dict(b=s['b'], k=s['k'], city=s['c'],
+            covpct=round(100*s['fin']/s['mx'], 1), gmv=round(g),
+            lost=round(lo), addpct=round(100*(s['mx']/s['fin']-1), 1)))
+    lostrows_bc.sort(key=lambda x: -x['lost'])
     # --- tablas por cocina / ciudad ---
     W4i = list(range(NW-4, NW))                # ventana móvil 4 semanas
     def s_avg4(x):
@@ -294,7 +311,7 @@ def compute(kind, name):
                  n_cocinas=len(cocset), lost=lost, gmv=gmv_now,
                  dist={str(l): dist.get(l, 0) for l in LV}, tot=sum(dist.values()), alerts=alerts),
         stack=dict(labels=[MXW[-2], MXW[-1]], series=stack, tot=stack_tot),
-        weekly_rt=wk_net, weekly_cov=weekly_cov, weekly_lost=weekly_lost, lostrows=lostrows,
+        weekly_rt=wk_net, weekly_cov=weekly_cov, weekly_lost=weekly_lost, lostrows=lostrows, lostrows_bc=lostrows_bc,
         cities=cities, cocinas=cocinas,
         pareto=pareto, top5=top5, top5_detail=top5_detail,
         per_cocina=per_cocina, coc_list=coc_list)
