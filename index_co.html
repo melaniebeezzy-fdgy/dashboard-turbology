@@ -258,9 +258,9 @@ function mxp(s){let m=(s.cc!=null?s.cc:null); (s.fin||[]).forEach(x=>{if(x!=null
 function covPctAvg(st,effOf){const p=st.map(s=>{const e=effOf(s),m=mxp(s);return (e==null||m==null||m===0)?null:100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
 // máximo por zona CONOCIDO hasta la semana w (no incluye polígonos futuros) -> congela semanas pasadas
 function mxAt(s,w){let m=null;for(let i=0;i<=w;i++){const v=s.fin[i];if(v!=null&&(m==null||v>m))m=v;}return m;}
-function covWeekAt(st,w){const p=st.map(s=>{const e=s.fin[w],m=mxAt(s,w);return (e==null||m==null||m===0)?null:100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
+function covWeekAt(st,w){const p=st.map(s=>{const e=s.fin[w],m=mxp(s);return (e==null||m==null||m===0)?null:100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
 // cobertura efectiva de la semana w: polígono congelado fin[w], 0 si penalizada (media móvil 4 sem>6), ÷ máximo conocido a esa semana
-function covWeekAtPen(st,w){const p=st.map(s=>{if(s.fin[w]==null)return null;const m=mxAt(s,w);if(m==null||m===0)return null;const a=ma4at(s,w);const e=(a!=null&&a>6)?0:s.fin[w];return 100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
+function covWeekAtPen(st,w){const p=st.map(s=>{if(s.fin[w]==null)return null;const m=mxp(s);if(m==null||m===0)return null;const a=ma4at(s,w);const e=(a!=null&&a>6)?0:s.fin[w];return 100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
 function stcol(a){return a==null?'#8b96ab':(a<=2?'#1e8e5a':(a<=3?'#d99a1b':(a<6?'#e67e22':'#c0392b')));}
 function stlabel(a){return a==null?'⚪ Sin datos':(a<=2?'🟢 Saludable':(a<=3?'🟡 Atención':(a<6?'🟠 Riesgo':'🔴 Crítico')));}
 const rt4fmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(v)}"></span>`;
@@ -434,7 +434,7 @@ function update(){
  const A=agg4(st);
  // cobertura: asignada (coverageCurrent) vs efectiva (coverageResult, 0 si penalizada)
  const covCur=covPctAvg(st,s=>s.cc);
- const covRes=covWeekAtPen(st,LI);                                  // efectiva de la última semana (polígono congelado + máx rodante)
+ const covRes=covWeekAtPen(st,LI);                                  // efectiva de la última semana (vs máximo polígono conocido)
  if(o.cov[LI]!=null && covRes!=null) o.cov[LI]=+covRes.toFixed(1);
  const covResPrev=covWeekAtPen(st,LI-1);
  if(o.cov[LI-1]!=null && covResPrev!=null) o.cov[LI-1]=+covResPrev.toFixed(1);
@@ -455,7 +455,7 @@ function update(){
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
  chR.data.datasets[0].data=o.rtwt; chR.update();
- chC.data.datasets[0].data=o.cov; chC.data.datasets[1].data=W.map((_,w)=>{let t=0;st.forEach(s=>{const gv=(s.gw||[])[w]; const fw=(s.fin||[])[w]; const mx=mxAt(s,w); if(gv&&fw&&mx&&fw<mx) t+=gv*(mx/fw-1);});return Math.round(t);}); chC.update();
+ chC.data.datasets[0].data=o.cov; chC.data.datasets[1].data=W.map((_,w)=>{let t=0;st.forEach(s=>{const gv=(s.gw||[])[w]; const fw=(s.fin||[])[w]; const mx=mxp(s); if(gv&&fw&&mx&&fw<mx) t+=gv*(mx/fw-1);});return Math.round(t);}); chC.update();
  chD.data.datasets.forEach(ds=>{ds.data=W.map((_,w)=>DIST.d[w][ds._size]||0)}); chD.update();
 
  // ciudades
