@@ -25,6 +25,13 @@ def to_m(v):
     if v in (None, ''): return None
     v = float(v)
     return v*1000 if v < 50 else v          # km -> m (1.0, 2.4 ...)
+def cc_clean(v):
+    # coverageCurrent del dashboard: '1' es placeholder (coverageResult null), NO 1 km real
+    if v in (None, ''): return None
+    try: fv = float(v)
+    except: return None
+    if fv == 1: return None
+    return to_m(v)
 MAY11 = {1.0:1000.0, 2.0:2400.0, 3.0:3000.0}
 def fin_m(dd, v):
     if dd == '2026-05-11':
@@ -175,8 +182,7 @@ stores = {}
 with open(NEW, encoding='utf-8') as f:
     for row in csv.DictReader(f):
         key = re.sub(r'\D','',str(row['storeId']))
-        cc_old = row.get('coverageCurrent')
-        cc_old = to_m(cc_old) if cc_old not in (None,'') else None
+        cc_old = cc_clean(row.get('coverageCurrent'))
         b = re.sub(r'\s*-\s*Turbo\s*$','', row['brand'] or '').strip()
         coc = s2c.get('CO'+key) or s2c.get(key) or '—'
         rt = list(hist_rt[key])                 # copia historia (0..6)
@@ -191,8 +197,8 @@ with open(NEW, encoding='utf-8') as f:
         u6 = up6.get(key)    # 03-ago..24-ago (RTWT + coverageCurrent) — el más reciente
         pick = lambda *xs: next((x for x in xs if x is not None), None)
         # cobertura: del más reciente que la traiga; si no, cc_old
-        _c = pick(u6.get('coverageCurrent') if u6 else None, u5.get('coverageCurrent') if u5 else None, u4.get('coverageCurrent') if u4 else None, u3.get('coverageCurrent') if u3 else None, u.get('coverageCurrent') if u else None)
-        cc = to_m(_c) if _c not in (None,'') else cc_old
+        _c = pick(cc_clean(u6.get('coverageCurrent')) if u6 else None, cc_clean(u5.get('coverageCurrent')) if u5 else None, cc_clean(u4.get('coverageCurrent')) if u4 else None, cc_clean(u3.get('coverageCurrent')) if u3 else None, cc_clean(u.get('coverageCurrent')) if u else None)
+        cc = _c if _c is not None else cc_old
         ow = [u.get('w1'), u.get('w2'), u.get('w3'), u.get('w4')] if u else [None]*4      # 29jun,06jul,13jul,20jul
         nw = [u2.get('w1'), u2.get('w2'), u2.get('w3'), u2.get('w4')] if u2 else [None]*4   # 06jul,13jul,20jul,27jul
         tw = [u3.get('w1'), u3.get('w2'), u3.get('w3'), u3.get('w4')] if u3 else [None]*4   # 13jul,20jul,27jul,03ago
@@ -216,6 +222,10 @@ with open(NEW, encoding='utf-8') as f:
 # con el coverageCurrent de hoy y se CONSERVAN las semanas anteriores ya guardadas (para tener histórico fechado).
 PH_PATH = 'poly_history.json'
 poly_history = json.load(open(PH_PATH, encoding='utf-8')) if os.path.exists(PH_PATH) else {}
+# limpiar placeholders (tiendas sin polígono real, cc=None) del histórico para que no aparezcan en 1 km
+_ph_sids = {sid for sid, st in stores.items() if st['cc'] is None}
+for _wl in list(poly_history):
+    for _sid in _ph_sids: poly_history[_wl].pop(_sid, None)
 LIw = NW - 1
 for w in range(8, NW):                       # semanas con coverageCurrent (Jun 29 en adelante)
     wl = WEEKS[w]
