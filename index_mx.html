@@ -419,7 +419,6 @@ window.showMxHeat=function(ci,w){
 function render(){
   const scopeTag = OPS!=='ALL' ? '· ops: '+OPS : (CITY==='ALL'?'':'· '+CITY);
   document.getElementById('hWk').textContent = scopeTag;
-  document.getElementById('cityTitle').textContent = OPS!=='ALL'?('Ops: '+OPS):(CITY==='ALL'?'Ciudades — estado actual':'Ciudad: '+CITY);
   const vw=document.getElementById('vWk'); if(vw) vw.textContent='· '+(MX.sales_week||'')+(MX.prev_week?(' vs '+MX.prev_week):'')+' '+scopeTag;
   renderKpis(); renderMxRt(); renderMxCov(); renderDist(); renderComb(); renderHeat(); renderOpp();
   renderTop5(); renderCocSel(); renderBrandSel();
