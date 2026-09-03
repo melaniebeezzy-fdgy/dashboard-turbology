@@ -208,7 +208,7 @@ def compute(kind, name):
         g = gmv_bc.get((s['k'], norm(s['b'])))
         if not g: continue
         lo = g*(s['mx']/s['fin'] - 1)
-        lostrows_bc.append(dict(b=s['b'], k=s['k'], city=s['c'],
+        lostrows_bc.append(dict(b=s['b'], k=s['k'], city=s['c'], poly=s['fin'],
             covpct=round(100*s['fin']/s['mx'], 1), gmv=round(g),
             lost=round(lo), addpct=round(100*(s['mx']/s['fin']-1), 1)))
     lostrows_bc.sort(key=lambda x: -x['lost'])
