@@ -261,12 +261,16 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
     <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Cobertura = polígono ÷ <b>máximo de cada zona</b> (100%). Barras = <b>$ perdido/sem</b> por cobertura &lt; máximo.</div><div class="chartbox" style="height:300px"><canvas id="mx-chCov"></canvas></div></div>
   </div>
 
-  <div class="card" style="margin-bottom:14px" id="mx-poligonos"><h2 id="mx-distTitle">Distribución de polígonos por semana</h2><div class="hint" id="mx-distHint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="mx-chDist"></canvas></div><div id="mx-distDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
+  
+  <div class="card" style="margin-bottom:14px" id="mx-oportunidad"><h2>Oportunidad por cobertura</h2><div class="hint">$ que dejamos de vender por polígonos por debajo de su <b>máximo de zona</b> (modelo lineal, nivel cocina) — última semana. Clic en encabezados para ordenar.</div><div class="kpis" id="mx-oppKpis" style="margin-bottom:10px"></div><div class="scroll"><table id="mx-tbOpp"></table></div></div>
 
-  <div class="card" style="margin-bottom:14px" id="mx-cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="mx-combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="mx-tgCoc" class="on" onclick="setComb('cocina')">Cocinas</button><button id="mx-tgCity" onclick="setComb('city')">Ciudades</button></div></div><div class="hint">RTWT promedio móvil de 4 semanas (2 ago–23 ago), estado (🟢🟡🟠🔴) y cobertura vs máximo de zona. Clic en encabezados para ordenar y en la cobertura para el detalle.</div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="mx-tbComb"></table></div><div id="mx-combDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
+  <div class="grid" id="mx-poli-grid">
+    <div class="card" id="mx-poligonos"><h2 id="mx-distTitle">Distribución de polígonos por semana</h2><div class="hint" id="mx-distHint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="mx-chDist"></canvas></div><div id="mx-distDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
+    <div class="card" id="mx-cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="mx-combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="mx-tgCoc" class="on" onclick="setComb('cocina')">Cocinas</button><button id="mx-tgCity" onclick="setComb('city')">Ciudades</button></div></div><div class="hint">RTWT promedio móvil de 4 semanas (2 ago–23 ago), estado (🟢🟡🟠🔴) y cobertura vs máximo de zona. Clic en encabezados para ordenar y en la cobertura para el detalle.</div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="mx-tbComb"></table></div><div id="mx-combDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
+  </div>
+
 
   <div class="card" style="margin-bottom:14px" id="mx-heat"><h2>Mapa de calor — cobertura por cocina y semana</h2><div class="hint">Cobertura (polígono ÷ máximo de zona) por cocina y semana. Clic en una celda para ver las marcas por debajo de su máximo. Escala continua: vino &lt; 70% → azul oscuro ≥ 98%.</div><div class="hscroll"><table class="hm" id="mx-tbHeat"></table></div><div id="mx-heatDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
-  <div class="card" style="margin-bottom:14px" id="mx-oportunidad"><h2>Oportunidad por cobertura</h2><div class="hint">$ que dejamos de vender por polígonos por debajo de su <b>máximo de zona</b> (modelo lineal, nivel cocina) — última semana. Clic en encabezados para ordenar.</div><div class="kpis" id="mx-oppKpis" style="margin-bottom:10px"></div><div class="scroll"><table id="mx-tbOpp"></table></div></div>
 
   <h1 id="mx-vpareto" style="margin-top:8px">Órdenes <span>· por marca y cocina</span> <span id="mx-vWk" style="font-size:14px;color:var(--mut)"></span></h1>
   <div class="sub">Órdenes de la semana por marca y cocina. Se aplica el filtro de ciudad. RTWT y polígonos son del cierre más reciente.</div>
@@ -818,9 +822,10 @@ function showCountry(c){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(c==='co'&&i===0)||(c==='mx'&&i===1)||(c==='pe'&&i===2)));
   var lbl={co:'Colombia',mx:'México',pe:'Perú'};
   var t=document.querySelector('#topbar .t'); if(t) t.innerHTML='Foodology <span>· Turbo '+lbl[c]+'</span> — RTWT & Polígonos';
-  if(c==='mx' && window.__mxRender){ try{window.__mxRender();}catch(e){console.error(e);} }
-  if(c==='pe' && window.__peRender){ try{window.__peRender();}catch(e){console.error(e);} }
-  setTimeout(function(){window.dispatchEvent(new Event('resize'));},80);
+  var _def=function(fn){requestAnimationFrame(function(){requestAnimationFrame(function(){try{fn();}catch(e){console.error(e);}});});};
+  if(c==='mx' && window.__mxRender){ _def(window.__mxRender); }
+  if(c==='pe' && window.__peRender){ _def(window.__peRender); }
+  setTimeout(function(){window.dispatchEvent(new Event('resize'));},120);
 }
 </script>
 <script>

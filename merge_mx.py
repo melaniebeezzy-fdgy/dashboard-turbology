@@ -97,9 +97,10 @@ function showCountry(c){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(c==='co'&&i===0)||(c==='mx'&&i===1)||(c==='pe'&&i===2)));
   var lbl={co:'Colombia',mx:'México',pe:'Perú'};
   var t=document.querySelector('#topbar .t'); if(t) t.innerHTML='Foodology <span>· Turbo '+lbl[c]+'</span> — RTWT & Polígonos';
-  if(c==='mx' && window.__mxRender){ try{window.__mxRender();}catch(e){console.error(e);} }
-  if(c==='pe' && window.__peRender){ try{window.__peRender();}catch(e){console.error(e);} }
-  setTimeout(function(){window.dispatchEvent(new Event('resize'));},80);
+  var _def=function(fn){requestAnimationFrame(function(){requestAnimationFrame(function(){try{fn();}catch(e){console.error(e);}});});};
+  if(c==='mx' && window.__mxRender){ _def(window.__mxRender); }
+  if(c==='pe' && window.__peRender){ _def(window.__peRender); }
+  setTimeout(function(){window.dispatchEvent(new Event('resize'));},120);
 }
 </script>
 <script>
