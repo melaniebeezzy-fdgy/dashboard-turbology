@@ -217,6 +217,9 @@ def compute(kind, name):
     def s_avg4(x):
         vv = [x['rtw'][i] for i in W4i if x['rtw'][i] is not None]
         return avg(vv) if vv else None
+    def s_avg4prev(x):
+        vv = [x['rtw'][i-1] for i in W4i if i-1 >= 0 and x['rtw'][i-1] is not None]
+        return avg(vv) if vv else None
     def subset_lost(v):
         byc = defaultdict(list)
         for x in v: byc[x['k']].append(x)
@@ -301,6 +304,24 @@ def compute(kind, name):
             avg_cov=round(avg(ac), 1) if ac else None, avg_rt=round(avg(ar), 2) if ar else None,
             best=best, worst=worst, rows=rows))
     n_orders = round(sum(ord_coc.values()))
+    # marca-cocina con RTWT prom móvil 4 sem > 3 (naranja/crítico)
+    brc = []
+    for s in st:
+        a4 = s_avg4(s)
+        if a4 is None or a4 <= 3: continue
+        ap = s_avg4prev(s)
+        brc.append(dict(b=s['b'], k=s['k'], rtwt=round(a4, 2),
+            rtwtPrev=round(ap, 2) if ap is not None else None,
+            rtLast=round(s['rt'], 2) if s['rt'] is not None else None, poly=s['fin']))
+    brc.sort(key=lambda x: -x['rtwt'])
+    # marcas que cambiaron de polígono (Aug 23 -> Aug 30)
+    polychg = []
+    for s in st:
+        if s['cur'] is not None and s['fin'] is not None and s['cur'] != s['fin']:
+            a4 = s_avg4(s)
+            polychg.append(dict(b=s['b'], k=s['k'], city=s['c'], frm=s['cur'], to=s['fin'],
+                rt=round(a4, 2) if a4 is not None else None))
+    polychg.sort(key=lambda x: (x['to']-x['frm']))
     return dict(
         kpi=dict(rtwt=None if rtwt is None else round(rtwt, 2),
                  rtwt_lw=None if rtwt_lw is None else round(rtwt_lw, 2),
@@ -314,7 +335,7 @@ def compute(kind, name):
         weekly_rt=wk_net, weekly_cov=weekly_cov, weekly_lost=weekly_lost, lostrows=lostrows, lostrows_bc=lostrows_bc,
         cities=cities, cocinas=cocinas,
         pareto=pareto, top5=top5, top5_detail=top5_detail,
-        per_cocina=per_cocina, coc_list=coc_list)
+        per_cocina=per_cocina, coc_list=coc_list, brc=brc, polychg=polychg)
 
 data = {'ALL': compute('all', None)}
 for c in CITIES:
