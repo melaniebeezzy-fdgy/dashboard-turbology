@@ -1,0 +1,105 @@
+kitchen,brand,orders,rank
+01 DOCTORES,Mr Beast Burger Turbo,14,1
+01 DOCTORES,Honest Food Turbo,11,2
+01 DOCTORES,AVOCALIA TURBO,8,3
+01 DOCTORES,Green House Turbo,6,4
+01 DOCTORES,Fonda Local turbo,6,5
+02 SAN ANGEL,AVOCALIA TURBO,25,1
+02 SAN ANGEL,BRUNCH & MUNCH TURBO,23,2
+02 SAN ANGEL,Honest Food Turbo,19,3
+02 SAN ANGEL,La Panquequería Turbo,16,4
+02 SAN ANGEL,Mr Beast Burger Turbo,13,5
+03 POLANCO,Mr Beast Burger Turbo,35,1
+03 POLANCO,Honest Food Turbo,33,2
+03 POLANCO,BRUNCH & MUNCH TURBO,32,3
+03 POLANCO,Órale Desayunos Turbo,26,4
+03 POLANCO,AVOCALIA TURBO,26,5
+05 COAPA,Mr Beast Burger Turbo,17,1
+05 COAPA,Honest Food Turbo,13,2
+05 COAPA,Órale Desayunos Turbo,10,3
+05 COAPA,Orale Chilaquiles Turbo,8,4
+05 COAPA,Cocina Corrida turbo,7,5
+09 CHURUBUSCO,Mr Beast Burger Turbo,17,1
+09 CHURUBUSCO,Honest Food Turbo,12,2
+09 CHURUBUSCO,Órale Desayunos Turbo,8,3
+09 CHURUBUSCO,House of Salads Turbo,7,4
+09 CHURUBUSCO,Tastyfoods turbo,6,5
+10 SAN JERONIMO,Mr Beast Burger Turbo,23,1
+10 SAN JERONIMO,Órale Desayunos Turbo,23,2
+10 SAN JERONIMO,Honest Food Turbo,14,3
+10 SAN JERONIMO,Desayunos de la Abuela Turbo,13,4
+10 SAN JERONIMO,BRUNCH & MUNCH TURBO,11,5
+12 DEL VALLE,Honest Food Turbo,13,1
+12 DEL VALLE,Mr Beast Burger Turbo,10,2
+12 DEL VALLE,Desayunos de la Abuela Turbo,6,3
+12 DEL VALLE,Fonda Local turbo,5,4
+12 DEL VALLE,The Egg Spot Turbo,4,5
+13 TEC,Órale Desayunos Turbo,13,1
+13 TEC,Fonda Local turbo,8,2
+13 TEC,Green House Turbo,7,3
+13 TEC,BRUNCH & MUNCH TURBO,6,4
+13 TEC,Honest Food Turbo,5,5
+14 JARDINES,Mr Beast Burger Turbo,20,1
+14 JARDINES,Honest Food Turbo,18,2
+14 JARDINES,La Panquequería Turbo,10,3
+14 JARDINES,BRUNCH & MUNCH TURBO,9,4
+14 JARDINES,AVOCALIA TURBO,8,5
+15 LINDAVISTA,Mr Beast Burger Turbo,10,1
+15 LINDAVISTA,Cocina Corrida turbo,6,2
+15 LINDAVISTA,Green House Turbo,2,3
+15 LINDAVISTA,The Breakfast Club Turbo,2,4
+15 LINDAVISTA,BRUNCH & MUNCH TURBO,2,5
+19 LA CALMA,Mr Beast Burger Turbo,19,1
+19 LA CALMA,Honest Food Turbo,18,2
+19 LA CALMA,AVOCALIA TURBO,11,3
+19 LA CALMA,BRUNCH & MUNCH TURBO,11,4
+19 LA CALMA,Órale Desayunos Turbo,8,5
+21 SANTA TERESITA,Honest Food Turbo,27,1
+21 SANTA TERESITA,AVOCALIA TURBO,26,2
+21 SANTA TERESITA,Fonda Local turbo,14,3
+21 SANTA TERESITA,Mr Beast Burger Turbo,10,4
+21 SANTA TERESITA,The Egg Spot Turbo,8,5
+23 SANTA CATARINA,Orale Chilaquiles Turbo,4,1
+23 SANTA CATARINA,Honest Food Turbo,4,2
+23 SANTA CATARINA,Órale Desayunos Turbo,2,3
+23 SANTA CATARINA,House of Salads Turbo,2,4
+23 SANTA CATARINA,Mr Beast Burger Turbo,2,5
+25 TABACHINES,Mr Beast Burger Turbo,14,1
+25 TABACHINES,Honest Food Turbo,13,2
+25 TABACHINES,La Panquequería Turbo,10,3
+25 TABACHINES,BRUNCH & MUNCH TURBO,5,4
+25 TABACHINES,Green House Turbo,5,5
+26 CIUDAD JUDICIAL,Mr Beast Burger Turbo,5,1
+26 CIUDAD JUDICIAL,Orale Chilaquiles Turbo,2,2
+26 CIUDAD JUDICIAL,La Panquequería Turbo,2,3
+26 CIUDAD JUDICIAL,BRUNCH & MUNCH TURBO,1,4
+26 CIUDAD JUDICIAL,Órale Desayunos Turbo,1,5
+30 LINCOLN,Honest Food Turbo,12,1
+30 LINCOLN,Mr Beast Burger Turbo,12,2
+30 LINCOLN,Orale Chilaquiles Turbo,9,3
+30 LINCOLN,AVOCALIA TURBO,5,4
+30 LINCOLN,Fonda Local turbo,5,5
+31 MONTEJO,Mr Beast Burger Turbo,10,1
+31 MONTEJO,House of Salads Turbo,5,2
+31 MONTEJO,AVOCALIA TURBO,5,3
+31 MONTEJO,Cocina Corrida turbo,4,4
+31 MONTEJO,Honest Food Turbo,4,5
+34 TLAQUEPAQUE,Mr Beast Burger Turbo,12,1
+34 TLAQUEPAQUE,Orale Chilaquiles Turbo,5,2
+34 TLAQUEPAQUE,BRUNCH & MUNCH TURBO,5,3
+34 TLAQUEPAQUE,Órale Desayunos Turbo,4,4
+34 TLAQUEPAQUE,Honest Food Turbo,4,5
+37 CANEK,Mr Beast Burger Turbo,19,1
+37 CANEK,Honest Food Turbo,17,2
+37 CANEK,Cocina Corrida turbo,10,3
+37 CANEK,Green House Turbo,9,4
+37 CANEK,BRUNCH & MUNCH TURBO,7,5
+38 SALTILLO CENTRO,Mr Beast Burger Turbo,12,1
+38 SALTILLO CENTRO,Órale Desayunos Turbo,9,2
+38 SALTILLO CENTRO,Honest Food Turbo,7,3
+38 SALTILLO CENTRO,AVOCALIA TURBO,6,4
+38 SALTILLO CENTRO,Orale Chilaquiles Turbo,6,5
+39 MONTERREY CENTRO,Honest Food Turbo,3,1
+39 MONTERREY CENTRO,Orale Chilaquiles Turbo,2,2
+39 MONTERREY CENTRO,AVOCALIA TURBO,2,3
+39 MONTERREY CENTRO,Mr Beast Burger Turbo,1,4
