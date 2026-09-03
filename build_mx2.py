@@ -8,6 +8,8 @@
 # Genera mx_data.json e inyecta const MX en index_mx.html.
 import json, re, unicodedata, os, csv, sys
 from collections import Counter, defaultdict
+import openpyxl, warnings
+warnings.filterwarnings('ignore')
 
 LV = [1000, 2100, 2400, 2700, 3000]
 IDEAL = 3000
@@ -51,6 +53,21 @@ MXW = RT['labels']              # 8 etiquetas domingo (+6): Jul 12 ... Aug 30
 NW = len(MXW)
 L = NW - 1
 
+# --- polígono viejo de julio (FOODOLOGY.xlsx): Current Size -> Jul 19, FINAL SIZE -> Jul 26 ---
+def _sidn(s):
+    if s is None: return None
+    s = re.sub(r'\.0+$', '', str(s).strip()); return re.sub(r'\D', '', s) or None
+OLDPOLY = {}
+if os.path.exists('FOODOLOGY.xlsx'):
+    _wb = openpyxl.load_workbook('FOODOLOGY.xlsx', data_only=True); _ws = _wb['DETALLE']
+    _h = {c: i for i, c in enumerate(next(_ws.iter_rows(min_row=1, max_row=1, values_only=True)))}
+    for _r in _ws.iter_rows(min_row=2, values_only=True):
+        _sid = _sidn(_r[_h['Store ID']]) if 'Store ID' in _h else None
+        if not _sid: continue
+        _cur = _r[_h['Current Size']] if 'Current Size' in _h else None
+        _fin = _r[_h['FINAL SIZE']] if 'FINAL SIZE' in _h else None
+        OLDPOLY[_sid] = (to_m(_cur), to_m(_fin))
+
 stores = []
 rtrows = []                     # (wi, city, cocina, op, rtwt)
 for sid, info in RT['stores'].items():
@@ -60,6 +77,19 @@ for sid, info in RT['stores'].items():
     op = coc2op.get(coc)
     rtarr = info['rt']          # 8 valores
     pw = [None, None, None, None, to_m(p.get('a9')), to_m(p.get('a16')), to_m(p.get('a23')), to_m(p.get('a30'))]
+    # dos semanas de julio con polígono real (FOODOLOGY): Jul 19 = Current Size, Jul 26 = FINAL SIZE
+    _op = OLDPOLY.get(sid)
+    if _op:
+        if _op[0] is not None: pw[1] = _op[0]   # Jul 19
+        if _op[1] is not None: pw[2] = _op[1]   # Jul 26
+    # semanas de julio sin polígono -> se deja el último dato conocido (arrastre):
+    #   forward-fill huecos internos + back-fill el inicio con el primer dato disponible (Aug 9)
+    _last = None
+    for _i in range(NW):
+        if pw[_i] is not None: _last = pw[_i]
+        elif _last is not None: pw[_i] = _last
+    _first = next((v for v in pw if v is not None), None)
+    pw = [v if v is not None else _first for v in pw]
     stores.append(dict(sid=sid, b=stripbrand(info.get('marca')), k=coc, c=city, op=op,
         rt=rtarr[L], rtlw=rtarr[L-1], cur=pw[L-1], fin=pw[L], prop=None, rtw=rtarr, pw=pw))
     for w, v in enumerate(rtarr):
