@@ -196,17 +196,30 @@ def compute(kind, name):
             lost=round(_lo or 0), addpct=round(100*(_lo/_g), 1) if (_lo and _g) else 0))
     lostrows.sort(key=lambda x: -x['lost'])
     # --- tablas por cocina / ciudad ---
+    W4i = list(range(NW-4, NW))                # ventana móvil 4 semanas
+    def s_avg4(x):
+        vv = [x['rtw'][i] for i in W4i if x['rtw'][i] is not None]
+        return avg(vv) if vv else None
+    def subset_lost(v):
+        byc = defaultdict(list)
+        for x in v: byc[x['k']].append(x)
+        tot = 0.0
+        for c, vv in byc.items():
+            _g, _r, _lo = coc_lost(vv, L)
+            if _lo: tot += _lo
+        return round(tot)
     def grp_rows(keyf, keyidx):
         by = defaultdict(list)
         for s in st: by[keyf(s)].append(s)
         out = []
         for k, v in by.items():
             f = [x['fin'] for x in v if x['fin'] is not None]
-            rr, rl = rt_lp(keyidx, k)
+            a4 = avg([s_avg4(x) for x in v if s_avg4(x) is not None])   # RTWT prom. móvil 4 sem
+            cv = None if not f else round(100*avg([x['fin']/x['mx'] for x in v if x['fin'] is not None and x.get('mx')]), 1)
             out.append(dict(k=k, city=Counter(x['c'] for x in v).most_common(1)[0][0],
-                n=len(v), rtwt=None if rr is None else round(rr, 2),
-                drt=None if (rr is None or rl is None) else round(rr-rl, 2),
-                cov=None if not f else round(100*avg([x['fin']/x['mx'] for x in v if x['fin'] is not None and x.get('mx')]), 1), cov_prop=None,
+                n=len(v), rtwt=None if a4 is None else round(a4, 2),
+                estado=None if a4 is None else round(a4, 2),
+                cov=cv, cov_prop=None, lost=subset_lost(v),
                 dt=[dict(b=x['b'], fin=x['fin'], prop=x['prop']) for x in v]))
         out.sort(key=lambda x: x['cov'] if x['cov'] is not None else 999)
         return out
