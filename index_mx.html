@@ -425,7 +425,7 @@ window.showMxHeat=function(ci,w){
 function renderBrc(){
   const rows=(sub().brc||[]);
   document.getElementById('tbBrc').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">RTWT últ. sem</th><th class="num">Polígono</th></tr>'+
-    (rows.length?rows.map(r=>`<tr class="sev-${r.rt>=8?'bad':'warn'}"><td>${r.b}</td><td>${r.k}</td><td class="num">${rtfmt(r.rt)} <span style="font-size:11px">${(r.rt!=null&&r.rtPrev!=null)?delta(+(r.rt-r.rtPrev).toFixed(2),true):''}</span></td><td class="num">${r.poly==null?'–':pillSize(LV[lvlIdx(r.poly)])}</td></tr>`).join('')
+    (rows.length?rows.map(r=>`<tr class="sev-${r.rt>=8?'bad':'warn'}"><td>${r.b}</td><td>${r.k}</td><td class="num" style="white-space:nowrap"><span style="display:inline-block;min-width:58px;text-align:right">${rtfmt(r.rt)}</span> <span style="font-size:11px;display:inline-block;min-width:60px;text-align:left">${(r.rt!=null&&r.rtPrev!=null)?delta(+(r.rt-r.rtPrev).toFixed(2),true):''}</span></td><td class="num">${r.poly==null?'–':pillSize(LV[lvlIdx(r.poly)])}</td></tr>`).join('')
      :'<tr><td colspan="4" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>');
 }
 function renderPolyChg(){
