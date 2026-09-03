@@ -304,23 +304,20 @@ def compute(kind, name):
             avg_cov=round(avg(ac), 1) if ac else None, avg_rt=round(avg(ar), 2) if ar else None,
             best=best, worst=worst, rows=rows))
     n_orders = round(sum(ord_coc.values()))
-    # marca-cocina con RTWT prom móvil 4 sem > 3 (naranja/crítico)
+    # marca-cocina con RTWT de la ÚLTIMA semana > 3 (naranja/crítico)
     brc = []
     for s in st:
-        a4 = s_avg4(s)
-        if a4 is None or a4 <= 3: continue
-        ap = s_avg4prev(s)
-        brc.append(dict(b=s['b'], k=s['k'], rtwt=round(a4, 2),
-            rtwtPrev=round(ap, 2) if ap is not None else None,
-            rtLast=round(s['rt'], 2) if s['rt'] is not None else None, poly=s['fin']))
-    brc.sort(key=lambda x: -x['rtwt'])
+        rl = s['rt']                       # RTWT última semana (Aug 30)
+        if rl is None or rl <= 3: continue
+        brc.append(dict(b=s['b'], k=s['k'], rt=round(rl, 2),
+            rtPrev=round(s['rtlw'], 2) if s['rtlw'] is not None else None, poly=s['fin']))
+    brc.sort(key=lambda x: -x['rt'])
     # marcas que cambiaron de polígono (Aug 23 -> Aug 30)
     polychg = []
     for s in st:
         if s['cur'] is not None and s['fin'] is not None and s['cur'] != s['fin']:
-            a4 = s_avg4(s)
             polychg.append(dict(b=s['b'], k=s['k'], city=s['c'], frm=s['cur'], to=s['fin'],
-                rt=round(a4, 2) if a4 is not None else None))
+                rt=round(s['rt'], 2) if s['rt'] is not None else None))   # RTWT última semana
     polychg.sort(key=lambda x: (x['to']-x['frm']))
     return dict(
         kpi=dict(rtwt=None if rtwt is None else round(rtwt, 2),
