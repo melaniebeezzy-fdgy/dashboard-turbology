@@ -255,8 +255,9 @@ for o in OPS:
     r = compute('op', o)
     if r: data['op::'+o] = r
 
+mx_stores = [dict(b=s['b'], k=s['k'], c=s['c'], op=s['op'], fin=s['pw']) for s in stores]
 MX = dict(updated='2026-08-24', ideal=IDEAL, LV=LV, cities=CITIES, ops=OPS, weeks=MXW,
-          sales_week=sales_week, prev_week=prev_week, data=data)
+          sales_week=sales_week, prev_week=prev_week, data=data, stores=mx_stores)
 json.dump(MX, open('mx_data.json', 'w'), ensure_ascii=False)
 k = data['ALL']['kpi']
 print('MX v2 | semanas', MXW)
