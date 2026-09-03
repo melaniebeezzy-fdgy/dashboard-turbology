@@ -228,7 +228,7 @@ json.dump(poly_history, open(PH_PATH, 'w', encoding='utf-8'), ensure_ascii=False
 print('poly_history: %d semanas guardadas (última estampada: %s)' % (len(poly_history), WEEKS[LIw]))
 
 # ---- GMV por marca-cocina (prom. últimas 4 semanas) para métrica de $ perdido por cobertura ----
-MKT = 'marketing_stores_wh.xlsx'   # marketing + última semana completa desde warehouse
+MKT = 'marketing_stores_wh2.xlsx'   # marketing + Aug17/Aug24 completas desde warehouse
 if os.path.exists(MKT):
     def _sac(x): return ''.join(c for c in unicodedata.normalize('NFD', str(x or '')) if unicodedata.category(c) != 'Mn')
     def _canon(b):

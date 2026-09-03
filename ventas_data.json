@@ -1,7 +1,7 @@
 {
- "sales_week": "17/08–23/08/2026",
- "rtwt_week": "Aug 23",
- "generated": "2026-08-27",
+ "sales_week": "24/08–30/08/2026",
+ "rtwt_week": "Aug 30",
+ "generated": "2026-09-02",
  "cities": [
   "ALL",
   "Barranquilla",
@@ -15,289 +15,289 @@
  "data": {
   "ALL": {
    "meta": {
-    "total_orders": 9045,
+    "total_orders": 8534,
     "n_brands": 40,
-    "top5_share": 57.8
+    "top5_share": 60.0
    },
    "pareto": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 1804,
-     "pct": 19.9,
-     "cum": 19.9
+     "orders": 1870,
+     "pct": 21.9,
+     "cum": 21.9
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 1036,
-     "pct": 11.5,
-     "cum": 31.4
+     "orders": 925,
+     "pct": 10.8,
+     "cum": 32.8
     },
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 858,
-     "pct": 9.5,
-     "cum": 40.9
-    },
-    {
-     "brand": "La Cuadra Turbo",
-     "cb": "la cuadra",
-     "orders": 802,
-     "pct": 8.9,
-     "cum": 49.8
+     "orders": 896,
+     "pct": 10.5,
+     "cum": 43.3
     },
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 729,
-     "pct": 8.1,
-     "cum": 57.8
+     "orders": 739,
+     "pct": 8.7,
+     "cum": 51.9
     },
     {
-     "brand": "Mr Beast Burger Turbo",
-     "cb": "mr beast burger",
-     "orders": 486,
-     "pct": 5.4,
-     "cum": 63.2
+     "brand": "La Cuadra Turbo",
+     "cb": "la cuadra",
+     "orders": 689,
+     "pct": 8.1,
+     "cum": 60.0
     },
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 466,
-     "pct": 5.2,
-     "cum": 68.3
+     "orders": 428,
+     "pct": 5.0,
+     "cum": 65.0
+    },
+    {
+     "brand": "Mr Beast Burger Turbo",
+     "cb": "mr beast burger",
+     "orders": 428,
+     "pct": 5.0,
+     "cum": 70.0
     },
     {
      "brand": "Desayunos de la Abuela Turbo",
      "cb": "desayunos de la abuela",
-     "orders": 438,
-     "pct": 4.8,
-     "cum": 73.2
+     "orders": 418,
+     "pct": 4.9,
+     "cum": 74.9
     },
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 400,
+     "orders": 377,
      "pct": 4.4,
-     "cum": 77.6
+     "cum": 79.3
     },
     {
      "brand": "Ñamgucheria Turbo",
      "cb": "namgucheria",
-     "orders": 354,
+     "orders": 337,
      "pct": 3.9,
-     "cum": 81.5
+     "cum": 83.3
     },
     {
      "brand": "The Breakfast Club Turbo",
      "cb": "the breakfast club",
-     "orders": 331,
+     "orders": 312,
      "pct": 3.7,
-     "cum": 85.2
+     "cum": 86.9
     },
     {
      "brand": "Monteverde Turbo",
      "cb": "monteverde",
-     "orders": 164,
-     "pct": 1.8,
-     "cum": 87.0
-    },
-    {
-     "brand": "San Jerónimo Turbo",
-     "cb": "helados san jeronimo",
-     "orders": 120,
-     "pct": 1.3,
-     "cum": 88.3
-    },
-    {
-     "brand": "House of Salads Turbo",
-     "cb": "house of salads",
-     "orders": 87,
-     "pct": 1.0,
-     "cum": 89.3
+     "orders": 131,
+     "pct": 1.5,
+     "cum": 88.5
     },
     {
      "brand": "Frost By Oreo Turbo",
      "cb": "frost",
-     "orders": 82,
-     "pct": 0.9,
-     "cum": 90.2
+     "orders": 110,
+     "pct": 1.3,
+     "cum": 89.8
     },
     {
-     "brand": "The Egg Spot Turbo",
-     "cb": "the egg spot",
-     "orders": 72,
-     "pct": 0.8,
-     "cum": 91.0
-    },
-    {
-     "brand": "Señor Burrito Turbo",
-     "cb": "senor burrito",
-     "orders": 70,
-     "pct": 0.8,
-     "cum": 91.8
+     "brand": "San Jerónimo Turbo",
+     "cb": "helados san jeronimo",
+     "orders": 98,
+     "pct": 1.1,
+     "cum": 90.9
     },
     {
      "brand": "Almuerzos de la Casa Turbo",
      "cb": "almuerzos d la casa",
-     "orders": 67,
-     "pct": 0.7,
-     "cum": 92.5
+     "orders": 79,
+     "pct": 0.9,
+     "cum": 91.8
     },
     {
-     "brand": "Desgranados & Co Turbo",
-     "cb": "desgranados co",
-     "orders": 65,
-     "pct": 0.7,
-     "cum": 93.2
+     "brand": "House of Salads Turbo",
+     "cb": "house of salads",
+     "orders": 72,
+     "pct": 0.8,
+     "cum": 92.7
     },
     {
-     "brand": "Desayunos mi Tierrita Turbo",
-     "cb": "desayunos mi tierrita",
-     "orders": 60,
-     "pct": 0.7,
-     "cum": 93.9
-    },
-    {
-     "brand": "Alba Vegetarian Turbo",
-     "cb": "alba vegetarian",
-     "orders": 55,
-     "pct": 0.6,
-     "cum": 94.5
-    },
-    {
-     "brand": "La Casa Mexicana Turbo",
-     "cb": "la casa mexicana",
-     "orders": 45,
-     "pct": 0.5,
-     "cum": 95.0
-    },
-    {
-     "brand": "Pret Sandwich Bistro Turbo",
-     "cb": "pret sandwich bistro",
-     "orders": 42,
-     "pct": 0.5,
-     "cum": 95.4
-    },
-    {
-     "brand": "Vicio Turbo",
-     "cb": "vicio",
-     "orders": 41,
-     "pct": 0.5,
-     "cum": 95.9
+     "brand": "The Egg Spot Turbo",
+     "cb": "the egg spot",
+     "orders": 70,
+     "pct": 0.8,
+     "cum": 93.5
     },
     {
      "brand": "El Jefe Turbo",
      "cb": "sanduches el jefe",
-     "orders": 41,
-     "pct": 0.5,
+     "orders": 61,
+     "pct": 0.7,
+     "cum": 94.2
+    },
+    {
+     "brand": "La Casa Mexicana Turbo",
+     "cb": "la casa mexicana",
+     "orders": 54,
+     "pct": 0.6,
+     "cum": 94.8
+    },
+    {
+     "brand": "Señor Burrito Turbo",
+     "cb": "senor burrito",
+     "orders": 52,
+     "pct": 0.6,
+     "cum": 95.5
+    },
+    {
+     "brand": "Desgranados & Co Turbo",
+     "cb": "desgranados co",
+     "orders": 50,
+     "pct": 0.6,
+     "cum": 96.0
+    },
+    {
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
+     "orders": 34,
+     "pct": 0.4,
      "cum": 96.4
-    },
-    {
-     "brand": "Foodology Court Turbo",
-     "cb": "foodology",
-     "orders": 38,
-     "pct": 0.4,
-     "cum": 96.8
-    },
-    {
-     "brand": "El Ejecutivo Turbo",
-     "cb": "el ejecutivo",
-     "orders": 37,
-     "pct": 0.4,
-     "cum": 97.2
-    },
-    {
-     "brand": "Acpm Corrientazo Turbo",
-     "cb": "acpm corrientazo",
-     "orders": 36,
-     "pct": 0.4,
-     "cum": 97.6
-    },
-    {
-     "brand": "Bottaniko Turbo",
-     "cb": "bottaniko",
-     "orders": 33,
-     "pct": 0.4,
-     "cum": 97.9
     },
     {
      "brand": "House Of Burgers Turbo",
      "cb": "house of burgers",
+     "orders": 30,
+     "pct": 0.4,
+     "cum": 96.8
+    },
+    {
+     "brand": "Pret Sandwich Bistro Turbo",
+     "cb": "pret sandwich bistro",
+     "orders": 28,
+     "pct": 0.3,
+     "cum": 97.1
+    },
+    {
+     "brand": "Desayunos mi Tierrita Turbo",
+     "cb": "desayunos mi tierrita",
+     "orders": 26,
+     "pct": 0.3,
+     "cum": 97.4
+    },
+    {
+     "brand": "Bottaniko Turbo",
+     "cb": "bottaniko",
+     "orders": 26,
+     "pct": 0.3,
+     "cum": 97.7
+    },
+    {
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
      "orders": 24,
      "pct": 0.3,
-     "cum": 98.2
+     "cum": 98.0
     },
     {
-     "brand": "Local Cocina Consciente turbo",
-     "cb": "local cocina consciente",
-     "orders": 21,
-     "pct": 0.2,
-     "cum": 98.4
-    },
-    {
-     "brand": "Doritos Locos By Dorito Turbo",
-     "cb": "doritos locos",
-     "orders": 20,
-     "pct": 0.2,
-     "cum": 98.7
+     "brand": "Selvatiko Turbo",
+     "cb": "selvatiko",
+     "orders": 22,
+     "pct": 0.3,
+     "cum": 98.3
     },
     {
      "brand": "Casa Árabe Turbo",
      "cb": "casa arabe",
      "orders": 20,
      "pct": 0.2,
-     "cum": 98.9
-    },
-    {
-     "brand": "Selvatiko Turbo",
-     "cb": "selvatiko",
-     "orders": 20,
-     "pct": 0.2,
-     "cum": 99.1
-    },
-    {
-     "brand": "Cacerola Turbo",
-     "cb": "cacerola",
-     "orders": 18,
-     "pct": 0.2,
-     "cum": 99.3
+     "cum": 98.5
     },
     {
      "brand": "Burrito Cantina Turbo",
      "cb": "burrito cantina",
-     "orders": 16,
+     "orders": 20,
      "pct": 0.2,
-     "cum": 99.5
+     "cum": 98.7
     },
     {
-     "brand": "Numa Cocina Mediterranea - Turbo",
-     "cb": "numa cocina mediterranea",
+     "brand": "Vicio Turbo",
+     "cb": "vicio",
+     "orders": 19,
+     "pct": 0.2,
+     "cum": 99.0
+    },
+    {
+     "brand": "Foodology Court Turbo",
+     "cb": "foodology",
+     "orders": 18,
+     "pct": 0.2,
+     "cum": 99.2
+    },
+    {
+     "brand": "El Ejecutivo Turbo",
+     "cb": "el ejecutivo",
      "orders": 15,
      "pct": 0.2,
-     "cum": 99.6
+     "cum": 99.3
+    },
+    {
+     "brand": "Cacerola Turbo",
+     "cb": "cacerola",
+     "orders": 13,
+     "pct": 0.2,
+     "cum": 99.5
     },
     {
      "brand": "La Cuadra Desayunos Turbo",
      "cb": "la cuadra desayunos",
      "orders": 12,
      "pct": 0.1,
-     "cum": 99.8
+     "cum": 99.6
     },
     {
      "brand": "Mañanero Diario Turbo",
      "cb": "mananero diario",
-     "orders": 11,
+     "orders": 8,
+     "pct": 0.1,
+     "cum": 99.7
+    },
+    {
+     "brand": "Numa Cocina Mediterranea - Turbo",
+     "cb": "numa cocina mediterranea",
+     "orders": 7,
+     "pct": 0.1,
+     "cum": 99.8
+    },
+    {
+     "brand": "Local Cocina Consciente turbo",
+     "cb": "local cocina consciente",
+     "orders": 6,
      "pct": 0.1,
      "cum": 99.9
     },
     {
+     "brand": "Doritos Locos By Dorito Turbo",
+     "cb": "doritos locos",
+     "orders": 6,
+     "pct": 0.1,
+     "cum": 100.0
+    },
+    {
      "brand": "El Calentao Turbo",
      "cb": "el calentao",
-     "orders": 9,
-     "pct": 0.1,
+     "orders": 4,
+     "pct": 0.0,
      "cum": 100.0
     }
    ],
@@ -305,393 +305,393 @@
     "avocalia",
     "burritos co",
     "brunch munch",
-    "la cuadra",
-    "green house"
+    "green house",
+    "la cuadra"
    ],
    "top5_detail": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 1804,
-     "wow": 3.0,
-     "orders_prev": 1751,
-     "avg_rt": 1.73,
-     "avg_cov": 91.1,
-     "drt": -0.3,
-     "dcov": -0.0,
-     "best": "Usaquén",
-     "worst": "Cartagena",
+     "orders": 1870,
+     "wow": 3.7,
+     "orders_prev": 1804,
+     "avg_rt": 1.41,
+     "avg_cov": 96.7,
+     "drt": -0.32,
+     "dcov": 0.0,
+     "best": "Manila",
+     "worst": "Chicó",
      "rows": [
       {
        "coc": "Manila",
-       "orders": 321,
+       "orders": 331,
        "rank": 1,
-       "nbrands": 34,
-       "rt": 0.78,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Laureles",
-       "orders": 169,
-       "rank": 1,
-       "nbrands": 32,
-       "rt": 1.13,
+       "nbrands": 33,
+       "rt": 0.52,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Chicó",
-       "orders": 152,
+       "orders": 206,
        "rank": 1,
-       "nbrands": 15,
-       "rt": 2.45,
+       "nbrands": 13,
+       "rt": 2.15,
        "size": 3000,
        "cov": 100.0,
        "sev": "warn"
       },
       {
-       "coc": "Calle 109",
-       "orders": 137,
+       "coc": "Laureles",
+       "orders": 197,
        "rank": 1,
-       "nbrands": 30,
-       "rt": 1.95,
+       "nbrands": 32,
+       "rt": 0.87,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Barranquilla",
-       "orders": 120,
+       "orders": 146,
+       "rank": 1,
+       "nbrands": 33,
+       "rt": 1.6,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 126,
        "rank": 2,
-       "nbrands": 34,
-       "rt": 1.46,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 28,
+       "rt": 1.97,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Cabecera (Bga)",
        "orders": 114,
        "rank": 1,
-       "nbrands": 27,
-       "rt": 0.92,
+       "nbrands": 29,
+       "rt": 0.9,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Parque 93 / Castellana",
+       "orders": 104,
+       "rank": 1,
+       "nbrands": 26,
+       "rt": 1.72,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Chapinero",
-       "orders": 102,
-       "rank": 1,
+       "orders": 87,
+       "rank": 2,
        "nbrands": 36,
-       "rt": 2.06,
-       "size": 2700,
-       "cov": 90.0,
+       "rt": 2.1,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
       },
       {
-       "coc": "Parque 93 / Castellana",
-       "orders": 96,
-       "rank": 1,
-       "nbrands": 28,
-       "rt": 1.91,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Andes",
-       "orders": 83,
-       "rank": 1,
-       "nbrands": 30,
-       "rt": 1.8,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
        "coc": "Usaquén",
-       "orders": 79,
+       "orders": 84,
        "rank": 1,
-       "nbrands": 29,
-       "rt": 0.62,
+       "nbrands": 27,
+       "rt": 0.63,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
-       "coc": "Villa del Prado",
-       "orders": 75,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": 1.52,
-       "size": 2400,
-       "cov": 80.0,
+       "coc": "Andes",
+       "orders": 74,
+       "rank": 1,
+       "nbrands": 27,
+       "rt": 1.04,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Arrecife",
-       "orders": 67,
+       "orders": 72,
        "rank": 1,
-       "nbrands": 27,
-       "rt": 2.42,
+       "nbrands": 23,
+       "rt": 1.57,
        "size": 2700,
        "cov": 90.0,
-       "sev": "warn"
+       "sev": "ok"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 70,
+       "rank": 1,
+       "nbrands": 29,
+       "rt": 1.39,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Colina",
-       "orders": 58,
+       "orders": 59,
        "rank": 2,
-       "nbrands": 31,
-       "rt": 1.08,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 27,
+       "rt": 1.76,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Cartagena",
        "orders": 53,
        "rank": 1,
-       "nbrands": 20,
-       "rt": 2.98,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
+       "nbrands": 18,
+       "rt": 1.63,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Ingenio",
-       "orders": 53,
+       "orders": 43,
        "rank": 1,
-       "nbrands": 21,
-       "rt": 1.78,
-       "size": 2400,
-       "cov": 80.0,
+       "nbrands": 17,
+       "rt": 1.37,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Kennedy",
+       "orders": 30,
+       "rank": 3,
+       "nbrands": 23,
+       "rt": 1.26,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Santa Mónica",
+       "orders": 30,
+       "rank": 2,
+       "nbrands": 24,
+       "rt": 1.35,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Cedritos",
-       "orders": 50,
-       "rank": 2,
-       "nbrands": 30,
+       "orders": 25,
+       "rank": 4,
+       "nbrands": 20,
        "rt": null,
        "size": null,
        "cov": null,
        "sev": "ok"
       },
       {
-       "coc": "Santa Mónica",
-       "orders": 34,
-       "rank": 1,
-       "nbrands": 25,
-       "rt": 2.27,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Kennedy",
-       "orders": 23,
-       "rank": 4,
-       "nbrands": 24,
-       "rt": 1.68,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
        "coc": "San Fernando",
-       "orders": 18,
-       "rank": 4,
-       "nbrands": 20,
-       "rt": 2.4,
+       "orders": 19,
+       "rank": 3,
+       "nbrands": 18,
+       "rt": 1.57,
        "size": 2400,
        "cov": 80.0,
-       "sev": "warn"
+       "sev": "ok"
       }
      ]
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 1036,
-     "wow": 10.6,
-     "orders_prev": 937,
-     "avg_rt": 1.97,
-     "avg_cov": 90.7,
-     "drt": 0.52,
+     "orders": 925,
+     "wow": -10.7,
+     "orders_prev": 1036,
+     "avg_rt": 1.87,
+     "avg_cov": 94.4,
+     "drt": -0.1,
      "dcov": 0.0,
-     "best": "Usaquén",
-     "worst": "Chicó",
+     "best": "Manila",
+     "worst": "Arrecife",
      "rows": [
       {
        "coc": "Manila",
-       "orders": 141,
+       "orders": 115,
        "rank": 3,
-       "nbrands": 34,
-       "rt": 0.95,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Cabecera (Bga)",
-       "orders": 107,
-       "rank": 2,
-       "nbrands": 27,
-       "rt": 0.65,
+       "nbrands": 33,
+       "rt": 0.46,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Laureles",
-       "orders": 104,
+       "orders": 108,
        "rank": 2,
        "nbrands": 32,
-       "rt": 0.77,
-       "size": 2700,
-       "cov": 90.0,
+       "rt": 1.22,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Cabecera (Bga)",
+       "orders": 103,
+       "rank": 2,
+       "nbrands": 29,
+       "rt": 0.71,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Calle 109",
-       "orders": 101,
+       "orders": 87,
        "rank": 3,
-       "nbrands": 30,
-       "rt": 3.1,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "bad"
+       "nbrands": 28,
+       "rt": 2.86,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Colina",
+       "orders": 64,
+       "rank": 1,
+       "nbrands": 27,
+       "rt": 1.26,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Barranquilla",
+       "orders": 63,
+       "rank": 4,
+       "nbrands": 33,
+       "rt": 1.46,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Andes",
-       "orders": 81,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": 1.08,
-       "size": 2700,
-       "cov": 90.0,
+       "orders": 60,
+       "rank": 3,
+       "nbrands": 27,
+       "rt": 1.1,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Villa del Prado",
-       "orders": 77,
-       "rank": 1,
-       "nbrands": 30,
+       "orders": 60,
+       "rank": 2,
+       "nbrands": 29,
        "rt": null,
        "size": null,
        "cov": null,
        "sev": "ok"
       },
       {
-       "coc": "Colina",
-       "orders": 71,
-       "rank": 1,
-       "nbrands": 31,
-       "rt": 1.06,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
        "coc": "Chapinero",
-       "orders": 51,
-       "rank": 4,
-       "nbrands": 36,
-       "rt": 1.58,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Barranquilla",
-       "orders": 50,
+       "orders": 58,
        "rank": 5,
-       "nbrands": 34,
-       "rt": 1.45,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Kennedy",
-       "orders": 50,
-       "rank": 1,
-       "nbrands": 24,
-       "rt": 2.26,
+       "nbrands": 36,
+       "rt": 2.31,
        "size": 2700,
        "cov": 90.0,
        "sev": "warn"
       },
       {
        "coc": "Parque 93 / Castellana",
-       "orders": 50,
+       "orders": 49,
        "rank": 3,
-       "nbrands": 28,
-       "rt": 1.34,
+       "nbrands": 26,
+       "rt": 1.88,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
+       "coc": "Kennedy",
+       "orders": 46,
+       "rank": 2,
+       "nbrands": 23,
+       "rt": 0.87,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
        "coc": "Cedritos",
-       "orders": 45,
-       "rank": 3,
-       "nbrands": 30,
+       "orders": 37,
+       "rank": 2,
+       "nbrands": 20,
        "rt": null,
        "size": null,
        "cov": null,
        "sev": "ok"
       },
       {
-       "coc": "Cartagena",
-       "orders": 38,
-       "rank": 3,
-       "nbrands": 20,
-       "rt": 2.52,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
        "coc": "Usaquén",
-       "orders": 31,
-       "rank": 5,
-       "nbrands": 29,
-       "rt": 0.4,
+       "orders": 28,
+       "rank": 6,
+       "nbrands": 27,
+       "rt": 1.44,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
-       "coc": "San Fernando",
-       "orders": 20,
-       "rank": 3,
-       "nbrands": 20,
-       "rt": 2.34,
+       "coc": "Cartagena",
+       "orders": 19,
+       "rank": 4,
+       "nbrands": 18,
+       "rt": 1.72,
        "size": 2700,
        "cov": 90.0,
-       "sev": "warn"
+       "sev": "ok"
+      },
+      {
+       "coc": "San Fernando",
+       "orders": 12,
+       "rank": 4,
+       "nbrands": 18,
+       "rt": 1.33,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
       },
       {
        "coc": "Ingenio",
-       "orders": 14,
+       "orders": 7,
        "rank": 3,
-       "nbrands": 21,
-       "rt": 1.37,
-       "size": 2400,
-       "cov": 80.0,
+       "nbrands": 17,
+       "rt": 1.72,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Santa Mónica",
-       "orders": 4,
-       "rank": 9,
-       "nbrands": 25,
+       "orders": 6,
+       "rank": 6,
+       "nbrands": 24,
        "rt": null,
        "size": null,
        "cov": null,
@@ -699,12 +699,22 @@
       },
       {
        "coc": "Chicó",
+       "orders": 2,
+       "rank": 9,
+       "nbrands": 13,
+       "rt": 2.22,
+       "size": 2100,
+       "cov": 70.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Arrecife",
        "orders": 1,
-       "rank": 11,
-       "nbrands": 15,
-       "rt": 8.72,
-       "size": 2400,
-       "cov": 80.0,
+       "rank": 22,
+       "nbrands": 23,
+       "rt": 7.32,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "bad"
       }
      ]
@@ -712,379 +722,194 @@
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 858,
-     "wow": 27.7,
-     "orders_prev": 672,
-     "avg_rt": 2.13,
-     "avg_cov": 83.5,
-     "drt": -0.2,
-     "dcov": -0.0,
-     "best": "Kennedy",
-     "worst": "San Fernando",
+     "orders": 896,
+     "wow": 4.4,
+     "orders_prev": 858,
+     "avg_rt": 2.39,
+     "avg_cov": 91.2,
+     "drt": 0.27,
+     "dcov": 0.0,
+     "best": "Usaquén",
+     "worst": "Chapinero",
      "rows": [
       {
        "coc": "Manila",
-       "orders": 183,
+       "orders": 219,
        "rank": 2,
-       "nbrands": 34,
-       "rt": 0.98,
+       "nbrands": 33,
+       "rt": 0.93,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Calle 109",
-       "orders": 134,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": 1.78,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Chicó",
-       "orders": 123,
-       "rank": 2,
-       "nbrands": 15,
-       "rt": 3.86,
-       "size": 2700,
-       "cov": 90.0,
+       "orders": 153,
+       "rank": 1,
+       "nbrands": 28,
+       "rt": 3.18,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "bad"
       },
       {
-       "coc": "Chapinero",
-       "orders": 88,
-       "rank": 3,
-       "nbrands": 36,
-       "rt": 2.24,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
+       "coc": "Chicó",
+       "orders": 116,
+       "rank": 2,
+       "nbrands": 13,
+       "rt": 3.83,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "bad"
       },
       {
        "coc": "Laureles",
-       "orders": 73,
+       "orders": 72,
        "rank": 3,
        "nbrands": 32,
-       "rt": 1.68,
+       "rt": 1.79,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Andes",
-       "orders": 69,
-       "rank": 3,
-       "nbrands": 30,
-       "rt": 2.41,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 44,
+       "orders": 68,
        "rank": 2,
-       "nbrands": 29,
-       "rt": 0.79,
+       "nbrands": 27,
+       "rt": 1.64,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
-       "coc": "Cedritos",
-       "orders": 41,
+       "coc": "Chapinero",
+       "orders": 60,
+       "rank": 4,
+       "nbrands": 36,
+       "rt": 6.03,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 46,
+       "rank": 4,
+       "nbrands": 27,
+       "rt": 0.75,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Cabecera (Bga)",
+       "orders": 33,
        "rank": 5,
-       "nbrands": 30,
+       "nbrands": 29,
+       "rt": 1.59,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Barranquilla",
+       "orders": 30,
+       "rank": 7,
+       "nbrands": 33,
+       "rt": 4.39,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 29,
+       "rank": 6,
+       "nbrands": 29,
+       "rt": 2.53,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Cedritos",
+       "orders": 24,
+       "rank": 5,
+       "nbrands": 20,
        "rt": null,
        "size": null,
        "cov": null,
        "sev": "ok"
       },
       {
-       "coc": "Barranquilla",
-       "orders": 24,
+       "coc": "Parque 93 / Castellana",
+       "orders": 12,
        "rank": 9,
-       "nbrands": 34,
-       "rt": 4.15,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "bad"
-      },
-      {
-       "coc": "Cabecera (Bga)",
-       "orders": 18,
-       "rank": 9,
-       "nbrands": 27,
-       "rt": 1.02,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Villa del Prado",
-       "orders": 14,
-       "rank": 10,
-       "nbrands": 30,
-       "rt": 2.22,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 26,
+       "rt": 2.54,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
       },
       {
        "coc": "Kennedy",
-       "orders": 11,
+       "orders": 10,
        "rank": 7,
-       "nbrands": 24,
-       "rt": 0.69,
-       "size": 2100,
-       "cov": 70.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Parque 93 / Castellana",
-       "orders": 11,
-       "rank": 10,
-       "nbrands": 28,
-       "rt": 2.9,
+       "nbrands": 23,
+       "rt": 1.35,
        "size": 2400,
        "cov": 80.0,
-       "sev": "warn"
+       "sev": "ok"
       },
       {
        "coc": "Santa Mónica",
-       "orders": 10,
-       "rank": 6,
-       "nbrands": 25,
-       "rt": 1.24,
-       "size": 2100,
-       "cov": 70.0,
+       "orders": 8,
+       "rank": 3,
+       "nbrands": 24,
+       "rt": 3.34,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Arrecife",
+       "orders": 5,
+       "rank": 12,
+       "nbrands": 23,
+       "rt": 2.0,
+       "size": 2400,
+       "cov": 80.0,
        "sev": "warn"
       },
       {
        "coc": "Ingenio",
-       "orders": 9,
-       "rank": 5,
-       "nbrands": 21,
-       "rt": 2.44,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "San Fernando",
-       "orders": 3,
-       "rank": 12,
-       "nbrands": 20,
-       "rt": 4.22,
-       "size": 2100,
-       "cov": 70.0,
-       "sev": "bad"
-      },
-      {
-       "coc": "Cartagena",
-       "orders": 2,
-       "rank": 14,
-       "nbrands": 20,
-       "rt": 1.48,
-       "size": 2100,
-       "cov": 70.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Arrecife",
-       "orders": 1,
-       "rank": 24,
-       "nbrands": 27,
-       "rt": 2.03,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      }
-     ]
-    },
-    {
-     "brand": "La Cuadra Turbo",
-     "cb": "la cuadra",
-     "orders": 802,
-     "wow": 35.0,
-     "orders_prev": 594,
-     "avg_rt": 1.3,
-     "avg_cov": 90.0,
-     "drt": -0.49,
-     "dcov": 0.0,
-     "best": "Cabecera (Bga)",
-     "worst": "Arrecife",
-     "rows": [
-      {
-       "coc": "Cabecera (Bga)",
-       "orders": 91,
-       "rank": 3,
-       "nbrands": 27,
-       "rt": 0.41,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Manila",
-       "orders": 87,
-       "rank": 5,
-       "nbrands": 34,
-       "rt": 0.89,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Calle 109",
-       "orders": 69,
-       "rank": 4,
-       "nbrands": 30,
+       "orders": 5,
+       "rank": 7,
+       "nbrands": 17,
        "rt": 1.77,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
-       "coc": "Andes",
-       "orders": 68,
-       "rank": 4,
-       "nbrands": 30,
-       "rt": 1.18,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Barranquilla",
-       "orders": 63,
-       "rank": 3,
-       "nbrands": 34,
-       "rt": 0.58,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Laureles",
-       "orders": 61,
-       "rank": 5,
-       "nbrands": 32,
-       "rt": 1.36,
+       "coc": "San Fernando",
+       "orders": 4,
+       "rank": 10,
+       "nbrands": 18,
+       "rt": 1.07,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Cartagena",
-       "orders": 44,
-       "rank": 2,
-       "nbrands": 20,
-       "rt": 1.38,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Parque 93 / Castellana",
-       "orders": 44,
-       "rank": 4,
-       "nbrands": 28,
-       "rt": 1.2,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Chapinero",
-       "orders": 41,
-       "rank": 6,
-       "nbrands": 36,
-       "rt": 1.39,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 41,
-       "rank": 3,
-       "nbrands": 29,
-       "rt": 0.68,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Arrecife",
-       "orders": 32,
-       "rank": 5,
-       "nbrands": 27,
-       "rt": 2.7,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Santa Mónica",
-       "orders": 32,
-       "rank": 2,
-       "nbrands": 25,
-       "rt": 1.18,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Cedritos",
-       "orders": 30,
-       "rank": 7,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
-      },
-      {
-       "coc": "Colina",
-       "orders": 25,
-       "rank": 5,
-       "nbrands": 31,
-       "rt": 1.5,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Kennedy",
-       "orders": 25,
-       "rank": 3,
-       "nbrands": 24,
+       "orders": 2,
+       "rank": 13,
+       "nbrands": 18,
        "rt": 1.88,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "San Fernando",
-       "orders": 25,
-       "rank": 2,
-       "nbrands": 20,
-       "rt": 0.63,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Villa del Prado",
-       "orders": 24,
-       "rank": 7,
-       "nbrands": 30,
-       "rt": 2.05,
-       "size": 2400,
-       "cov": 80.0,
+       "size": 2100,
+       "cov": 70.0,
        "sev": "warn"
       }
      ]
@@ -1092,172 +917,172 @@
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 729,
-     "wow": 4.1,
-     "orders_prev": 700,
-     "avg_rt": 1.76,
-     "avg_cov": 88.0,
-     "drt": -0.23,
+     "orders": 739,
+     "wow": 1.4,
+     "orders_prev": 729,
+     "avg_rt": 1.77,
+     "avg_cov": 94.7,
+     "drt": 0.01,
      "dcov": 0.0,
-     "best": "Santa Mónica",
-     "worst": "Colina",
+     "best": "Chicó",
+     "worst": "Calle 109",
      "rows": [
       {
        "coc": "Barranquilla",
-       "orders": 141,
-       "rank": 1,
-       "nbrands": 34,
-       "rt": 1.51,
-       "size": 2700,
-       "cov": 90.0,
+       "orders": 145,
+       "rank": 2,
+       "nbrands": 33,
+       "rt": 1.5,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Chapinero",
-       "orders": 93,
-       "rank": 2,
+       "orders": 97,
+       "rank": 1,
        "nbrands": 36,
-       "rt": 1.35,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Laureles",
-       "orders": 61,
-       "rank": 6,
-       "nbrands": 32,
-       "rt": 1.13,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Cabecera (Bga)",
-       "orders": 57,
-       "rank": 4,
-       "nbrands": 27,
-       "rt": 1.02,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
+       "rt": 2.45,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
       },
       {
        "coc": "Calle 109",
-       "orders": 56,
-       "rank": 6,
-       "nbrands": 30,
-       "rt": 2.26,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
+       "orders": 68,
+       "rank": 5,
+       "nbrands": 28,
+       "rt": 3.01,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Cabecera (Bga)",
+       "orders": 67,
+       "rank": 4,
+       "nbrands": 29,
+       "rt": 1.11,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Parque 93 / Castellana",
-       "orders": 53,
+       "orders": 61,
        "rank": 2,
-       "nbrands": 28,
-       "rt": 2.86,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 26,
+       "rt": 2.39,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
       },
       {
-       "coc": "Cedritos",
-       "orders": 51,
+       "coc": "San Fernando",
+       "orders": 45,
        "rank": 1,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "nbrands": 18,
+       "rt": 1.73,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       },
       {
-       "coc": "San Fernando",
-       "orders": 44,
-       "rank": 1,
-       "nbrands": 20,
-       "rt": 1.81,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
+       "coc": "Villa del Prado",
+       "orders": 43,
+       "rank": 4,
+       "nbrands": 29,
+       "rt": 2.1,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
       },
       {
        "coc": "Arrecife",
-       "orders": 42,
-       "rank": 2,
-       "nbrands": 27,
-       "rt": 1.9,
+       "orders": 41,
+       "rank": 3,
+       "nbrands": 23,
+       "rt": 1.42,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Usaquén",
-       "orders": 37,
-       "rank": 4,
-       "nbrands": 29,
-       "rt": 0.8,
+       "orders": 39,
+       "rank": 5,
+       "nbrands": 27,
+       "rt": 0.73,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Cartagena",
-       "orders": 35,
-       "rank": 4,
-       "nbrands": 20,
-       "rt": 2.17,
-       "size": 2700,
-       "cov": 90.0,
+       "orders": 37,
+       "rank": 2,
+       "nbrands": 18,
+       "rt": 2.5,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
       },
       {
-       "coc": "Villa del Prado",
-       "orders": 33,
-       "rank": 5,
-       "nbrands": 30,
-       "rt": 1.62,
+       "coc": "Laureles",
+       "orders": 34,
+       "rank": 9,
+       "nbrands": 32,
+       "rt": 1.29,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
+       "coc": "Cedritos",
+       "orders": 26,
+       "rank": 3,
+       "nbrands": 20,
+       "rt": null,
+       "size": null,
+       "cov": null,
+       "sev": "ok"
+      },
+      {
        "coc": "Kennedy",
-       "orders": 12,
-       "rank": 6,
-       "nbrands": 24,
-       "rt": 3.18,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "bad"
+       "orders": 20,
+       "rank": 5,
+       "nbrands": 23,
+       "rt": 1.75,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Colina",
-       "orders": 7,
-       "rank": 12,
-       "nbrands": 31,
-       "rt": 3.68,
+       "orders": 10,
+       "rank": 11,
+       "nbrands": 27,
+       "rt": 2.58,
        "size": 2400,
        "cov": 80.0,
-       "sev": "bad"
+       "sev": "warn"
       },
       {
        "coc": "Santa Mónica",
        "orders": 5,
        "rank": 8,
-       "nbrands": 25,
-       "rt": 0.39,
+       "nbrands": 24,
+       "rt": 1.82,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Chicó",
-       "orders": 2,
-       "rank": 10,
-       "nbrands": 15,
-       "rt": 0.7,
+       "orders": 1,
+       "rank": 12,
+       "nbrands": 13,
+       "rt": 0.22,
        "size": 2400,
        "cov": 80.0,
        "sev": "ok"
@@ -1265,14 +1090,199 @@
      ]
     },
     {
+     "brand": "La Cuadra Turbo",
+     "cb": "la cuadra",
+     "orders": 689,
+     "wow": -14.1,
+     "orders_prev": 802,
+     "avg_rt": 1.3,
+     "avg_cov": 95.0,
+     "drt": 0.0,
+     "dcov": 0.0,
+     "best": "Manila",
+     "worst": "Colina",
+     "rows": [
+      {
+       "coc": "Cabecera (Bga)",
+       "orders": 77,
+       "rank": 3,
+       "nbrands": 29,
+       "rt": 0.63,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Barranquilla",
+       "orders": 68,
+       "rank": 3,
+       "nbrands": 33,
+       "rt": 0.67,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Manila",
+       "orders": 61,
+       "rank": 6,
+       "nbrands": 33,
+       "rt": 0.37,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 59,
+       "rank": 6,
+       "nbrands": 28,
+       "rt": 1.99,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Laureles",
+       "orders": 59,
+       "rank": 5,
+       "nbrands": 32,
+       "rt": 0.8,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Arrecife",
+       "orders": 48,
+       "rank": 2,
+       "nbrands": 23,
+       "rt": 1.5,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Andes",
+       "orders": 45,
+       "rank": 4,
+       "nbrands": 27,
+       "rt": 1.22,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Parque 93 / Castellana",
+       "orders": 45,
+       "rank": 4,
+       "nbrands": 26,
+       "rt": 2.04,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Cartagena",
+       "orders": 34,
+       "rank": 3,
+       "nbrands": 18,
+       "rt": 1.22,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Santa Mónica",
+       "orders": 33,
+       "rank": 1,
+       "nbrands": 24,
+       "rt": 1.6,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chapinero",
+       "orders": 32,
+       "rank": 7,
+       "nbrands": 36,
+       "rt": 2.12,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "San Fernando",
+       "orders": 29,
+       "rank": 2,
+       "nbrands": 18,
+       "rt": 0.92,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 26,
+       "rank": 8,
+       "nbrands": 27,
+       "rt": 0.45,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 26,
+       "rank": 8,
+       "nbrands": 29,
+       "rt": 1.12,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Kennedy",
+       "orders": 22,
+       "rank": 4,
+       "nbrands": 23,
+       "rt": 1.88,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Colina",
+       "orders": 17,
+       "rank": 8,
+       "nbrands": 27,
+       "rt": 2.25,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Cedritos",
+       "orders": 8,
+       "rank": 7,
+       "nbrands": 20,
+       "rt": null,
+       "size": null,
+       "cov": null,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 466,
-     "wow": 27.0,
-     "orders_prev": 367,
-     "avg_rt": 1.77,
-     "avg_cov": 94.6,
-     "drt": -0.01,
+     "orders": 428,
+     "wow": -8.2,
+     "orders_prev": 466,
+     "avg_rt": 1.67,
+     "avg_cov": 99.2,
+     "drt": -0.1,
      "dcov": -0.0,
      "best": "Usaquén",
      "worst": "Chicó",
@@ -1280,131 +1290,131 @@
       {
        "coc": "Manila",
        "orders": 74,
-       "rank": 6,
-       "nbrands": 34,
-       "rt": 0.83,
+       "rank": 4,
+       "nbrands": 33,
+       "rt": 0.66,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Laureles",
-       "orders": 66,
+       "orders": 65,
        "rank": 4,
        "nbrands": 32,
-       "rt": 0.67,
+       "rt": 0.89,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Chicó",
-       "orders": 62,
+       "orders": 56,
        "rank": 3,
-       "nbrands": 15,
-       "rt": 4.56,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 13,
+       "rt": 4.93,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "bad"
       },
       {
-       "coc": "Calle 109",
-       "orders": 55,
-       "rank": 7,
-       "nbrands": 30,
-       "rt": 2.17,
+       "coc": "Usaquén",
+       "orders": 52,
+       "rank": 2,
+       "nbrands": 27,
+       "rt": 0.52,
        "size": 3000,
        "cov": 100.0,
-       "sev": "warn"
+       "sev": "ok"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 38,
+       "rank": 9,
+       "nbrands": 28,
+       "rt": 1.77,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Barranquilla",
-       "orders": 51,
-       "rank": 4,
-       "nbrands": 34,
-       "rt": 1.05,
+       "orders": 37,
+       "rank": 6,
+       "nbrands": 33,
+       "rt": 1.44,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Villa del Prado",
-       "orders": 39,
-       "rank": 4,
-       "nbrands": 30,
-       "rt": 1.51,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 28,
-       "rank": 6,
+       "orders": 29,
+       "rank": 5,
        "nbrands": 29,
-       "rt": 0.4,
+       "rt": 0.97,
        "size": 3000,
        "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Colina",
-       "orders": 24,
-       "rank": 6,
-       "nbrands": 31,
-       "rt": 0.96,
-       "size": 2400,
-       "cov": 80.0,
        "sev": "ok"
       },
       {
        "coc": "Chapinero",
-       "orders": 22,
+       "orders": 25,
        "rank": 9,
        "nbrands": 36,
-       "rt": 2.46,
-       "size": 2700,
-       "cov": 90.0,
+       "rt": 2.3,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
+      },
+      {
+       "coc": "Colina",
+       "orders": 18,
+       "rank": 7,
+       "nbrands": 27,
+       "rt": 0.9,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Cabecera (Bga)",
-       "orders": 20,
-       "rank": 7,
-       "nbrands": 27,
-       "rt": 2.0,
+       "orders": 16,
+       "rank": 9,
+       "nbrands": 29,
+       "rt": 1.79,
        "size": 3000,
        "cov": 100.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Santa Mónica",
-       "orders": 10,
-       "rank": 5,
-       "nbrands": 25,
-       "rt": 2.7,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "warn"
+       "sev": "ok"
       },
       {
        "coc": "Ingenio",
-       "orders": 8,
+       "orders": 6,
        "rank": 6,
-       "nbrands": 21,
-       "rt": 1.89,
+       "nbrands": 17,
+       "rt": 2.86,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "San Fernando",
+       "orders": 6,
+       "rank": 6,
+       "nbrands": 18,
+       "rt": 1.18,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
-       "coc": "San Fernando",
-       "orders": 7,
-       "rank": 6,
-       "nbrands": 20,
-       "rt": 1.83,
-       "size": 2700,
-       "cov": 90.0,
+       "coc": "Santa Mónica",
+       "orders": 6,
+       "rank": 5,
+       "nbrands": 24,
+       "rt": 1.47,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -1415,126 +1425,126 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 83,
-      "pct": 17.3,
-      "rt": 1.8,
-      "size": 2700
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 81,
-      "pct": 16.9,
-      "rt": 1.08,
+      "orders": 74,
+      "pct": 16.8,
+      "rt": 1.04,
       "size": 2700
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 69,
-      "pct": 14.4,
-      "rt": 2.41,
-      "size": 2400
+      "orders": 68,
+      "pct": 15.5,
+      "rt": 1.64,
+      "size": 3000
+     },
+     {
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 60,
+      "pct": 13.6,
+      "rt": 1.1,
+      "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 68,
-      "pct": 14.2,
-      "rt": 1.18,
+      "orders": 45,
+      "pct": 10.2,
+      "rt": 1.22,
       "size": 2700
      },
      {
-      "brand": "Ñamgucheria Turbo",
-      "cb": "namgucheria",
-      "orders": 31,
-      "pct": 6.5,
-      "rt": 2.81,
-      "size": 2400
+      "brand": "Mr Beast Burger Turbo",
+      "cb": "mr beast burger",
+      "orders": 36,
+      "pct": 8.2,
+      "rt": 1.8,
+      "size": 3000
      }
     ],
     "Arrecife": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 67,
-      "pct": 23.5,
-      "rt": 2.42,
+      "orders": 72,
+      "pct": 26.5,
+      "rt": 1.57,
+      "size": 2700
+     },
+     {
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 48,
+      "pct": 17.6,
+      "rt": 1.5,
       "size": 2700
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 42,
-      "pct": 14.7,
-      "rt": 1.9,
-      "size": 2700
-     },
-     {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 34,
-      "pct": 11.9,
-      "rt": 4.15,
+      "orders": 41,
+      "pct": 15.1,
+      "rt": 1.42,
       "size": 2700
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 33,
-      "pct": 11.6,
-      "rt": 3.43,
-      "size": 2700
+      "orders": 20,
+      "pct": 7.4,
+      "rt": 2.28,
+      "size": 3000
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 32,
-      "pct": 11.2,
-      "rt": 2.7,
-      "size": 2700
+      "brand": "Mr Beast Burger Turbo",
+      "cb": "mr beast burger",
+      "orders": 19,
+      "pct": 7.0,
+      "rt": 2.45,
+      "size": 2400
      }
     ],
     "Barranquilla": [
      {
-      "brand": "Green House Turbo",
-      "cb": "green house",
-      "orders": 141,
-      "pct": 20.2,
-      "rt": 1.51,
-      "size": 2700
-     },
-     {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 120,
-      "pct": 17.2,
-      "rt": 1.46,
-      "size": 2700
+      "orders": 146,
+      "pct": 20.4,
+      "rt": 1.6,
+      "size": 3000
+     },
+     {
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 145,
+      "pct": 20.3,
+      "rt": 1.5,
+      "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 63,
-      "pct": 9.0,
-      "rt": 0.58,
-      "size": 2700
-     },
-     {
-      "brand": "Cinnabon Turbo",
-      "cb": "cinnabon",
-      "orders": 51,
-      "pct": 7.3,
-      "rt": 1.05,
+      "orders": 68,
+      "pct": 9.5,
+      "rt": 0.67,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 50,
-      "pct": 7.2,
-      "rt": 1.45,
-      "size": 2700
+      "orders": 63,
+      "pct": 8.8,
+      "rt": 1.46,
+      "size": 3000
+     },
+     {
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 43,
+      "pct": 6.0,
+      "rt": 2.2,
+      "size": 3000
      }
     ],
     "Cabecera (Bga)": [
@@ -1542,83 +1552,83 @@
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
       "orders": 114,
-      "pct": 19.8,
-      "rt": 0.92,
+      "pct": 20.2,
+      "rt": 0.9,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 107,
-      "pct": 18.6,
-      "rt": 0.65,
+      "orders": 103,
+      "pct": 18.3,
+      "rt": 0.71,
       "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 91,
-      "pct": 15.8,
-      "rt": 0.41,
+      "orders": 77,
+      "pct": 13.7,
+      "rt": 0.63,
       "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 57,
-      "pct": 9.9,
-      "rt": 1.02,
-      "size": 2700
-     },
-     {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 34,
-      "pct": 5.9,
-      "rt": 1.88,
-      "size": 3000
-     }
-    ],
-    "Calle 109": [
-     {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 137,
-      "pct": 16.6,
-      "rt": 1.95,
+      "orders": 67,
+      "pct": 11.9,
+      "rt": 1.11,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 134,
-      "pct": 16.3,
-      "rt": 1.78,
-      "size": 2400
+      "orders": 33,
+      "pct": 5.9,
+      "rt": 1.59,
+      "size": 3000
+     }
+    ],
+    "Calle 109": [
+     {
+      "brand": "Brunch & Munch Turbo",
+      "cb": "brunch munch",
+      "orders": 153,
+      "pct": 18.7,
+      "rt": 3.18,
+      "size": 3000
+     },
+     {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 126,
+      "pct": 15.4,
+      "rt": 1.97,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 101,
-      "pct": 12.3,
-      "rt": 3.1,
-      "size": 2700
+      "orders": 87,
+      "pct": 10.6,
+      "rt": 2.86,
+      "size": 3000
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 69,
-      "pct": 8.4,
-      "rt": 1.77,
-      "size": 2700
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 74,
+      "pct": 9.0,
+      "rt": 2.96,
+      "size": 3000
      },
      {
-      "brand": "Ñamgucheria Turbo",
-      "cb": "namgucheria",
-      "orders": 59,
-      "pct": 7.2,
-      "rt": 3.88,
-      "size": 2400
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 68,
+      "pct": 8.3,
+      "rt": 3.01,
+      "size": 3000
      }
     ],
     "Cartagena": [
@@ -1626,124 +1636,124 @@
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
       "orders": 53,
-      "pct": 20.9,
-      "rt": 2.98,
-      "size": 2700
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 44,
-      "pct": 17.4,
-      "rt": 1.38,
-      "size": 2400
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 38,
-      "pct": 15.0,
-      "rt": 2.52,
-      "size": 2700
+      "pct": 27.0,
+      "rt": 1.63,
+      "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 35,
-      "pct": 13.8,
-      "rt": 2.17,
+      "orders": 37,
+      "pct": 18.9,
+      "rt": 2.5,
+      "size": 3000
+     },
+     {
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 34,
+      "pct": 17.3,
+      "rt": 1.22,
+      "size": 3000
+     },
+     {
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 19,
+      "pct": 9.7,
+      "rt": 1.72,
       "size": 2700
      },
      {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 20,
-      "pct": 7.9,
-      "rt": 4.3,
+      "orders": 14,
+      "pct": 7.1,
+      "rt": 5.06,
       "size": 2400
      }
     ],
     "Cedritos": [
      {
+      "brand": "Ñamgucheria Turbo",
+      "cb": "namgucheria",
+      "orders": 40,
+      "pct": 19.7,
+      "rt": null,
+      "size": null
+     },
+     {
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 37,
+      "pct": 18.2,
+      "rt": null,
+      "size": null
+     },
+     {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 51,
-      "pct": 13.1,
+      "orders": 26,
+      "pct": 12.8,
       "rt": null,
       "size": null
      },
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 50,
-      "pct": 12.8,
-      "rt": null,
-      "size": null
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 45,
-      "pct": 11.5,
-      "rt": null,
-      "size": null
-     },
-     {
-      "brand": "Ñamgucheria Turbo",
-      "cb": "namgucheria",
-      "orders": 42,
-      "pct": 10.8,
+      "orders": 25,
+      "pct": 12.3,
       "rt": null,
       "size": null
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 41,
-      "pct": 10.5,
+      "orders": 24,
+      "pct": 11.8,
       "rt": null,
       "size": null
      }
     ],
     "Chapinero": [
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 102,
-      "pct": 14.8,
-      "rt": 2.06,
-      "size": 2700
-     },
-     {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 93,
-      "pct": 13.5,
-      "rt": 1.35,
+      "orders": 97,
+      "pct": 15.4,
+      "rt": 2.45,
+      "size": 3000
+     },
+     {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 87,
+      "pct": 13.8,
+      "rt": 2.1,
+      "size": 3000
+     },
+     {
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 61,
+      "pct": 9.7,
+      "rt": 4.1,
       "size": 2700
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 88,
-      "pct": 12.8,
-      "rt": 2.24,
-      "size": 2400
+      "orders": 60,
+      "pct": 9.5,
+      "rt": 6.03,
+      "size": 2700
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 51,
-      "pct": 7.4,
-      "rt": 1.58,
-      "size": 2700
-     },
-     {
-      "brand": "The Breakfast Club Turbo",
-      "cb": "the breakfast club",
-      "orders": 46,
-      "pct": 6.7,
-      "rt": 1.31,
+      "orders": 58,
+      "pct": 9.2,
+      "rt": 2.31,
       "size": 2700
      }
     ],
@@ -1751,41 +1761,41 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 152,
-      "pct": 37.6,
-      "rt": 2.45,
+      "orders": 206,
+      "pct": 45.4,
+      "rt": 2.15,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 123,
-      "pct": 30.4,
-      "rt": 3.86,
-      "size": 2700
+      "orders": 116,
+      "pct": 25.6,
+      "rt": 3.83,
+      "size": 3000
      },
      {
       "brand": "Cinnabon Turbo",
       "cb": "cinnabon",
-      "orders": 62,
-      "pct": 15.3,
-      "rt": 4.56,
-      "size": 2700
+      "orders": 56,
+      "pct": 12.3,
+      "rt": 4.93,
+      "size": 3000
      },
      {
       "brand": "The Breakfast Club Turbo",
       "cb": "the breakfast club",
-      "orders": 31,
-      "pct": 7.7,
-      "rt": 4.39,
-      "size": 2700
+      "orders": 41,
+      "pct": 9.0,
+      "rt": 3.51,
+      "size": 3000
      },
      {
       "brand": "Desayunos de la Abuela Turbo",
       "cb": "desayunos de la abuela",
-      "orders": 16,
-      "pct": 4.0,
-      "rt": 2.7,
+      "orders": 10,
+      "pct": 2.2,
+      "rt": 6.16,
       "size": 3000
      }
     ],
@@ -1793,209 +1803,209 @@
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 71,
-      "pct": 18.3,
-      "rt": 1.06,
-      "size": 2700
+      "orders": 64,
+      "pct": 19.0,
+      "rt": 1.26,
+      "size": 3000
      },
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 58,
-      "pct": 14.9,
-      "rt": 1.08,
-      "size": 2700
+      "orders": 59,
+      "pct": 17.5,
+      "rt": 1.76,
+      "size": 3000
      },
      {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 45,
-      "pct": 11.6,
-      "rt": 3.07,
-      "size": 2400
+      "orders": 40,
+      "pct": 11.9,
+      "rt": 2.61,
+      "size": 2700
+     },
+     {
+      "brand": "Honest Food Turbo",
+      "cb": "honest food",
+      "orders": 21,
+      "pct": 6.2,
+      "rt": 2.18,
+      "size": 3000
      },
      {
       "brand": "Desayunos de la Abuela Turbo",
       "cb": "desayunos de la abuela",
-      "orders": 34,
-      "pct": 8.8,
-      "rt": 4.13,
-      "size": 2400
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 25,
-      "pct": 6.4,
-      "rt": 1.5,
-      "size": 2400
+      "orders": 21,
+      "pct": 6.2,
+      "rt": 1.6,
+      "size": 2700
      }
     ],
     "Ingenio": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 53,
-      "pct": 34.0,
-      "rt": 1.78,
-      "size": 2400
+      "orders": 43,
+      "pct": 33.9,
+      "rt": 1.37,
+      "size": 3000
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 21,
-      "pct": 13.5,
-      "rt": 0.68,
-      "size": 2400
+      "orders": 27,
+      "pct": 21.3,
+      "rt": 2.45,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 14,
-      "pct": 9.0,
-      "rt": 1.37,
-      "size": 2400
+      "orders": 7,
+      "pct": 5.5,
+      "rt": 1.72,
+      "size": 2700
      },
      {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 11,
-      "pct": 7.1,
-      "rt": 3.83,
-      "size": 2400
+      "brand": "Señor Burrito Turbo",
+      "cb": "senor burrito",
+      "orders": 6,
+      "pct": 4.7,
+      "rt": 4.87,
+      "size": 2700
      },
      {
-      "brand": "Brunch & Munch Turbo",
-      "cb": "brunch munch",
-      "orders": 9,
-      "pct": 5.8,
-      "rt": 2.44,
-      "size": 2400
+      "brand": "Monteverde Turbo",
+      "cb": "monteverde",
+      "orders": 6,
+      "pct": 4.7,
+      "rt": 1.88,
+      "size": 3000
      }
     ],
     "Kennedy": [
      {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 50,
-      "pct": 21.6,
-      "rt": 2.26,
-      "size": 2700
-     },
-     {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 50,
-      "pct": 21.6,
-      "rt": 5.09,
-      "size": 2100
+      "orders": 56,
+      "pct": 24.0,
+      "rt": 2.34,
+      "size": 2700
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 25,
-      "pct": 10.8,
-      "rt": 1.88,
-      "size": 2700
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 46,
+      "pct": 19.7,
+      "rt": 0.87,
+      "size": 3000
      },
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 23,
-      "pct": 10.0,
-      "rt": 1.68,
+      "orders": 30,
+      "pct": 12.9,
+      "rt": 1.26,
       "size": 2700
      },
      {
-      "brand": "Honest Food Turbo",
-      "cb": "honest food",
-      "orders": 15,
-      "pct": 6.5,
-      "rt": 2.22,
-      "size": 2700
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 22,
+      "pct": 9.4,
+      "rt": 1.88,
+      "size": 3000
+     },
+     {
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 20,
+      "pct": 8.6,
+      "rt": 1.75,
+      "size": 3000
      }
     ],
     "Laureles": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 169,
-      "pct": 19.5,
-      "rt": 1.13,
+      "orders": 197,
+      "pct": 23.0,
+      "rt": 0.87,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 104,
-      "pct": 12.0,
-      "rt": 0.77,
-      "size": 2700
+      "orders": 108,
+      "pct": 12.6,
+      "rt": 1.22,
+      "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 73,
+      "orders": 72,
       "pct": 8.4,
-      "rt": 1.68,
+      "rt": 1.79,
       "size": 3000
      },
      {
       "brand": "Cinnabon Turbo",
       "cb": "cinnabon",
-      "orders": 66,
+      "orders": 65,
       "pct": 7.6,
-      "rt": 0.67,
+      "rt": 0.89,
       "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 61,
-      "pct": 7.0,
-      "rt": 1.36,
-      "size": 2700
+      "orders": 59,
+      "pct": 6.9,
+      "rt": 0.8,
+      "size": 3000
      }
     ],
     "Manila": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 321,
-      "pct": 26.6,
-      "rt": 0.78,
+      "orders": 331,
+      "pct": 29.3,
+      "rt": 0.52,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 183,
-      "pct": 15.2,
-      "rt": 0.98,
+      "orders": 219,
+      "pct": 19.4,
+      "rt": 0.93,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 141,
-      "pct": 11.7,
-      "rt": 0.95,
+      "orders": 115,
+      "pct": 10.2,
+      "rt": 0.46,
+      "size": 3000
+     },
+     {
+      "brand": "Cinnabon Turbo",
+      "cb": "cinnabon",
+      "orders": 74,
+      "pct": 6.5,
+      "rt": 0.66,
       "size": 3000
      },
      {
       "brand": "Desayunos de la Abuela Turbo",
       "cb": "desayunos de la abuela",
-      "orders": 88,
-      "pct": 7.3,
-      "rt": 1.04,
-      "size": 3000
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 87,
-      "pct": 7.2,
-      "rt": 0.89,
+      "orders": 66,
+      "pct": 5.8,
+      "rt": 0.87,
       "size": 3000
      }
     ],
@@ -2003,125 +2013,125 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 96,
-      "pct": 23.1,
-      "rt": 1.91,
-      "size": 2400
+      "orders": 104,
+      "pct": 25.9,
+      "rt": 1.72,
+      "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 53,
-      "pct": 12.7,
-      "rt": 2.86,
-      "size": 2700
+      "orders": 61,
+      "pct": 15.2,
+      "rt": 2.39,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 50,
-      "pct": 12.0,
-      "rt": 1.34,
+      "orders": 49,
+      "pct": 12.2,
+      "rt": 1.88,
       "size": 2700
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 44,
-      "pct": 10.6,
-      "rt": 1.2,
-      "size": 2400
+      "orders": 45,
+      "pct": 11.2,
+      "rt": 2.04,
+      "size": 3000
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 31,
-      "pct": 7.5,
-      "rt": 2.21,
-      "size": 2400
+      "orders": 37,
+      "pct": 9.2,
+      "rt": 2.8,
+      "size": 2700
      }
     ],
     "San Fernando": [
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 44,
-      "pct": 26.7,
-      "rt": 1.81,
-      "size": 2400
+      "orders": 45,
+      "pct": 30.4,
+      "rt": 1.73,
+      "size": 2700
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 25,
-      "pct": 15.2,
-      "rt": 0.63,
-      "size": 3000
+      "orders": 29,
+      "pct": 19.6,
+      "rt": 0.92,
+      "size": 2700
+     },
+     {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 19,
+      "pct": 12.8,
+      "rt": 1.57,
+      "size": 2400
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 20,
-      "pct": 12.1,
-      "rt": 2.34,
+      "orders": 12,
+      "pct": 8.1,
+      "rt": 1.33,
       "size": 2700
-     },
-     {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 18,
-      "pct": 10.9,
-      "rt": 2.4,
-      "size": 2400
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 13,
-      "pct": 7.9,
-      "rt": 1.94,
-      "size": 2700
+      "orders": 8,
+      "pct": 5.4,
+      "rt": 3.21,
+      "size": 2400
      }
     ],
     "Santa Mónica": [
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 34,
-      "pct": 21.8,
-      "rt": 2.27,
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 33,
+      "pct": 23.9,
+      "rt": 1.6,
       "size": 2700
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 32,
-      "pct": 20.5,
-      "rt": 1.18,
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 30,
+      "pct": 21.7,
+      "rt": 1.35,
       "size": 2700
+     },
+     {
+      "brand": "Brunch & Munch Turbo",
+      "cb": "brunch munch",
+      "orders": 8,
+      "pct": 5.8,
+      "rt": 3.34,
+      "size": 2400
      },
      {
       "brand": "The Breakfast Club Turbo",
       "cb": "the breakfast club",
-      "orders": 16,
-      "pct": 10.3,
-      "rt": 3.13,
-      "size": 2100
-     },
-     {
-      "brand": "Honest Food Turbo",
-      "cb": "honest food",
-      "orders": 13,
-      "pct": 8.3,
-      "rt": 1.96,
+      "orders": 8,
+      "pct": 5.8,
+      "rt": 3.45,
       "size": 2100
      },
      {
       "brand": "Cinnabon Turbo",
       "cb": "cinnabon",
-      "orders": 10,
-      "pct": 6.4,
-      "rt": 2.7,
+      "orders": 6,
+      "pct": 4.3,
+      "rt": 1.47,
       "size": 3000
      }
     ],
@@ -2129,84 +2139,84 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 79,
-      "pct": 19.9,
-      "rt": 0.62,
+      "orders": 84,
+      "pct": 19.3,
+      "rt": 0.63,
+      "size": 3000
+     },
+     {
+      "brand": "Cinnabon Turbo",
+      "cb": "cinnabon",
+      "orders": 52,
+      "pct": 11.9,
+      "rt": 0.52,
+      "size": 3000
+     },
+     {
+      "brand": "Ñamgucheria Turbo",
+      "cb": "namgucheria",
+      "orders": 48,
+      "pct": 11.0,
+      "rt": 0.86,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 44,
-      "pct": 11.1,
-      "rt": 0.79,
-      "size": 3000
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 41,
-      "pct": 10.3,
-      "rt": 0.68,
+      "orders": 46,
+      "pct": 10.6,
+      "rt": 0.75,
       "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 37,
-      "pct": 9.3,
-      "rt": 0.8,
-      "size": 3000
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 31,
-      "pct": 7.8,
-      "rt": 0.4,
+      "orders": 39,
+      "pct": 8.9,
+      "rt": 0.73,
       "size": 3000
      }
     ],
     "Villa del Prado": [
      {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 70,
+      "pct": 16.1,
+      "rt": 1.39,
+      "size": 3000
+     },
+     {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 77,
-      "pct": 16.5,
+      "orders": 60,
+      "pct": 13.8,
       "rt": null,
       "size": null
      },
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 75,
-      "pct": 16.1,
-      "rt": 1.52,
-      "size": 2400
-     },
-     {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 61,
-      "pct": 13.1,
-      "rt": 3.15,
-      "size": 2400
-     },
-     {
-      "brand": "Cinnabon Turbo",
-      "cb": "cinnabon",
-      "orders": 39,
-      "pct": 8.4,
-      "rt": 1.51,
+      "orders": 43,
+      "pct": 9.9,
+      "rt": 1.58,
       "size": 2700
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 33,
-      "pct": 7.1,
-      "rt": 1.62,
-      "size": 2700
+      "orders": 43,
+      "pct": 9.9,
+      "rt": 2.1,
+      "size": 3000
+     },
+     {
+      "brand": "Cinnabon Turbo",
+      "cb": "cinnabon",
+      "orders": 29,
+      "pct": 6.7,
+      "rt": 0.97,
+      "size": 3000
      }
     ]
    },
@@ -2234,231 +2244,224 @@
   },
   "Barranquilla": {
    "meta": {
-    "total_orders": 698,
-    "n_brands": 34,
-    "top5_share": 60.9
+    "total_orders": 715,
+    "n_brands": 33,
+    "top5_share": 65.0
    },
    "pareto": [
     {
-     "brand": "Green House Turbo",
-     "cb": "green house",
-     "orders": 141,
-     "pct": 20.2,
-     "cum": 20.2
-    },
-    {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 120,
-     "pct": 17.2,
-     "cum": 37.4
+     "orders": 146,
+     "pct": 20.4,
+     "cum": 20.4
+    },
+    {
+     "brand": "Green House Turbo",
+     "cb": "green house",
+     "orders": 145,
+     "pct": 20.3,
+     "cum": 40.7
     },
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 63,
-     "pct": 9.0,
-     "cum": 46.4
-    },
-    {
-     "brand": "Cinnabon Turbo",
-     "cb": "cinnabon",
-     "orders": 51,
-     "pct": 7.3,
-     "cum": 53.7
+     "orders": 68,
+     "pct": 9.5,
+     "cum": 50.2
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 50,
-     "pct": 7.2,
-     "cum": 60.9
+     "orders": 63,
+     "pct": 8.8,
+     "cum": 59.0
     },
     {
      "brand": "Desayunos de la Abuela Turbo",
      "cb": "desayunos de la abuela",
-     "orders": 39,
-     "pct": 5.6,
-     "cum": 66.5
+     "orders": 43,
+     "pct": 6.0,
+     "cum": 65.0
     },
     {
-     "brand": "The Breakfast Club Turbo",
-     "cb": "the breakfast club",
-     "orders": 34,
-     "pct": 4.9,
-     "cum": 71.3
-    },
-    {
-     "brand": "Monteverde Turbo",
-     "cb": "monteverde",
-     "orders": 26,
-     "pct": 3.7,
-     "cum": 75.1
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 37,
+     "pct": 5.2,
+     "cum": 70.2
     },
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 24,
-     "pct": 3.4,
-     "cum": 78.5
+     "orders": 30,
+     "pct": 4.2,
+     "cum": 74.4
+    },
+    {
+     "brand": "The Breakfast Club Turbo",
+     "cb": "the breakfast club",
+     "orders": 23,
+     "pct": 3.2,
+     "cum": 77.6
     },
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 19,
-     "pct": 2.7,
-     "cum": 81.2
-    },
-    {
-     "brand": "Mr Beast Burger Turbo",
-     "cb": "mr beast burger",
-     "orders": 18,
-     "pct": 2.6,
-     "cum": 83.8
-    },
-    {
-     "brand": "The Egg Spot Turbo",
-     "cb": "the egg spot",
-     "orders": 11,
-     "pct": 1.6,
-     "cum": 85.4
-    },
-    {
-     "brand": "Ñamgucheria Turbo",
-     "cb": "namgucheria",
-     "orders": 10,
-     "pct": 1.4,
-     "cum": 86.8
-    },
-    {
-     "brand": "Desayunos mi Tierrita Turbo",
-     "cb": "desayunos mi tierrita",
-     "orders": 9,
-     "pct": 1.3,
-     "cum": 88.1
-    },
-    {
-     "brand": "Frost By Oreo Turbo",
-     "cb": "frost",
-     "orders": 9,
-     "pct": 1.3,
-     "cum": 89.4
-    },
-    {
-     "brand": "El Ejecutivo Turbo",
-     "cb": "el ejecutivo",
-     "orders": 8,
-     "pct": 1.1,
-     "cum": 90.5
+     "orders": 21,
+     "pct": 2.9,
+     "cum": 80.6
     },
     {
      "brand": "Almuerzos de la Casa Turbo",
      "cb": "almuerzos d la casa",
-     "orders": 7,
-     "pct": 1.0,
-     "cum": 91.5
+     "orders": 20,
+     "pct": 2.8,
+     "cum": 83.4
+    },
+    {
+     "brand": "Mr Beast Burger Turbo",
+     "cb": "mr beast burger",
+     "orders": 16,
+     "pct": 2.2,
+     "cum": 85.6
+    },
+    {
+     "brand": "Monteverde Turbo",
+     "cb": "monteverde",
+     "orders": 15,
+     "pct": 2.1,
+     "cum": 87.7
     },
     {
      "brand": "El Jefe Turbo",
      "cb": "sanduches el jefe",
-     "orders": 7,
-     "pct": 1.0,
-     "cum": 92.6
+     "orders": 13,
+     "pct": 1.8,
+     "cum": 89.5
     },
     {
      "brand": "San Jerónimo Turbo",
      "cb": "helados san jeronimo",
-     "orders": 7,
-     "pct": 1.0,
-     "cum": 93.6
-    },
-    {
-     "brand": "Alba Vegetarian Turbo",
-     "cb": "alba vegetarian",
-     "orders": 6,
-     "pct": 0.9,
-     "cum": 94.4
-    },
-    {
-     "brand": "Pret Sandwich Bistro Turbo",
-     "cb": "pret sandwich bistro",
-     "orders": 5,
-     "pct": 0.7,
-     "cum": 95.1
-    },
-    {
-     "brand": "Foodology Court Turbo",
-     "cb": "foodology",
-     "orders": 5,
-     "pct": 0.7,
-     "cum": 95.8
+     "orders": 10,
+     "pct": 1.4,
+     "cum": 90.9
     },
     {
      "brand": "Señor Burrito Turbo",
      "cb": "senor burrito",
-     "orders": 5,
-     "pct": 0.7,
-     "cum": 96.6
+     "orders": 8,
+     "pct": 1.1,
+     "cum": 92.0
+    },
+    {
+     "brand": "The Egg Spot Turbo",
+     "cb": "the egg spot",
+     "orders": 8,
+     "pct": 1.1,
+     "cum": 93.1
+    },
+    {
+     "brand": "Ñamgucheria Turbo",
+     "cb": "namgucheria",
+     "orders": 6,
+     "pct": 0.8,
+     "cum": 94.0
     },
     {
      "brand": "La Casa Mexicana Turbo",
      "cb": "la casa mexicana",
-     "orders": 4,
-     "pct": 0.6,
-     "cum": 97.1
+     "orders": 6,
+     "pct": 0.8,
+     "cum": 94.8
     },
     {
-     "brand": "Acpm Corrientazo Turbo",
-     "cb": "acpm corrientazo",
+     "brand": "El Ejecutivo Turbo",
+     "cb": "el ejecutivo",
+     "orders": 5,
+     "pct": 0.7,
+     "cum": 95.5
+    },
+    {
+     "brand": "House of Salads Turbo",
+     "cb": "house of salads",
+     "orders": 4,
+     "pct": 0.6,
+     "cum": 96.1
+    },
+    {
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
+     "orders": 4,
+     "pct": 0.6,
+     "cum": 96.6
+    },
+    {
+     "brand": "Bottaniko Turbo",
+     "cb": "bottaniko",
+     "orders": 4,
+     "pct": 0.6,
+     "cum": 97.2
+    },
+    {
+     "brand": "Frost By Oreo Turbo",
+     "cb": "frost",
      "orders": 3,
      "pct": 0.4,
      "cum": 97.6
     },
     {
-     "brand": "Selvatiko Turbo",
-     "cb": "selvatiko",
+     "brand": "Foodology Court Turbo",
+     "cb": "foodology",
      "orders": 3,
      "pct": 0.4,
      "cum": 98.0
     },
     {
-     "brand": "Burrito Cantina Turbo",
-     "cb": "burrito cantina",
-     "orders": 3,
-     "pct": 0.4,
-     "cum": 98.4
-    },
-    {
-     "brand": "Bottaniko Turbo",
-     "cb": "bottaniko",
-     "orders": 3,
-     "pct": 0.4,
-     "cum": 98.9
-    },
-    {
-     "brand": "Desgranados & Co Turbo",
-     "cb": "desgranados co",
-     "orders": 3,
-     "pct": 0.4,
-     "cum": 99.3
+     "brand": "Desayunos mi Tierrita Turbo",
+     "cb": "desayunos mi tierrita",
+     "orders": 2,
+     "pct": 0.3,
+     "cum": 98.3
     },
     {
      "brand": "Vicio Turbo",
      "cb": "vicio",
-     "orders": 1,
-     "pct": 0.1,
+     "orders": 2,
+     "pct": 0.3,
+     "cum": 98.6
+    },
+    {
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
+     "orders": 2,
+     "pct": 0.3,
+     "cum": 98.9
+    },
+    {
+     "brand": "Pret Sandwich Bistro Turbo",
+     "cb": "pret sandwich bistro",
+     "orders": 2,
+     "pct": 0.3,
+     "cum": 99.2
+    },
+    {
+     "brand": "Desgranados & Co Turbo",
+     "cb": "desgranados co",
+     "orders": 2,
+     "pct": 0.3,
      "cum": 99.4
     },
     {
-     "brand": "House Of Burgers Turbo",
-     "cb": "house of burgers",
+     "brand": "Burrito Cantina Turbo",
+     "cb": "burrito cantina",
      "orders": 1,
      "pct": 0.1,
      "cum": 99.6
     },
     {
-     "brand": "House of Salads Turbo",
-     "cb": "house of salads",
+     "brand": "Selvatiko Turbo",
+     "cb": "selvatiko",
      "orders": 1,
      "pct": 0.1,
      "cum": 99.7
@@ -2471,67 +2474,67 @@
      "cum": 99.9
     },
     {
-     "brand": "Cacerola Turbo",
-     "cb": "cacerola",
+     "brand": "House Of Burgers Turbo",
+     "cb": "house of burgers",
      "orders": 1,
      "pct": 0.1,
      "cum": 100.0
     }
    ],
    "top5": [
-    "green house",
     "avocalia",
+    "green house",
     "la cuadra",
-    "cinnabon",
-    "burritos co"
+    "burritos co",
+    "desayunos de la abuela"
    ],
    "top5_detail": [
     {
-     "brand": "Green House Turbo",
-     "cb": "green house",
-     "orders": 141,
-     "wow": 1.4,
-     "orders_prev": 139,
-     "avg_rt": 1.51,
-     "avg_cov": 90.0,
-     "drt": -0.05,
+     "brand": "Avocalia Turbo",
+     "cb": "avocalia",
+     "orders": 146,
+     "wow": 21.7,
+     "orders_prev": 120,
+     "avg_rt": 1.6,
+     "avg_cov": 100.0,
+     "drt": 0.14,
      "dcov": 0.0,
      "best": "Barranquilla",
      "worst": "Barranquilla",
      "rows": [
       {
        "coc": "Barranquilla",
-       "orders": 141,
+       "orders": 146,
        "rank": 1,
-       "nbrands": 34,
-       "rt": 1.51,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 33,
+       "rt": 1.6,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
     },
     {
-     "brand": "Avocalia Turbo",
-     "cb": "avocalia",
-     "orders": 120,
-     "wow": 9.1,
-     "orders_prev": 110,
-     "avg_rt": 1.46,
-     "avg_cov": 90.0,
-     "drt": 0.28,
+     "brand": "Green House Turbo",
+     "cb": "green house",
+     "orders": 145,
+     "wow": 2.8,
+     "orders_prev": 141,
+     "avg_rt": 1.5,
+     "avg_cov": 100.0,
+     "drt": -0.01,
      "dcov": 0.0,
      "best": "Barranquilla",
      "worst": "Barranquilla",
      "rows": [
       {
        "coc": "Barranquilla",
-       "orders": 120,
+       "orders": 145,
        "rank": 2,
-       "nbrands": 34,
-       "rt": 1.46,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 33,
+       "rt": 1.5,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -2539,47 +2542,22 @@
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 63,
-     "wow": 34.0,
-     "orders_prev": 47,
-     "avg_rt": 0.58,
-     "avg_cov": 90.0,
-     "drt": -0.45,
-     "dcov": 0.0,
-     "best": "Barranquilla",
-     "worst": "Barranquilla",
-     "rows": [
-      {
-       "coc": "Barranquilla",
-       "orders": 63,
-       "rank": 3,
-       "nbrands": 34,
-       "rt": 0.58,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      }
-     ]
-    },
-    {
-     "brand": "Cinnabon Turbo",
-     "cb": "cinnabon",
-     "orders": 51,
-     "wow": 54.5,
-     "orders_prev": 33,
-     "avg_rt": 1.05,
+     "orders": 68,
+     "wow": 7.9,
+     "orders_prev": 63,
+     "avg_rt": 0.67,
      "avg_cov": 100.0,
-     "drt": -0.06,
+     "drt": 0.09,
      "dcov": 0.0,
      "best": "Barranquilla",
      "worst": "Barranquilla",
      "rows": [
       {
        "coc": "Barranquilla",
-       "orders": 51,
-       "rank": 4,
-       "nbrands": 34,
-       "rt": 1.05,
+       "orders": 68,
+       "rank": 3,
+       "nbrands": 33,
+       "rt": 0.67,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -2589,24 +2567,74 @@
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 50,
-     "wow": 0.0,
+     "orders": 63,
+     "wow": 26.0,
      "orders_prev": 50,
-     "avg_rt": 1.45,
-     "avg_cov": 90.0,
-     "drt": -0.25,
+     "avg_rt": 1.46,
+     "avg_cov": 100.0,
+     "drt": 0.01,
      "dcov": 0.0,
      "best": "Barranquilla",
      "worst": "Barranquilla",
      "rows": [
       {
        "coc": "Barranquilla",
-       "orders": 50,
+       "orders": 63,
+       "rank": 4,
+       "nbrands": 33,
+       "rt": 1.46,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
+     "brand": "Desayunos de la Abuela Turbo",
+     "cb": "desayunos de la abuela",
+     "orders": 43,
+     "wow": 10.3,
+     "orders_prev": 39,
+     "avg_rt": 2.2,
+     "avg_cov": 100.0,
+     "drt": 0.13,
+     "dcov": 0.0,
+     "best": "Barranquilla",
+     "worst": "Barranquilla",
+     "rows": [
+      {
+       "coc": "Barranquilla",
+       "orders": 43,
        "rank": 5,
-       "nbrands": 34,
-       "rt": 1.45,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 33,
+       "rt": 2.2,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      }
+     ]
+    },
+    {
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 37,
+     "wow": -27.5,
+     "orders_prev": 51,
+     "avg_rt": 1.44,
+     "avg_cov": 100.0,
+     "drt": 0.39,
+     "dcov": 0.0,
+     "best": "Barranquilla",
+     "worst": "Barranquilla",
+     "rows": [
+      {
+       "coc": "Barranquilla",
+       "orders": 37,
+       "rank": 6,
+       "nbrands": 33,
+       "rt": 1.44,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -2615,44 +2643,44 @@
    "per_cocina": {
     "Barranquilla": [
      {
-      "brand": "Green House Turbo",
-      "cb": "green house",
-      "orders": 141,
-      "pct": 20.2,
-      "rt": 1.51,
-      "size": 2700
-     },
-     {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 120,
-      "pct": 17.2,
-      "rt": 1.46,
-      "size": 2700
+      "orders": 146,
+      "pct": 20.4,
+      "rt": 1.6,
+      "size": 3000
+     },
+     {
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 145,
+      "pct": 20.3,
+      "rt": 1.5,
+      "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 63,
-      "pct": 9.0,
-      "rt": 0.58,
-      "size": 2700
-     },
-     {
-      "brand": "Cinnabon Turbo",
-      "cb": "cinnabon",
-      "orders": 51,
-      "pct": 7.3,
-      "rt": 1.05,
+      "orders": 68,
+      "pct": 9.5,
+      "rt": 0.67,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 50,
-      "pct": 7.2,
-      "rt": 1.45,
-      "size": 2700
+      "orders": 63,
+      "pct": 8.8,
+      "rt": 1.46,
+      "size": 3000
+     },
+     {
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 43,
+      "pct": 6.0,
+      "rt": 2.2,
+      "size": 3000
      }
     ]
    },
@@ -2662,318 +2690,683 @@
   },
   "Bogotá": {
    "meta": {
-    "total_orders": 4967,
+    "total_orders": 4661,
     "n_brands": 40,
-    "top5_share": 56.4
+    "top5_share": 57.6
    },
    "pareto": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 922,
-     "pct": 18.6,
-     "cum": 18.6
-    },
-    {
-     "brand": "Burritos & Co Turbo",
-     "cb": "burritos co",
-     "orders": 558,
-     "pct": 11.2,
-     "cum": 29.8
+     "orders": 937,
+     "pct": 20.1,
+     "cum": 20.1
     },
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 536,
-     "pct": 10.8,
-     "cum": 40.6
+     "orders": 523,
+     "pct": 11.2,
+     "cum": 31.3
     },
     {
-     "brand": "La Cuadra Turbo",
-     "cb": "la cuadra",
-     "orders": 399,
-     "pct": 8.0,
-     "cum": 48.6
+     "brand": "Burritos & Co Turbo",
+     "cb": "burritos co",
+     "orders": 492,
+     "pct": 10.6,
+     "cum": 41.9
     },
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 386,
-     "pct": 7.8,
-     "cum": 56.4
+     "orders": 406,
+     "pct": 8.7,
+     "cum": 50.6
+    },
+    {
+     "brand": "La Cuadra Turbo",
+     "cb": "la cuadra",
+     "orders": 328,
+     "pct": 7.0,
+     "cum": 57.6
     },
     {
      "brand": "Mr Beast Burger Turbo",
      "cb": "mr beast burger",
-     "orders": 321,
-     "pct": 6.5,
-     "cum": 62.9
+     "orders": 296,
+     "pct": 6.4,
+     "cum": 64.0
     },
     {
      "brand": "Ñamgucheria Turbo",
      "cb": "namgucheria",
-     "orders": 256,
-     "pct": 5.2,
-     "cum": 68.0
+     "orders": 248,
+     "pct": 5.3,
+     "cum": 69.3
     },
     {
      "brand": "Desayunos de la Abuela Turbo",
      "cb": "desayunos de la abuela",
-     "orders": 241,
-     "pct": 4.9,
-     "cum": 72.9
+     "orders": 239,
+     "pct": 5.1,
+     "cum": 74.4
     },
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 230,
-     "pct": 4.6,
-     "cum": 77.5
+     "orders": 218,
+     "pct": 4.7,
+     "cum": 79.1
     },
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 223,
-     "pct": 4.5,
-     "cum": 82.0
+     "orders": 198,
+     "pct": 4.2,
+     "cum": 83.4
     },
     {
      "brand": "The Breakfast Club Turbo",
      "cb": "the breakfast club",
-     "orders": 175,
-     "pct": 3.5,
-     "cum": 85.5
-    },
-    {
-     "brand": "San Jerónimo Turbo",
-     "cb": "helados san jeronimo",
-     "orders": 84,
-     "pct": 1.7,
-     "cum": 87.2
-    },
-    {
-     "brand": "Monteverde Turbo",
-     "cb": "monteverde",
-     "orders": 68,
-     "pct": 1.4,
-     "cum": 88.6
+     "orders": 184,
+     "pct": 3.9,
+     "cum": 87.3
     },
     {
      "brand": "Frost By Oreo Turbo",
      "cb": "frost",
-     "orders": 47,
-     "pct": 0.9,
-     "cum": 89.5
+     "orders": 72,
+     "pct": 1.5,
+     "cum": 88.8
     },
     {
-     "brand": "Desgranados & Co Turbo",
-     "cb": "desgranados co",
-     "orders": 42,
-     "pct": 0.8,
-     "cum": 90.4
+     "brand": "Monteverde Turbo",
+     "cb": "monteverde",
+     "orders": 69,
+     "pct": 1.5,
+     "cum": 90.3
     },
     {
-     "brand": "Señor Burrito Turbo",
-     "cb": "senor burrito",
-     "orders": 36,
-     "pct": 0.7,
-     "cum": 91.1
+     "brand": "San Jerónimo Turbo",
+     "cb": "helados san jeronimo",
+     "orders": 64,
+     "pct": 1.4,
+     "cum": 91.7
     },
     {
      "brand": "The Egg Spot Turbo",
      "cb": "the egg spot",
-     "orders": 34,
+     "orders": 36,
+     "pct": 0.8,
+     "cum": 92.5
+    },
+    {
+     "brand": "Desgranados & Co Turbo",
+     "cb": "desgranados co",
+     "orders": 33,
      "pct": 0.7,
-     "cum": 91.8
+     "cum": 93.2
     },
     {
-     "brand": "House of Salads Turbo",
-     "cb": "house of salads",
-     "orders": 31,
-     "pct": 0.6,
-     "cum": 92.4
-    },
-    {
-     "brand": "La Casa Mexicana Turbo",
-     "cb": "la casa mexicana",
-     "orders": 30,
-     "pct": 0.6,
-     "cum": 93.0
-    },
-    {
-     "brand": "Pret Sandwich Bistro Turbo",
-     "cb": "pret sandwich bistro",
-     "orders": 29,
-     "pct": 0.6,
-     "cum": 93.6
-    },
-    {
-     "brand": "Alba Vegetarian Turbo",
-     "cb": "alba vegetarian",
+     "brand": "El Jefe Turbo",
+     "cb": "sanduches el jefe",
      "orders": 28,
      "pct": 0.6,
-     "cum": 94.1
+     "cum": 93.8
     },
     {
      "brand": "Almuerzos de la Casa Turbo",
      "cb": "almuerzos d la casa",
-     "orders": 27,
-     "pct": 0.5,
-     "cum": 94.7
+     "orders": 26,
+     "pct": 0.6,
+     "cum": 94.3
     },
     {
-     "brand": "Foodology Court Turbo",
-     "cb": "foodology",
+     "brand": "La Casa Mexicana Turbo",
+     "cb": "la casa mexicana",
+     "orders": 25,
+     "pct": 0.5,
+     "cum": 94.9
+    },
+    {
+     "brand": "House of Salads Turbo",
+     "cb": "house of salads",
      "orders": 23,
      "pct": 0.5,
-     "cum": 95.1
+     "cum": 95.4
     },
     {
-     "brand": "Acpm Corrientazo Turbo",
-     "cb": "acpm corrientazo",
-     "orders": 23,
-     "pct": 0.5,
-     "cum": 95.6
-    },
-    {
-     "brand": "Desayunos mi Tierrita Turbo",
-     "cb": "desayunos mi tierrita",
-     "orders": 22,
-     "pct": 0.4,
-     "cum": 96.1
-    },
-    {
-     "brand": "Local Cocina Consciente turbo",
-     "cb": "local cocina consciente",
+     "brand": "Pret Sandwich Bistro Turbo",
+     "cb": "pret sandwich bistro",
      "orders": 21,
-     "pct": 0.4,
-     "cum": 96.5
+     "pct": 0.5,
+     "cum": 95.8
     },
     {
-     "brand": "Doritos Locos By Dorito Turbo",
-     "cb": "doritos locos",
+     "brand": "Señor Burrito Turbo",
+     "cb": "senor burrito",
      "orders": 20,
      "pct": 0.4,
-     "cum": 96.9
+     "cum": 96.2
     },
     {
      "brand": "Casa Árabe Turbo",
      "cb": "casa arabe",
      "orders": 20,
      "pct": 0.4,
-     "cum": 97.3
+     "cum": 96.7
     },
     {
-     "brand": "Numa Cocina Mediterranea - Turbo",
-     "cb": "numa cocina mediterranea",
-     "orders": 15,
-     "pct": 0.3,
-     "cum": 97.6
+     "brand": "House Of Burgers Turbo",
+     "cb": "house of burgers",
+     "orders": 18,
+     "pct": 0.4,
+     "cum": 97.1
     },
     {
-     "brand": "El Jefe Turbo",
-     "cb": "sanduches el jefe",
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
+     "orders": 17,
+     "pct": 0.4,
+     "cum": 97.4
+    },
+    {
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
      "orders": 14,
      "pct": 0.3,
-     "cum": 97.9
+     "cum": 97.7
     },
     {
      "brand": "Selvatiko Turbo",
      "cb": "selvatiko",
      "orders": 14,
      "pct": 0.3,
-     "cum": 98.1
+     "cum": 98.0
     },
     {
-     "brand": "Vicio Turbo",
-     "cb": "vicio",
-     "orders": 14,
+     "brand": "Burrito Cantina Turbo",
+     "cb": "burrito cantina",
+     "orders": 12,
      "pct": 0.3,
-     "cum": 98.4
+     "cum": 98.3
+    },
+    {
+     "brand": "Desayunos mi Tierrita Turbo",
+     "cb": "desayunos mi tierrita",
+     "orders": 10,
+     "pct": 0.2,
+     "cum": 98.5
     },
     {
      "brand": "Bottaniko Turbo",
      "cb": "bottaniko",
-     "orders": 14,
-     "pct": 0.3,
+     "orders": 10,
+     "pct": 0.2,
      "cum": 98.7
     },
     {
      "brand": "Cacerola Turbo",
      "cb": "cacerola",
-     "orders": 12,
-     "pct": 0.2,
-     "cum": 99.0
-    },
-    {
-     "brand": "House Of Burgers Turbo",
-     "cb": "house of burgers",
-     "orders": 12,
-     "pct": 0.2,
-     "cum": 99.2
-    },
-    {
-     "brand": "El Ejecutivo Turbo",
-     "cb": "el ejecutivo",
-     "orders": 10,
-     "pct": 0.2,
-     "cum": 99.4
-    },
-    {
-     "brand": "El Calentao Turbo",
-     "cb": "el calentao",
      "orders": 9,
      "pct": 0.2,
-     "cum": 99.6
-    },
-    {
-     "brand": "Burrito Cantina Turbo",
-     "cb": "burrito cantina",
-     "orders": 8,
-     "pct": 0.2,
-     "cum": 99.7
+     "cum": 98.9
     },
     {
      "brand": "La Cuadra Desayunos Turbo",
      "cb": "la cuadra desayunos",
+     "orders": 8,
+     "pct": 0.2,
+     "cum": 99.1
+    },
+    {
+     "brand": "Numa Cocina Mediterranea - Turbo",
+     "cb": "numa cocina mediterranea",
      "orders": 7,
+     "pct": 0.2,
+     "cum": 99.2
+    },
+    {
+     "brand": "Local Cocina Consciente turbo",
+     "cb": "local cocina consciente",
+     "orders": 6,
      "pct": 0.1,
-     "cum": 99.9
+     "cum": 99.4
+    },
+    {
+     "brand": "Doritos Locos By Dorito Turbo",
+     "cb": "doritos locos",
+     "orders": 6,
+     "pct": 0.1,
+     "cum": 99.5
+    },
+    {
+     "brand": "Foodology Court Turbo",
+     "cb": "foodology",
+     "orders": 6,
+     "pct": 0.1,
+     "cum": 99.6
     },
     {
      "brand": "Mañanero Diario Turbo",
      "cb": "mananero diario",
-     "orders": 6,
+     "orders": 5,
+     "pct": 0.1,
+     "cum": 99.7
+    },
+    {
+     "brand": "Vicio Turbo",
+     "cb": "vicio",
+     "orders": 5,
+     "pct": 0.1,
+     "cum": 99.8
+    },
+    {
+     "brand": "El Calentao Turbo",
+     "cb": "el calentao",
+     "orders": 4,
+     "pct": 0.1,
+     "cum": 99.9
+    },
+    {
+     "brand": "El Ejecutivo Turbo",
+     "cb": "el ejecutivo",
+     "orders": 4,
      "pct": 0.1,
      "cum": 100.0
     }
    ],
    "top5": [
     "avocalia",
-    "burritos co",
     "brunch munch",
-    "la cuadra",
-    "green house"
+    "burritos co",
+    "green house",
+    "la cuadra"
    ],
    "top5_detail": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 922,
-     "wow": -8.1,
-     "orders_prev": 1003,
-     "avg_rt": 1.75,
-     "avg_cov": 91.0,
-     "drt": 0.2,
+     "orders": 937,
+     "wow": 1.6,
+     "orders_prev": 922,
+     "avg_rt": 1.56,
+     "avg_cov": 97.0,
+     "drt": -0.19,
      "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chicó",
      "rows": [
       {
        "coc": "Chicó",
-       "orders": 152,
+       "orders": 206,
        "rank": 1,
-       "nbrands": 15,
+       "nbrands": 13,
+       "rt": 2.15,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 126,
+       "rank": 2,
+       "nbrands": 28,
+       "rt": 1.97,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Parque 93 / Castellana",
+       "orders": 104,
+       "rank": 1,
+       "nbrands": 26,
+       "rt": 1.72,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chapinero",
+       "orders": 87,
+       "rank": 2,
+       "nbrands": 36,
+       "rt": 2.1,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 84,
+       "rank": 1,
+       "nbrands": 27,
+       "rt": 0.63,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Andes",
+       "orders": 74,
+       "rank": 1,
+       "nbrands": 27,
+       "rt": 1.04,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Arrecife",
+       "orders": 72,
+       "rank": 1,
+       "nbrands": 23,
+       "rt": 1.57,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 70,
+       "rank": 1,
+       "nbrands": 29,
+       "rt": 1.39,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Colina",
+       "orders": 59,
+       "rank": 2,
+       "nbrands": 27,
+       "rt": 1.76,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Kennedy",
+       "orders": 30,
+       "rank": 3,
+       "nbrands": 23,
+       "rt": 1.26,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Cedritos",
+       "orders": 25,
+       "rank": 4,
+       "nbrands": 20,
+       "rt": null,
+       "size": null,
+       "cov": null,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
+     "brand": "Brunch & Munch Turbo",
+     "cb": "brunch munch",
+     "orders": 523,
+     "wow": -2.4,
+     "orders_prev": 536,
+     "avg_rt": 2.65,
+     "avg_cov": 92.2,
+     "drt": 0.55,
+     "dcov": -0.0,
+     "best": "Usaquén",
+     "worst": "Chapinero",
+     "rows": [
+      {
+       "coc": "Calle 109",
+       "orders": 153,
+       "rank": 1,
+       "nbrands": 28,
+       "rt": 3.18,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Chicó",
+       "orders": 116,
+       "rank": 2,
+       "nbrands": 13,
+       "rt": 3.83,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Andes",
+       "orders": 68,
+       "rank": 2,
+       "nbrands": 27,
+       "rt": 1.64,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chapinero",
+       "orders": 60,
+       "rank": 4,
+       "nbrands": 36,
+       "rt": 6.03,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "bad"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 46,
+       "rank": 4,
+       "nbrands": 27,
+       "rt": 0.75,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 29,
+       "rank": 6,
+       "nbrands": 29,
+       "rt": 2.53,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Cedritos",
+       "orders": 24,
+       "rank": 5,
+       "nbrands": 20,
+       "rt": null,
+       "size": null,
+       "cov": null,
+       "sev": "ok"
+      },
+      {
+       "coc": "Parque 93 / Castellana",
+       "orders": 12,
+       "rank": 9,
+       "nbrands": 26,
+       "rt": 2.54,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Kennedy",
+       "orders": 10,
+       "rank": 7,
+       "nbrands": 23,
+       "rt": 1.35,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Arrecife",
+       "orders": 5,
+       "rank": 12,
+       "nbrands": 23,
+       "rt": 2.0,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "warn"
+      }
+     ]
+    },
+    {
+     "brand": "Burritos & Co Turbo",
+     "cb": "burritos co",
+     "orders": 492,
+     "wow": -11.8,
+     "orders_prev": 558,
+     "avg_rt": 2.36,
+     "avg_cov": 93.3,
+     "drt": -0.08,
+     "dcov": -0.0,
+     "best": "Kennedy",
+     "worst": "Arrecife",
+     "rows": [
+      {
+       "coc": "Calle 109",
+       "orders": 87,
+       "rank": 3,
+       "nbrands": 28,
+       "rt": 2.86,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Colina",
+       "orders": 64,
+       "rank": 1,
+       "nbrands": 27,
+       "rt": 1.26,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Andes",
+       "orders": 60,
+       "rank": 3,
+       "nbrands": 27,
+       "rt": 1.1,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Villa del Prado",
+       "orders": 60,
+       "rank": 2,
+       "nbrands": 29,
+       "rt": null,
+       "size": null,
+       "cov": null,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chapinero",
+       "orders": 58,
+       "rank": 5,
+       "nbrands": 36,
+       "rt": 2.31,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Parque 93 / Castellana",
+       "orders": 49,
+       "rank": 3,
+       "nbrands": 26,
+       "rt": 1.88,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Kennedy",
+       "orders": 46,
+       "rank": 2,
+       "nbrands": 23,
+       "rt": 0.87,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Cedritos",
+       "orders": 37,
+       "rank": 2,
+       "nbrands": 20,
+       "rt": null,
+       "size": null,
+       "cov": null,
+       "sev": "ok"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 28,
+       "rank": 6,
+       "nbrands": 27,
+       "rt": 1.44,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Chicó",
+       "orders": 2,
+       "rank": 9,
+       "nbrands": 13,
+       "rt": 2.22,
+       "size": 2100,
+       "cov": 70.0,
+       "sev": "warn"
+      },
+      {
+       "coc": "Arrecife",
+       "orders": 1,
+       "rank": 22,
+       "nbrands": 23,
+       "rt": 7.32,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "bad"
+      }
+     ]
+    },
+    {
+     "brand": "Green House Turbo",
+     "cb": "green house",
+     "orders": 406,
+     "wow": 5.2,
+     "orders_prev": 386,
+     "avg_rt": 1.85,
+     "avg_cov": 94.4,
+     "drt": -0.19,
+     "dcov": -0.0,
+     "best": "Chicó",
+     "worst": "Calle 109",
+     "rows": [
+      {
+       "coc": "Chapinero",
+       "orders": 97,
+       "rank": 1,
+       "nbrands": 36,
        "rt": 2.45,
        "size": 3000,
        "cov": 100.0,
@@ -2981,562 +3374,207 @@
       },
       {
        "coc": "Calle 109",
-       "orders": 137,
-       "rank": 1,
-       "nbrands": 30,
-       "rt": 1.95,
+       "orders": 68,
+       "rank": 5,
+       "nbrands": 28,
+       "rt": 3.01,
        "size": 3000,
        "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Chapinero",
-       "orders": 102,
-       "rank": 1,
-       "nbrands": 36,
-       "rt": 2.06,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
+       "sev": "bad"
       },
       {
        "coc": "Parque 93 / Castellana",
-       "orders": 96,
-       "rank": 1,
-       "nbrands": 28,
-       "rt": 1.91,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Andes",
-       "orders": 83,
-       "rank": 1,
-       "nbrands": 30,
-       "rt": 1.8,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 79,
-       "rank": 1,
-       "nbrands": 29,
-       "rt": 0.62,
+       "orders": 61,
+       "rank": 2,
+       "nbrands": 26,
+       "rt": 2.39,
        "size": 3000,
        "cov": 100.0,
-       "sev": "ok"
+       "sev": "warn"
       },
       {
        "coc": "Villa del Prado",
-       "orders": 75,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": 1.52,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
+       "orders": 43,
+       "rank": 4,
+       "nbrands": 29,
+       "rt": 2.1,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
       },
       {
        "coc": "Arrecife",
-       "orders": 67,
-       "rank": 1,
-       "nbrands": 27,
-       "rt": 2.42,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Colina",
-       "orders": 58,
-       "rank": 2,
-       "nbrands": 31,
-       "rt": 1.08,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Cedritos",
-       "orders": 50,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
-      },
-      {
-       "coc": "Kennedy",
-       "orders": 23,
-       "rank": 4,
-       "nbrands": 24,
-       "rt": 1.68,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      }
-     ]
-    },
-    {
-     "brand": "Burritos & Co Turbo",
-     "cb": "burritos co",
-     "orders": 558,
-     "wow": 23.2,
-     "orders_prev": 453,
-     "avg_rt": 2.44,
-     "avg_cov": 90.0,
-     "drt": 0.95,
-     "dcov": 0.0,
-     "best": "Usaquén",
-     "worst": "Chicó",
-     "rows": [
-      {
-       "coc": "Calle 109",
-       "orders": 101,
-       "rank": 3,
-       "nbrands": 30,
-       "rt": 3.1,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "bad"
-      },
-      {
-       "coc": "Andes",
-       "orders": 81,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": 1.08,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Villa del Prado",
-       "orders": 77,
-       "rank": 1,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
-      },
-      {
-       "coc": "Colina",
-       "orders": 71,
-       "rank": 1,
-       "nbrands": 31,
-       "rt": 1.06,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Chapinero",
-       "orders": 51,
-       "rank": 4,
-       "nbrands": 36,
-       "rt": 1.58,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Kennedy",
-       "orders": 50,
-       "rank": 1,
-       "nbrands": 24,
-       "rt": 2.26,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Parque 93 / Castellana",
-       "orders": 50,
-       "rank": 3,
-       "nbrands": 28,
-       "rt": 1.34,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Cedritos",
-       "orders": 45,
-       "rank": 3,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 31,
-       "rank": 5,
-       "nbrands": 29,
-       "rt": 0.4,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Chicó",
-       "orders": 1,
-       "rank": 11,
-       "nbrands": 15,
-       "rt": 8.72,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "bad"
-      }
-     ]
-    },
-    {
-     "brand": "Brunch & Munch Turbo",
-     "cb": "brunch munch",
-     "orders": 536,
-     "wow": 29.8,
-     "orders_prev": 413,
-     "avg_rt": 2.1,
-     "avg_cov": 84.4,
-     "drt": -0.39,
-     "dcov": -0.0,
-     "best": "Kennedy",
-     "worst": "Chicó",
-     "rows": [
-      {
-       "coc": "Calle 109",
-       "orders": 134,
-       "rank": 2,
-       "nbrands": 30,
-       "rt": 1.78,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Chicó",
-       "orders": 123,
-       "rank": 2,
-       "nbrands": 15,
-       "rt": 3.86,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "bad"
-      },
-      {
-       "coc": "Chapinero",
-       "orders": 88,
-       "rank": 3,
-       "nbrands": 36,
-       "rt": 2.24,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Andes",
-       "orders": 69,
-       "rank": 3,
-       "nbrands": 30,
-       "rt": 2.41,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 44,
-       "rank": 2,
-       "nbrands": 29,
-       "rt": 0.79,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Cedritos",
        "orders": 41,
+       "rank": 3,
+       "nbrands": 23,
+       "rt": 1.42,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Usaquén",
+       "orders": 39,
        "rank": 5,
-       "nbrands": 30,
+       "nbrands": 27,
+       "rt": 0.73,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Cedritos",
+       "orders": 26,
+       "rank": 3,
+       "nbrands": 20,
        "rt": null,
        "size": null,
        "cov": null,
        "sev": "ok"
       },
       {
-       "coc": "Villa del Prado",
-       "orders": 14,
-       "rank": 10,
-       "nbrands": 30,
-       "rt": 2.22,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
        "coc": "Kennedy",
-       "orders": 11,
-       "rank": 7,
-       "nbrands": 24,
-       "rt": 0.69,
-       "size": 2100,
-       "cov": 70.0,
-       "sev": "warn"
+       "orders": 20,
+       "rank": 5,
+       "nbrands": 23,
+       "rt": 1.75,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
-       "coc": "Parque 93 / Castellana",
-       "orders": 11,
-       "rank": 10,
-       "nbrands": 28,
-       "rt": 2.9,
+       "coc": "Colina",
+       "orders": 10,
+       "rank": 11,
+       "nbrands": 27,
+       "rt": 2.58,
        "size": 2400,
        "cov": 80.0,
        "sev": "warn"
       },
       {
-       "coc": "Arrecife",
+       "coc": "Chicó",
        "orders": 1,
-       "rank": 24,
-       "nbrands": 27,
-       "rt": 2.03,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
+       "rank": 12,
+       "nbrands": 13,
+       "rt": 0.22,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "ok"
       }
      ]
     },
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 399,
-     "wow": 43.5,
-     "orders_prev": 278,
-     "avg_rt": 1.59,
-     "avg_cov": 87.8,
-     "drt": 0.01,
-     "dcov": 0.0,
+     "orders": 328,
+     "wow": -17.8,
+     "orders_prev": 399,
+     "avg_rt": 1.62,
+     "avg_cov": 93.3,
+     "drt": 0.02,
+     "dcov": -0.0,
      "best": "Usaquén",
-     "worst": "Arrecife",
+     "worst": "Colina",
      "rows": [
       {
        "coc": "Calle 109",
-       "orders": 69,
-       "rank": 4,
-       "nbrands": 30,
-       "rt": 1.77,
+       "orders": 59,
+       "rank": 6,
+       "nbrands": 28,
+       "rt": 1.99,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Arrecife",
+       "orders": 48,
+       "rank": 2,
+       "nbrands": 23,
+       "rt": 1.5,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Andes",
-       "orders": 68,
+       "orders": 45,
        "rank": 4,
-       "nbrands": 30,
-       "rt": 1.18,
+       "nbrands": 27,
+       "rt": 1.22,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Parque 93 / Castellana",
-       "orders": 44,
+       "orders": 45,
        "rank": 4,
-       "nbrands": 28,
-       "rt": 1.2,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
+       "nbrands": 26,
+       "rt": 2.04,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
       },
       {
        "coc": "Chapinero",
-       "orders": 41,
-       "rank": 6,
-       "nbrands": 36,
-       "rt": 1.39,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 41,
-       "rank": 3,
-       "nbrands": 29,
-       "rt": 0.68,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Arrecife",
        "orders": 32,
-       "rank": 5,
-       "nbrands": 27,
-       "rt": 2.7,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Cedritos",
-       "orders": 30,
        "rank": 7,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
-      },
-      {
-       "coc": "Colina",
-       "orders": 25,
-       "rank": 5,
-       "nbrands": 31,
-       "rt": 1.5,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Kennedy",
-       "orders": 25,
-       "rank": 3,
-       "nbrands": 24,
-       "rt": 1.88,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Villa del Prado",
-       "orders": 24,
-       "rank": 7,
-       "nbrands": 30,
-       "rt": 2.05,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "warn"
-      }
-     ]
-    },
-    {
-     "brand": "Green House Turbo",
-     "cb": "green house",
-     "orders": 386,
-     "wow": 1.3,
-     "orders_prev": 381,
-     "avg_rt": 2.04,
-     "avg_cov": 87.8,
-     "drt": 0.25,
-     "dcov": 0.0,
-     "best": "Chicó",
-     "worst": "Colina",
-     "rows": [
-      {
-       "coc": "Chapinero",
-       "orders": 93,
-       "rank": 2,
        "nbrands": 36,
-       "rt": 1.35,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Calle 109",
-       "orders": 56,
-       "rank": 6,
-       "nbrands": 30,
-       "rt": 2.26,
+       "rt": 2.12,
        "size": 2400,
        "cov": 80.0,
        "sev": "warn"
-      },
-      {
-       "coc": "Parque 93 / Castellana",
-       "orders": 53,
-       "rank": 2,
-       "nbrands": 28,
-       "rt": 2.86,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      },
-      {
-       "coc": "Cedritos",
-       "orders": 51,
-       "rank": 1,
-       "nbrands": 30,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
-      },
-      {
-       "coc": "Arrecife",
-       "orders": 42,
-       "rank": 2,
-       "nbrands": 27,
-       "rt": 1.9,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
       },
       {
        "coc": "Usaquén",
-       "orders": 37,
-       "rank": 4,
-       "nbrands": 29,
-       "rt": 0.8,
+       "orders": 26,
+       "rank": 8,
+       "nbrands": 27,
+       "rt": 0.45,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Villa del Prado",
-       "orders": 33,
-       "rank": 5,
-       "nbrands": 30,
-       "rt": 1.62,
+       "orders": 26,
+       "rank": 8,
+       "nbrands": 29,
+       "rt": 1.12,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Kennedy",
-       "orders": 12,
-       "rank": 6,
-       "nbrands": 24,
-       "rt": 3.18,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "bad"
+       "orders": 22,
+       "rank": 4,
+       "nbrands": 23,
+       "rt": 1.88,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Colina",
-       "orders": 7,
-       "rank": 12,
-       "nbrands": 31,
-       "rt": 3.68,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "bad"
+       "orders": 17,
+       "rank": 8,
+       "nbrands": 27,
+       "rt": 2.25,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "warn"
       },
       {
-       "coc": "Chicó",
-       "orders": 2,
-       "rank": 10,
-       "nbrands": 15,
-       "rt": 0.7,
-       "size": 2400,
-       "cov": 80.0,
+       "coc": "Cedritos",
+       "orders": 8,
+       "rank": 7,
+       "nbrands": 20,
+       "rt": null,
+       "size": null,
+       "cov": null,
        "sev": "ok"
       }
      ]
@@ -3544,75 +3582,75 @@
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 230,
-     "wow": 22.3,
-     "orders_prev": 188,
-     "avg_rt": 2.01,
-     "avg_cov": 91.7,
-     "drt": 0.27,
+     "orders": 218,
+     "wow": -5.2,
+     "orders_prev": 230,
+     "avg_rt": 1.9,
+     "avg_cov": 100.0,
+     "drt": -0.11,
      "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chicó",
      "rows": [
       {
        "coc": "Chicó",
-       "orders": 62,
+       "orders": 56,
        "rank": 3,
-       "nbrands": 15,
-       "rt": 4.56,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 13,
+       "rt": 4.93,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "bad"
       },
       {
-       "coc": "Calle 109",
-       "orders": 55,
-       "rank": 7,
-       "nbrands": 30,
-       "rt": 2.17,
+       "coc": "Usaquén",
+       "orders": 52,
+       "rank": 2,
+       "nbrands": 27,
+       "rt": 0.52,
        "size": 3000,
        "cov": 100.0,
-       "sev": "warn"
+       "sev": "ok"
+      },
+      {
+       "coc": "Calle 109",
+       "orders": 38,
+       "rank": 9,
+       "nbrands": 28,
+       "rt": 1.77,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       },
       {
        "coc": "Villa del Prado",
-       "orders": 39,
-       "rank": 4,
-       "nbrands": 30,
-       "rt": 1.51,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Usaquén",
-       "orders": 28,
-       "rank": 6,
+       "orders": 29,
+       "rank": 5,
        "nbrands": 29,
-       "rt": 0.4,
+       "rt": 0.97,
        "size": 3000,
        "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Colina",
-       "orders": 24,
-       "rank": 6,
-       "nbrands": 31,
-       "rt": 0.96,
-       "size": 2400,
-       "cov": 80.0,
        "sev": "ok"
       },
       {
        "coc": "Chapinero",
-       "orders": 22,
+       "orders": 25,
        "rank": 9,
        "nbrands": 36,
-       "rt": 2.46,
-       "size": 2700,
-       "cov": 90.0,
+       "rt": 2.3,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
+      },
+      {
+       "coc": "Colina",
+       "orders": 18,
+       "rank": 7,
+       "nbrands": 27,
+       "rt": 0.9,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
       }
      ]
     }
@@ -3622,209 +3660,209 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 83,
-      "pct": 17.3,
-      "rt": 1.8,
-      "size": 2700
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 81,
-      "pct": 16.9,
-      "rt": 1.08,
+      "orders": 74,
+      "pct": 16.8,
+      "rt": 1.04,
       "size": 2700
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 69,
-      "pct": 14.4,
-      "rt": 2.41,
-      "size": 2400
+      "orders": 68,
+      "pct": 15.5,
+      "rt": 1.64,
+      "size": 3000
+     },
+     {
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 60,
+      "pct": 13.6,
+      "rt": 1.1,
+      "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 68,
-      "pct": 14.2,
-      "rt": 1.18,
+      "orders": 45,
+      "pct": 10.2,
+      "rt": 1.22,
       "size": 2700
      },
      {
-      "brand": "Ñamgucheria Turbo",
-      "cb": "namgucheria",
-      "orders": 31,
-      "pct": 6.5,
-      "rt": 2.81,
-      "size": 2400
+      "brand": "Mr Beast Burger Turbo",
+      "cb": "mr beast burger",
+      "orders": 36,
+      "pct": 8.2,
+      "rt": 1.8,
+      "size": 3000
      }
     ],
     "Arrecife": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 67,
-      "pct": 23.5,
-      "rt": 2.42,
+      "orders": 72,
+      "pct": 26.5,
+      "rt": 1.57,
+      "size": 2700
+     },
+     {
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 48,
+      "pct": 17.6,
+      "rt": 1.5,
       "size": 2700
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 42,
-      "pct": 14.7,
-      "rt": 1.9,
-      "size": 2700
-     },
-     {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 34,
-      "pct": 11.9,
-      "rt": 4.15,
+      "orders": 41,
+      "pct": 15.1,
+      "rt": 1.42,
       "size": 2700
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 33,
-      "pct": 11.6,
-      "rt": 3.43,
-      "size": 2700
+      "orders": 20,
+      "pct": 7.4,
+      "rt": 2.28,
+      "size": 3000
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 32,
-      "pct": 11.2,
-      "rt": 2.7,
-      "size": 2700
+      "brand": "Mr Beast Burger Turbo",
+      "cb": "mr beast burger",
+      "orders": 19,
+      "pct": 7.0,
+      "rt": 2.45,
+      "size": 2400
      }
     ],
     "Calle 109": [
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 137,
-      "pct": 16.6,
-      "rt": 1.95,
+      "brand": "Brunch & Munch Turbo",
+      "cb": "brunch munch",
+      "orders": 153,
+      "pct": 18.7,
+      "rt": 3.18,
       "size": 3000
      },
      {
-      "brand": "Brunch & Munch Turbo",
-      "cb": "brunch munch",
-      "orders": 134,
-      "pct": 16.3,
-      "rt": 1.78,
-      "size": 2400
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 126,
+      "pct": 15.4,
+      "rt": 1.97,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 101,
-      "pct": 12.3,
-      "rt": 3.1,
-      "size": 2700
+      "orders": 87,
+      "pct": 10.6,
+      "rt": 2.86,
+      "size": 3000
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 69,
-      "pct": 8.4,
-      "rt": 1.77,
-      "size": 2700
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 74,
+      "pct": 9.0,
+      "rt": 2.96,
+      "size": 3000
      },
      {
-      "brand": "Ñamgucheria Turbo",
-      "cb": "namgucheria",
-      "orders": 59,
-      "pct": 7.2,
-      "rt": 3.88,
-      "size": 2400
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 68,
+      "pct": 8.3,
+      "rt": 3.01,
+      "size": 3000
      }
     ],
     "Cedritos": [
      {
-      "brand": "Green House Turbo",
-      "cb": "green house",
-      "orders": 51,
-      "pct": 13.1,
+      "brand": "Ñamgucheria Turbo",
+      "cb": "namgucheria",
+      "orders": 40,
+      "pct": 19.7,
       "rt": null,
       "size": null
      },
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 50,
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 37,
+      "pct": 18.2,
+      "rt": null,
+      "size": null
+     },
+     {
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 26,
       "pct": 12.8,
       "rt": null,
       "size": null
      },
      {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 45,
-      "pct": 11.5,
-      "rt": null,
-      "size": null
-     },
-     {
-      "brand": "Ñamgucheria Turbo",
-      "cb": "namgucheria",
-      "orders": 42,
-      "pct": 10.8,
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 25,
+      "pct": 12.3,
       "rt": null,
       "size": null
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 41,
-      "pct": 10.5,
+      "orders": 24,
+      "pct": 11.8,
       "rt": null,
       "size": null
      }
     ],
     "Chapinero": [
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 102,
-      "pct": 14.8,
-      "rt": 2.06,
-      "size": 2700
-     },
-     {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 93,
-      "pct": 13.5,
-      "rt": 1.35,
+      "orders": 97,
+      "pct": 15.4,
+      "rt": 2.45,
+      "size": 3000
+     },
+     {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 87,
+      "pct": 13.8,
+      "rt": 2.1,
+      "size": 3000
+     },
+     {
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 61,
+      "pct": 9.7,
+      "rt": 4.1,
       "size": 2700
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 88,
-      "pct": 12.8,
-      "rt": 2.24,
-      "size": 2400
+      "orders": 60,
+      "pct": 9.5,
+      "rt": 6.03,
+      "size": 2700
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 51,
-      "pct": 7.4,
-      "rt": 1.58,
-      "size": 2700
-     },
-     {
-      "brand": "The Breakfast Club Turbo",
-      "cb": "the breakfast club",
-      "orders": 46,
-      "pct": 6.7,
-      "rt": 1.31,
+      "orders": 58,
+      "pct": 9.2,
+      "rt": 2.31,
       "size": 2700
      }
     ],
@@ -3832,41 +3870,41 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 152,
-      "pct": 37.6,
-      "rt": 2.45,
+      "orders": 206,
+      "pct": 45.4,
+      "rt": 2.15,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 123,
-      "pct": 30.4,
-      "rt": 3.86,
-      "size": 2700
+      "orders": 116,
+      "pct": 25.6,
+      "rt": 3.83,
+      "size": 3000
      },
      {
       "brand": "Cinnabon Turbo",
       "cb": "cinnabon",
-      "orders": 62,
-      "pct": 15.3,
-      "rt": 4.56,
-      "size": 2700
+      "orders": 56,
+      "pct": 12.3,
+      "rt": 4.93,
+      "size": 3000
      },
      {
       "brand": "The Breakfast Club Turbo",
       "cb": "the breakfast club",
-      "orders": 31,
-      "pct": 7.7,
-      "rt": 4.39,
-      "size": 2700
+      "orders": 41,
+      "pct": 9.0,
+      "rt": 3.51,
+      "size": 3000
      },
      {
       "brand": "Desayunos de la Abuela Turbo",
       "cb": "desayunos de la abuela",
-      "orders": 16,
-      "pct": 4.0,
-      "rt": 2.7,
+      "orders": 10,
+      "pct": 2.2,
+      "rt": 6.16,
       "size": 3000
      }
     ],
@@ -3874,210 +3912,210 @@
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 71,
-      "pct": 18.3,
-      "rt": 1.06,
-      "size": 2700
+      "orders": 64,
+      "pct": 19.0,
+      "rt": 1.26,
+      "size": 3000
      },
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 58,
-      "pct": 14.9,
-      "rt": 1.08,
-      "size": 2700
+      "orders": 59,
+      "pct": 17.5,
+      "rt": 1.76,
+      "size": 3000
      },
      {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 45,
-      "pct": 11.6,
-      "rt": 3.07,
-      "size": 2400
-     },
-     {
-      "brand": "Desayunos de la Abuela Turbo",
-      "cb": "desayunos de la abuela",
-      "orders": 34,
-      "pct": 8.8,
-      "rt": 4.13,
-      "size": 2400
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 25,
-      "pct": 6.4,
-      "rt": 1.5,
-      "size": 2400
-     }
-    ],
-    "Kennedy": [
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 50,
-      "pct": 21.6,
-      "rt": 2.26,
-      "size": 2700
-     },
-     {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 50,
-      "pct": 21.6,
-      "rt": 5.09,
-      "size": 2100
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 25,
-      "pct": 10.8,
-      "rt": 1.88,
-      "size": 2700
-     },
-     {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 23,
-      "pct": 10.0,
-      "rt": 1.68,
+      "orders": 40,
+      "pct": 11.9,
+      "rt": 2.61,
       "size": 2700
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 15,
-      "pct": 6.5,
-      "rt": 2.22,
+      "orders": 21,
+      "pct": 6.2,
+      "rt": 2.18,
+      "size": 3000
+     },
+     {
+      "brand": "Desayunos de la Abuela Turbo",
+      "cb": "desayunos de la abuela",
+      "orders": 21,
+      "pct": 6.2,
+      "rt": 1.6,
       "size": 2700
+     }
+    ],
+    "Kennedy": [
+     {
+      "brand": "Mr Beast Burger Turbo",
+      "cb": "mr beast burger",
+      "orders": 56,
+      "pct": 24.0,
+      "rt": 2.34,
+      "size": 2700
+     },
+     {
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 46,
+      "pct": 19.7,
+      "rt": 0.87,
+      "size": 3000
+     },
+     {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 30,
+      "pct": 12.9,
+      "rt": 1.26,
+      "size": 2700
+     },
+     {
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 22,
+      "pct": 9.4,
+      "rt": 1.88,
+      "size": 3000
+     },
+     {
+      "brand": "Green House Turbo",
+      "cb": "green house",
+      "orders": 20,
+      "pct": 8.6,
+      "rt": 1.75,
+      "size": 3000
      }
     ],
     "Parque 93 / Castellana": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 96,
-      "pct": 23.1,
-      "rt": 1.91,
-      "size": 2400
+      "orders": 104,
+      "pct": 25.9,
+      "rt": 1.72,
+      "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 53,
-      "pct": 12.7,
-      "rt": 2.86,
-      "size": 2700
+      "orders": 61,
+      "pct": 15.2,
+      "rt": 2.39,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 50,
-      "pct": 12.0,
-      "rt": 1.34,
+      "orders": 49,
+      "pct": 12.2,
+      "rt": 1.88,
       "size": 2700
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 44,
-      "pct": 10.6,
-      "rt": 1.2,
-      "size": 2400
+      "orders": 45,
+      "pct": 11.2,
+      "rt": 2.04,
+      "size": 3000
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 31,
-      "pct": 7.5,
-      "rt": 2.21,
-      "size": 2400
+      "orders": 37,
+      "pct": 9.2,
+      "rt": 2.8,
+      "size": 2700
      }
     ],
     "Usaquén": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 79,
-      "pct": 19.9,
-      "rt": 0.62,
+      "orders": 84,
+      "pct": 19.3,
+      "rt": 0.63,
+      "size": 3000
+     },
+     {
+      "brand": "Cinnabon Turbo",
+      "cb": "cinnabon",
+      "orders": 52,
+      "pct": 11.9,
+      "rt": 0.52,
+      "size": 3000
+     },
+     {
+      "brand": "Ñamgucheria Turbo",
+      "cb": "namgucheria",
+      "orders": 48,
+      "pct": 11.0,
+      "rt": 0.86,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 44,
-      "pct": 11.1,
-      "rt": 0.79,
-      "size": 3000
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 41,
-      "pct": 10.3,
-      "rt": 0.68,
+      "orders": 46,
+      "pct": 10.6,
+      "rt": 0.75,
       "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 37,
-      "pct": 9.3,
-      "rt": 0.8,
-      "size": 3000
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 31,
-      "pct": 7.8,
-      "rt": 0.4,
+      "orders": 39,
+      "pct": 8.9,
+      "rt": 0.73,
       "size": 3000
      }
     ],
     "Villa del Prado": [
      {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 70,
+      "pct": 16.1,
+      "rt": 1.39,
+      "size": 3000
+     },
+     {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 77,
-      "pct": 16.5,
+      "orders": 60,
+      "pct": 13.8,
       "rt": null,
       "size": null
      },
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 75,
-      "pct": 16.1,
-      "rt": 1.52,
-      "size": 2400
-     },
-     {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 61,
-      "pct": 13.1,
-      "rt": 3.15,
-      "size": 2400
-     },
-     {
-      "brand": "Cinnabon Turbo",
-      "cb": "cinnabon",
-      "orders": 39,
-      "pct": 8.4,
-      "rt": 1.51,
+      "orders": 43,
+      "pct": 9.9,
+      "rt": 1.58,
       "size": 2700
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 33,
-      "pct": 7.1,
-      "rt": 1.62,
-      "size": 2700
+      "orders": 43,
+      "pct": 9.9,
+      "rt": 2.1,
+      "size": 3000
+     },
+     {
+      "brand": "Cinnabon Turbo",
+      "cb": "cinnabon",
+      "orders": 29,
+      "pct": 6.7,
+      "rt": 0.97,
+      "size": 3000
      }
     ]
    },
@@ -4097,8 +4135,8 @@
   },
   "Bucaramanga": {
    "meta": {
-    "total_orders": 576,
-    "n_brands": 27,
+    "total_orders": 563,
+    "n_brands": 29,
     "top5_share": 70.0
    },
    "pareto": [
@@ -4106,189 +4144,203 @@
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
      "orders": 114,
-     "pct": 19.8,
-     "cum": 19.8
+     "pct": 20.2,
+     "cum": 20.2
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 107,
-     "pct": 18.6,
-     "cum": 38.4
+     "orders": 103,
+     "pct": 18.3,
+     "cum": 38.5
     },
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 91,
-     "pct": 15.8,
-     "cum": 54.2
+     "orders": 77,
+     "pct": 13.7,
+     "cum": 52.2
     },
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 57,
-     "pct": 9.9,
+     "orders": 67,
+     "pct": 11.9,
      "cum": 64.1
-    },
-    {
-     "brand": "Mr Beast Burger Turbo",
-     "cb": "mr beast burger",
-     "orders": 34,
-     "pct": 5.9,
-     "cum": 70.0
-    },
-    {
-     "brand": "The Breakfast Club Turbo",
-     "cb": "the breakfast club",
-     "orders": 29,
-     "pct": 5.0,
-     "cum": 75.0
-    },
-    {
-     "brand": "Cinnabon Turbo",
-     "cb": "cinnabon",
-     "orders": 20,
-     "pct": 3.5,
-     "cum": 78.5
-    },
-    {
-     "brand": "Honest Food Turbo",
-     "cb": "honest food",
-     "orders": 19,
-     "pct": 3.3,
-     "cum": 81.8
     },
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 18,
-     "pct": 3.1,
-     "cum": 84.9
+     "orders": 33,
+     "pct": 5.9,
+     "cum": 70.0
+    },
+    {
+     "brand": "Mr Beast Burger Turbo",
+     "cb": "mr beast burger",
+     "orders": 30,
+     "pct": 5.3,
+     "cum": 75.3
+    },
+    {
+     "brand": "The Breakfast Club Turbo",
+     "cb": "the breakfast club",
+     "orders": 24,
+     "pct": 4.3,
+     "cum": 79.6
+    },
+    {
+     "brand": "Honest Food Turbo",
+     "cb": "honest food",
+     "orders": 20,
+     "pct": 3.6,
+     "cum": 83.1
+    },
+    {
+     "brand": "Cinnabon Turbo",
+     "cb": "cinnabon",
+     "orders": 16,
+     "pct": 2.8,
+     "cum": 86.0
     },
     {
      "brand": "Ñamgucheria Turbo",
      "cb": "namgucheria",
-     "orders": 12,
-     "pct": 2.1,
-     "cum": 87.0
-    },
-    {
-     "brand": "El Ejecutivo Turbo",
-     "cb": "el ejecutivo",
-     "orders": 8,
-     "pct": 1.4,
-     "cum": 88.4
-    },
-    {
-     "brand": "Monteverde Turbo",
-     "cb": "monteverde",
-     "orders": 8,
-     "pct": 1.4,
-     "cum": 89.8
+     "orders": 14,
+     "pct": 2.5,
+     "cum": 88.5
     },
     {
      "brand": "Desayunos de la Abuela Turbo",
      "cb": "desayunos de la abuela",
-     "orders": 7,
-     "pct": 1.2,
-     "cum": 91.0
+     "orders": 10,
+     "pct": 1.8,
+     "cum": 90.2
     },
     {
-     "brand": "Almuerzos de la Casa Turbo",
-     "cb": "almuerzos d la casa",
-     "orders": 6,
-     "pct": 1.0,
-     "cum": 92.0
+     "brand": "Monteverde Turbo",
+     "cb": "monteverde",
+     "orders": 9,
+     "pct": 1.6,
+     "cum": 91.8
     },
     {
      "brand": "San Jerónimo Turbo",
      "cb": "helados san jeronimo",
-     "orders": 6,
-     "pct": 1.0,
-     "cum": 93.1
+     "orders": 8,
+     "pct": 1.4,
+     "cum": 93.3
     },
     {
-     "brand": "The Egg Spot Turbo",
-     "cb": "the egg spot",
+     "brand": "Almuerzos de la Casa Turbo",
+     "cb": "almuerzos d la casa",
      "orders": 5,
      "pct": 0.9,
-     "cum": 93.9
-    },
-    {
-     "brand": "El Jefe Turbo",
-     "cb": "sanduches el jefe",
-     "orders": 5,
-     "pct": 0.9,
-     "cum": 94.8
-    },
-    {
-     "brand": "Alba Vegetarian Turbo",
-     "cb": "alba vegetarian",
-     "orders": 5,
-     "pct": 0.9,
-     "cum": 95.7
-    },
-    {
-     "brand": "Bottaniko Turbo",
-     "cb": "bottaniko",
-     "orders": 5,
-     "pct": 0.9,
-     "cum": 96.5
+     "cum": 94.1
     },
     {
      "brand": "Frost By Oreo Turbo",
      "cb": "frost",
-     "orders": 4,
-     "pct": 0.7,
-     "cum": 97.2
+     "orders": 5,
+     "pct": 0.9,
+     "cum": 95.0
     },
     {
-     "brand": "Foodology Court Turbo",
-     "cb": "foodology",
+     "brand": "Desgranados & Co Turbo",
+     "cb": "desgranados co",
      "orders": 3,
      "pct": 0.5,
-     "cum": 97.7
+     "cum": 95.6
     },
     {
-     "brand": "Señor Burrito Turbo",
-     "cb": "senor burrito",
+     "brand": "The Egg Spot Turbo",
+     "cb": "the egg spot",
      "orders": 3,
      "pct": 0.5,
-     "cum": 98.3
+     "cum": 96.1
+    },
+    {
+     "brand": "El Jefe Turbo",
+     "cb": "sanduches el jefe",
+     "orders": 3,
+     "pct": 0.5,
+     "cum": 96.6
+    },
+    {
+     "brand": "House Of Burgers Turbo",
+     "cb": "house of burgers",
+     "orders": 2,
+     "pct": 0.4,
+     "cum": 97.0
+    },
+    {
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
+     "orders": 2,
+     "pct": 0.4,
+     "cum": 97.3
     },
     {
      "brand": "Desayunos mi Tierrita Turbo",
      "cb": "desayunos mi tierrita",
      "orders": 2,
-     "pct": 0.3,
-     "cum": 98.6
+     "pct": 0.4,
+     "cum": 97.7
     },
     {
-     "brand": "Pret Sandwich Bistro Turbo",
-     "cb": "pret sandwich bistro",
+     "brand": "Bottaniko Turbo",
+     "cb": "bottaniko",
      "orders": 2,
-     "pct": 0.3,
-     "cum": 99.0
-    },
-    {
-     "brand": "Desgranados & Co Turbo",
-     "cb": "desgranados co",
-     "orders": 2,
-     "pct": 0.3,
-     "cum": 99.3
+     "pct": 0.4,
+     "cum": 98.0
     },
     {
      "brand": "La Casa Mexicana Turbo",
      "cb": "la casa mexicana",
      "orders": 2,
-     "pct": 0.3,
-     "cum": 99.7
+     "pct": 0.4,
+     "cum": 98.4
     },
     {
-     "brand": "House of Salads Turbo",
-     "cb": "house of salads",
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
      "orders": 2,
-     "pct": 0.3,
+     "pct": 0.4,
+     "cum": 98.8
+    },
+    {
+     "brand": "Señor Burrito Turbo",
+     "cb": "senor burrito",
+     "orders": 2,
+     "pct": 0.4,
+     "cum": 99.1
+    },
+    {
+     "brand": "El Ejecutivo Turbo",
+     "cb": "el ejecutivo",
+     "orders": 2,
+     "pct": 0.4,
+     "cum": 99.5
+    },
+    {
+     "brand": "Foodology Court Turbo",
+     "cb": "foodology",
+     "orders": 1,
+     "pct": 0.2,
+     "cum": 99.6
+    },
+    {
+     "brand": "Burrito Cantina Turbo",
+     "cb": "burrito cantina",
+     "orders": 1,
+     "pct": 0.2,
+     "cum": 99.8
+    },
+    {
+     "brand": "Pret Sandwich Bistro Turbo",
+     "cb": "pret sandwich bistro",
+     "orders": 1,
+     "pct": 0.2,
      "cum": 100.0
     }
    ],
@@ -4297,18 +4349,18 @@
     "burritos co",
     "la cuadra",
     "green house",
-    "mr beast burger"
+    "brunch munch"
    ],
    "top5_detail": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
      "orders": 114,
-     "wow": 18.8,
-     "orders_prev": 96,
-     "avg_rt": 0.92,
+     "wow": 0.0,
+     "orders_prev": 114,
+     "avg_rt": 0.9,
      "avg_cov": 100.0,
-     "drt": 0.19,
+     "drt": -0.02,
      "dcov": 0.0,
      "best": "Cabecera (Bga)",
      "worst": "Cabecera (Bga)",
@@ -4317,8 +4369,8 @@
        "coc": "Cabecera (Bga)",
        "orders": 114,
        "rank": 1,
-       "nbrands": 27,
-       "rt": 0.92,
+       "nbrands": 29,
+       "rt": 0.9,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -4328,22 +4380,22 @@
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 107,
-     "wow": 0.0,
+     "orders": 103,
+     "wow": -3.7,
      "orders_prev": 107,
-     "avg_rt": 0.65,
+     "avg_rt": 0.71,
      "avg_cov": 100.0,
-     "drt": 0.05,
+     "drt": 0.06,
      "dcov": 0.0,
      "best": "Cabecera (Bga)",
      "worst": "Cabecera (Bga)",
      "rows": [
       {
        "coc": "Cabecera (Bga)",
-       "orders": 107,
+       "orders": 103,
        "rank": 2,
-       "nbrands": 27,
-       "rt": 0.65,
+       "nbrands": 29,
+       "rt": 0.71,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -4353,22 +4405,22 @@
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 91,
-     "wow": 4.6,
-     "orders_prev": 87,
-     "avg_rt": 0.41,
+     "orders": 77,
+     "wow": -15.4,
+     "orders_prev": 91,
+     "avg_rt": 0.63,
      "avg_cov": 100.0,
-     "drt": -0.22,
+     "drt": 0.22,
      "dcov": 0.0,
      "best": "Cabecera (Bga)",
      "worst": "Cabecera (Bga)",
      "rows": [
       {
        "coc": "Cabecera (Bga)",
-       "orders": 91,
+       "orders": 77,
        "rank": 3,
-       "nbrands": 27,
-       "rt": 0.41,
+       "nbrands": 29,
+       "rt": 0.63,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -4378,47 +4430,47 @@
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 57,
-     "wow": 50.0,
-     "orders_prev": 38,
-     "avg_rt": 1.02,
-     "avg_cov": 90.0,
-     "drt": 0.19,
+     "orders": 67,
+     "wow": 17.5,
+     "orders_prev": 57,
+     "avg_rt": 1.11,
+     "avg_cov": 100.0,
+     "drt": 0.09,
      "dcov": 0.0,
      "best": "Cabecera (Bga)",
      "worst": "Cabecera (Bga)",
      "rows": [
       {
        "coc": "Cabecera (Bga)",
-       "orders": 57,
+       "orders": 67,
        "rank": 4,
-       "nbrands": 27,
-       "rt": 1.02,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 29,
+       "rt": 1.11,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
     },
     {
-     "brand": "Mr Beast Burger Turbo",
-     "cb": "mr beast burger",
-     "orders": 34,
-     "wow": 112.5,
-     "orders_prev": 16,
-     "avg_rt": 1.88,
+     "brand": "Brunch & Munch Turbo",
+     "cb": "brunch munch",
+     "orders": 33,
+     "wow": 83.3,
+     "orders_prev": 18,
+     "avg_rt": 1.59,
      "avg_cov": 100.0,
-     "drt": 0.3,
+     "drt": 0.57,
      "dcov": 0.0,
      "best": "Cabecera (Bga)",
      "worst": "Cabecera (Bga)",
      "rows": [
       {
        "coc": "Cabecera (Bga)",
-       "orders": 34,
+       "orders": 33,
        "rank": 5,
-       "nbrands": 27,
-       "rt": 1.88,
+       "nbrands": 29,
+       "rt": 1.59,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -4428,25 +4480,25 @@
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 20,
-     "wow": 33.3,
-     "orders_prev": 15,
-     "avg_rt": 2.0,
+     "orders": 16,
+     "wow": -20.0,
+     "orders_prev": 20,
+     "avg_rt": 1.79,
      "avg_cov": 100.0,
-     "drt": 0.62,
+     "drt": -0.21,
      "dcov": 0.0,
      "best": "Cabecera (Bga)",
      "worst": "Cabecera (Bga)",
      "rows": [
       {
        "coc": "Cabecera (Bga)",
-       "orders": 20,
-       "rank": 7,
-       "nbrands": 27,
-       "rt": 2.0,
+       "orders": 16,
+       "rank": 9,
+       "nbrands": 29,
+       "rt": 1.79,
        "size": 3000,
        "cov": 100.0,
-       "sev": "warn"
+       "sev": "ok"
       }
      ]
     }
@@ -4457,40 +4509,40 @@
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
       "orders": 114,
-      "pct": 19.8,
-      "rt": 0.92,
+      "pct": 20.2,
+      "rt": 0.9,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 107,
-      "pct": 18.6,
-      "rt": 0.65,
+      "orders": 103,
+      "pct": 18.3,
+      "rt": 0.71,
       "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 91,
-      "pct": 15.8,
-      "rt": 0.41,
+      "orders": 77,
+      "pct": 13.7,
+      "rt": 0.63,
       "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 57,
-      "pct": 9.9,
-      "rt": 1.02,
-      "size": 2700
+      "orders": 67,
+      "pct": 11.9,
+      "rt": 1.11,
+      "size": 3000
      },
      {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 34,
+      "brand": "Brunch & Munch Turbo",
+      "cb": "brunch munch",
+      "orders": 33,
       "pct": 5.9,
-      "rt": 1.88,
+      "rt": 1.59,
       "size": 3000
      }
     ]
@@ -4501,224 +4553,210 @@
   },
   "Cali": {
    "meta": {
-    "total_orders": 477,
-    "n_brands": 31,
-    "top5_share": 62.1
+    "total_orders": 413,
+    "n_brands": 29,
+    "top5_share": 64.9
    },
    "pareto": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 105,
-     "pct": 22.0,
-     "cum": 22.0
+     "orders": 92,
+     "pct": 22.3,
+     "cum": 22.3
     },
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 57,
-     "pct": 11.9,
-     "cum": 34.0
+     "orders": 62,
+     "pct": 15.0,
+     "cum": 37.3
     },
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 49,
-     "pct": 10.3,
-     "cum": 44.2
+     "orders": 50,
+     "pct": 12.1,
+     "cum": 49.4
     },
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 47,
-     "pct": 9.9,
-     "cum": 54.1
+     "orders": 39,
+     "pct": 9.4,
+     "cum": 58.8
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 38,
-     "pct": 8.0,
-     "cum": 62.1
+     "orders": 25,
+     "pct": 6.1,
+     "cum": 64.9
     },
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 25,
-     "pct": 5.2,
-     "cum": 67.3
+     "orders": 18,
+     "pct": 4.4,
+     "cum": 69.2
     },
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 22,
-     "pct": 4.6,
-     "cum": 71.9
-    },
-    {
-     "brand": "Mr Beast Burger Turbo",
-     "cb": "mr beast burger",
-     "orders": 19,
-     "pct": 4.0,
-     "cum": 75.9
-    },
-    {
-     "brand": "The Breakfast Club Turbo",
-     "cb": "the breakfast club",
-     "orders": 18,
-     "pct": 3.8,
-     "cum": 79.7
-    },
-    {
-     "brand": "Desayunos de la Abuela Turbo",
-     "cb": "desayunos de la abuela",
-     "orders": 15,
-     "pct": 3.1,
-     "cum": 82.8
-    },
-    {
-     "brand": "Almuerzos de la Casa Turbo",
-     "cb": "almuerzos d la casa",
-     "orders": 14,
-     "pct": 2.9,
-     "cum": 85.7
-    },
-    {
-     "brand": "Señor Burrito Turbo",
-     "cb": "senor burrito",
-     "orders": 11,
-     "pct": 2.3,
-     "cum": 88.1
+     "orders": 17,
+     "pct": 4.1,
+     "cum": 73.4
     },
     {
      "brand": "Monteverde Turbo",
      "cb": "monteverde",
-     "orders": 10,
-     "pct": 2.1,
-     "cum": 90.1
+     "orders": 16,
+     "pct": 3.9,
+     "cum": 77.2
     },
     {
-     "brand": "Desgranados & Co Turbo",
-     "cb": "desgranados co",
-     "orders": 8,
-     "pct": 1.7,
-     "cum": 91.8
+     "brand": "Mr Beast Burger Turbo",
+     "cb": "mr beast burger",
+     "orders": 12,
+     "pct": 2.9,
+     "cum": 80.1
     },
     {
-     "brand": "Ñamgucheria Turbo",
-     "cb": "namgucheria",
-     "orders": 7,
-     "pct": 1.5,
-     "cum": 93.3
+     "brand": "Almuerzos de la Casa Turbo",
+     "cb": "almuerzos d la casa",
+     "orders": 11,
+     "pct": 2.7,
+     "cum": 82.8
     },
     {
-     "brand": "El Ejecutivo Turbo",
-     "cb": "el ejecutivo",
-     "orders": 3,
-     "pct": 0.6,
-     "cum": 93.9
+     "brand": "The Breakfast Club Turbo",
+     "cb": "the breakfast club",
+     "orders": 9,
+     "pct": 2.2,
+     "cum": 85.0
     },
     {
-     "brand": "Alba Vegetarian Turbo",
-     "cb": "alba vegetarian",
-     "orders": 3,
-     "pct": 0.6,
-     "cum": 94.5
-    },
-    {
-     "brand": "Vicio Turbo",
-     "cb": "vicio",
-     "orders": 3,
-     "pct": 0.6,
-     "cum": 95.2
-    },
-    {
-     "brand": "La Casa Mexicana Turbo",
-     "cb": "la casa mexicana",
-     "orders": 3,
-     "pct": 0.6,
-     "cum": 95.8
-    },
-    {
-     "brand": "San Jerónimo Turbo",
-     "cb": "helados san jeronimo",
-     "orders": 3,
-     "pct": 0.6,
-     "cum": 96.4
-    },
-    {
-     "brand": "House of Salads Turbo",
-     "cb": "house of salads",
-     "orders": 2,
-     "pct": 0.4,
-     "cum": 96.9
-    },
-    {
-     "brand": "The Egg Spot Turbo",
-     "cb": "the egg spot",
-     "orders": 2,
-     "pct": 0.4,
-     "cum": 97.3
-    },
-    {
-     "brand": "Bottaniko Turbo",
-     "cb": "bottaniko",
-     "orders": 2,
-     "pct": 0.4,
-     "cum": 97.7
+     "brand": "Desayunos de la Abuela Turbo",
+     "cb": "desayunos de la abuela",
+     "orders": 9,
+     "pct": 2.2,
+     "cum": 87.2
     },
     {
      "brand": "El Jefe Turbo",
      "cb": "sanduches el jefe",
-     "orders": 2,
-     "pct": 0.4,
-     "cum": 98.1
+     "orders": 8,
+     "pct": 1.9,
+     "cum": 89.1
     },
     {
-     "brand": "Acpm Corrientazo Turbo",
-     "cb": "acpm corrientazo",
-     "orders": 2,
-     "pct": 0.4,
-     "cum": 98.5
+     "brand": "Señor Burrito Turbo",
+     "cb": "senor burrito",
+     "orders": 7,
+     "pct": 1.7,
+     "cum": 90.8
+    },
+    {
+     "brand": "La Casa Mexicana Turbo",
+     "cb": "la casa mexicana",
+     "orders": 7,
+     "pct": 1.7,
+     "cum": 92.5
+    },
+    {
+     "brand": "San Jerónimo Turbo",
+     "cb": "helados san jeronimo",
+     "orders": 5,
+     "pct": 1.2,
+     "cum": 93.7
+    },
+    {
+     "brand": "Ñamgucheria Turbo",
+     "cb": "namgucheria",
+     "orders": 4,
+     "pct": 1.0,
+     "cum": 94.7
+    },
+    {
+     "brand": "Desgranados & Co Turbo",
+     "cb": "desgranados co",
+     "orders": 3,
+     "pct": 0.7,
+     "cum": 95.4
+    },
+    {
+     "brand": "Bottaniko Turbo",
+     "cb": "bottaniko",
+     "orders": 3,
+     "pct": 0.7,
+     "cum": 96.1
     },
     {
      "brand": "Frost By Oreo Turbo",
      "cb": "frost",
+     "orders": 3,
+     "pct": 0.7,
+     "cum": 96.9
+    },
+    {
+     "brand": "House of Salads Turbo",
+     "cb": "house of salads",
+     "orders": 3,
+     "pct": 0.7,
+     "cum": 97.6
+    },
+    {
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
      "orders": 2,
-     "pct": 0.4,
-     "cum": 99.0
+     "pct": 0.5,
+     "cum": 98.1
     },
     {
-     "brand": "Desayunos mi Tierrita Turbo",
-     "cb": "desayunos mi tierrita",
-     "orders": 1,
-     "pct": 0.2,
-     "cum": 99.2
+     "brand": "Foodology Court Turbo",
+     "cb": "foodology",
+     "orders": 2,
+     "pct": 0.5,
+     "cum": 98.5
     },
     {
-     "brand": "Pret Sandwich Bistro Turbo",
-     "cb": "pret sandwich bistro",
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
      "orders": 1,
      "pct": 0.2,
-     "cum": 99.4
-    },
-    {
-     "brand": "Mañanero Diario Turbo",
-     "cb": "mananero diario",
-     "orders": 1,
-     "pct": 0.2,
-     "cum": 99.6
+     "cum": 98.8
     },
     {
      "brand": "House Of Burgers Turbo",
      "cb": "house of burgers",
      "orders": 1,
      "pct": 0.2,
+     "cum": 99.0
+    },
+    {
+     "brand": "Cacerola Turbo",
+     "cb": "cacerola",
+     "orders": 1,
+     "pct": 0.2,
+     "cum": 99.3
+    },
+    {
+     "brand": "Burrito Cantina Turbo",
+     "cb": "burrito cantina",
+     "orders": 1,
+     "pct": 0.2,
+     "cum": 99.5
+    },
+    {
+     "brand": "Mañanero Diario Turbo",
+     "cb": "mananero diario",
+     "orders": 1,
+     "pct": 0.2,
      "cum": 99.8
     },
     {
-     "brand": "Selvatiko Turbo",
-     "cb": "selvatiko",
+     "brand": "Pret Sandwich Bistro Turbo",
+     "cb": "pret sandwich bistro",
      "orders": 1,
      "pct": 0.2,
      "cum": 100.0
@@ -4735,79 +4773,79 @@
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 105,
-     "wow": 28.0,
-     "orders_prev": 82,
-     "avg_rt": 2.15,
-     "avg_cov": 83.3,
-     "drt": -3.21,
-     "dcov": -0.0,
-     "best": "Ingenio",
+     "orders": 92,
+     "wow": -12.4,
+     "orders_prev": 105,
+     "avg_rt": 1.43,
+     "avg_cov": 90.0,
+     "drt": -0.72,
+     "dcov": 0.0,
+     "best": "Santa Mónica",
      "worst": "San Fernando",
      "rows": [
       {
        "coc": "Ingenio",
-       "orders": 53,
+       "orders": 43,
        "rank": 1,
-       "nbrands": 21,
-       "rt": 1.78,
-       "size": 2400,
-       "cov": 80.0,
+       "nbrands": 17,
+       "rt": 1.37,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Santa Mónica",
-       "orders": 34,
-       "rank": 1,
-       "nbrands": 25,
-       "rt": 2.27,
+       "orders": 30,
+       "rank": 2,
+       "nbrands": 24,
+       "rt": 1.35,
        "size": 2700,
        "cov": 90.0,
-       "sev": "warn"
+       "sev": "ok"
       },
       {
        "coc": "San Fernando",
-       "orders": 18,
-       "rank": 4,
-       "nbrands": 20,
-       "rt": 2.4,
+       "orders": 19,
+       "rank": 3,
+       "nbrands": 18,
+       "rt": 1.57,
        "size": 2400,
        "cov": 80.0,
-       "sev": "warn"
+       "sev": "ok"
       }
      ]
     },
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 57,
-     "wow": -13.6,
-     "orders_prev": 66,
-     "avg_rt": 0.91,
-     "avg_cov": 95.0,
-     "drt": -4.26,
+     "orders": 62,
+     "wow": 8.8,
+     "orders_prev": 57,
+     "avg_rt": 1.26,
+     "avg_cov": 90.0,
+     "drt": 0.36,
      "dcov": 0.0,
      "best": "San Fernando",
      "worst": "Santa Mónica",
      "rows": [
       {
        "coc": "Santa Mónica",
-       "orders": 32,
-       "rank": 2,
-       "nbrands": 25,
-       "rt": 1.18,
+       "orders": 33,
+       "rank": 1,
+       "nbrands": 24,
+       "rt": 1.6,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "San Fernando",
-       "orders": 25,
+       "orders": 29,
        "rank": 2,
-       "nbrands": 20,
-       "rt": 0.63,
-       "size": 3000,
-       "cov": 100.0,
+       "nbrands": 18,
+       "rt": 0.92,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       }
      ]
@@ -4815,32 +4853,32 @@
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 49,
-     "wow": 32.4,
-     "orders_prev": 37,
-     "avg_rt": 1.1,
-     "avg_cov": 85.0,
-     "drt": -3.12,
+     "orders": 50,
+     "wow": 2.0,
+     "orders_prev": 49,
+     "avg_rt": 1.77,
+     "avg_cov": 90.0,
+     "drt": 0.67,
      "dcov": 0.0,
-     "best": "Santa Mónica",
-     "worst": "San Fernando",
+     "best": "San Fernando",
+     "worst": "Santa Mónica",
      "rows": [
       {
        "coc": "San Fernando",
-       "orders": 44,
+       "orders": 45,
        "rank": 1,
-       "nbrands": 20,
-       "rt": 1.81,
-       "size": 2400,
-       "cov": 80.0,
+       "nbrands": 18,
+       "rt": 1.73,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Santa Mónica",
        "orders": 5,
        "rank": 8,
-       "nbrands": 25,
-       "rt": 0.39,
+       "nbrands": 24,
+       "rt": 1.82,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
@@ -4850,86 +4888,86 @@
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 47,
-     "wow": 193.8,
-     "orders_prev": 16,
-     "avg_rt": 1.53,
-     "avg_cov": 80.0,
-     "drt": -0.71,
+     "orders": 39,
+     "wow": -17.0,
+     "orders_prev": 47,
+     "avg_rt": 2.11,
+     "avg_cov": 90.0,
+     "drt": 0.58,
      "dcov": 0.0,
-     "best": "Ingenio",
-     "worst": "Santa Mónica",
+     "best": "Santa Mónica",
+     "worst": "San Fernando",
      "rows": [
       {
        "coc": "Ingenio",
-       "orders": 21,
+       "orders": 27,
        "rank": 2,
-       "nbrands": 21,
-       "rt": 0.68,
-       "size": 2400,
-       "cov": 80.0,
-       "sev": "ok"
+       "nbrands": 17,
+       "rt": 2.45,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "warn"
       },
       {
        "coc": "San Fernando",
-       "orders": 13,
+       "orders": 8,
        "rank": 5,
-       "nbrands": 20,
-       "rt": 1.94,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
+       "nbrands": 18,
+       "rt": 3.21,
+       "size": 2400,
+       "cov": 80.0,
+       "sev": "bad"
       },
       {
        "coc": "Santa Mónica",
-       "orders": 13,
-       "rank": 4,
-       "nbrands": 25,
-       "rt": 1.96,
-       "size": 2100,
-       "cov": 70.0,
-       "sev": "warn"
+       "orders": 4,
+       "rank": 11,
+       "nbrands": 24,
+       "rt": 0.68,
+       "size": 2700,
+       "cov": 90.0,
+       "sev": "ok"
       }
      ]
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 38,
-     "wow": -36.7,
-     "orders_prev": 60,
-     "avg_rt": 1.85,
-     "avg_cov": 85.0,
-     "drt": -0.2,
+     "orders": 25,
+     "wow": -34.2,
+     "orders_prev": 38,
+     "avg_rt": 1.52,
+     "avg_cov": 90.0,
+     "drt": -0.34,
      "dcov": 0.0,
-     "best": "Ingenio",
-     "worst": "San Fernando",
+     "best": "San Fernando",
+     "worst": "Ingenio",
      "rows": [
       {
        "coc": "San Fernando",
-       "orders": 20,
-       "rank": 3,
-       "nbrands": 20,
-       "rt": 2.34,
+       "orders": 12,
+       "rank": 4,
+       "nbrands": 18,
+       "rt": 1.33,
        "size": 2700,
        "cov": 90.0,
-       "sev": "warn"
+       "sev": "ok"
       },
       {
        "coc": "Ingenio",
-       "orders": 14,
+       "orders": 7,
        "rank": 3,
-       "nbrands": 21,
-       "rt": 1.37,
-       "size": 2400,
-       "cov": 80.0,
+       "nbrands": 17,
+       "rt": 1.72,
+       "size": 2700,
+       "cov": 90.0,
        "sev": "ok"
       },
       {
        "coc": "Santa Mónica",
-       "orders": 4,
-       "rank": 9,
-       "nbrands": 25,
+       "orders": 6,
+       "rank": 6,
+       "nbrands": 24,
        "rt": null,
        "size": null,
        "cov": null,
@@ -4940,44 +4978,44 @@
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 25,
-     "wow": 13.6,
-     "orders_prev": 22,
-     "avg_rt": 2.14,
-     "avg_cov": 93.3,
-     "drt": -0.69,
-     "dcov": -0.0,
+     "orders": 18,
+     "wow": -28.0,
+     "orders_prev": 25,
+     "avg_rt": 1.84,
+     "avg_cov": 96.7,
+     "drt": -0.3,
+     "dcov": 0.0,
      "best": "San Fernando",
-     "worst": "Santa Mónica",
+     "worst": "Ingenio",
      "rows": [
       {
-       "coc": "Santa Mónica",
-       "orders": 10,
-       "rank": 5,
-       "nbrands": 25,
-       "rt": 2.7,
+       "coc": "Ingenio",
+       "orders": 6,
+       "rank": 6,
+       "nbrands": 17,
+       "rt": 2.86,
        "size": 3000,
        "cov": 100.0,
        "sev": "warn"
       },
       {
-       "coc": "Ingenio",
-       "orders": 8,
+       "coc": "San Fernando",
+       "orders": 6,
        "rank": 6,
-       "nbrands": 21,
-       "rt": 1.89,
+       "nbrands": 18,
+       "rt": 1.18,
        "size": 2700,
        "cov": 90.0,
        "sev": "ok"
       },
       {
-       "coc": "San Fernando",
-       "orders": 7,
-       "rank": 6,
-       "nbrands": 20,
-       "rt": 1.83,
-       "size": 2700,
-       "cov": 90.0,
+       "coc": "Santa Mónica",
+       "orders": 6,
+       "rank": 5,
+       "nbrands": 24,
+       "rt": 1.47,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -4988,125 +5026,125 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 53,
-      "pct": 34.0,
-      "rt": 1.78,
-      "size": 2400
+      "orders": 43,
+      "pct": 33.9,
+      "rt": 1.37,
+      "size": 3000
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 21,
-      "pct": 13.5,
-      "rt": 0.68,
-      "size": 2400
+      "orders": 27,
+      "pct": 21.3,
+      "rt": 2.45,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 14,
-      "pct": 9.0,
-      "rt": 1.37,
-      "size": 2400
+      "orders": 7,
+      "pct": 5.5,
+      "rt": 1.72,
+      "size": 2700
      },
      {
-      "brand": "Mr Beast Burger Turbo",
-      "cb": "mr beast burger",
-      "orders": 11,
-      "pct": 7.1,
-      "rt": 3.83,
-      "size": 2400
+      "brand": "Señor Burrito Turbo",
+      "cb": "senor burrito",
+      "orders": 6,
+      "pct": 4.7,
+      "rt": 4.87,
+      "size": 2700
      },
      {
-      "brand": "Brunch & Munch Turbo",
-      "cb": "brunch munch",
-      "orders": 9,
-      "pct": 5.8,
-      "rt": 2.44,
-      "size": 2400
+      "brand": "Monteverde Turbo",
+      "cb": "monteverde",
+      "orders": 6,
+      "pct": 4.7,
+      "rt": 1.88,
+      "size": 3000
      }
     ],
     "San Fernando": [
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 44,
-      "pct": 26.7,
-      "rt": 1.81,
-      "size": 2400
+      "orders": 45,
+      "pct": 30.4,
+      "rt": 1.73,
+      "size": 2700
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 25,
-      "pct": 15.2,
-      "rt": 0.63,
-      "size": 3000
+      "orders": 29,
+      "pct": 19.6,
+      "rt": 0.92,
+      "size": 2700
+     },
+     {
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 19,
+      "pct": 12.8,
+      "rt": 1.57,
+      "size": 2400
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 20,
-      "pct": 12.1,
-      "rt": 2.34,
+      "orders": 12,
+      "pct": 8.1,
+      "rt": 1.33,
       "size": 2700
-     },
-     {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 18,
-      "pct": 10.9,
-      "rt": 2.4,
-      "size": 2400
      },
      {
       "brand": "Honest Food Turbo",
       "cb": "honest food",
-      "orders": 13,
-      "pct": 7.9,
-      "rt": 1.94,
-      "size": 2700
+      "orders": 8,
+      "pct": 5.4,
+      "rt": 3.21,
+      "size": 2400
      }
     ],
     "Santa Mónica": [
      {
-      "brand": "Avocalia Turbo",
-      "cb": "avocalia",
-      "orders": 34,
-      "pct": 21.8,
-      "rt": 2.27,
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 33,
+      "pct": 23.9,
+      "rt": 1.6,
       "size": 2700
      },
      {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 32,
-      "pct": 20.5,
-      "rt": 1.18,
+      "brand": "Avocalia Turbo",
+      "cb": "avocalia",
+      "orders": 30,
+      "pct": 21.7,
+      "rt": 1.35,
       "size": 2700
+     },
+     {
+      "brand": "Brunch & Munch Turbo",
+      "cb": "brunch munch",
+      "orders": 8,
+      "pct": 5.8,
+      "rt": 3.34,
+      "size": 2400
      },
      {
       "brand": "The Breakfast Club Turbo",
       "cb": "the breakfast club",
-      "orders": 16,
-      "pct": 10.3,
-      "rt": 3.13,
-      "size": 2100
-     },
-     {
-      "brand": "Honest Food Turbo",
-      "cb": "honest food",
-      "orders": 13,
-      "pct": 8.3,
-      "rt": 1.96,
+      "orders": 8,
+      "pct": 5.8,
+      "rt": 3.45,
       "size": 2100
      },
      {
       "brand": "Cinnabon Turbo",
       "cb": "cinnabon",
-      "orders": 10,
-      "pct": 6.4,
-      "rt": 2.7,
+      "orders": 6,
+      "pct": 4.3,
+      "rt": 1.47,
       "size": 3000
      }
     ]
@@ -5119,157 +5157,143 @@
   },
   "Cartagena": {
    "meta": {
-    "total_orders": 253,
-    "n_brands": 20,
-    "top5_share": 75.1
+    "total_orders": 196,
+    "n_brands": 18,
+    "top5_share": 80.1
    },
    "pareto": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
      "orders": 53,
-     "pct": 20.9,
-     "cum": 20.9
-    },
-    {
-     "brand": "La Cuadra Turbo",
-     "cb": "la cuadra",
-     "orders": 44,
-     "pct": 17.4,
-     "cum": 38.3
-    },
-    {
-     "brand": "Burritos & Co Turbo",
-     "cb": "burritos co",
-     "orders": 38,
-     "pct": 15.0,
-     "cum": 53.4
+     "pct": 27.0,
+     "cum": 27.0
     },
     {
      "brand": "Green House Turbo",
      "cb": "green house",
-     "orders": 35,
-     "pct": 13.8,
-     "cum": 67.2
+     "orders": 37,
+     "pct": 18.9,
+     "cum": 45.9
+    },
+    {
+     "brand": "La Cuadra Turbo",
+     "cb": "la cuadra",
+     "orders": 34,
+     "pct": 17.3,
+     "cum": 63.3
+    },
+    {
+     "brand": "Burritos & Co Turbo",
+     "cb": "burritos co",
+     "orders": 19,
+     "pct": 9.7,
+     "cum": 73.0
     },
     {
      "brand": "Mr Beast Burger Turbo",
      "cb": "mr beast burger",
-     "orders": 20,
-     "pct": 7.9,
-     "cum": 75.1
-    },
-    {
-     "brand": "Ñamgucheria Turbo",
-     "cb": "namgucheria",
-     "orders": 16,
-     "pct": 6.3,
-     "cum": 81.4
+     "orders": 14,
+     "pct": 7.1,
+     "cum": 80.1
     },
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 13,
-     "pct": 5.1,
-     "cum": 86.6
+     "orders": 12,
+     "pct": 6.1,
+     "cum": 86.2
+    },
+    {
+     "brand": "Ñamgucheria Turbo",
+     "cb": "namgucheria",
+     "orders": 8,
+     "pct": 4.1,
+     "cum": 90.3
+    },
+    {
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
+     "orders": 3,
+     "pct": 1.5,
+     "cum": 91.8
+    },
+    {
+     "brand": "La Casa Mexicana Turbo",
+     "cb": "la casa mexicana",
+     "orders": 2,
+     "pct": 1.0,
+     "cum": 92.9
     },
     {
      "brand": "House of Salads Turbo",
      "cb": "house of salads",
-     "orders": 9,
-     "pct": 3.6,
-     "cum": 90.1
+     "orders": 2,
+     "pct": 1.0,
+     "cum": 93.9
     },
     {
      "brand": "San Jerónimo Turbo",
      "cb": "helados san jeronimo",
-     "orders": 6,
-     "pct": 2.4,
-     "cum": 92.5
-    },
-    {
-     "brand": "Monteverde Turbo",
-     "cb": "monteverde",
-     "orders": 3,
-     "pct": 1.2,
-     "cum": 93.7
-    },
-    {
-     "brand": "Bottaniko Turbo",
-     "cb": "bottaniko",
-     "orders": 3,
-     "pct": 1.2,
+     "orders": 2,
+     "pct": 1.0,
      "cum": 94.9
-    },
-    {
-     "brand": "Pret Sandwich Bistro Turbo",
-     "cb": "pret sandwich bistro",
-     "orders": 2,
-     "pct": 0.8,
-     "cum": 95.7
-    },
-    {
-     "brand": "House Of Burgers Turbo",
-     "cb": "house of burgers",
-     "orders": 2,
-     "pct": 0.8,
-     "cum": 96.4
-    },
-    {
-     "brand": "Brunch & Munch Turbo",
-     "cb": "brunch munch",
-     "orders": 2,
-     "pct": 0.8,
-     "cum": 97.2
     },
     {
      "brand": "Señor Burrito Turbo",
      "cb": "senor burrito",
      "orders": 2,
-     "pct": 0.8,
-     "cum": 98.0
+     "pct": 1.0,
+     "cum": 95.9
     },
     {
-     "brand": "Vicio Turbo",
-     "cb": "vicio",
-     "orders": 1,
-     "pct": 0.4,
-     "cum": 98.4
-    },
-    {
-     "brand": "La Casa Mexicana Turbo",
-     "cb": "la casa mexicana",
-     "orders": 1,
-     "pct": 0.4,
-     "cum": 98.8
+     "brand": "Brunch & Munch Turbo",
+     "cb": "brunch munch",
+     "orders": 2,
+     "pct": 1.0,
+     "cum": 96.9
     },
     {
      "brand": "Almuerzos de la Casa Turbo",
      "cb": "almuerzos d la casa",
-     "orders": 1,
-     "pct": 0.4,
-     "cum": 99.2
+     "orders": 2,
+     "pct": 1.0,
+     "cum": 98.0
     },
     {
-     "brand": "Mañanero Diario Turbo",
-     "cb": "mananero diario",
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
      "orders": 1,
-     "pct": 0.4,
-     "cum": 99.6
+     "pct": 0.5,
+     "cum": 98.5
+    },
+    {
+     "brand": "Monteverde Turbo",
+     "cb": "monteverde",
+     "orders": 1,
+     "pct": 0.5,
+     "cum": 99.0
     },
     {
      "brand": "Foodology Court Turbo",
      "cb": "foodology",
      "orders": 1,
-     "pct": 0.4,
+     "pct": 0.5,
+     "cum": 99.5
+    },
+    {
+     "brand": "Bottaniko Turbo",
+     "cb": "bottaniko",
+     "orders": 1,
+     "pct": 0.5,
      "cum": 100.0
     }
    ],
    "top5": [
     "avocalia",
+    "green house",
     "la cuadra",
     "burritos co",
-    "green house",
     "mr beast burger"
    ],
    "top5_detail": [
@@ -5277,11 +5301,11 @@
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
      "orders": 53,
-     "wow": 39.5,
-     "orders_prev": 38,
-     "avg_rt": 2.98,
-     "avg_cov": 90.0,
-     "drt": 1.58,
+     "wow": 0.0,
+     "orders_prev": 53,
+     "avg_rt": 1.63,
+     "avg_cov": 100.0,
+     "drt": -1.35,
      "dcov": 0.0,
      "best": "Cartagena",
      "worst": "Cartagena",
@@ -5290,10 +5314,35 @@
        "coc": "Cartagena",
        "orders": 53,
        "rank": 1,
-       "nbrands": 20,
-       "rt": 2.98,
-       "size": 2700,
-       "cov": 90.0,
+       "nbrands": 18,
+       "rt": 1.63,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
+     "brand": "Green House Turbo",
+     "cb": "green house",
+     "orders": 37,
+     "wow": 5.7,
+     "orders_prev": 35,
+     "avg_rt": 2.5,
+     "avg_cov": 100.0,
+     "drt": 0.33,
+     "dcov": 0.0,
+     "best": "Cartagena",
+     "worst": "Cartagena",
+     "rows": [
+      {
+       "coc": "Cartagena",
+       "orders": 37,
+       "rank": 2,
+       "nbrands": 18,
+       "rt": 2.5,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "warn"
       }
      ]
@@ -5301,24 +5350,24 @@
     {
      "brand": "La Cuadra Turbo",
      "cb": "la cuadra",
-     "orders": 44,
-     "wow": 158.8,
-     "orders_prev": 17,
-     "avg_rt": 1.38,
-     "avg_cov": 80.0,
-     "drt": 0.37,
+     "orders": 34,
+     "wow": -22.7,
+     "orders_prev": 44,
+     "avg_rt": 1.22,
+     "avg_cov": 100.0,
+     "drt": -0.16,
      "dcov": 0.0,
      "best": "Cartagena",
      "worst": "Cartagena",
      "rows": [
       {
        "coc": "Cartagena",
-       "orders": 44,
-       "rank": 2,
-       "nbrands": 20,
-       "rt": 1.38,
-       "size": 2400,
-       "cov": 80.0,
+       "orders": 34,
+       "rank": 3,
+       "nbrands": 18,
+       "rt": 1.22,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -5326,36 +5375,36 @@
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 38,
-     "wow": 100.0,
-     "orders_prev": 19,
-     "avg_rt": 2.52,
+     "orders": 19,
+     "wow": -50.0,
+     "orders_prev": 38,
+     "avg_rt": 1.72,
      "avg_cov": 90.0,
-     "drt": 0.9,
+     "drt": -0.8,
      "dcov": 0.0,
      "best": "Cartagena",
      "worst": "Cartagena",
      "rows": [
       {
        "coc": "Cartagena",
-       "orders": 38,
-       "rank": 3,
-       "nbrands": 20,
-       "rt": 2.52,
+       "orders": 19,
+       "rank": 4,
+       "nbrands": 18,
+       "rt": 1.72,
        "size": 2700,
        "cov": 90.0,
-       "sev": "warn"
+       "sev": "ok"
       }
      ]
     },
     {
-     "brand": "Green House Turbo",
-     "cb": "green house",
-     "orders": 35,
-     "wow": 2.9,
-     "orders_prev": 34,
-     "avg_rt": 2.17,
-     "avg_cov": 90.0,
+     "brand": "Mr Beast Burger Turbo",
+     "cb": "mr beast burger",
+     "orders": 14,
+     "wow": -30.0,
+     "orders_prev": 20,
+     "avg_rt": 5.06,
+     "avg_cov": 80.0,
      "drt": 0.76,
      "dcov": 0.0,
      "best": "Cartagena",
@@ -5363,35 +5412,10 @@
      "rows": [
       {
        "coc": "Cartagena",
-       "orders": 35,
-       "rank": 4,
-       "nbrands": 20,
-       "rt": 2.17,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "warn"
-      }
-     ]
-    },
-    {
-     "brand": "Mr Beast Burger Turbo",
-     "cb": "mr beast burger",
-     "orders": 20,
-     "wow": 100.0,
-     "orders_prev": 10,
-     "avg_rt": 4.3,
-     "avg_cov": 80.0,
-     "drt": 2.43,
-     "dcov": 0.0,
-     "best": "Cartagena",
-     "worst": "Cartagena",
-     "rows": [
-      {
-       "coc": "Cartagena",
-       "orders": 20,
+       "orders": 14,
        "rank": 5,
-       "nbrands": 20,
-       "rt": 4.3,
+       "nbrands": 18,
+       "rt": 5.06,
        "size": 2400,
        "cov": 80.0,
        "sev": "bad"
@@ -5405,40 +5429,40 @@
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
       "orders": 53,
-      "pct": 20.9,
-      "rt": 2.98,
-      "size": 2700
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 44,
-      "pct": 17.4,
-      "rt": 1.38,
-      "size": 2400
-     },
-     {
-      "brand": "Burritos & Co Turbo",
-      "cb": "burritos co",
-      "orders": 38,
-      "pct": 15.0,
-      "rt": 2.52,
-      "size": 2700
+      "pct": 27.0,
+      "rt": 1.63,
+      "size": 3000
      },
      {
       "brand": "Green House Turbo",
       "cb": "green house",
-      "orders": 35,
-      "pct": 13.8,
-      "rt": 2.17,
+      "orders": 37,
+      "pct": 18.9,
+      "rt": 2.5,
+      "size": 3000
+     },
+     {
+      "brand": "La Cuadra Turbo",
+      "cb": "la cuadra",
+      "orders": 34,
+      "pct": 17.3,
+      "rt": 1.22,
+      "size": 3000
+     },
+     {
+      "brand": "Burritos & Co Turbo",
+      "cb": "burritos co",
+      "orders": 19,
+      "pct": 9.7,
+      "rt": 1.72,
       "size": 2700
      },
      {
       "brand": "Mr Beast Burger Turbo",
       "cb": "mr beast burger",
-      "orders": 20,
-      "pct": 7.9,
-      "rt": 4.3,
+      "orders": 14,
+      "pct": 7.1,
+      "rt": 5.06,
       "size": 2400
      }
     ]
@@ -5449,232 +5473,232 @@
   },
   "Medellín": {
    "meta": {
-    "total_orders": 2074,
+    "total_orders": 1986,
     "n_brands": 35,
-    "top5_share": 61.7
+    "top5_share": 65.5
    },
    "pareto": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 490,
-     "pct": 23.6,
-     "cum": 23.6
+     "orders": 528,
+     "pct": 26.6,
+     "cum": 26.6
     },
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 256,
-     "pct": 12.3,
-     "cum": 36.0
+     "orders": 291,
+     "pct": 14.7,
+     "cum": 41.2
     },
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 245,
-     "pct": 11.8,
-     "cum": 47.8
-    },
-    {
-     "brand": "La Cuadra Turbo",
-     "cb": "la cuadra",
-     "orders": 148,
-     "pct": 7.1,
-     "cum": 54.9
+     "orders": 223,
+     "pct": 11.2,
+     "cum": 52.5
     },
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 140,
-     "pct": 6.8,
-     "cum": 61.7
+     "orders": 139,
+     "pct": 7.0,
+     "cum": 59.5
+    },
+    {
+     "brand": "La Cuadra Turbo",
+     "cb": "la cuadra",
+     "orders": 120,
+     "pct": 6.0,
+     "cum": 65.5
     },
     {
      "brand": "Desayunos de la Abuela Turbo",
      "cb": "desayunos de la abuela",
-     "orders": 136,
-     "pct": 6.6,
-     "cum": 68.2
+     "orders": 117,
+     "pct": 5.9,
+     "cum": 71.4
     },
     {
      "brand": "Honest Food Turbo",
      "cb": "honest food",
-     "orders": 79,
-     "pct": 3.8,
-     "cum": 72.0
+     "orders": 87,
+     "pct": 4.4,
+     "cum": 75.8
     },
     {
      "brand": "The Breakfast Club Turbo",
      "cb": "the breakfast club",
-     "orders": 75,
+     "orders": 72,
      "pct": 3.6,
-     "cum": 75.7
+     "cum": 79.4
     },
     {
      "brand": "Mr Beast Burger Turbo",
      "cb": "mr beast burger",
-     "orders": 74,
-     "pct": 3.6,
-     "cum": 79.2
-    },
-    {
-     "brand": "Green House Turbo",
-     "cb": "green house",
-     "orders": 61,
-     "pct": 2.9,
-     "cum": 82.2
+     "orders": 60,
+     "pct": 3.0,
+     "cum": 82.4
     },
     {
      "brand": "Ñamgucheria Turbo",
      "cb": "namgucheria",
-     "orders": 53,
-     "pct": 2.6,
-     "cum": 84.7
-    },
-    {
-     "brand": "Monteverde Turbo",
-     "cb": "monteverde",
-     "orders": 49,
-     "pct": 2.4,
-     "cum": 87.1
+     "orders": 57,
+     "pct": 2.9,
+     "cum": 85.3
     },
     {
      "brand": "House of Salads Turbo",
      "cb": "house of salads",
-     "orders": 42,
+     "orders": 40,
      "pct": 2.0,
-     "cum": 89.1
+     "cum": 87.3
     },
     {
-     "brand": "Desayunos mi Tierrita Turbo",
-     "cb": "desayunos mi tierrita",
-     "orders": 26,
-     "pct": 1.3,
-     "cum": 90.4
-    },
-    {
-     "brand": "Vicio Turbo",
-     "cb": "vicio",
-     "orders": 22,
-     "pct": 1.1,
-     "cum": 91.4
+     "brand": "Green House Turbo",
+     "cb": "green house",
+     "orders": 34,
+     "pct": 1.7,
+     "cum": 89.0
     },
     {
      "brand": "Frost By Oreo Turbo",
      "cb": "frost",
-     "orders": 20,
-     "pct": 1.0,
-     "cum": 92.4
+     "orders": 27,
+     "pct": 1.4,
+     "cum": 90.4
     },
     {
      "brand": "The Egg Spot Turbo",
      "cb": "the egg spot",
-     "orders": 20,
-     "pct": 1.0,
-     "cum": 93.3
+     "orders": 23,
+     "pct": 1.2,
+     "cum": 91.5
     },
     {
-     "brand": "San Jerónimo Turbo",
-     "cb": "helados san jeronimo",
-     "orders": 14,
-     "pct": 0.7,
-     "cum": 94.0
+     "brand": "Monteverde Turbo",
+     "cb": "monteverde",
+     "orders": 21,
+     "pct": 1.1,
+     "cum": 92.6
     },
     {
-     "brand": "Alba Vegetarian Turbo",
-     "cb": "alba vegetarian",
-     "orders": 13,
-     "pct": 0.6,
-     "cum": 94.6
-    },
-    {
-     "brand": "El Jefe Turbo",
-     "cb": "sanduches el jefe",
-     "orders": 13,
-     "pct": 0.6,
-     "cum": 95.3
+     "brand": "Almuerzos de la Casa Turbo",
+     "cb": "almuerzos d la casa",
+     "orders": 15,
+     "pct": 0.8,
+     "cum": 93.4
     },
     {
      "brand": "Señor Burrito Turbo",
      "cb": "senor burrito",
      "orders": 13,
-     "pct": 0.6,
-     "cum": 95.9
+     "pct": 0.7,
+     "cum": 94.0
     },
     {
-     "brand": "Almuerzos de la Casa Turbo",
-     "cb": "almuerzos d la casa",
+     "brand": "La Casa Mexicana Turbo",
+     "cb": "la casa mexicana",
      "orders": 12,
      "pct": 0.6,
-     "cum": 96.5
+     "cum": 94.6
+    },
+    {
+     "brand": "Desayunos mi Tierrita Turbo",
+     "cb": "desayunos mi tierrita",
+     "orders": 12,
+     "pct": 0.6,
+     "cum": 95.2
+    },
+    {
+     "brand": "Vicio Turbo",
+     "cb": "vicio",
+     "orders": 12,
+     "pct": 0.6,
+     "cum": 95.8
+    },
+    {
+     "brand": "San Jerónimo Turbo",
+     "cb": "helados san jeronimo",
+     "orders": 9,
+     "pct": 0.5,
+     "cum": 96.3
+    },
+    {
+     "brand": "El Jefe Turbo",
+     "cb": "sanduches el jefe",
+     "orders": 9,
+     "pct": 0.5,
+     "cum": 96.7
     },
     {
      "brand": "Desgranados & Co Turbo",
      "cb": "desgranados co",
-     "orders": 10,
+     "orders": 9,
      "pct": 0.5,
-     "cum": 97.0
-    },
-    {
-     "brand": "Acpm Corrientazo Turbo",
-     "cb": "acpm corrientazo",
-     "orders": 8,
-     "pct": 0.4,
-     "cum": 97.3
+     "cum": 97.2
     },
     {
      "brand": "House Of Burgers Turbo",
      "cb": "house of burgers",
      "orders": 8,
      "pct": 0.4,
-     "cum": 97.7
+     "cum": 97.6
     },
     {
-     "brand": "El Ejecutivo Turbo",
-     "cb": "el ejecutivo",
+     "brand": "Alba Vegetarian Turbo",
+     "cb": "alba vegetarian",
      "orders": 8,
      "pct": 0.4,
-     "cum": 98.1
+     "cum": 98.0
+    },
+    {
+     "brand": "Selvatiko Turbo",
+     "cb": "selvatiko",
+     "orders": 7,
+     "pct": 0.4,
+     "cum": 98.3
     },
     {
      "brand": "Bottaniko Turbo",
      "cb": "bottaniko",
      "orders": 6,
      "pct": 0.3,
-     "cum": 98.4
-    },
-    {
-     "brand": "Foodology Court Turbo",
-     "cb": "foodology",
-     "orders": 6,
-     "pct": 0.3,
-     "cum": 98.7
-    },
-    {
-     "brand": "La Cuadra Desayunos Turbo",
-     "cb": "la cuadra desayunos",
-     "orders": 5,
-     "pct": 0.2,
-     "cum": 98.9
+     "cum": 98.6
     },
     {
      "brand": "Burrito Cantina Turbo",
      "cb": "burrito cantina",
      "orders": 5,
+     "pct": 0.3,
+     "cum": 98.9
+    },
+    {
+     "brand": "Foodology Court Turbo",
+     "cb": "foodology",
+     "orders": 5,
+     "pct": 0.3,
+     "cum": 99.1
+    },
+    {
+     "brand": "La Cuadra Desayunos Turbo",
+     "cb": "la cuadra desayunos",
+     "orders": 4,
      "pct": 0.2,
-     "cum": 99.2
+     "cum": 99.3
+    },
+    {
+     "brand": "El Ejecutivo Turbo",
+     "cb": "el ejecutivo",
+     "orders": 4,
+     "pct": 0.2,
+     "cum": 99.5
     },
     {
      "brand": "Cacerola Turbo",
      "cb": "cacerola",
-     "orders": 5,
-     "pct": 0.2,
-     "cum": 99.4
-    },
-    {
-     "brand": "La Casa Mexicana Turbo",
-     "cb": "la casa mexicana",
-     "orders": 5,
+     "orders": 3,
      "pct": 0.2,
      "cum": 99.7
     },
@@ -5682,12 +5706,12 @@
      "brand": "Pret Sandwich Bistro Turbo",
      "cb": "pret sandwich bistro",
      "orders": 3,
-     "pct": 0.1,
+     "pct": 0.2,
      "cum": 99.8
     },
     {
-     "brand": "Selvatiko Turbo",
-     "cb": "selvatiko",
+     "brand": "Acpm Corrientazo Turbo",
+     "cb": "acpm corrientazo",
      "orders": 2,
      "pct": 0.1,
      "cum": 99.9
@@ -5695,7 +5719,7 @@
     {
      "brand": "Mañanero Diario Turbo",
      "cb": "mananero diario",
-     "orders": 2,
+     "orders": 1,
      "pct": 0.1,
      "cum": 100.0
     }
@@ -5704,39 +5728,39 @@
     "avocalia",
     "brunch munch",
     "burritos co",
-    "la cuadra",
-    "cinnabon"
+    "cinnabon",
+    "la cuadra"
    ],
    "top5_detail": [
     {
      "brand": "Avocalia Turbo",
      "cb": "avocalia",
-     "orders": 490,
-     "wow": 16.1,
-     "orders_prev": 422,
-     "avg_rt": 0.95,
+     "orders": 528,
+     "wow": 7.8,
+     "orders_prev": 490,
+     "avg_rt": 0.7,
      "avg_cov": 100.0,
-     "drt": 0.14,
+     "drt": -0.25,
      "dcov": 0.0,
      "best": "Manila",
      "worst": "Laureles",
      "rows": [
       {
        "coc": "Manila",
-       "orders": 321,
+       "orders": 331,
        "rank": 1,
-       "nbrands": 34,
-       "rt": 0.78,
+       "nbrands": 33,
+       "rt": 0.52,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Laureles",
-       "orders": 169,
+       "orders": 197,
        "rank": 1,
        "nbrands": 32,
-       "rt": 1.13,
+       "rt": 0.87,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -5746,32 +5770,32 @@
     {
      "brand": "Brunch & Munch Turbo",
      "cb": "brunch munch",
-     "orders": 256,
-     "wow": 43.0,
-     "orders_prev": 179,
-     "avg_rt": 1.33,
+     "orders": 291,
+     "wow": 13.7,
+     "orders_prev": 256,
+     "avg_rt": 1.36,
      "avg_cov": 100.0,
-     "drt": -0.22,
+     "drt": 0.03,
      "dcov": 0.0,
      "best": "Manila",
      "worst": "Laureles",
      "rows": [
       {
        "coc": "Manila",
-       "orders": 183,
+       "orders": 219,
        "rank": 2,
-       "nbrands": 34,
-       "rt": 0.98,
+       "nbrands": 33,
+       "rt": 0.93,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Laureles",
-       "orders": 73,
+       "orders": 72,
        "rank": 3,
        "nbrands": 32,
-       "rt": 1.68,
+       "rt": 1.79,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -5781,69 +5805,34 @@
     {
      "brand": "Burritos & Co Turbo",
      "cb": "burritos co",
-     "orders": 245,
-     "wow": -1.2,
-     "orders_prev": 248,
-     "avg_rt": 0.86,
-     "avg_cov": 95.0,
-     "drt": -0.04,
-     "dcov": 0.0,
-     "best": "Laureles",
-     "worst": "Manila",
-     "rows": [
-      {
-       "coc": "Manila",
-       "orders": 141,
-       "rank": 3,
-       "nbrands": 34,
-       "rt": 0.95,
-       "size": 3000,
-       "cov": 100.0,
-       "sev": "ok"
-      },
-      {
-       "coc": "Laureles",
-       "orders": 104,
-       "rank": 2,
-       "nbrands": 32,
-       "rt": 0.77,
-       "size": 2700,
-       "cov": 90.0,
-       "sev": "ok"
-      }
-     ]
-    },
-    {
-     "brand": "La Cuadra Turbo",
-     "cb": "la cuadra",
-     "orders": 148,
-     "wow": 49.5,
-     "orders_prev": 99,
-     "avg_rt": 1.12,
-     "avg_cov": 95.0,
-     "drt": 0.45,
+     "orders": 223,
+     "wow": -9.0,
+     "orders_prev": 245,
+     "avg_rt": 0.84,
+     "avg_cov": 100.0,
+     "drt": -0.02,
      "dcov": 0.0,
      "best": "Manila",
      "worst": "Laureles",
      "rows": [
       {
        "coc": "Manila",
-       "orders": 87,
-       "rank": 5,
-       "nbrands": 34,
-       "rt": 0.89,
+       "orders": 115,
+       "rank": 3,
+       "nbrands": 33,
+       "rt": 0.46,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Laureles",
-       "orders": 61,
-       "rank": 5,
+       "orders": 108,
+       "rank": 2,
        "nbrands": 32,
-       "rt": 1.36,
-       "size": 2700,
-       "cov": 90.0,
+       "rt": 1.22,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -5851,32 +5840,67 @@
     {
      "brand": "Cinnabon Turbo",
      "cb": "cinnabon",
-     "orders": 140,
-     "wow": 28.4,
-     "orders_prev": 109,
-     "avg_rt": 0.75,
+     "orders": 139,
+     "wow": -0.7,
+     "orders_prev": 140,
+     "avg_rt": 0.78,
      "avg_cov": 100.0,
-     "drt": -0.12,
+     "drt": 0.03,
      "dcov": 0.0,
-     "best": "Laureles",
-     "worst": "Manila",
+     "best": "Manila",
+     "worst": "Laureles",
      "rows": [
       {
        "coc": "Manila",
        "orders": 74,
-       "rank": 6,
-       "nbrands": 34,
-       "rt": 0.83,
+       "rank": 4,
+       "nbrands": 33,
+       "rt": 0.66,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
       },
       {
        "coc": "Laureles",
-       "orders": 66,
+       "orders": 65,
        "rank": 4,
        "nbrands": 32,
-       "rt": 0.67,
+       "rt": 0.89,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      }
+     ]
+    },
+    {
+     "brand": "La Cuadra Turbo",
+     "cb": "la cuadra",
+     "orders": 120,
+     "wow": -18.9,
+     "orders_prev": 148,
+     "avg_rt": 0.58,
+     "avg_cov": 100.0,
+     "drt": -0.54,
+     "dcov": 0.0,
+     "best": "Manila",
+     "worst": "Laureles",
+     "rows": [
+      {
+       "coc": "Manila",
+       "orders": 61,
+       "rank": 6,
+       "nbrands": 33,
+       "rt": 0.37,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "ok"
+      },
+      {
+       "coc": "Laureles",
+       "orders": 59,
+       "rank": 5,
+       "nbrands": 32,
+       "rt": 0.8,
        "size": 3000,
        "cov": 100.0,
        "sev": "ok"
@@ -5889,83 +5913,83 @@
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 169,
-      "pct": 19.5,
-      "rt": 1.13,
+      "orders": 197,
+      "pct": 23.0,
+      "rt": 0.87,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 104,
-      "pct": 12.0,
-      "rt": 0.77,
-      "size": 2700
+      "orders": 108,
+      "pct": 12.6,
+      "rt": 1.22,
+      "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 73,
+      "orders": 72,
       "pct": 8.4,
-      "rt": 1.68,
+      "rt": 1.79,
       "size": 3000
      },
      {
       "brand": "Cinnabon Turbo",
       "cb": "cinnabon",
-      "orders": 66,
+      "orders": 65,
       "pct": 7.6,
-      "rt": 0.67,
+      "rt": 0.89,
       "size": 3000
      },
      {
       "brand": "La Cuadra Turbo",
       "cb": "la cuadra",
-      "orders": 61,
-      "pct": 7.0,
-      "rt": 1.36,
-      "size": 2700
+      "orders": 59,
+      "pct": 6.9,
+      "rt": 0.8,
+      "size": 3000
      }
     ],
     "Manila": [
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
-      "orders": 321,
-      "pct": 26.6,
-      "rt": 0.78,
+      "orders": 331,
+      "pct": 29.3,
+      "rt": 0.52,
       "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
-      "orders": 183,
-      "pct": 15.2,
-      "rt": 0.98,
+      "orders": 219,
+      "pct": 19.4,
+      "rt": 0.93,
       "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
-      "orders": 141,
-      "pct": 11.7,
-      "rt": 0.95,
+      "orders": 115,
+      "pct": 10.2,
+      "rt": 0.46,
+      "size": 3000
+     },
+     {
+      "brand": "Cinnabon Turbo",
+      "cb": "cinnabon",
+      "orders": 74,
+      "pct": 6.5,
+      "rt": 0.66,
       "size": 3000
      },
      {
       "brand": "Desayunos de la Abuela Turbo",
       "cb": "desayunos de la abuela",
-      "orders": 88,
-      "pct": 7.3,
-      "rt": 1.04,
-      "size": 3000
-     },
-     {
-      "brand": "La Cuadra Turbo",
-      "cb": "la cuadra",
-      "orders": 87,
-      "pct": 7.2,
-      "rt": 0.89,
+      "orders": 66,
+      "pct": 5.8,
+      "rt": 0.87,
       "size": 3000
      }
     ]
