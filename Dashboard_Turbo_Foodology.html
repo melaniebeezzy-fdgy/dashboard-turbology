@@ -377,6 +377,11 @@ function covResultPrev(s){if(s.cc==null)return null;const a=avg4prev(s);return (
 function mxp(s){let m=(s.cc!=null?s.cc:null); (s.fin||[]).forEach(x=>{if(x!=null&&(m==null||x>m))m=x;}); return m;}
 // cobertura % (0-100) promedio sobre tiendas, normalizando cada una a SU polígono máximo
 function covPctAvg(st,effOf){const p=st.map(s=>{const e=effOf(s),m=mxp(s);return (e==null||m==null||m===0)?null:100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
+// máximo por zona CONOCIDO hasta la semana w (no incluye polígonos futuros) -> congela semanas pasadas
+function mxAt(s,w){let m=null;for(let i=0;i<=w;i++){const v=s.fin[i];if(v!=null&&(m==null||v>m))m=v;}return m;}
+function covWeekAt(st,w){const p=st.map(s=>{const e=s.fin[w],m=mxAt(s,w);return (e==null||m==null||m===0)?null:100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
+// cobertura efectiva de la semana w: polígono congelado fin[w], 0 si penalizada (media móvil 4 sem>8), ÷ máximo conocido a esa semana
+function covWeekAtPen(st,w){const p=st.map(s=>{if(s.fin[w]==null)return null;const m=mxAt(s,w);if(m==null||m===0)return null;const a=ma4at(s,w);const e=(a!=null&&a>8)?0:s.fin[w];return 100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
 function stcol(a){return a==null?'#8b96ab':(a<=2?'#1e8e5a':(a<=3?'#d99a1b':(a<8?'#e67e22':'#c0392b')));}
 function stlabel(a){return a==null?'⚪ Sin datos':(a<=2?'🟢 Saludable':(a<=3?'🟡 Atención':(a<8?'🟠 Riesgo':'🔴 Crítico')));}
 const rt4fmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(v)}"></span>`;
@@ -412,7 +417,7 @@ function rtRising(st){
 function weekly(st){ const r=[],c=[],n=[];
   for(let w=0;w<W.length;w++){ r.push(avg(st.map(s=>s.rt[w])));
     const f=st.map(s=>s.fin[w]).filter(x=>x!=null);
-    c.push(covPctAvg(st,s=>s.fin[w])); n.push(f.length); }
+    c.push(covWeekAt(st,w)); n.push(f.length); }
   return {rtwt:r.map(x=>x==null?null:+x.toFixed(2)),cov:c.map(x=>x==null?null:+x.toFixed(1)),n:n}; }
 function distOf(st){ const d=W.map(()=>({})), tot=W.map(()=>0);
   st.forEach(s=>s.fin.forEach((m,w)=>{ if(m!=null){const l=LV[lvlIdx(m)]; d[w][l]=(d[w][l]||0)+1; tot[w]++;} }));
@@ -550,10 +555,10 @@ function update(){
  const A=agg4(st);
  // cobertura: asignada (coverageCurrent) vs efectiva (coverageResult, 0 si penalizada)
  const covCur=covPctAvg(st,s=>s.cc);
- const covRes=A.cov;
- if(o.cov[LI]!=null && covRes!=null) o.cov[LI]=+covRes.toFixed(1);   // semana más reciente = coverageResult
- const covResPrev=covPctAvg(st,covResultPrev);
- if(o.cov[LI-1]!=null && covResPrev!=null) o.cov[LI-1]=+covResPrev.toFixed(1);   // sem. pasada = su propio coverageResult (ventana 4 sem anterior)
+ const covRes=covWeekAtPen(st,LI);                                  // efectiva de la última semana (polígono congelado + máx rodante)
+ if(o.cov[LI]!=null && covRes!=null) o.cov[LI]=+covRes.toFixed(1);
+ const covResPrev=covWeekAtPen(st,LI-1);
+ if(o.cov[LI-1]!=null && covResPrev!=null) o.cov[LI-1]=+covResPrev.toFixed(1);
  const cctot=st.filter(s=>s.cc!=null).length||1;
  const nCC=sz=>st.filter(s=>s.cc!=null&&LV[lvlIdx(s.cc)]===sz).length;
  const al=alertsOf(st);
@@ -584,7 +589,7 @@ function update(){
  const gk=groupBy(st.filter(s=>!HIDDEN.includes(s.k)),s=>s.k);
  const kagg={}; Object.keys(gk).forEach(k=>kagg[k]=weekly(gk[k]));
  // heatmap: la semana más reciente usa cobertura efectiva (coverageResult, 0% si penalizada)
- Object.keys(gk).forEach(k=>{const cr=covPctAvg(gk[k],covResult); if(cr!=null&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+cr.toFixed(1); const cp=covPctAvg(gk[k],covResultPrev); if(cp!=null&&kagg[k].cov[LI-1]!=null) kagg[k].cov[LI-1]=+cp.toFixed(1);});
+ Object.keys(gk).forEach(k=>{const cr=covWeekAtPen(gk[k],LI); if(cr!=null&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+cr.toFixed(1); const cp=covWeekAtPen(gk[k],LI-1); if(cp!=null&&kagg[k].cov[LI-1]!=null) kagg[k].cov[LI-1]=+cp.toFixed(1);});
  const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),lose:a.lose,lost:g.reduce((t,x)=>t+((x.g&&x.cc&&x.cc<3000)?x.g*(1/(x.cc/3000)-1):0),0)}})
    .filter(r=>r.n>3).sort((a,b)=>(a.cov??999)-(b.cov??999));
  KC=kc; renderComb();
