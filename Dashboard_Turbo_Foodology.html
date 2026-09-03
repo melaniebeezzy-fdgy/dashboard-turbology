@@ -261,9 +261,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
     <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Cobertura = polígono ÷ <b>máximo de cada zona</b> (100%). Barras = <b>$ perdido/sem</b> por cobertura &lt; máximo.</div><div class="chartbox" style="height:300px"><canvas id="mx-chCov"></canvas></div></div>
   </div>
 
-  <div class="grid" id="mx-poligonos">
-    <div class="card"><h2 id="mx-distTitle">Distribución de polígonos por semana</h2><div class="hint" id="mx-distHint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="mx-chDist"></canvas></div><div id="mx-distDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
-  </div>
+  <div class="card" style="margin-bottom:14px" id="mx-poligonos"><h2 id="mx-distTitle">Distribución de polígonos por semana</h2><div class="hint" id="mx-distHint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="mx-chDist"></canvas></div><div id="mx-distDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
 
   <div class="card" style="margin-bottom:14px" id="mx-cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="mx-combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="mx-tgCoc" class="on" onclick="setComb('cocina')">Cocinas</button><button id="mx-tgCity" onclick="setComb('city')">Ciudades</button></div></div><div class="hint">RTWT promedio móvil de 4 semanas (2 ago–23 ago), estado (🟢🟡🟠🔴) y cobertura vs máximo de zona. Clic en encabezados para ordenar y en la cobertura para el detalle.</div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="mx-tbComb"></table></div><div id="mx-combDetail" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"></div></div>
 
