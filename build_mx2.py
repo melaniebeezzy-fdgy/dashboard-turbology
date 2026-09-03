@@ -90,8 +90,10 @@ for sid, info in RT['stores'].items():
         elif _last is not None: pw[_i] = _last
     _first = next((v for v in pw if v is not None), None)
     pw = [v if v is not None else _first for v in pw]
+    _pvals = [v for v in pw if v is not None]
+    mxp = max(_pvals) if _pvals else None       # polígono máximo de la zona (mayor de las 8 semanas)
     stores.append(dict(sid=sid, b=stripbrand(info.get('marca')), k=coc, c=city, op=op,
-        rt=rtarr[L], rtlw=rtarr[L-1], cur=pw[L-1], fin=pw[L], prop=None, rtw=rtarr, pw=pw))
+        rt=rtarr[L], rtlw=rtarr[L-1], cur=pw[L-1], fin=pw[L], prop=None, rtw=rtarr, pw=pw, mx=mxp))
     for w, v in enumerate(rtarr):
         if v is not None: rtrows.append((w, city, coc, op, v))
 
@@ -124,6 +126,14 @@ if os.path.exists('mx_ventas_percoc.csv'):
         bdisp.setdefault(cb, stripbrand(row['brand']))
         percoc[coc].append((cb, num(row['orders']) or 0))
 
+# ---------- GMV semanal por cocina (warehouse) para $ perdido ----------
+MONS = RT['mondays']                    # 8 lunes alineados a MXW
+gmvw = defaultdict(lambda: [None]*NW)   # cocina -> [gmv por semana]
+if os.path.exists('mx_gmv.csv'):
+    for row in csv.DictReader(open('mx_gmv.csv')):
+        coc = kit2coc(row['kitchen'])
+        if row['week'] in MONS: gmvw[coc][MONS.index(row['week'])] = num(row['gmv'])
+
 # ---------- agregador por scope ----------
 def compute(kind, name):
     incs = lambda s: kind == 'all' or (kind == 'city' and s['c'] == name) or (kind == 'op' and s['op'] == name)
@@ -133,8 +143,8 @@ def compute(kind, name):
     # --- polígono (Aug30 = fin, Aug23 = cur) ---
     fins = [s['fin'] for s in st if s['fin'] is not None]
     curs = [s['cur'] for s in st if s['cur'] is not None]
-    cov = 100*avg(fins)/IDEAL if fins else None
-    cov_prev = 100*avg(curs)/IDEAL if curs else None
+    cov = 100*avg([s['fin']/s['mx'] for s in st if s['fin'] is not None and s.get('mx')]) if fins else None
+    cov_prev = 100*avg([s['cur']/s['mx'] for s in st if s['cur'] is not None and s.get('mx')]) if curs else None
     dist = Counter(lvl(f) for f in fins)
     d_prev = Counter(lvl(c) for c in curs)
     stack = {str(l): [d_prev.get(l, 0), dist.get(l, 0)] for l in LV}
@@ -154,8 +164,37 @@ def compute(kind, name):
     # --- cobertura semanal (4 semanas con polígono: idx 4..7) ---
     weekly_cov = []
     for w in range(NW):
-        pv = [s['pw'][w] for s in st if s['pw'][w] is not None]
-        weekly_cov.append(round(100*avg(pv)/IDEAL, 1) if pv else None)
+        pv = [s['pw'][w]/s['mx'] for s in st if s['pw'][w] is not None and s.get('mx')]
+        weekly_cov.append(round(100*avg(pv), 1) if pv else None)
+    # --- $ perdido (modelo lineal vs polígono máximo, a nivel cocina) ---
+    bycoc_all = defaultdict(list)
+    for s in st: bycoc_all[s['k']].append(s)
+    def coc_lost(v, w):
+        g = gmvw.get(v[0]['k'], [None]*NW)[w] if v else None
+        if g is None: return None, None, None
+        polys = [x['pw'][w] for x in v if x['pw'][w] is not None]
+        maxs = [x['mx'] for x in v if x.get('mx')]
+        if not polys or not maxs: return g, None, None
+        ap, mp = avg(polys), avg(maxs)
+        lo = g*(mp/ap - 1) if (ap and mp and ap < mp) else 0
+        return g, (ap/mp if mp else None), lo
+    weekly_lost = []
+    for w in range(NW):
+        tw = 0.0
+        for c, v in bycoc_all.items():
+            _g, _r, _lo = coc_lost(v, w)
+            if _lo: tw += _lo
+        weekly_lost.append(round(tw))
+    lost = weekly_lost[L]
+    gmv_now = round(sum((gmvw.get(c, [None]*NW)[L] or 0) for c in bycoc_all))
+    lostrows = []
+    for c, v in bycoc_all.items():
+        _g, _r, _lo = coc_lost(v, L)
+        if _g is None: continue
+        lostrows.append(dict(k=c, city=coc2city.get(c), gmv=round(_g),
+            covpct=round(100*_r, 1) if _r is not None else None,
+            lost=round(_lo or 0), addpct=round(100*(_lo/_g), 1) if (_lo and _g) else 0))
+    lostrows.sort(key=lambda x: -x['lost'])
     # --- tablas por cocina / ciudad ---
     def grp_rows(keyf, keyidx):
         by = defaultdict(list)
@@ -167,7 +206,7 @@ def compute(kind, name):
             out.append(dict(k=k, city=Counter(x['c'] for x in v).most_common(1)[0][0],
                 n=len(v), rtwt=None if rr is None else round(rr, 2),
                 drt=None if (rr is None or rl is None) else round(rr-rl, 2),
-                cov=None if not f else round(100*avg(f)/IDEAL, 1), cov_prop=None,
+                cov=None if not f else round(100*avg([x['fin']/x['mx'] for x in v if x['fin'] is not None and x.get('mx')]), 1), cov_prop=None,
                 dt=[dict(b=x['b'], fin=x['fin'], prop=x['prop']) for x in v]))
         out.sort(key=lambda x: x['cov'] if x['cov'] is not None else 999)
         return out
@@ -202,7 +241,7 @@ def compute(kind, name):
     for c in coc_list:
         v = [s for s in st if s['k'] == c]
         f = [x['fin'] for x in v if x['fin'] is not None]
-        coc_cov[c] = round(100*avg(f)/IDEAL) if f else None
+        coc_cov[c] = round(100*avg([x['fin']/x['mx'] for x in v if x['fin'] is not None and x.get('mx')])) if f else None
         coc_fin[c] = lvl(avg(f)) if f else None
     for coc in coc_list:
         items = sorted(percoc.get(coc, []), key=lambda x: -x[1])
@@ -239,10 +278,10 @@ def compute(kind, name):
                  cov=None if cov is None else round(cov, 1),
                  cov_prop=None,
                  n_stores=len(st), n_orders=n_orders, n_brands=len(pareto),
-                 n_cocinas=len(cocset),
+                 n_cocinas=len(cocset), lost=lost, gmv=gmv_now,
                  dist={str(l): dist.get(l, 0) for l in LV}, tot=sum(dist.values()), alerts=alerts),
         stack=dict(labels=[MXW[-2], MXW[-1]], series=stack, tot=stack_tot),
-        weekly_rt=wk_net, weekly_cov=weekly_cov,
+        weekly_rt=wk_net, weekly_cov=weekly_cov, weekly_lost=weekly_lost, lostrows=lostrows,
         cities=cities, cocinas=cocinas,
         pareto=pareto, top5=top5, top5_detail=top5_detail,
         per_cocina=per_cocina, coc_list=coc_list)
