@@ -377,6 +377,7 @@ const W4=(()=>{const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.pus
 function avg4(s){return avg(W4.map(i=>s.rt[i]));}                 // RTWT promedio 4 sem de la tienda
 function avg4prev(s){return avg(W4.map(i=>i-1).filter(i=>i>=0).map(i=>s.rt[i]));} // media móvil 4 sem de la semana anterior
 function covResult(s){if(s.cc==null)return null;const a=avg4(s);return (a!=null&&a>6)?0:s.cc;} // 0% si >6 min
+function penal(s){const a=avg4(s);return a!=null&&a>6;} // penalizada (pierde cobertura) -> no cuenta en su bucket de km
 function covResultPrev(s){if(s.cc==null)return null;const a=avg4prev(s);return (a!=null&&a>6)?0:s.cc;} // result de la ventana de la semana anterior
 // polígono MÁXIMO de la zona = el mayor que la tienda ha tenido asignado (no todas llegan a 3 km)
 function mxp(s){let m=(s.cc!=null?s.cc:null); (s.fin||[]).forEach(x=>{if(x!=null&&(m==null||x>m))m=x;}); return m;}
@@ -565,7 +566,7 @@ function update(){
  const covResPrev=covWeekAtPen(st,LI-1);
  if(o.cov[LI-1]!=null && covResPrev!=null) o.cov[LI-1]=+covResPrev.toFixed(1);
  const cctot=st.filter(s=>s.cc!=null).length||1;
- const nCC=sz=>st.filter(s=>s.cc!=null&&LV[lvlIdx(s.cc)]===sz).length;
+ const nCC=sz=>st.filter(s=>s.cc!=null&&!penal(s)&&LV[lvlIdx(s.cc)]===sz).length;
  const al=alertsOf(st);
  const pct=sz=>`<span class="warnc">${(100*nCC(sz)/cctot).toFixed(0)}% del total</span>`;
  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
@@ -676,7 +677,7 @@ function showBrand(idx){
   document.getElementById('modalBg').classList.add('open');
 }
 window.showPoly=function(sz){
-  const rows=F().filter(s=>s.cc!=null&&LV[lvlIdx(s.cc)]===sz).map(s=>({b:s.b,k:s.k,c:s.c,rt:avg4(s),cc:s.cc})).sort((a,b)=>(b.rt==null?-1:b.rt)-(a.rt==null?-1:a.rt));
+  const rows=F().filter(s=>s.cc!=null&&!penal(s)&&LV[lvlIdx(s.cc)]===sz).map(s=>({b:s.b,k:s.k,c:s.c,rt:avg4(s),cc:s.cc})).sort((a,b)=>(b.rt==null?-1:b.rt)-(a.rt==null?-1:a.rt));
   document.getElementById('mTitle').textContent='Marcas en polígono '+km(sz)+' km — '+rows.length+' tienda(s)';
   document.getElementById('mSum').innerHTML=`Tiendas con polígono asignado de <b>${km(sz)} km</b> en este alcance. RTWT = promedio móvil de 4 semanas (semáforo por color). Ordenadas de peor a mejor RTWT.`;
   document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">RTWT 4 sem</th><th class="num">Polígono</th></tr>'+
@@ -685,9 +686,9 @@ window.showPoly=function(sz){
   document.getElementById('modalBg').classList.add('open');
 };
 window.showLost=function(){
-  const rows=lostCoverage(F());
+  const rows=lostCoverage(F()).sort((a,b)=>(a.pw-b.pw)||(b.a4-a.a4));   // menos → más semanas penalizadas
   document.getElementById('mTitle').textContent='Tiendas que pierden cobertura — '+rows.length+' tienda(s)';
-  document.getElementById('mSum').innerHTML=`Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> → <b>0% de cobertura</b> (penalización 4 semanas). Δ = variación de la media móvil vs la semana pasada. Ordenadas de peor a mejor.`;
+  document.getElementById('mSum').innerHTML=`Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> → <b>0% de cobertura</b> (penalización 4 semanas). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas penalizadas</b> (menos → más).`;
   document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">RTWT 4 sem</th><th class="num">Δ</th><th class="num">Polígono efectivo</th><th class="num">Sem. penalizada</th><th class="num">Sem. con dato</th></tr>'+
    (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num"><span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span></td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
     :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda pierde cobertura en este alcance ✓</td></tr>');
