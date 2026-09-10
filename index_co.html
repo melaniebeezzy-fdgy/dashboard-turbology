@@ -202,7 +202,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
   <div class="card"><h2>📈 RTWT en aumento (2+ semanas seguidas)</h2><div class="hint">Tiendas cuyo RTWT lleva <b>2 o más semanas seguidas subiendo</b> y que <b>en la semana más reciente sigue subiendo</b>. Si la última semana bajó, no aparece. Cada flecha = 1 semana.</div><div class="scroll"><table id="tbConsec" class="dense"></table></div></div>
 </div>
 <div class="grid" id="alertas2">
-  <div class="card"><h2>🔀 Marcas que cambiaron de polígono</h2><div class="hint">Tiendas cuyo <b>polígono efectivo</b> cambió vs la semana pasada: <b>subió</b> (se recuperó de la penalización) o <b>bajó</b> (entró en penalización). Ant → act.</div><div class="scroll"><table id="tbPolyChg" class="dense"></table></div></div>
+  <div class="card"><h2>🔀 Marcas que cambiaron de polígono</h2><div class="hint">Tiendas cuyo <b>polígono efectivo</b> cambió vs la semana pasada — <b>subió</b> o <b>bajó</b>, ya sea por reasignación de polígono o por entrar/salir de penalización (0%). Ant → act.</div><div class="scroll"><table id="tbPolyChg" class="dense"></table></div></div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">📉 RTWT mejorando (candidatas a subir polígono)</h2><button class="dlbtn" onclick="dlRtImp()">⬇ Excel</button></div><div class="hint">RTWT bajando <b>2+ semanas seguidas</b> (últimas 4) o <b>RTWT 4 sem &lt; 2 min</b>, <b>excluyendo</b> las que ya tienen polígono de 3.0 km. Se ve la evolución, el promedio y el polígono.</div><div class="scroll"><table id="tbRtImp" class="dense"></table></div></div>
 </div>
 <!--VENTAS_HTML_START-->
@@ -565,8 +565,9 @@ function update(){
 
   // ---- marcas que cambiaron de polígono efectivo (sem pasada vs actual) ----
   const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
-  const pchg=st.filter(s=>{const a=covResultPrev(s),b=covResult(s);return a!=null&&b!=null&&a!==b;})
-    .map(s=>({b:s.b,k:s.k,c:s.c,from:covResultPrev(s),to:covResult(s),rt:avg4(s)}))
+  const effAt=(s,w)=>{if(s.fin[w]==null)return null;const a=ma4at(s,w);return (a!=null&&a>6)?0:s.fin[w];};
+  const pchg=st.filter(s=>{const a=effAt(s,LI-1),b=effAt(s,LI);return a!=null&&b!=null&&a!==b;})
+    .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s)}))
     .sort((x,y)=>(x.to-x.from)-(y.to-y.from));
   document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">RTWT 4 sem</th></tr>'+
    (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td></tr>`).join('')
