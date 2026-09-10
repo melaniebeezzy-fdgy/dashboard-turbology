@@ -192,7 +192,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 </div>
 <div class="grid" id="poligonos">
   <div class="card"><h2>Distribución de polígonos por semana</h2><div class="hint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div></div>
-  <div class="card" id="cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="tgCoc" class="on" onclick="coSetComb('cocina')">Cocinas</button><button id="tgCity" onclick="coSetComb('city')">Ciudades</button></div></div><div class="hint" id="combHint">RTWT promedio móvil de 4 semanas (16 ago–6 sep), estado (🟢🟡🟠🔴) y cobertura efectiva (0% si penalizada). Clic en encabezados para ordenar y en la cobertura para el detalle.</div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="tbComb"></table></div></div>
+  <div class="card" id="cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="tgCoc" class="on" onclick="coSetComb('cocina')">Cocinas</button><button id="tgCity" onclick="coSetComb('city')">Ciudades</button></div></div><div class="hint" id="combHint">RTWT promedio móvil de 4 semanas (16 ago–6 sep), estado (🟢🟡🟠🔴) y cobertura efectiva (0% si penalizada). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.</div><div id="combBC" style="margin:2px 0 6px"></div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="tbComb"></table></div></div>
 </div>
 <div id="distDetail"></div>
 <div class="card" style="margin-bottom:14px"><h2>Mapa de calor — % cobertura por cocina y semana</h2><div class="hint">Escala continua: vino &lt; 70% → malva → verde azulado → azul → azul oscuro ≥ 98%. Cada punto porcentual cambia el tono.</div><div class="hscroll"><table class="hm" id="tbHeat"></table></div><div id="heatDetail"></div></div>
@@ -438,21 +438,53 @@ function showHeat(hi,wi){
   dd.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 window.showHeat=showHeat;
-const sortC={key:'cov',dir:1}, sortK={key:'cov',dir:1};
+const sortC={key:'cov',dir:1}, sortK={key:'cov',dir:1}; let sortD={key:'cov',dir:1};
 const COLS=[{k:'k',l:'Nombre'},{k:'n',l:'Tiendas',num:1},{k:'rtwt',l:'RTWT 4 sem',num:1},{k:'estado',l:'Estado'},{k:'cov',l:'Cobertura',num:1},{k:'lost',l:'$ perd./sem',num:1},{k:'lose',l:'Penaliz.',num:1}];
 function sortRows(rows,st){const k=st.key,d=st.dir;
   return [...rows].sort((a,b)=>{const av=a[k],bv=b[k];
     if(av==null&&bv==null)return 0; if(av==null)return 1; if(bv==null)return -1;
     return (av<bv?-1:av>bv?1:0)*d;});}
 function hdrRow(st,fn,first){return '<tr>'+COLS.map((c,i)=>`<th class="${c.num?'num ':''}sortable" onclick="${fn}('${c.k}')" title="Ordenar">${i===0?first:c.l}${st.key===c.k?(st.dir===1?' ↑':' ↓'):''}</th>`).join('')+'</tr>'}
-function rowHtml(r,dim){return `<tr><td>${r.k}</td><td class="num">${r.n}</td><td class="num">${rt4fmt(r.rtwt)}</td><td style="font-size:11px">${stlabel(r.rtwt)}</td><td class="num"><span class="covlink" onclick="showDetail('${dim}','${r.k}')">${fmt(r.cov,1)}%</span></td><td class="num">${r.lost?('$'+(r.lost/1e6).toFixed(1)+'M'):'–'}</td><td class="num">${r.lose?('<span style="color:var(--plum);font-weight:700">'+r.lose+'</span>'):'0'}</td></tr>`}
-let combView='cocina';
-window.coSetComb=function(v){combView=v;document.getElementById('tgCoc').classList.toggle('on',v==='cocina');document.getElementById('tgCity').classList.toggle('on',v==='city');document.getElementById('combTitle').textContent=(v==='cocina'?'Cocinas':'Ciudades')+' — promedio móvil 4 semanas';renderComb();};
-function renderComb(){if(combView==='cocina')renderCocina();else renderCity();}
-function renderCity(){document.getElementById('tbComb').innerHTML=hdrRow(sortC,'coSortCity','Ciudad')+sortRows(WC,sortC).map(r=>rowHtml(r,'city')).join('');}
-function renderCocina(){document.getElementById('tbComb').innerHTML=hdrRow(sortK,'sortCocina','Cocina')+sortRows(KC,sortK).map(r=>rowHtml(r,'cocina')).join('');}
-function coSortCity(k){ if(sortC.key===k)sortC.dir*=-1; else {sortC.key=k; sortC.dir=k==='k'?1:-1;} renderCity(); }
-function sortCocina(k){ if(sortK.key===k)sortK.dir*=-1; else {sortK.key=k; sortK.dir=k==='k'?1:-1;} renderCocina(); }
+function nmeta(k){return String(k).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');}
+function rowHtml(r,dim,nav){
+  const name = nav ? `<span class="covlink" onclick="${nav}('${nmeta(r.k)}')" title="Desglosar">${r.k} ▸</span>` : r.k;
+  const cov = (dim==='marca') ? `${fmt(r.cov,1)}%` : `<span class="covlink" onclick="showDetail('${dim}','${nmeta(r.k)}')">${fmt(r.cov,1)}%</span>`;
+  return `<tr><td>${name}</td><td class="num">${r.n}</td><td class="num">${rt4fmt(r.rtwt)}</td><td style="font-size:11px">${stlabel(r.rtwt)}</td><td class="num">${cov}</td><td class="num">${r.lost?('$'+(r.lost/1e6).toFixed(1)+'M'):'–'}</td><td class="num">${r.lose?('<span style="color:var(--plum);font-weight:700">'+r.lose+'</span>'):'0'}</td></tr>`;
+}
+function aggRowsBy(stores,keyf){
+  const g=groupBy(stores.filter(s=>!HIDDEN.includes(s.k)),keyf);
+  return Object.keys(g).map(k=>{const gr=g[k];const a=agg4(gr);let cov=a.cov==null?null:+a.cov.toFixed(1);const cr=covWeekAtPen(gr,LI);if(cr!=null)cov=+cr.toFixed(1);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);
+    return {k,n:gr.length,rtwt:rt,estado:rt,cov,lose:a.lose,lost:gr.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)};});
+}
+let combView='cocina', combDrill=[];
+window.coSetComb=function(v){combView=v;combDrill=[];document.getElementById('tgCoc').classList.toggle('on',v==='cocina');document.getElementById('tgCity').classList.toggle('on',v==='city');document.getElementById('combTitle').textContent=(v==='cocina'?'Cocinas':'Ciudades')+' — promedio móvil 4 semanas';renderComb();};
+window.coDrillCocina=function(k){combDrill.push({type:'cocina',key:k});sortD={key:'cov',dir:1};renderComb();};
+window.coDrillCity=function(k){combDrill.push({type:'city',key:k});sortD={key:'cov',dir:1};renderComb();};
+window.coDrillTo=function(i){combDrill=combDrill.slice(0,i);sortD={key:'cov',dir:1};renderComb();};
+window.coSortCity=function(k){ if(sortC.key===k)sortC.dir*=-1; else {sortC.key=k; sortC.dir=k==='k'?1:-1;} renderComb(); };
+window.sortCocina=function(k){ if(sortK.key===k)sortK.dir*=-1; else {sortK.key=k; sortK.dir=k==='k'?1:-1;} renderComb(); };
+window.coSortDrill=function(k){ if(sortD.key===k)sortD.dir*=-1; else {sortD.key=k; sortD.dir=k==='k'?1:-1;} renderComb(); };
+function drillBC(){
+  const root='<span class="covlink" onclick="coDrillTo(0)">'+(combView==='cocina'?'Cocinas':'Ciudades')+'</span>';
+  const seg=[root];
+  combDrill.forEach((d,i)=>{ seg.push(i<combDrill.length-1?('<span class="covlink" onclick="coDrillTo('+(i+1)+')">'+d.key+'</span>'):('<b>'+d.key+'</b>')); });
+  return seg.join(' <span style="color:var(--mut)">▸</span> ');
+}
+function renderComb(){
+  const el=document.getElementById('tbComb'), bc=document.getElementById('combBC');
+  if(combDrill.length===0){
+    if(bc) bc.innerHTML='';
+    if(combView==='cocina') el.innerHTML=hdrRow(sortK,'sortCocina','Cocina')+sortRows(KC,sortK).map(r=>rowHtml(r,'cocina','coDrillCocina')).join('');
+    else el.innerHTML=hdrRow(sortC,'coSortCity','Ciudad')+sortRows(WC,sortC).map(r=>rowHtml(r,'city','coDrillCity')).join('');
+    return;
+  }
+  const last=combDrill[combDrill.length-1], st=F();
+  let rows, first, dim, nav;
+  if(last.type==='city'){ rows=aggRowsBy(st.filter(s=>s.c===last.key),s=>s.k); first='Cocina'; dim='cocina'; nav='coDrillCocina'; }
+  else { const cityCtx=combDrill.find(d=>d.type==='city'); rows=aggRowsBy(st.filter(s=>s.k===last.key&&(!cityCtx||s.c===cityCtx.key)),s=>s.b); first='Marca'; dim='marca'; nav=null; }
+  if(bc) bc.innerHTML=drillBC();
+  el.innerHTML=hdrRow(sortD,'coSortDrill',first)+sortRows(rows,sortD).map(r=>rowHtml(r,dim,nav)).join('');
+}
 const allCities=[...new Set(D.stores.map(s=>s.c))].filter(c=>D.stores.filter(s=>s.c===c&&s.fin[LI]!=null).length>5).sort();
 const sel=document.getElementById('selCity');
 sel.innerHTML='<option value="ALL">🌎 Todas las ciudades</option>'+allCities.map(c=>`<option>${c}</option>`).join('');
@@ -743,28 +775,42 @@ function swSyncBtns(){
   document.getElementById('swGmvBtn').classList.toggle('on',swMetric==='gmv');
   document.getElementById('swOrdBtn').classList.toggle('on',swMetric==='ord');
 }
+let swCity=null;
+const CCOL=['#156082','#e67e22','#1e8e5a','#B15C8C','#d99a1b','#0F9ED5','#9C4A8B','#5B8C5A','#C0392B','#2C7BB6'];
+function coCocinaWeekly(city){
+  const st=F().filter(s=>s.c===city&&!HIDDEN.includes(s.k));
+  const g=groupBy(st,s=>s.k);
+  return Object.keys(g).map(k=>{const data=W.map((_,w)=>g[k].reduce((t,s)=>t+(((s.gw||[])[w])||0),0));return {k,data,tot:data.reduce((a,b)=>a+b,0)};}).filter(x=>x.tot>0).sort((a,b)=>b.tot-a.tot);
+}
 function renderSales(){
   const WK=SALESWK.weeks;
   document.getElementById('swMetricTgl').style.display = swView==='city'?'':'none';
-  let datasets;
+  let datasets, isCoc=(swView==='coc');
   if(swView==='global'){
     document.getElementById('swTitle').textContent='🛒 Venta semanal Turbo';
     datasets=[
       {type:'bar',label:'Monto ($)',data:SALESWK.gmv.ALL,backgroundColor:'rgba(21,96,130,.55)',borderColor:'#156082',borderWidth:1,yAxisID:'y',order:1,datalabels:{display:false}},
       {type:'line',label:'Órdenes (Q)',data:SALESWK.ord.ALL,borderColor:'#e67e22',backgroundColor:'rgba(230,126,34,.12)',tension:.3,pointRadius:2.5,pointBackgroundColor:'#e67e22',yAxisID:'y1',order:0,datalabels:{display:false}}
     ];
+  } else if(isCoc){
+    document.getElementById('swTitle').innerHTML='<span class="covlink" onclick="swSet(\'city\')" title="Volver a ciudades">← </span>🛒 '+swCity+' — venta por cocina ($)';
+    let arr=coCocinaWeekly(swCity); const top=arr.slice(0,8), rest=arr.slice(8);
+    datasets=top.map((c,i)=>({type:'line',label:c.k,data:c.data,borderColor:CCOL[i%CCOL.length],backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:2,datalabels:{display:false}}));
+    if(rest.length){const rd=W.map((_,w)=>rest.reduce((t,c)=>t+c.data[w],0));datasets.push({type:'line',label:'Otras',data:rd,borderColor:'#9aa4b2',borderDash:[4,3],backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:1.5,datalabels:{display:false}});}
   } else {
     const src = swMetric==='gmv'?SALESWK.gmv:SALESWK.ord;
     document.getElementById('swTitle').textContent = swMetric==='gmv'?'🛒 Monto por ciudad':'🛒 Cantidad (Q) por ciudad';
     datasets=SALESWK.cities.map(c=>({type:'line',label:c,data:src[c],borderColor:SWCITYCOL[c]||'#345964',backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:2,datalabels:{display:false}}));
   }
   if(chSales)chSales.destroy();
-  const gmvAxis = swView==='global' || swMetric==='gmv';
+  const gmvAxis = swView==='global' || isCoc || swMetric==='gmv';
   chSales=new Chart(document.getElementById('chSales'),{data:{labels:WK,datasets},
     options:{maintainAspectRatio:false,layout:{padding:{top:6}},interaction:{mode:'nearest',intersect:false},
-     onClick:(e,els)=>{ if(swView!=='global'||!els.length)return; swView='city'; swMetric=(els[0].datasetIndex===0)?'gmv':'ord'; swSyncBtns(); renderSales(); },
+     onClick:(e,els)=>{ if(!els.length)return;
+       if(swView==='global'){ swView='city'; swMetric=(els[0].datasetIndex===0)?'gmv':'ord'; swSyncBtns(); renderSales(); }
+       else if(swView==='city'){ swCity=SALESWK.cities[els[0].datasetIndex]; if(swCity){swView='coc'; swSyncBtns(); renderSales();} } },
      plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10}}},
-       tooltip:{callbacks:{label:ctx=>{const isMoney=(swView==='global'&&ctx.dataset.type==='bar')||(swView==='city'&&swMetric==='gmv');return ctx.dataset.label+': '+(isMoney?('$'+Math.round(ctx.parsed.y).toLocaleString('es')):(Math.round(ctx.parsed.y).toLocaleString('es')+' órd'));}}}},
+       tooltip:{callbacks:{label:ctx=>{const isMoney=(swView==='global'&&ctx.dataset.type==='bar')||isCoc||(swView==='city'&&swMetric==='gmv');return ctx.dataset.label+': '+(isMoney?('$'+Math.round(ctx.parsed.y).toLocaleString('es')):(Math.round(ctx.parsed.y).toLocaleString('es')+' órd'));}}}},
      scales: swView==='global'?{
        x:{grid:{display:false},ticks:{font:{size:9}}},
        y:{position:'left',beginAtZero:true,ticks:{callback:swMoney,font:{size:9}},title:{display:true,text:'Monto ($)',font:{size:9}}},
