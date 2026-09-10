@@ -16,7 +16,7 @@ OLD = 'Turbology.xlsx'
 # ---- semanas ----
 HIST = ['May 10','May 17','May 24','May 31','Jun 7','Jun 14','Jun 21']  # etiqueta = último día (domingo) de cada semana
 HIST_DATES = ['2026-05-04','2026-05-11','2026-05-18','2026-05-25','2026-06-01','2026-06-08','2026-06-15']  # fechas reales (lunes) para el match
-NEW_WEEKS = ['Jun 28','Jul 5','Jul 12','Jul 19','Jul 26','Aug 2','Aug 9','Aug 16','Aug 23','Aug 30']  # último día de cada semana (Jun22..Aug24 -> +6d)
+NEW_WEEKS = ['Jun 28','Jul 5','Jul 12','Jul 19','Jul 26','Aug 2','Aug 9','Aug 16','Aug 23','Aug 30','Sep 6']  # último día de cada semana (Jun22..Aug31 -> +6d)
 WEEKS = HIST + NEW_WEEKS                                               # 12 semanas
 NW = len(WEEKS)
 N4 = 4                                                                 # ventana móvil fija de 4 semanas (Jun 29–Jul 20)
@@ -178,6 +178,24 @@ if os.path.exists(UP6):
             up6[re.sub(r'\D','',str(_o['storeId']))] = _o
     print('dashboard v6: %d tiendas (03-ago..24-ago, RTWT+cobertura)' % len(up6))
 
+# ---- dashboard más reciente (10-ago..31-ago, RTWT + coverageCurrent) ----
+UP7 = 'foodology_rt_dashboard_v7.html'
+up7 = {}
+if os.path.exists(UP7):
+    _h7 = open(UP7, encoding='utf-8', errors='replace').read()
+    for _m in re.finditer(r'"storeId"', _h7):
+        _i = _m.start(); _s = _h7.rfind('{', 0, _i); _d = 0; _e = None
+        for _j in range(_s, len(_h7)):
+            if _h7[_j] == '{': _d += 1
+            elif _h7[_j] == '}':
+                _d -= 1
+                if _d == 0: _e = _j + 1; break
+        try: _o = json.loads(_h7[_s:_e])
+        except: continue
+        if 'w4' in _o and 'storeId' in _o:
+            up7[re.sub(r'\D','',str(_o['storeId']))] = _o
+    print('dashboard v7: %d tiendas (10-ago..31-ago, RTWT+cobertura)' % len(up7))
+
 stores = {}
 with open(NEW, encoding='utf-8') as f:
     for row in csv.DictReader(f):
@@ -194,10 +212,11 @@ with open(NEW, encoding='utf-8') as f:
         u3 = up3.get(key)    # 13-jul..03-ago (RTWT + coverageCurrent)
         u4 = up4.get(key)    # 20-jul..10-ago (RTWT + coverageCurrent)
         u5 = up5.get(key)    # 27-jul..17-ago (RTWT + coverageCurrent)
-        u6 = up6.get(key)    # 03-ago..24-ago (RTWT + coverageCurrent) — el más reciente
+        u6 = up6.get(key)    # 03-ago..24-ago (RTWT + coverageCurrent)
+        u7 = up7.get(key)    # 10-ago..31-ago (RTWT + coverageCurrent) — el más reciente
         pick = lambda *xs: next((x for x in xs if x is not None), None)
         # cobertura: del más reciente que la traiga; si no, cc_old
-        _c = pick(cc_clean(u6.get('coverageCurrent')) if u6 else None, cc_clean(u5.get('coverageCurrent')) if u5 else None, cc_clean(u4.get('coverageCurrent')) if u4 else None, cc_clean(u3.get('coverageCurrent')) if u3 else None, cc_clean(u.get('coverageCurrent')) if u else None)
+        _c = pick(cc_clean(u7.get('coverageCurrent')) if u7 else None, cc_clean(u6.get('coverageCurrent')) if u6 else None, cc_clean(u5.get('coverageCurrent')) if u5 else None, cc_clean(u4.get('coverageCurrent')) if u4 else None, cc_clean(u3.get('coverageCurrent')) if u3 else None, cc_clean(u.get('coverageCurrent')) if u else None)
         cc = _c if _c is not None else cc_old
         ow = [u.get('w1'), u.get('w2'), u.get('w3'), u.get('w4')] if u else [None]*4      # 29jun,06jul,13jul,20jul
         nw = [u2.get('w1'), u2.get('w2'), u2.get('w3'), u2.get('w4')] if u2 else [None]*4   # 06jul,13jul,20jul,27jul
@@ -205,16 +224,18 @@ with open(NEW, encoding='utf-8') as f:
         fw = [u4.get('w1'), u4.get('w2'), u4.get('w3'), u4.get('w4')] if u4 else [None]*4   # 20jul,27jul,03ago,10ago
         gw5 = [u5.get('w1'), u5.get('w2'), u5.get('w3'), u5.get('w4')] if u5 else [None]*4  # 27jul,03ago,10ago,17ago
         gw6 = [u6.get('w1'), u6.get('w2'), u6.get('w3'), u6.get('w4')] if u6 else [None]*4  # 03ago,10ago,17ago,24ago
+        gw7 = [u7.get('w1'), u7.get('w2'), u7.get('w3'), u7.get('w4')] if u7 else [None]*4  # 10ago,17ago,24ago,31ago
         rt[8]  = rtclean(ow[0])                                                   # 29-jun (Jul 5)
         rt[9]  = rtclean(pick(nw[0], ow[1]))                                      # 06-jul (Jul 12)
         rt[10] = rtclean(pick(tw[0], nw[1], ow[2]))                              # 13-jul (Jul 19)
         rt[11] = rtclean(pick(fw[0], tw[1], nw[2], ow[3]))                       # 20-jul (Jul 26)
         rt[12] = rtclean(pick(gw5[0], fw[1], tw[2], nw[3]))                      # 27-jul (Aug 2)
         rt[13] = rtclean(pick(gw6[0], gw5[1], fw[2], tw[3]))                     # 03-ago (Aug 9)
-        rt[14] = rtclean(pick(gw6[1], gw5[2], fw[3]))                            # 10-ago (Aug 16)
-        rt[15] = rtclean(pick(gw6[2], gw5[3]))                                    # 17-ago (Aug 23)
-        rt[16] = rtclean(gw6[3])                                                  # 24-ago (Aug 30) — nueva semana
-        for i in range(8, 17): fin[i] = cc                                        # polígono actual = coverageCurrent (fijo)
+        rt[14] = rtclean(pick(gw7[0], gw6[1], gw5[2], fw[3]))                    # 10-ago (Aug 16)
+        rt[15] = rtclean(pick(gw7[1], gw6[2], gw5[3]))                           # 17-ago (Aug 23)
+        rt[16] = rtclean(pick(gw7[2], gw6[3]))                                    # 24-ago (Aug 30)
+        rt[17] = rtclean(gw7[3])                                                  # 31-ago (Sep 6) — nueva semana
+        for i in range(8, 18): fin[i] = cc                                        # polígono actual = coverageCurrent (fijo)
         stores[key] = dict(b=b, k=coc, c=city_of.get(key,'—'), sid=key, cc=cc, fin=fin, rt=rt, op=coc2op.get(coc))
 
 # ---- histórico de polígono por semana (el archivo no trae fecha; estampamos la semana que actualizamos) ----
@@ -238,7 +259,7 @@ json.dump(poly_history, open(PH_PATH, 'w', encoding='utf-8'), ensure_ascii=False
 print('poly_history: %d semanas guardadas (última estampada: %s)' % (len(poly_history), WEEKS[LIw]))
 
 # ---- GMV por marca-cocina (prom. últimas 4 semanas) para métrica de $ perdido por cobertura ----
-MKT = 'marketing_stores_wh2.xlsx'   # marketing + Aug17/Aug24 completas desde warehouse
+MKT = 'marketing_stores_wh3.xlsx'   # marketing + Aug17/Aug24/Sep6 completas desde warehouse
 if os.path.exists(MKT):
     def _sac(x): return ''.join(c for c in unicodedata.normalize('NFD', str(x or '')) if unicodedata.category(c) != 'Mn')
     def _canon(b):
