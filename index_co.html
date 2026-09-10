@@ -189,7 +189,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 </div>
 <div class="grid" id="opp-grid" style="grid-template-columns:1.05fr .95fr">
 <div class="card" id="oportunidad"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">💸 Oportunidad por cobertura (dinero no vendido)</h2><button class="dlbtn" onclick="dlLostRev()">⬇ Excel</button></div><div class="hint">Estimado de ventas que se dejan de capturar por polígonos &lt; 3.0 km. Modelo <b>lineal</b> (potencial = GMV ÷ cobertura; las ventas escalan con el radio de entrega); base = GMV promedio de las <b>últimas 4 semanas</b>. Respeta el filtro de ciudad/ops.</div><div class="kpis" id="oppKpis" style="margin-bottom:12px"></div><div class="scroll"><table id="tbLostRev" class="dense"></table></div></div>
-<div class="card" id="salescard"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0" id="swTitle">🛒 Venta semanal Turbo</h2><div class="tgl"><button id="swGlobalBtn" class="on" onclick="swSet('global')">Global</button><button id="swCityBtn" onclick="swSet('city')">Por ciudad</button></div></div><div class="hint" id="swHint">Barras = <b>monto ($)</b>, línea = <b>cantidad (Q)</b>. Clic en las barras → tendencia de <b>monto por ciudad</b>; clic en la línea → tendencia de <b>Q por ciudad</b>.</div><div id="swMetricTgl" style="display:none;margin-bottom:6px"><span class="tgl"><button id="swGmvBtn" class="on" onclick="swMetricSet('gmv')">$ Monto</button><button id="swOrdBtn" onclick="swMetricSet('ord')">Q Cantidad</button></span></div><div class="chartbox" style="height:330px"><canvas id="chSales"></canvas></div></div>
+<div class="card" id="salescard"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0" id="swTitle">🛒 Venta semanal Turbo</h2><div class="tgl"><button id="swGlobalBtn" class="on" onclick="swSet('global')">Global</button><button id="swCityBtn" onclick="swSet('city')">Por ciudad</button><button id="swCocBtn" onclick="swSet('coc')">Por cocina</button></div></div><div class="hint" id="swHint">Barras = <b>monto ($)</b>, línea = <b>cantidad (Q)</b>. Clic en las barras → tendencia de <b>monto por ciudad</b>; clic en la línea → tendencia de <b>Q por ciudad</b>.</div><div id="swMetricTgl" style="display:none;margin-bottom:6px"><span class="tgl"><button id="swGmvBtn" class="on" onclick="swMetricSet('gmv')">$ Monto</button><button id="swOrdBtn" onclick="swMetricSet('ord')">Q Cantidad</button></span></div><div class="chartbox" style="height:330px"><canvas id="chSales"></canvas></div></div>
 </div>
 <div class="grid" id="poligonos">
   <div class="card"><h2>Distribución de polígonos por semana</h2><div class="hint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div></div>
@@ -774,13 +774,14 @@ const swMoney=v=>'$'+(v/1e6).toFixed(0)+'M';
 function swSyncBtns(){
   document.getElementById('swGlobalBtn').classList.toggle('on',swView==='global');
   document.getElementById('swCityBtn').classList.toggle('on',swView==='city');
+  document.getElementById('swCocBtn').classList.toggle('on',swView==='coc');
   document.getElementById('swGmvBtn').classList.toggle('on',swMetric==='gmv');
   document.getElementById('swOrdBtn').classList.toggle('on',swMetric==='ord');
 }
 let swCity=null;
 const CCOL=['#156082','#e67e22','#1e8e5a','#B15C8C','#d99a1b','#0F9ED5','#9C4A8B','#5B8C5A','#C0392B','#2C7BB6'];
 function coCocinaWeekly(city){
-  const st=F().filter(s=>s.c===city&&!HIDDEN.includes(s.k));
+  const st=F().filter(s=>(city==null||s.c===city)&&!HIDDEN.includes(s.k));
   const g=groupBy(st,s=>s.k);
   return Object.keys(g).map(k=>{const data=W.map((_,w)=>g[k].reduce((t,s)=>t+(((s.gw||[])[w])||0),0));return {k,data,tot:data.reduce((a,b)=>a+b,0)};}).filter(x=>x.tot>0).sort((a,b)=>b.tot-a.tot);
 }
@@ -795,8 +796,10 @@ function renderSales(){
       {type:'line',label:'Órdenes (Q)',data:SALESWK.ord.ALL,borderColor:'#e67e22',backgroundColor:'rgba(230,126,34,.12)',tension:.3,pointRadius:2.5,pointBackgroundColor:'#e67e22',yAxisID:'y1',order:0,datalabels:{display:false}}
     ];
   } else if(isCoc){
-    document.getElementById('swTitle').innerHTML='<span class="covlink" onclick="swSet(\'city\')" title="Volver a ciudades">← </span>🛒 '+swCity+' — venta por cocina ($)';
-    let arr=coCocinaWeekly(swCity); const top=arr.slice(0,8), rest=arr.slice(8);
+    document.getElementById('swTitle').innerHTML = swCity
+      ? '<span class="covlink" onclick="swSet(\'city\')" title="Volver a ciudades">← </span>🛒 '+swCity+' — venta por cocina ($)'
+      : '🛒 Venta semanal por cocina ($)';
+    let arr=coCocinaWeekly(swCity); const top=arr.slice(0,10), rest=arr.slice(10);
     datasets=top.map((c,i)=>({type:'line',label:c.k,data:c.data,borderColor:CCOL[i%CCOL.length],backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:2,datalabels:{display:false}}));
     if(rest.length){const rd=W.map((_,w)=>rest.reduce((t,c)=>t+c.data[w],0));datasets.push({type:'line',label:'Otras',data:rd,borderColor:'#9aa4b2',borderDash:[4,3],backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:1.5,datalabels:{display:false}});}
   } else {
@@ -822,7 +825,7 @@ function renderSales(){
        y:{beginAtZero:true,ticks:{callback:v=>gmvAxis?swMoney(v):v.toLocaleString('es'),font:{size:9}}}
      }}});
 }
-window.swSet=function(v){swView=v; if(v==='city'&&swMetric!=='gmv'&&swMetric!=='ord')swMetric='gmv'; swSyncBtns(); renderSales();};
+window.swSet=function(v){swView=v; if(v==='coc')swCity=null; if(v==='city'&&swMetric!=='gmv'&&swMetric!=='ord')swMetric='gmv'; swSyncBtns(); renderSales();};
 window.swMetricSet=function(m){swMetric=m; swSyncBtns(); renderSales();};
 
 window.swSet=window.swSet; // noop marker
