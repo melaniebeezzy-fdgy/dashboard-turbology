@@ -32,6 +32,15 @@ def cc_clean(v):
     except: return None
     if fv == 1: return None
     return to_m(v)
+def _sac(s): return ''.join(c for c in unicodedata.normalize('NFD', str(s or '')) if unicodedata.category(c) != 'Mn').lower()
+def infer_cocina(name, sid):
+    # cocinas nuevas (Cedritos / Chía) inferidas del storeName; 2 tiendas sin ubicación se ubican por rango de sid
+    if sid == '900502747': return 'Cedritos'
+    if sid == '900507601': return 'Chía'
+    n = _sac(name)
+    if 'cedritos' in n: return 'Cedritos'
+    if 'chia' in n: return 'Chía'
+    return 'Otra'
 MAY11 = {1.0:1000.0, 2.0:2400.0, 3.0:3000.0}
 def fin_m(dd, v):
     if dd == '2026-05-11':
@@ -237,6 +246,23 @@ with open(NEW, encoding='utf-8') as f:
         rt[17] = rtclean(gw7[3])                                                  # 31-ago (Sep 6) — nueva semana
         for i in range(8, 18): fin[i] = cc                                        # polígono actual = coverageCurrent (fijo)
         stores[key] = dict(b=b, k=coc, c=city_of.get(key,'—'), sid=key, cc=cc, fin=fin, rt=rt, op=coc2op.get(coc))
+
+# ---- tiendas NUEVAS del dashboard más reciente (Cedritos/Chía, no están en rt_data) ----
+_newcity = {'Cedritos': 'Bogotá', 'Chía': 'Bogotá'}
+_nnew = 0
+for _k, _o in up7.items():
+    if _k in stores: continue
+    _b = re.sub(r'\s*-?\s*Turbo\s*$', '', (_o.get('brand') or _o.get('storeName') or ''), flags=re.I).strip()
+    _coc = infer_cocina(_o.get('storeName', ''), _k)
+    _cc = cc_clean(_o.get('coverageCurrent'))
+    _rt = [None]*NW; _fin = [None]*NW
+    _g7 = [_o.get('w1'), _o.get('w2'), _o.get('w3'), _o.get('w4')]   # Aug16, Aug23, Aug30, Sep6
+    _rt[14] = rtclean(_g7[0]); _rt[15] = rtclean(_g7[1]); _rt[16] = rtclean(_g7[2]); _rt[17] = rtclean(_g7[3])
+    for _i in range(14, NW):
+        if _cc is not None: _fin[_i] = _cc
+    stores[_k] = dict(b=_b, k=_coc, c=_newcity.get(_coc, 'Bogotá'), sid=_k, cc=_cc, fin=_fin, rt=_rt, op=coc2op.get(_coc))
+    _nnew += 1
+print('tiendas nuevas agregadas (Cedritos/Chía): %d' % _nnew)
 
 # ---- histórico de polígono por semana (el archivo no trae fecha; estampamos la semana que actualizamos) ----
 # poly_history.json: { "<semana>": { "<storeId>": polígono_m } }. Se estampa SIEMPRE la semana más reciente

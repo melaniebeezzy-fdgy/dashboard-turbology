@@ -323,8 +323,8 @@
      "wow": 10.4,
      "orders_prev": 1860,
      "avg_rt": 1.75,
-     "avg_cov": 96.5,
-     "drt": 0.31,
+     "avg_cov": 96.7,
+     "drt": 0.29,
      "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chapinero",
@@ -504,9 +504,9 @@
        "orders": 38,
        "rank": 2,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.72,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
@@ -527,10 +527,10 @@
      "orders": 1003,
      "wow": 9.6,
      "orders_prev": 915,
-     "avg_rt": 1.74,
-     "avg_cov": 95.0,
-     "drt": 0.18,
-     "dcov": 0.0,
+     "avg_rt": 1.71,
+     "avg_cov": 95.3,
+     "drt": 0.19,
+     "dcov": -0.0,
      "best": "Manila",
      "worst": "Chicó",
      "rows": [
@@ -659,9 +659,9 @@
        "orders": 28,
        "rank": 5,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.29,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
@@ -722,10 +722,10 @@
      "orders": 862,
      "wow": -2.9,
      "orders_prev": 888,
-     "avg_rt": 2.16,
-     "avg_cov": 93.8,
-     "drt": -0.28,
-     "dcov": 0.0,
+     "avg_rt": 2.21,
+     "avg_cov": 94.1,
+     "drt": -0.19,
+     "dcov": -0.0,
      "best": "Manila",
      "worst": "Barranquilla",
      "rows": [
@@ -804,10 +804,10 @@
        "orders": 30,
        "rank": 4,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
+       "rt": 3.02,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "bad"
       },
       {
        "coc": "Barranquilla",
@@ -917,9 +917,9 @@
      "orders": 740,
      "wow": 0.4,
      "orders_prev": 737,
-     "avg_rt": 2.66,
-     "avg_cov": 97.1,
-     "drt": 0.84,
+     "avg_rt": 2.58,
+     "avg_cov": 97.3,
+     "drt": 0.73,
      "dcov": -0.0,
      "best": "Usaquén",
      "worst": "Chicó",
@@ -989,9 +989,9 @@
        "orders": 50,
        "rank": 1,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.51,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
@@ -1092,8 +1092,8 @@
      "orders": 684,
      "wow": 0.3,
      "orders_prev": 682,
-     "avg_rt": 1.55,
-     "avg_cov": 96.7,
+     "avg_rt": 1.52,
+     "avg_cov": 96.9,
      "drt": 0.21,
      "dcov": 0.0,
      "best": "Manila",
@@ -1264,9 +1264,9 @@
        "orders": 14,
        "rank": 8,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.08,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -1676,40 +1676,40 @@
       "cb": "green house",
       "orders": 50,
       "pct": 17.5,
-      "rt": null,
-      "size": null
+      "rt": 1.51,
+      "size": 3000
      },
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
       "orders": 38,
       "pct": 13.3,
-      "rt": null,
-      "size": null
+      "rt": 1.72,
+      "size": 3000
      },
      {
       "brand": "Ñamgucheria Turbo",
       "cb": "namgucheria",
       "orders": 35,
       "pct": 12.3,
-      "rt": null,
-      "size": null
+      "rt": 1.81,
+      "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
       "orders": 30,
       "pct": 10.5,
-      "rt": null,
-      "size": null
+      "rt": 3.02,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
       "orders": 28,
       "pct": 9.8,
-      "rt": null,
-      "size": null
+      "rt": 1.29,
+      "size": 3000
      }
     ],
     "Chapinero": [
@@ -2998,9 +2998,9 @@
      "orders": 1107,
      "wow": 19.2,
      "orders_prev": 929,
-     "avg_rt": 1.92,
-     "avg_cov": 96.0,
-     "drt": 0.36,
+     "avg_rt": 1.9,
+     "avg_cov": 96.4,
+     "drt": 0.32,
      "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chapinero",
@@ -3110,9 +3110,9 @@
        "orders": 38,
        "rank": 2,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.72,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -3123,10 +3123,10 @@
      "orders": 528,
      "wow": 8.9,
      "orders_prev": 485,
-     "avg_rt": 2.25,
-     "avg_cov": 96.2,
-     "drt": 0.51,
-     "dcov": -0.0,
+     "avg_rt": 2.15,
+     "avg_cov": 96.7,
+     "drt": 0.49,
+     "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chicó",
      "rows": [
@@ -3215,9 +3215,9 @@
        "orders": 28,
        "rank": 5,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.29,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
@@ -3238,10 +3238,10 @@
      "orders": 515,
      "wow": 0.0,
      "orders_prev": 515,
-     "avg_rt": 2.36,
-     "avg_cov": 93.3,
-     "drt": -0.29,
-     "dcov": -0.0,
+     "avg_rt": 2.43,
+     "avg_cov": 94.0,
+     "drt": -0.13,
+     "dcov": 0.0,
      "best": "Kennedy",
      "worst": "Chicó",
      "rows": [
@@ -3300,10 +3300,10 @@
        "orders": 30,
        "rank": 4,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
-       "sev": "ok"
+       "rt": 3.02,
+       "size": 3000,
+       "cov": 100.0,
+       "sev": "bad"
       },
       {
        "coc": "Villa del Prado",
@@ -3353,9 +3353,9 @@
      "orders": 397,
      "wow": -1.7,
      "orders_prev": 404,
-     "avg_rt": 2.92,
-     "avg_cov": 98.9,
-     "drt": 1.07,
+     "avg_rt": 2.78,
+     "avg_cov": 99.0,
+     "drt": 0.89,
      "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chicó",
@@ -3405,9 +3405,9 @@
        "orders": 50,
        "rank": 1,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.51,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       },
       {
@@ -3468,9 +3468,9 @@
      "orders": 371,
      "wow": 14.5,
      "orders_prev": 324,
-     "avg_rt": 1.88,
-     "avg_cov": 96.7,
-     "drt": 0.26,
+     "avg_rt": 1.8,
+     "avg_cov": 97.0,
+     "drt": 0.27,
      "dcov": 0.0,
      "best": "Usaquén",
      "worst": "Chapinero",
@@ -3570,9 +3570,9 @@
        "orders": 14,
        "rank": 8,
        "nbrands": 26,
-       "rt": null,
-       "size": null,
-       "cov": null,
+       "rt": 1.08,
+       "size": 3000,
+       "cov": 100.0,
        "sev": "ok"
       }
      ]
@@ -3786,40 +3786,40 @@
       "cb": "green house",
       "orders": 50,
       "pct": 17.5,
-      "rt": null,
-      "size": null
+      "rt": 1.51,
+      "size": 3000
      },
      {
       "brand": "Avocalia Turbo",
       "cb": "avocalia",
       "orders": 38,
       "pct": 13.3,
-      "rt": null,
-      "size": null
+      "rt": 1.72,
+      "size": 3000
      },
      {
       "brand": "Ñamgucheria Turbo",
       "cb": "namgucheria",
       "orders": 35,
       "pct": 12.3,
-      "rt": null,
-      "size": null
+      "rt": 1.81,
+      "size": 3000
      },
      {
       "brand": "Brunch & Munch Turbo",
       "cb": "brunch munch",
       "orders": 30,
       "pct": 10.5,
-      "rt": null,
-      "size": null
+      "rt": 3.02,
+      "size": 3000
      },
      {
       "brand": "Burritos & Co Turbo",
       "cb": "burritos co",
       "orders": 28,
       "pct": 9.8,
-      "rt": null,
-      "size": null
+      "rt": 1.29,
+      "size": 3000
      }
     ],
     "Chapinero": [
