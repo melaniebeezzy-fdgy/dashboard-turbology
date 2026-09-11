@@ -205,7 +205,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 <div id="distDetail"></div>
 <div class="card" style="margin-bottom:14px"><h2>Mapa de calor — % cobertura por cocina y semana</h2><div class="hint">Escala continua: vino &lt; 70% → malva → verde azulado → azul → azul oscuro ≥ 98%. Cada punto porcentual cambia el tono.</div><div class="hscroll"><table class="hm" id="tbHeat"></table></div><div id="heatDetail"></div></div>
 <div class="grid" id="alertas">
-  <div class="card"><h2>Marcas–cocinas penalizadas y con RTWT crítico</h2><div class="hint">Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas (16 ago–6 sep) en 🟠 naranja (3–6) o 🔴 crítico/penalizado (≥6 → 0% cobertura). Ordenadas de peor a mejor.</div><div class="scroll"><table id="tbBrand" class="dense"></table></div></div>
+  <div class="card"><h2 id="brTitle">Marcas–cocinas penalizadas y con RTWT crítico</h2><div class="hint" id="brHint">Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico/penalizado (≥6 → 0% cobertura). Ordenadas de peor a mejor.</div><div class="scroll"><table id="tbBrand" class="dense"></table></div></div>
   <div class="card"><h2>📈 RTWT en aumento (2+ semanas seguidas)</h2><div class="hint">Tiendas cuyo RTWT lleva <b>2 o más semanas seguidas subiendo</b> y que <b>en la semana más reciente sigue subiendo</b>. Si la última semana bajó, no aparece. Cada flecha = 1 semana.</div><div class="scroll"><table id="tbConsec" class="dense"></table></div></div>
 </div>
 <div class="grid" id="alertas2">
@@ -616,9 +616,12 @@ function update(){
  // ranking marcas
  const gbk=groupBy(st,s=>s.b+'||'+s.k);
  const brc=Object.keys(gbk).map(key=>{const g=gbk[key];const v=g.map(avg4).filter(x=>x!=null);if(!v.length)return null;const vp=g.map(avg4prev).filter(x=>x!=null);const vl=g.map(s=>s.rt[LI]).filter(x=>x!=null);const cr=g.map(covResult).filter(x=>x!=null);return {brand:g[0].b,coc:g[0].k,city:g[0].c,rtwt:avg(v),rtwtPrev:vp.length?avg(vp):null,rtLast:vl.length?avg(vl):null,res:cr.length?Math.round(avg(cr)):null};}).filter(r=>r&&r.rtwt!=null&&r.rtwt>3).sort((a,b)=>b.rtwt-a.rtwt);
- document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th><th class="num">RTWT últ. sem</th><th class="num">Polígono efectivo</th></tr>'+
-  (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td><td class="num">${rt4fmt(r.rtLast)}</td><td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>')}</td></tr>`).join('')
-   :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>');
+ const _co=CTRY==='CO';
+ {var _bt=document.getElementById('brTitle'); if(_bt)_bt.textContent=_co?'Marcas–cocinas penalizadas y con RTWT crítico':'Marcas–cocinas con RTWT sobre 6 min';
+  var _bh=document.getElementById('brHint'); if(_bh)_bh.innerHTML=_co?'Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico/penalizado (≥6 → 0% cobertura). Ordenadas de peor a mejor.':'Combinaciones marca–cocina con RTWT de la <b>última semana</b> en 🟠 naranja (3–6) o 🔴 <b>sobre 6 min</b> (≥6). Ordenadas de peor a mejor.';}
+ document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th>'+(_co?'<th class="num">RTWT últ. sem</th>':'')+'<th class="num">Polígono efectivo</th></tr>'+
+  (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td>${_co?`<td class="num">${rt4fmt(r.rtLast)}</td>`:''}<td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>')}</td></tr>`).join('')
+   :`<tr><td colspan="${_co?5:4}" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>`);
 
   // ---- marcas que cambiaron de polígono efectivo (sem pasada vs actual) ----
   const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
