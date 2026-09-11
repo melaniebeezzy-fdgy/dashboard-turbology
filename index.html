@@ -153,6 +153,9 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 .subtab:hover{color:var(--ind)}
 .subtab.on{color:var(--ind);border-bottom-color:var(--ind)}
 .subtab .ic{font-size:13px;line-height:1}
+table:not(.hm) th{cursor:pointer;user-select:none}
+table:not(.hm) th[data-sd="1"]::after{content:" ↑";font-size:9px;opacity:.8}
+table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 #stickybar{position:sticky;top:var(--topbar);z-index:30;background:var(--bg);margin:0 -26px 14px;padding:12px 26px 0;box-shadow:0 6px 10px -8px rgba(14,40,65,.2)}
 #stickybar #filters{margin-bottom:10px}
 #stickybar .subtabs{margin-bottom:0}
@@ -1130,6 +1133,36 @@ window.__fdgyRender=function(cc,cid){
 
 // re-render Fdgy al cambiar el filtro de ciudad/ops
 if(typeof update==='function'){var _uf=update; update=function(){_uf.apply(this,arguments); try{var fd=document.getElementById('co-fdgy'); if(fd&&fd.style.display!=='none'&&window.__fdgyRender) window.__fdgyRender(CTRY3[CTRY],'co-fdgy');}catch(e){console.error(e);}};}
+
+// ---- ordenamiento genérico: clic en el encabezado ordena cualquier tabla (las que ya traen sort propio lo conservan) ----
+(function(){
+  function cellVal(td){ if(!td)return -Infinity;
+    var t=(td.textContent||'').replace(/ /g,' ').trim();
+    if(t===''||t==='–'||t==='-'||t==='s/d')return -Infinity;
+    var mult=/\d\s*M\b/.test(t)?1e6:(/\d\s*K\b/.test(t)?1e3:1);
+    var n=parseFloat(t.replace(/,/g,'').replace(/[^0-9.\-]/g,''));
+    if(!isNaN(n)&&/\d/.test(t))return n*mult;
+    return t.toLowerCase();
+  }
+  document.addEventListener('click',function(e){
+    var th=e.target && e.target.closest ? e.target.closest('th') : null; if(!th)return;
+    if(th.getAttribute('onclick')||th.classList.contains('sortable'))return;   // ya tiene sort propio
+    var table=th.closest('table'); if(!table||table.classList.contains('hm'))return;
+    var head=th.parentNode; if(head!==table.querySelector('tr'))return;         // solo la fila de encabezado
+    var idx=Array.prototype.indexOf.call(head.children,th);
+    var dir=(th.getAttribute('data-sd')==='1')?-1:1;
+    Array.prototype.forEach.call(head.children,function(x){x.removeAttribute('data-sd');});
+    th.setAttribute('data-sd',String(dir));
+    var body=head.parentNode;
+    var rows=Array.prototype.slice.call(body.children).filter(function(r){return r!==head;});
+    rows.sort(function(a,b){var av=cellVal(a.children[idx]),bv=cellVal(b.children[idx]);
+      var an=typeof av==='number',bn=typeof bv==='number';
+      if(an&&bn)return (av-bv)*dir;
+      if(an)return -1; if(bn)return 1;
+      return String(av).localeCompare(String(bv))*dir;});
+    rows.forEach(function(r){body.appendChild(r);});
+  });
+})();
 
 update();
 renderSales();
