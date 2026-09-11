@@ -153,6 +153,9 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 .subtab:hover{color:var(--ind)}
 .subtab.on{color:var(--ind);border-bottom-color:var(--ind)}
 .subtab .ic{font-size:13px;line-height:1}
+#stickybar{position:sticky;top:var(--topbar);z-index:30;background:var(--bg);margin:0 -26px 14px;padding:12px 26px 0;box-shadow:0 6px 10px -8px rgba(14,40,65,.2)}
+#stickybar #filters{margin-bottom:10px}
+#stickybar .subtabs{margin-bottom:0}
 #mo-g1 .card,#mo-g2 .card{height:440px}
 </style></head><body class="collapsed">
 
@@ -168,6 +171,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 </div>
 
 <div id="main">
+<div id="stickybar">
 <div id="filters">
   <select id="selCity" title="Filtro global por ciudad"></select>
   <select id="selOps" title="Filtro global por ops"></select>
@@ -177,6 +181,7 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
   <button id="coTabM" class="subtab" onclick="coView('m')"><span class="ic">🗓️</span>Mensual <span style="opacity:.6">(Rappi)</span></button>
   <button id="coTabF" class="subtab" onclick="coView('f')"><span class="ic">🥑</span>Fdgy</button>
 </div>
+</div><!--/stickybar-->
 <div id="co-weekly">
 <h1 id="resumen">Resumen <span>ejecutivo</span> <span id="cityTag" style="font-size:14px;color:var(--mut)"></span></h1>
 <div class="sub" id="resSub">Semanas del 10 may al 6 sep 2026 · Evaluación por <b>promedio móvil de 4 semanas</b> (16 ago–6 sep). Cobertura =polígono efectivo (<b>coverageCurrent</b>) sobre el <b>polígono máximo de cada zona</b> (no todas llegan a 3 km); cae a <b>0%</b> si el RTWT promedio de 4 semanas supera <b>6 min</b> (penalización 4 semanas). El filtro de ciudad aplica a todo el dashboard.</div>
