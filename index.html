@@ -829,8 +829,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
      <div class="vo">${d.orders.toLocaleString('es')} <span style="font-size:13px;font-weight:600;color:var(--mut)">órdenes</span> ${wowTag(d.wow)}</div>
      <div class="vm">
      Cobertura <b style="color:#156082;font-size:14px">${d.avg_cov==null?'–':d.avg_cov+'%'}</b><br>
-     RTWT ${rtfmt(d.avg_rt)} ${dTag(d.drt,'',true)}<br>
-     <span style="color:#1e8e5a">▲ mejor: <b>${d.best||'–'}</b></span> · <span style="color:#c0392b">▼ peor: <b>${d.worst||'–'}</b></span></div></div>`;
+     RTWT ${rtfmt(d.avg_rt)} ${dTag(d.drt,'',true)}${OPS==='ALL'?`<br>
+     <span style="color:#1e8e5a">▲ mejor: <b>${d.best||'–'}</b></span> · <span style="color:#c0392b">▼ peor: <b>${d.worst||'–'}</b></span>`:''}</div></div>`;
    }).join('');
    // selects (reconstruir preservando selección)
    const vco=document.getElementById('vCocinaSel'), pc=vco.value;
