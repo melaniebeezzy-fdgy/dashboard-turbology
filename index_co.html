@@ -460,15 +460,17 @@ function sortRows(rows,st){const k=st.key,d=st.dir;
     return (av<bv?-1:av>bv?1:0)*d;});}
 function hdrRow(st,fn,first){return '<tr>'+COLS.map((c,i)=>`<th class="${c.num?'num ':''}sortable" onclick="${fn}('${c.k}')" title="Ordenar">${i===0?first:c.l}${st.key===c.k?(st.dir===1?' ↑':' ↓'):''}</th>`).join('')+'</tr>'}
 function nmeta(k){return String(k).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');}
+function covArrow(d){ if(d==null||Math.abs(d)<0.05) return ''; const up=d>0; return ` <span style="font-size:10px;font-weight:700;color:${up?'var(--good)':'var(--bad)'}" title="vs semana pasada">${up?'▲':'▼'}${Math.abs(d).toFixed(1)}</span>`; }
 function rowHtml(r,dim,nav){
   const name = nav ? `<span class="covlink" onclick="${nav}('${nmeta(r.k)}')" title="Desglosar">${r.k} ▸</span>` : r.k;
-  const cov = (dim==='marca') ? `${fmt(r.cov,1)}%` : `<span class="covlink" onclick="showDetail('${dim}','${nmeta(r.k)}')">${fmt(r.cov,1)}%</span>`;
+  const arr = covArrow(r.dcov);
+  const cov = (dim==='marca') ? `${fmt(r.cov,1)}%${arr}` : `<span class="covlink" onclick="showDetail('${dim}','${nmeta(r.k)}')">${fmt(r.cov,1)}%</span>${arr}`;
   return `<tr><td>${name}</td><td class="num">${r.n}</td><td class="num">${rt4fmt(r.rtwt)}</td><td style="font-size:11px">${stlabel(r.rtwt)}</td><td class="num">${cov}</td><td class="num">${r.lost?('$'+(r.lost/1e6).toFixed(1)+'M'):'–'}</td><td class="num">${r.lose?('<span style="color:var(--plum);font-weight:700">'+r.lose+'</span>'):'0'}</td></tr>`;
 }
 function aggRowsBy(stores,keyf){
   const g=groupBy(stores.filter(s=>!HIDDEN.includes(s.k)),keyf);
-  return Object.keys(g).map(k=>{const gr=g[k];const a=agg4(gr);let cov=a.cov==null?null:+a.cov.toFixed(1);const cr=covWeekAtPen(gr,LI);if(cr!=null)cov=+cr.toFixed(1);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);
-    return {k,n:gr.length,rtwt:rt,estado:rt,cov,lose:a.lose,lost:gr.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)};});
+  return Object.keys(g).map(k=>{const gr=g[k];const a=agg4(gr);let cov=a.cov==null?null:+a.cov.toFixed(1);const cr=covWeekAtPen(gr,LI);if(cr!=null)cov=+cr.toFixed(1);const cp=covWeekAtPen(gr,LI-1);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);
+    return {k,n:gr.length,rtwt:rt,estado:rt,cov,dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:gr.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)};});
 }
 let combView='cocina', combDrill=[];
 window.coSetComb=function(v){combView=v;combDrill=[];document.getElementById('tgCoc').classList.toggle('on',v==='cocina');document.getElementById('tgCity').classList.toggle('on',v==='city');document.getElementById('combTitle').textContent=(v==='cocina'?'Cocinas':'Ciudades')+' — promedio móvil 4 semanas';renderComb();};
@@ -572,7 +574,7 @@ function update(){
 
  // ciudades
  const gc=groupBy(st,s=>s.c);
- const wc=Object.keys(gc).map(c=>{const g=gc[c];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);return {k:c,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
+ const wc=Object.keys(gc).map(c=>{const g=gc[c];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k:c,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
    .filter(r=>r.n>5).sort((a,b)=>(a.cov??999)-(b.cov??999));
  WC=wc;
 
@@ -581,7 +583,7 @@ function update(){
  const kagg={}; Object.keys(gk).forEach(k=>kagg[k]=weekly(gk[k]));
  // heatmap: la semana más reciente usa cobertura efectiva (coverageResult, 0% si penalizada)
  Object.keys(gk).forEach(k=>{const cr=covWeekAtPen(gk[k],LI); if(cr!=null&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+cr.toFixed(1); const cp=covWeekAtPen(gk[k],LI-1); if(cp!=null&&kagg[k].cov[LI-1]!=null) kagg[k].cov[LI-1]=+cp.toFixed(1);});
- const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
+ const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
    .filter(r=>r.n>3).sort((a,b)=>(a.cov??999)-(b.cov??999));
  KC=kc; renderComb();
 
