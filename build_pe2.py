@@ -66,9 +66,16 @@ for r in ws.iter_rows(min_row=2, values_only=True):
     if z == 'Otra': continue
     k = (bkey(r[2]), z)
     m = to_m(r[5])
-    if m is not None: newcov[k].append(m)
+    if m is not None: newcov[k].append((sac(r[1]), m))   # (nombre_tienda, distancia)
     newdisp.setdefault(k, bdisp(r[2]))
-newcc = {k: round(avg(v)) for k, v in newcov.items() if v}
+# Al promediar, si varias tiendas caen en (marca,zona), usar solo las cuyo NOMBRE
+# corresponde a la marca (evita mezclar marcas mal etiquetadas, p.ej. Cacerola como Avocalia).
+newcc = {}
+for k, rows in newcov.items():
+    tok = k[0].split()[0] if k[0] else ''
+    match = [d for (nm, d) in rows if tok and tok in nm]
+    use = match if match else [d for (_, d) in rows]
+    if use: newcc[k] = round(avg(use))
 if NEW_LABEL is None:
     NEW_LABEL = max(_days).strftime('%b %-d') if _days else 'Nuevo'
 
