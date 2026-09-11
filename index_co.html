@@ -300,6 +300,7 @@ function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'|
 let N4=D.n4||4;
 let W4=(()=>{const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.push(i);return a;})();
 // CO: promedio móvil de 4 semanas. MX/PE: RTWT de la última semana (no hay regla de 4 sem).
+function rtH(){return CTRY==='CO'?'RTWT 4 sem':'RTWT últ. sem';}
 function avg4(s){ if(CTRY!=='CO'){const v=s.rt[W.length-1];return v==null?null:v;} return avg(W4.map(i=>s.rt[i]));}
 function avg4prev(s){ if(CTRY!=='CO'){const v=s.rt[W.length-2];return v==null?null:v;} return avg(W4.map(i=>i-1).filter(i=>i>=0).map(i=>s.rt[i]));}
 function penOn(){return CTRY==='CO';} // penalización solo aplica en Colombia
@@ -615,7 +616,7 @@ function update(){
  // ranking marcas
  const gbk=groupBy(st,s=>s.b+'||'+s.k);
  const brc=Object.keys(gbk).map(key=>{const g=gbk[key];const v=g.map(avg4).filter(x=>x!=null);if(!v.length)return null;const vp=g.map(avg4prev).filter(x=>x!=null);const vl=g.map(s=>s.rt[LI]).filter(x=>x!=null);const cr=g.map(covResult).filter(x=>x!=null);return {brand:g[0].b,coc:g[0].k,city:g[0].c,rtwt:avg(v),rtwtPrev:vp.length?avg(vp):null,rtLast:vl.length?avg(vl):null,res:cr.length?Math.round(avg(cr)):null};}).filter(r=>r&&r.rtwt!=null&&r.rtwt>3).sort((a,b)=>b.rtwt-a.rtwt);
- document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">RTWT 4 sem</th><th class="num">RTWT últ. sem</th><th class="num">Polígono efectivo</th></tr>'+
+ document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th><th class="num">RTWT últ. sem</th><th class="num">Polígono efectivo</th></tr>'+
   (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td><td class="num">${rt4fmt(r.rtLast)}</td><td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>')}</td></tr>`).join('')
    :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>');
 
@@ -625,7 +626,7 @@ function update(){
   const pchg=st.filter(s=>{const a=effAt(s,LI-1),b=effAt(s,LI);return a!=null&&b!=null&&a!==b;})
     .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s)}))
     .sort((x,y)=>(x.to-x.from)-(y.to-y.from));
-  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">RTWT 4 sem</th></tr>'+
+  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">'+rtH()+'</th></tr>'+
    (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td></tr>`).join('')
     :'<tr><td colspan="6" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin cambios de polígono en la última semana ✓</td></tr>');
 
@@ -644,7 +645,7 @@ function update(){
   });
   rimp.sort((x,y)=>(x.a4==null?9:x.a4)-(y.a4==null?9:y.a4));
   window.RIMP=rimp;
-  document.getElementById('tbRtImp').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">Evolución RTWT (min)</th><th class="num">RTWT 4 sem</th><th class="num">Polígono</th></tr>'+
+  document.getElementById('tbRtImp').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">Evolución RTWT (min)</th><th class="num">'+rtH()+'</th><th class="num">Polígono</th></tr>'+
    (rimp.length?rimp.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num"><span class="pill" style="background:#1e8e5a">${r.ev.join(' → ')}</span></td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${r.cc==null?'–':`<span class="pill" style="background:${scol[r.cc]||'#345964'}">${km(r.cc)} km</span>`}</td></tr>`).join('')
     :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin marcas mejorando en este alcance</td></tr>');
   renderOpp();
@@ -681,7 +682,7 @@ window.showPoly=function(sz){
   const rows=F().filter(s=>s.cc!=null&&!penal(s)&&LV[lvlIdx(s.cc)]===sz).map(s=>({b:s.b,k:s.k,c:s.c,rt:avg4(s),cc:s.cc})).sort((a,b)=>(b.rt==null?-1:b.rt)-(a.rt==null?-1:a.rt));
   document.getElementById('mTitle').textContent='Marcas en polígono '+km(sz)+' km — '+rows.length+' tienda(s)';
   document.getElementById('mSum').innerHTML=`Tiendas con polígono asignado de <b>${km(sz)} km</b> en este alcance. RTWT = promedio móvil de 4 semanas (semáforo por color). Ordenadas de peor a mejor RTWT.`;
-  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">RTWT 4 sem</th><th class="num">Polígono</th></tr>'+
+  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">'+rtH()+'</th><th class="num">Polígono</th></tr>'+
    (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.rt)}</td><td class="num"><span class="pill" style="background:${scol[r.cc]||'#345964'}">${km(r.cc)} km</span></td></tr>`).join('')
     :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin tiendas en este polígono ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
@@ -693,7 +694,7 @@ window.showLost=function(){
   document.getElementById('mSum').innerHTML=_pen
     ? `Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> → <b>0% de cobertura</b> (penalización 4 semanas). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas penalizadas</b> (menos → más).`
     : `Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b>. Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas &gt; 6 min</b> (menos → más).`;
-  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">RTWT 4 sem</th><th class="num">Δ</th><th class="num">Polígono'+(_pen?' efectivo':'')+'</th><th class="num">Sem. &gt; 6 min</th><th class="num">Sem. con dato</th></tr>'+
+  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">'+rtH()+'</th><th class="num">Δ</th><th class="num">Polígono'+(_pen?' efectivo':'')+'</th><th class="num">Sem. &gt; 6 min</th><th class="num">Sem. con dato</th></tr>'+
    (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num">${_pen?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':('<span class="pill" style="background:'+(scol[r.cc]||'#345964')+'">'+km(r.cc)+' km</span>')}</td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
     :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda pierde cobertura en este alcance ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
