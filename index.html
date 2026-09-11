@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
- --primary:#090e3e; --navy:#0E2841; --navy2:#242F42; --navy3:#153D64;
+ --primary:#090e3e; --navy:#0E2841; --navy2:#242F42; --navy3:#153D64; --ind:#6366f1;
  --blue:#156082; --blue2:#0B769F; --sky:#0F9ED5; --slate:#345964; --teal:#467886;
  --mauve:#C19EB1; --plum:#96607D;
  --bg:#E8E8E8; --card:#ffffff; --tx:#242F42; --mut:#5d6b80; --bd:#d5dae3;
@@ -17,7 +17,7 @@
  --topbar:56px; --side:220px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--tx);font-family:'Poppins',system-ui,sans-serif}
+body{background:var(--bg);color:var(--tx);font-family:'Poppins',system-ui,sans-serif;font-size:13px}
 #login{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
  background:linear-gradient(rgba(9,14,62,.55),rgba(9,14,62,.75)),url('https://images.squarespace-cdn.com/content/v1/5e711db98f62f46196625761/1651616585662-7L3JLXHY0UMDJBU9KFFB/Banner-03-02.png?format=2500w') center/cover no-repeat}
 .loginCard{background:rgba(255,255,255,.97);border-radius:16px;padding:40px 44px;width:360px;max-width:92vw;box-shadow:0 20px 60px rgba(9,14,62,.45);text-align:center}
@@ -136,15 +136,15 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
  .kpis{grid-template-columns:1fr 1fr}
  #kpis{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:1fr 1fr}
 }
-.ctabs{display:flex;gap:8px;margin:0 0 14px}
-.ctab{background:#fff;border:1px solid var(--bd);border-radius:11px;padding:9px 20px;font-family:Poppins;font-size:14px;font-weight:600;color:var(--mut);cursor:pointer;transition:.15s}
-.ctab:hover{color:var(--primary);border-color:var(--primary)}
-.ctab.on{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(14,40,65,.18)}
-.subtabs{display:inline-flex;gap:4px;background:var(--navy);padding:5px;border-radius:13px;margin:0 0 18px;box-shadow:0 2px 8px rgba(14,40,65,.18)}
-.subtab{background:transparent;border:none;border-radius:9px;padding:8px 16px;font-family:Poppins;font-size:13px;font-weight:600;color:#aeb9cc;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s,color .15s;white-space:nowrap}
-.subtab:hover{color:#fff}
-.subtab.on{background:#fff;color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.15)}
-.subtab .ic{font-size:14px;line-height:1}
+.ctabs{display:flex;gap:6px;margin:0 0 12px}
+.ctab{background:#fff;border:1px solid var(--bd);border-radius:6px;padding:5px 14px;font-family:Poppins;font-size:12px;font-weight:600;color:var(--mut);cursor:pointer;transition:.15s}
+.ctab:hover{color:var(--ind);border-color:var(--ind)}
+.ctab.on{background:var(--ind);color:#fff;border-color:var(--ind)}
+.subtabs{display:flex;gap:2px;margin:0 0 16px;border-bottom:1px solid var(--bd)}
+.subtab{background:transparent;border:none;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;padding:9px 16px;font-family:Poppins;font-size:12px;font-weight:600;color:var(--mut);cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:color .15s,border-color .15s;white-space:nowrap}
+.subtab:hover{color:var(--ind)}
+.subtab.on{color:var(--ind);border-bottom-color:var(--ind)}
+.subtab .ic{font-size:13px;line-height:1}
 #mo-g1 .card,#mo-g2 .card{height:440px}
 </style></head><body class="collapsed">
 
