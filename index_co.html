@@ -37,6 +37,14 @@ body{background:var(--bg);color:var(--tx);font-family:'Poppins',system-ui,sans-s
 #topbar .t span{color:var(--sky)}
 #topbar select{background:var(--navy3);color:#fff;border:1px solid #2b3f63;border-radius:8px;padding:6px 10px;font-size:12.5px;font-family:inherit;margin-left:8px}
 #topbar img{height:30px;margin-left:auto}
+#logo{font-family:'Poppins',sans-serif;font-weight:800;font-size:21px;color:#fff;letter-spacing:-.5px;line-height:1}
+#logo span{color:var(--sky)}
+#topbar .ctab{background:var(--navy3);color:#cfd8e6;border-color:#2b3f63}
+#topbar .ctab:hover{color:#fff;border-color:var(--ind)}
+#topbar .ctab.on{background:var(--ind);color:#fff;border-color:var(--ind)}
+#filters{display:flex;gap:8px;margin:0 0 14px}
+#filters select{background:#fff;color:var(--tx);border:1px solid var(--bd);border-radius:7px;padding:5px 10px;font-size:11.5px;font-family:inherit;font-weight:500;cursor:pointer}
+#filters select:hover{border-color:var(--ind)}
 #side{position:fixed;top:var(--topbar);left:0;bottom:0;width:var(--side);background:var(--navy);z-index:40;
  padding:16px 10px;transition:transform .25s ease;overflow-y:auto}
 body.collapsed #side{transform:translateX(-100%)}
@@ -44,7 +52,7 @@ body.collapsed #side{transform:translateX(-100%)}
 #side a:hover{background:var(--navy3);color:#fff}
 #side a.active{background:var(--blue);color:#fff}
 #side .sec{color:#7d8ca3;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;padding:14px 14px 6px}
-#main{padding:calc(var(--topbar) + 22px) 26px 30px calc(var(--side) + 26px);transition:padding-left .25s ease}
+#main{padding:calc(var(--topbar) + 20px) 26px 30px 26px}
 #resumen,#tendencias,#poligonos,#cocinas,#alertas,#marcas,#notas,#vpareto,#vtop5,#vcocina,#vproblemas{scroll-margin-top:calc(var(--topbar) + 16px)}
 body.collapsed #main{padding-left:26px}
 h1{font-size:21px;font-weight:700;color:var(--primary)}h1 span{color:var(--sky)}
@@ -157,33 +165,19 @@ tr.sev-bad td{background:rgba(192,57,43,.10)} tr.sev-warn td{background:rgba(217
 </div></div>
 
 <div id="topbar">
-  <button id="burger" onclick="document.body.classList.toggle('collapsed');setTimeout(()=>window.dispatchEvent(new Event('resize')),280)" title="Contraer / expandir menú">☰</button>
+  <div id="logo">fdgy<span>.</span></div>
   <div class="t">Foodology <span>· Turbo</span> — RTWT & Polígonos</div>
-  <select id="selCity" title="Filtro global por ciudad"></select>
-  <select id="selOps" title="Filtro global por ops"></select>
-  <img src="https://images.squarespace-cdn.com/content/v1/5e711db98f62f46196625761/a203a1da-a389-43ad-969f-44fecfd3a6a6/Logo_Blanco+-+copia.png?format=750w" alt="Foodology">
+  <div class="ctabs" style="margin:0 0 0 auto">
+    <button class="ctab on" data-c="CO" onclick="setCountry('CO')">🇨🇴 Colombia</button>
+    <button class="ctab" data-c="MX" onclick="setCountry('MX')">🇲🇽 México</button>
+    <button class="ctab" data-c="PE" onclick="setCountry('PE')">🇵🇪 Perú</button>
+  </div>
 </div>
 
-<nav id="side">
-  <div class="sec">Reporte</div>
-  <a href="#resumen" class="active">Resumen ejecutivo</a>
-  <a href="#tendencias">Tendencias semanales</a>
-  <a href="#poligonos">Polígonos & ciudades</a>
-  <a href="#cocinas">Cocinas</a>
-  <div class="sec">Ventas · última semana</div>
-  <a href="#vpareto">Pareto de marcas</a>
-  <a href="#vtop5">Top 5 · cobertura & RTWT</a>
-  <a href="#vcocina">Top marcas por cocina</a>
-  <a href="#alertas">Alertas de polígono</a>
-  <div class="sec">Info</div>
-  <a href="#notas">Notas metodológicas</a>
-</nav>
-
 <div id="main">
-<div class="ctabs">
-  <button class="ctab on" data-c="CO" onclick="setCountry('CO')">🇨🇴 Colombia</button>
-  <button class="ctab" data-c="MX" onclick="setCountry('MX')">🇲🇽 México</button>
-  <button class="ctab" data-c="PE" onclick="setCountry('PE')">🇵🇪 Perú</button>
+<div id="filters">
+  <select id="selCity" title="Filtro global por ciudad"></select>
+  <select id="selOps" title="Filtro global por ops"></select>
 </div>
 <div class="subtabs">
   <button id="coTabW" class="subtab on" onclick="coView('w')"><span class="ic">📅</span>Semanal <span style="opacity:.6">(Rappi)</span></button>
