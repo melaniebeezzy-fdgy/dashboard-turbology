@@ -620,7 +620,7 @@ function update(){
     let i=Lw, path=(s.rt[Lw]!=null?[s.rt[Lw]]:[]), dec=0;
     while(i-1>=0 && s.rt[i]!=null && s.rt[i-1]!=null && s.rt[i]<s.rt[i-1]){ path.unshift(s.rt[i-1]); dec++; i--; }
     const a4=avg4(s);
-    const notFull=(s.cc!=null && lvlIdx(s.cc)!==4);           // excluye polígono de 3.0 km
+    const notFull=(s.cc!=null && lvlIdx(s.cc)!==LV.length-1);  // excluye polígono de 3.0 km (nivel máximo)
     const improving=(dec>=2) || (a4!=null && a4<2);
     if(notFull && improving){
       let ev; if(dec>=2){ev=path.slice(-4);} else {ev=[]; for(let w=Math.max(0,Lw-3);w<=Lw;w++) if(s.rt[w]!=null) ev.push(s.rt[w]);}
