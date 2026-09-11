@@ -556,7 +556,9 @@ function update(){
   {l:'Marcas en 2.4 km', v:nCC(2400)+' / '+cctot, d:pct(2400), click:'showPoly(2400)'},
   {l:'Marcas en 2.1 km (alerta)', v:pink(nCC(2100)+' / '+cctot), d:pct(2100), click:'showPoly(2100)'},
   (function(){var cl=CTRY==='PE'?1000:1800,kml=(cl/1000).toFixed(1);return {l:'Marcas en '+kml+' km (crítico)', v:pink(nCC(cl)+' / '+cctot), d:pct(cl), click:'showPoly('+cl+')'};})(),
-  {l:'Tiendas que pierden cobertura', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min → 0% + penalización</span>', click:'showLost()'},
+  (CTRY==='CO'
+    ? {l:'Tiendas que pierden cobertura', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min → 0% + penalización</span>', click:'showLost()'}
+    : {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>', click:'showLost()'}),
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
  chR.data.labels=W; chR.data.datasets[0].data=o.rtwt; chR.update();
@@ -666,10 +668,13 @@ window.showPoly=function(sz){
 };
 window.showLost=function(){
   const rows=lostCoverage(F()).sort((a,b)=>(a.pw-b.pw)||(b.a4-a.a4));   // menos → más semanas penalizadas
-  document.getElementById('mTitle').textContent='Tiendas que pierden cobertura — '+rows.length+' tienda(s)';
-  document.getElementById('mSum').innerHTML=`Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> → <b>0% de cobertura</b> (penalización 4 semanas). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas penalizadas</b> (menos → más).`;
-  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">RTWT 4 sem</th><th class="num">Δ</th><th class="num">Polígono efectivo</th><th class="num">Sem. penalizada</th><th class="num">Sem. con dato</th></tr>'+
-   (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num"><span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span></td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
+  const _pen=CTRY==='CO';
+  document.getElementById('mTitle').textContent=(_pen?'Tiendas que pierden cobertura':'Tiendas con RTWT > 6 min')+' — '+rows.length+' tienda(s)';
+  document.getElementById('mSum').innerHTML=_pen
+    ? `Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> → <b>0% de cobertura</b> (penalización 4 semanas). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas penalizadas</b> (menos → más).`
+    : `Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b>. Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas &gt; 6 min</b> (menos → más).`;
+  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">RTWT 4 sem</th><th class="num">Δ</th><th class="num">Polígono'+(_pen?' efectivo':'')+'</th><th class="num">Sem. &gt; 6 min</th><th class="num">Sem. con dato</th></tr>'+
+   (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num">${_pen?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':('<span class="pill" style="background:'+(scol[r.cc]||'#345964')+'">'+km(r.cc)+' km</span>')}</td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
     :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda pierde cobertura en este alcance ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
 };
