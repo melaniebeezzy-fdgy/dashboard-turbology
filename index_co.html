@@ -296,8 +296,9 @@ function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'|
 // ---------- lógica 4 semanas móviles (stakeholder) ----------
 let N4=D.n4||4;
 let W4=(()=>{const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.push(i);return a;})();
-function avg4(s){return avg(W4.map(i=>s.rt[i]));}                 // RTWT promedio 4 sem de la tienda
-function avg4prev(s){return avg(W4.map(i=>i-1).filter(i=>i>=0).map(i=>s.rt[i]));} // media móvil 4 sem de la semana anterior
+// CO: promedio móvil de 4 semanas. MX/PE: RTWT de la última semana (no hay regla de 4 sem).
+function avg4(s){ if(CTRY!=='CO'){const v=s.rt[W.length-1];return v==null?null:v;} return avg(W4.map(i=>s.rt[i]));}
+function avg4prev(s){ if(CTRY!=='CO'){const v=s.rt[W.length-2];return v==null?null:v;} return avg(W4.map(i=>i-1).filter(i=>i>=0).map(i=>s.rt[i]));}
 function penOn(){return CTRY==='CO';} // penalización solo aplica en Colombia
 function covResult(s){if(s.cc==null)return null;const a=avg4(s);return (penOn()&&a!=null&&a>6)?0:s.cc;} // 0% si >6 min (solo CO)
 function penal(s){if(!penOn())return false;const a=avg4(s);return a!=null&&a>6;} // penalizada (pierde cobertura) -> no cuenta en su bucket de km
@@ -487,6 +488,10 @@ function drillBC(){
   return seg.join(' <span style="color:var(--mut)">▸</span> ');
 }
 function renderComb(){
+  COLS[2].l=CTRY==='CO'?'RTWT 4 sem':'RTWT últ. sem';
+  var _rl=CTRY==='CO'?'promedio móvil 4 semanas':'RTWT última semana';
+  var _ct=document.getElementById('combTitle'); if(_ct)_ct.textContent=(combView==='cocina'?'Cocinas':'Ciudades')+' — '+_rl;
+  var _ch=document.getElementById('combHint'); if(_ch)_ch.innerHTML=(CTRY==='CO'?'RTWT promedio móvil de 4 semanas':'RTWT de la <b>última semana</b>')+', estado (🟢🟡🟠🔴) y cobertura efectiva (0% si penalizada). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.';
   const el=document.getElementById('tbComb'), bc=document.getElementById('combBC');
   if(combDrill.length===0){
     if(bc) bc.innerHTML='';
@@ -561,7 +566,7 @@ function update(){
  const pct=sz=>`<span class="warnc">${(100*nCC(sz)/cctot).toFixed(0)}% del total</span>`;
  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
  document.getElementById('kpis').innerHTML=[
-  {l:'Avg RTWT (4 sem. móviles)', v:A.rtwt==null?'–':`<span style="white-space:nowrap">${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
+  {l:CTRY==='CO'?'Avg RTWT (4 sem. móviles)':'RTWT (última semana)', v:A.rtwt==null?'–':`<span style="white-space:nowrap">${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
   {l:'Cobertura efectiva vs máximo por zona', v:fmt(covRes,1)+'%', d:delta(1, (covRes!=null&&o.cov[LI-1]!=null)?+(covRes-o.cov[LI-1]).toFixed(1):null, false)+' pts vs sem. pasada'},
   {l:'Marcas en 3.0 km (ideal)', v:nCC(3000)+' / '+cctot, d:pct(3000)+kdiff(nCC(3000),nCCp(3000),true), click:'showPoly(3000)'},
   {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700)+kdiff(nCC(2700),nCCp(2700),true), click:'showPoly(2700)'},
