@@ -298,7 +298,8 @@ function covResult(s){if(s.cc==null)return null;const a=avg4(s);return (penOn()&
 function penal(s){if(!penOn())return false;const a=avg4(s);return a!=null&&a>6;} // penalizada (pierde cobertura) -> no cuenta en su bucket de km
 function covResultPrev(s){if(s.cc==null)return null;const a=avg4prev(s);return (penOn()&&a!=null&&a>6)?0:s.cc;} // result de la ventana de la semana anterior
 // polígono MÁXIMO de la zona = el mayor que la tienda ha tenido asignado (no todas llegan a 3 km)
-function mxp(s){let m=(s.cc!=null?s.cc:null); (s.fin||[]).forEach(x=>{if(x!=null&&(m==null||x>m))m=x;}); return m;}
+function mxp(s){ if(CTRY==='PE') return 3000; /* Perú: cobertura vs ideal 3km (no hay historia de polígonos) */
+  let m=(s.cc!=null?s.cc:null); (s.fin||[]).forEach(x=>{if(x!=null&&(m==null||x>m))m=x;}); return m;}
 // cobertura % (0-100) promedio sobre tiendas, normalizando cada una a SU polígono máximo
 function covPctAvg(st,effOf){const p=st.map(s=>{const e=effOf(s),m=mxp(s);return (e==null||m==null||m===0)?null:100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
 // máximo por zona CONOCIDO hasta la semana w (no incluye polígonos futuros) -> congela semanas pasadas
