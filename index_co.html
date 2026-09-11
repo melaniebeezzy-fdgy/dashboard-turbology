@@ -796,7 +796,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
  let chPar=null;
  function renderCoc(){const D=sub();if(!D)return;const c=document.getElementById('vCocinaSel').value,rows=(D.per_cocina[c]||[]);
    document.getElementById('vCocinaTable').innerHTML='<tr><th>#</th><th>Marca</th><th class="num">Órdenes</th><th class="num">% cocina</th><th class="num">RTWT</th><th class="num">Polígono</th></tr>'+
-   rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td>${r.brand}</td><td class="num">${r.orders}</td><td class="num">${r.pct}%</td><td class="num">${rtfmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td></tr>`).join('');}
+   (rows.length?rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td>${r.brand}</td><td class="num">${r.orders}</td><td class="num">${r.pct}%</td><td class="num">${rtfmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td></tr>`).join('')
+     :'<tr><td colspan="6" style="color:var(--mut);font-size:12px;padding:10px 6px">Sin órdenes de esta cocina en la última semana registrada.</td></tr>');}
  let pSort={key:'orders',dir:-1};
  window.vSortProb=function(k){if(pSort.key===k)pSort.dir*=-1;else{pSort.key=k;pSort.dir=(k==='coc')?1:-1;}renderProb();};
  function renderProb(){const D=sub();if(!D)return;const d=D.top5_detail[+document.getElementById('vBrandSel').value];if(!d)return;
