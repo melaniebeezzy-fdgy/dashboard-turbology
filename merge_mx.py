@@ -26,6 +26,14 @@ mx_js = "(function(){\n" + mx_js + "\nwindow.__mxRender=render;\n})();"
 pe_main, pe_js = extract(pe)
 pe_js = "(function(){\n" + pe_js + "\nwindow.__peRender=render;\n})();"
 
+# ---- sub-pestañas Rappi / Fdgy en México y Perú ----
+def _sub(prefix):
+    return ('<div class="subtabs">'
+            '<button class="subtab on" id="' + prefix + 'TabR" onclick="xView(\'' + prefix + '\',0)"><span class="ic">📅</span>Semanal <span style="opacity:.6">(Rappi)</span></button>'
+            '<button class="subtab" id="' + prefix + 'TabF" onclick="xView(\'' + prefix + '\',1)"><span class="ic">🥑</span>Fdgy</button></div>')
+mx_main = _sub('mx') + '<div id="mx-rappi">' + mx_main + '</div><div id="mx-fdgy" style="display:none"></div>'
+pe_main = _sub('pe') + '<div id="pe-rappi">' + pe_main + '</div><div id="pe-fdgy" style="display:none"></div>'
+
 h = co
 # 1) CSS de tabs + kpis MX/PE en una línea
 css = '''
@@ -101,6 +109,17 @@ function showCountry(c){
   if(c==='mx' && window.__mxRender){ _def(window.__mxRender); }
   if(c==='pe' && window.__peRender){ _def(window.__peRender); }
   setTimeout(function(){window.dispatchEvent(new Event('resize'));},120);
+}
+function xView(p,i){
+  var R=document.getElementById(p+'-rappi'), F=document.getElementById(p+'-fdgy');
+  if(R)R.style.display=i===0?'':'none';
+  if(F)F.style.display=i===1?'':'none';
+  var tr=document.getElementById(p+'TabR'), tf=document.getElementById(p+'TabF');
+  if(tr)tr.classList.toggle('on',i===0); if(tf)tf.classList.toggle('on',i===1);
+  var _d=function(fn){requestAnimationFrame(function(){requestAnimationFrame(function(){try{fn();}catch(e){console.error(e);}});});};
+  if(i===1){ var cc=(p==='mx'?'MEX':'PER'); if(window.__fdgyRender)_d(function(){window.__fdgyRender(cc,p+'-fdgy');}); }
+  else { var r=(p==='mx'?window.__mxRender:window.__peRender); if(r)_d(r); }
+  setTimeout(function(){window.dispatchEvent(new Event('resize'));},140);
 }
 </script>
 <script>
