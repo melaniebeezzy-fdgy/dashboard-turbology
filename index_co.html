@@ -552,20 +552,25 @@ function update(){
  if(o.cov[LI-1]!=null && covResPrev!=null) o.cov[LI-1]=+covResPrev.toFixed(1);
  const cctot=st.filter(s=>s.cc!=null).length||1;
  const nCC=sz=>st.filter(s=>s.cc!=null&&!penal(s)&&LV[lvlIdx(s.cc)]===sz).length;
+ // conteo la semana pasada (polígono congelado fin[LI-1], 0 si penalizada esa ventana) para el delta
+ const effP=s=>{if(s.fin[LI-1]==null)return null;const a=ma4at(s,LI-1);return (penOn()&&a!=null&&a>6)?0:s.fin[LI-1];};
+ const nCCp=sz=>st.filter(s=>{const e=effP(s);return e!=null&&e!==0&&LV[lvlIdx(e)]===sz;}).length;
+ const losePrev=st.filter(s=>{const a=avg4prev(s);return a!=null&&a>6;}).length;
+ const kdiff=(now,prev,goodUp)=>{const d=now-prev;if(!d)return '';const up=d>0,good=goodUp?up:!up;return ` · <span title="vs semana pasada" style="color:${good?'var(--good)':'var(--bad)'};font-weight:700">${up?'▲':'▼'}${Math.abs(d)}</span>`;};
  const al=alertsOf(st);
  const pct=sz=>`<span class="warnc">${(100*nCC(sz)/cctot).toFixed(0)}% del total</span>`;
  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
  document.getElementById('kpis').innerHTML=[
   {l:'Avg RTWT (4 sem. móviles)', v:A.rtwt==null?'–':`<span style="white-space:nowrap">${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
   {l:'Cobertura efectiva vs máximo por zona', v:fmt(covRes,1)+'%', d:delta(1, (covRes!=null&&o.cov[LI-1]!=null)?+(covRes-o.cov[LI-1]).toFixed(1):null, false)+' pts vs sem. pasada'},
-  {l:'Marcas en 3.0 km (ideal)', v:nCC(3000)+' / '+cctot, d:pct(3000), click:'showPoly(3000)'},
-  {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700), click:'showPoly(2700)'},
-  {l:'Marcas en 2.4 km', v:nCC(2400)+' / '+cctot, d:pct(2400), click:'showPoly(2400)'},
-  {l:'Marcas en 2.1 km (alerta)', v:pink(nCC(2100)+' / '+cctot), d:pct(2100), click:'showPoly(2100)'},
-  (function(){var cl=CTRY==='PE'?1000:1800,kml=(cl/1000).toFixed(1);return {l:'Marcas en '+kml+' km (crítico)', v:pink(nCC(cl)+' / '+cctot), d:pct(cl), click:'showPoly('+cl+')'};})(),
+  {l:'Marcas en 3.0 km (ideal)', v:nCC(3000)+' / '+cctot, d:pct(3000)+kdiff(nCC(3000),nCCp(3000),true), click:'showPoly(3000)'},
+  {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700)+kdiff(nCC(2700),nCCp(2700),true), click:'showPoly(2700)'},
+  {l:'Marcas en 2.4 km', v:nCC(2400)+' / '+cctot, d:pct(2400)+kdiff(nCC(2400),nCCp(2400),true), click:'showPoly(2400)'},
+  {l:'Marcas en 2.1 km (alerta)', v:pink(nCC(2100)+' / '+cctot), d:pct(2100)+kdiff(nCC(2100),nCCp(2100),false), click:'showPoly(2100)'},
+  (function(){var cl=CTRY==='PE'?1000:1800,kml=(cl/1000).toFixed(1);return {l:'Marcas en '+kml+' km (crítico)', v:pink(nCC(cl)+' / '+cctot), d:pct(cl)+kdiff(nCC(cl),nCCp(cl),false), click:'showPoly('+cl+')'};})(),
   (CTRY==='CO'
-    ? {l:'Tiendas que pierden cobertura', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min → 0% + penalización</span>', click:'showLost()'}
-    : {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>', click:'showLost()'}),
+    ? {l:'Tiendas que pierden cobertura', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min → 0% + penalización</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'}
+    : {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'}),
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
  chR.data.labels=W; chR.data.datasets[0].data=o.rtwt; chR.update();
