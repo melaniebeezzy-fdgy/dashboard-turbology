@@ -555,7 +555,7 @@ function update(){
   {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700), click:'showPoly(2700)'},
   {l:'Marcas en 2.4 km', v:nCC(2400)+' / '+cctot, d:pct(2400), click:'showPoly(2400)'},
   {l:'Marcas en 2.1 km (alerta)', v:pink(nCC(2100)+' / '+cctot), d:pct(2100), click:'showPoly(2100)'},
-  {l:'Marcas en 1.8 km (crítico)', v:pink(nCC(1800)+' / '+cctot), d:pct(1800), click:'showPoly(1800)'},
+  (function(){var cl=CTRY==='PE'?1000:1800,kml=(cl/1000).toFixed(1);return {l:'Marcas en '+kml+' km (crítico)', v:pink(nCC(cl)+' / '+cctot), d:pct(cl), click:'showPoly('+cl+')'};})(),
   {l:'Tiendas que pierden cobertura', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min → 0% + penalización</span>', click:'showLost()'},
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
