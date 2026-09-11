@@ -7,11 +7,20 @@ import openpyxl, json, sys, re, unicodedata, datetime, os, warnings
 from collections import Counter, defaultdict
 warnings.filterwarnings('ignore')
 
-NEWCOB = '../uploads/Foodology Coberturas.xlsx'   # snapshot ACTUAL (5 sep)
+# Uso:  python3 build_pe2.py [ruta_al_xlsx_de_coberturas] [--inject]
+#   - Si no se pasa ruta, usa el último "Foodology Coberturas*.xlsx" en ../uploads.
+#   - La etiqueta del corte (p.ej. "Sep 5") se saca sola de la columna Coverage Day.
+import glob
+_args = [a for a in sys.argv[1:] if not a.startswith('--')]
+if _args:
+    NEWCOB = _args[0]
+else:
+    _cands = sorted(glob.glob('../uploads/*obertura*.xlsx') + glob.glob('../uploads/*overage*.xlsx'), key=os.path.getmtime)
+    NEWCOB = _cands[-1] if _cands else '../uploads/Foodology Coberturas.xlsx'
 KDS = 'KDS_ventas_pe.xlsx'
 LV = [1000, 2100, 2400, 2700, 3000]
 IDEAL = 3000
-NEW_LABEL = 'Sep 5'          # etiqueta del corte nuevo
+NEW_LABEL = None             # se deriva de la fecha del archivo (Coverage Day)
 
 def num(x): return float(x) if isinstance(x, (int, float)) else None
 def to_m(x):
@@ -49,9 +58,10 @@ old_cc = {(bkey(s['b']), s['k']): s['cc'] for s in PEold['stores']}   # Jul 26 -
 # ---- snapshot nuevo (5 sep) ----
 wb = openpyxl.load_workbook(NEWCOB, data_only=True)
 ws = wb[wb.sheetnames[0]]
-newcov = defaultdict(list); newdisp = {}
+newcov = defaultdict(list); newdisp = {}; _days = []
 for r in ws.iter_rows(min_row=2, values_only=True):
     if r[0] is None: continue
+    if isinstance(r[4], datetime.datetime): _days.append(r[4])
     z = zona(r[1])
     if z == 'Otra': continue
     k = (bkey(r[2]), z)
@@ -59,6 +69,8 @@ for r in ws.iter_rows(min_row=2, values_only=True):
     if m is not None: newcov[k].append(m)
     newdisp.setdefault(k, bdisp(r[2]))
 newcc = {k: round(avg(v)) for k, v in newcov.items() if v}
+if NEW_LABEL is None:
+    NEW_LABEL = max(_days).strftime('%b %-d') if _days else 'Nuevo'
 
 # ---- construir lista de tiendas (union) ----
 ST = []
@@ -277,5 +289,11 @@ for z in ZONAS:
 if '--inject' in sys.argv:
     payload = '/*PE_DATA_START*/const PE=' + json.dumps(PE, ensure_ascii=False) + ';/*PE_DATA_END*/'
     new = re.sub(r'/\*PE_DATA_START\*/.*?/\*PE_DATA_END\*/', lambda m: payload, h, count=1, flags=re.S)
+    # actualiza el subtítulo con la fecha del corte de cobertura
+    sub = ('<div class="sub">Turbo Perú (Lima) · <b>RTWT</b> por la última semana (%s vs %s). '
+           '<b>Cobertura</b> = polígono asignado por tienda, corte del <b>%s</b> (Anterior: %s). '
+           'Filtro por zona en la barra superior.</div>') % (WEEKS[-1], WEEKS[-2], NEW_LABEL, PREV_LABEL)
+    new = re.sub(r'<div class="sub">Turbo Perú \(Lima\).*?Filtro por zona en la barra superior\.</div>',
+                 lambda m: sub, new, count=1, flags=re.S)
     open('index_pe.html', 'w', encoding='utf-8').write(new)
-    print('PE inyectado en index_pe.html')
+    print('PE inyectado en index_pe.html (corte %s, subtítulo actualizado)' % NEW_LABEL)
