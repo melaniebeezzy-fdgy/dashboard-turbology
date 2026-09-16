@@ -160,7 +160,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 #stickybar #filters{margin-bottom:10px}
 #stickybar .subtabs{margin-bottom:0}
 #mo-g1 .card,#mo-g2 .card{height:440px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:600px){.grid4{grid-template-columns:1fr 1fr}}.k2{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:10px 12px}.k2l{font-size:10.5px;color:var(--mut);font-weight:600}.k2v{font-size:20px;font-weight:700;font-family:Poppins;margin-top:2px}.dlbtn{border:1px solid var(--ind,#6366f1);background:var(--ind,#6366f1);color:#fff;font:600 11px Poppins;padding:5px 12px;border-radius:8px;cursor:pointer}.dlbtn:hover{opacity:.9}</style></head><body class="collapsed">
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:600px){.grid4{grid-template-columns:1fr 1fr}}.k2{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:10px 12px}.k2l{font-size:10.5px;color:var(--mut);font-weight:600}.k2v{font-size:20px;font-weight:700;font-family:Poppins;margin-top:2px}.dlbtn{border:1px solid var(--ind,#6366f1);background:var(--ind,#6366f1);color:#fff;font:600 11px Poppins;padding:5px 12px;border-radius:8px;cursor:pointer}.dlbtn:hover{opacity:.9}.fd2tbl thead th{background:#1e2a5a;color:#fff;border-color:#1e2a5a}.fd2tbl td.fd2rt{background:#dcece2}.fd2tbl td.fd2rt b{color:#12351f}</style></head><body class="collapsed">
 
 
 <div id="topbar">
@@ -1049,16 +1049,17 @@ window.coView=function(x){
 if(typeof update==='function'){const _u2=update; update=function(){_u2.apply(this,arguments); try{if(document.getElementById('co-monthly').style.display!=='none')renderMonthly();}catch(e){console.error(e);}};}
 
 // ============ TURBO · TIEMPOS DE COCCIÓN + RTWT (warehouse) ============
-const FDGY2ST={ch:{},det:[],week:''};
+const FDGY2ST={ch:{},det:[],week:'',short:''};
 var FD2CC={COL:'CO',MEX:'MX',PER:'PE'};
 function fd2norm(s){return (s==null?'':''+s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();}
 var FD2ALIAS={'parque 93':'parque 93 / castellana','bucaramanga':'cabecera (bga)','chico cinnabon':'chico'};
 function fd2dkey(kw){var n=fd2norm(kw);return FD2ALIAS[n]||n;}
 function fd2title(b){var s=(''+b).replace(/\s*turbo\s*$/i,'').trim();return s.replace(/\S+/g,function(w){return w.length>2?w.charAt(0).toUpperCase()+w.slice(1).toLowerCase():w.toUpperCase();});}
-var FD2C={g:'#16a34a',a:'#f59e0b',r:'#dc2626',ind:'#4338ca'};
+// paleta del reporte: navy / gris / rosa
+var FD2C={navy:'#1e2a5a',gray:'#6f6f6f',pink:'#e79ec2',line:'#1e2a5a',cream:'#f3ead9',red:'#dc2626',amber:'#f59e0b'};
 function fd2esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// mapas de RTWT desde D (métrica autoritativa de Rappi, última semana; ponderado por órdenes)
+// RTWT desde D (métrica Rappi, última semana; ponderado por órdenes)
 function fd2D(){
   var meta={},K={},BK={};
   (D.stores||[]).forEach(function(s){
@@ -1081,28 +1082,30 @@ function fd2avgp(a){return a&&a.wwp>0?a.swp/a.wwp:null;}
 function fd2allow(meta){return function(kw){var m=meta[fd2dkey(kw)];return (CITY==='ALL'||(m&&m.city===CITY))&&(OPS==='ALL'||(m&&m.ops===OPS));};}
 function fd2delta(v,vp){
   if(v==null||vp==null) return '';
-  var dd=v-vp,ar=dd>0.05?'▲':(dd<-0.05?'▼':'—'),c=dd>0.05?FD2C.r:(dd<-0.05?FD2C.g:'#94a3b8');
+  var dd=v-vp,ar=dd>0.05?'▲':(dd<-0.05?'▼':'—'),c=dd>0.05?FD2C.red:(dd<-0.05?'#16a34a':'#94a3b8');
   return ' <span style="font-size:9px;color:'+c+'">'+ar+' '+(dd>0?'+':'')+dd.toFixed(2)+'</span>';
 }
+// bandera segun RTWT (rojo ≥3, ámbar ≥2.4) sobre celda verde, estilo reporte
 function fd2rtCell(v,vp){
-  if(v==null) return '<td class="num" data-v="-1">—</td>';
-  var col=v>=6?FD2C.r:(v>=4?FD2C.a:'#0f172a');
-  return '<td class="num" data-v="'+v.toFixed(3)+'"><b style="color:'+col+'">'+v.toFixed(2)+'</b>'+fd2delta(v,vp)+'</td>';
+  if(v==null) return '<td class="num fd2rt" data-v="-1">—</td>';
+  var flag = v>=3?'<span style="color:'+FD2C.red+'">⚑</span> ':(v>=2.4?'<span style="color:'+FD2C.amber+'">⚑</span> ':'');
+  return '<td class="num fd2rt" data-v="'+v.toFixed(3)+'">'+flag+'<b>'+v.toFixed(2)+'</b>'+fd2delta(v,vp)+'</td>';
 }
-function fd2mk(slot,canvasId,cfg){var s=FDGY2ST.ch;if(s[slot])s[slot].destroy();var el=document.getElementById(canvasId);if(el)s[slot]=new Chart(el,cfg);}
+function fd2mk(slot,canvasId,cfg){try{var s=FDGY2ST.ch;if(s[slot]){s[slot].destroy();}var el=document.getElementById(canvasId);if(el)s[slot]=new Chart(el,cfg);}catch(e){console.error('fd2 chart '+slot,e);}}
+function fd2kpi(l,v,st){return '<div class="k2"><div class="k2l">'+l+'</div><div class="k2v" style="'+(st||'')+'">'+v+'</div></div>';}
 
 function fd2HTML(short){
   var wk=FDGY2ST.week||'';
   return '<h1>Turbo <span>· tiempos de cocción &amp; RTWT</span></h1>'
-   +'<div class="sub">Tiempo de <b>cocción hasta el empacado</b> por orden (warehouse) clasificado en rangos, y <b>RTWT</b> por cocina (métrica Rappi de la última semana). Semana <b>'+fd2esc(wk)+'</b>. Respeta el <b>filtro de ciudad y ops</b>.</div>'
+   +'<div class="sub">Tiempo de <b>cocción hasta el empacado</b> por orden (warehouse) por rango, y <b>RTWT</b> por cocina (métrica Rappi de la última semana). Semana <b>'+fd2esc(wk)+'</b>. Respeta el <b>filtro de ciudad y ops</b>.</div>'
    +'<div class="grid4" id="fd2kpis" style="margin-bottom:14px"></div>'
-   +'<div class="card" style="margin-bottom:14px"><h2>⏱️ % Rango de cocción por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: participación de órdenes por rango de cocción (≤7 / 7–9 / >9 min). Línea: <b>RTWT promedio</b> de la cocina (min). Cocinas ordenadas por volumen.</div><div class="chartbox" style="height:420px"><canvas id="fd2Range"></canvas></div></div>'
-   +'<div class="card" style="margin-bottom:14px"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina, apilado por rango de cocción.</div><div class="chartbox" style="height:400px"><canvas id="fd2Count"></canvas></div></div>'
+   +'<div class="card" style="margin-bottom:14px"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen), segmentadas por rango de cocción. Etiquetas: % del rango. Línea: <b>RTWT promedio</b> de la cocina (min). Cocinas ordenadas por volumen.</div><div class="chartbox" style="height:440px"><canvas id="fd2Range"></canvas></div></div>'
+   +'<div class="card" style="margin-bottom:14px"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div>'
    +'<div class="grid" style="margin-bottom:14px">'
-     +'<div class="card"><h2>🔴 RTWT crítico · Marca / Cocina</h2><div class="hint">RTWT de la última semana por marca dentro de cada cocina. Ordenado de mayor a menor; <b>rojo ≥ 6 min</b>, ámbar ≥ 4.</div><div class="scroll" style="max-height:360px"><table id="fd2t1"></table></div></div>'
-     +'<div class="card"><h2>🔴 RTWT crítico · Cocina</h2><div class="hint">RTWT de la última semana agregado por cocina (ponderado por órdenes). <b>Δ</b> vs semana anterior.</div><div class="scroll" style="max-height:360px"><table id="fd2t2"></table></div></div>'
+     +'<div class="card"><h2>🚩 RTWT crítico · Marca / Cocina</h2><div class="hint">RTWT de la última semana por marca dentro de cada cocina. Ordenado de mayor a menor; <b>⚑ rojo ≥ 3</b>, ⚑ ámbar ≥ 2.4 min.</div><div class="scroll" style="max-height:360px"><table id="fd2t1" class="fd2tbl"></table></div></div>'
+     +'<div class="card"><h2>🚩 RTWT crítico · Cocina</h2><div class="hint">RTWT de la última semana agregado por cocina (ponderado por órdenes). <b>Δ</b> vs semana anterior.</div><div class="scroll" style="max-height:360px"><table id="fd2t2" class="fd2tbl"></table></div></div>'
    +'</div>'
-   +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">📋 Detalle · cocina × marca</h2><button class="dlbtn" onclick="fd2csv()">⬇ Descargar CSV</button></div><div class="hint">Detalle por marca y cocina de la última semana: órdenes, distribución por rango, cocción promedio y RTWT de la cocina. Clic en el encabezado para ordenar.</div><div class="scroll" style="max-height:460px"><table id="fd2det"></table></div></div>';
+   +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">📋 Detalle · cocina × marca</h2><button class="dlbtn" onclick="fd2csv()">⬇ Descargar CSV</button></div><div class="hint">Detalle por marca y cocina de la última semana: órdenes, distribución por rango, cocción promedio y RTWT de la cocina. Clic en el encabezado para ordenar.</div><div class="scroll" style="max-height:460px"><table id="fd2det" class="fd2tbl"></table></div></div>';
 }
 
 function fd2Render(cc){
@@ -1118,98 +1121,107 @@ function fd2Render(cc){
   var cocinas=Object.keys(byK).map(function(k){return byK[k];}).sort(function(a,b){return b.n-a.n;});
   cocinas.forEach(function(c){c.rtwt=fd2avg(Dm.K[fd2dkey(c.k)]);});
 
-  // KPIs globales
-  var TN=0,T7=0,T79=0,T9=0,CS=0;
-  cocinas.forEach(function(c){TN+=c.n;T7+=c.r7;T79+=c.r79;T9+=c.r9;CS+=c.cs;});
-  var rtw=0,rtwW=0;
-  cocinas.forEach(function(c){if(c.rtwt!=null){rtw+=c.rtwt*c.n;rtwW+=c.n;}});
-  var avgRt=rtwW>0?rtw/rtwW:null;
-  var kpi=document.getElementById('fd2kpis');
-  if(kpi){kpi.innerHTML=
-    fd2kpi('Órdenes',TN.toLocaleString('es'),'')
-   +fd2kpi('≤ 7 min',TN?Math.round(100*T7/TN)+'%':'—','color:'+FD2C.g)
-   +fd2kpi('> 9 min',TN?Math.round(100*T9/TN)+'%':'—','color:'+FD2C.r)
-   +fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.ind);}
+  // ---- KPIs (aislado) ----
+  try{
+    var TN=0,T7=0,T79=0,T9=0,rtw=0,rtwW=0;
+    cocinas.forEach(function(c){TN+=c.n;T7+=c.r7;T79+=c.r79;T9+=c.r9;if(c.rtwt!=null){rtw+=c.rtwt*c.n;rtwW+=c.n;}});
+    var avgRt=rtwW>0?rtw/rtwW:null;
+    var kpi=document.getElementById('fd2kpis');
+    if(kpi){kpi.innerHTML=
+      fd2kpi('Órdenes',TN.toLocaleString('es'),'')
+     +fd2kpi('≤ 7 min',TN?Math.round(100*T7/TN)+'%':'—','color:'+FD2C.navy)
+     +fd2kpi('> 9 min',TN?Math.round(100*T9/TN)+'%':'—','color:'+FD2C.pink)
+     +fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);}
+  }catch(e){console.error('fd2 kpis',e);}
 
-  // chart 1 — % por rango + línea RTWT (cap 20 cocinas)
   var top=cocinas.slice(0,20);
-  var labels=top.map(function(c){return c.k;});
-  var p7=top.map(function(c){return c.n?+(100*c.r7/c.n).toFixed(1):0;});
-  var p79=top.map(function(c){return c.n?+(100*c.r79/c.n).toFixed(1):0;});
-  var p9=top.map(function(c){return c.n?+(100*c.r9/c.n).toFixed(1):0;});
-  var rt=top.map(function(c){return c.rtwt==null?null:+c.rtwt.toFixed(2);});
-  var barDL=function(color){return {display:function(x){return x.dataset.data[x.dataIndex]>=7;},color:'#fff',font:{size:9,weight:'600'},formatter:function(v){return v+'%';}};};
-  fd2mk('range','fd2Range',{data:{labels:labels,datasets:[
-    {type:'bar',label:'≤ 7 min',data:p7,backgroundColor:FD2C.g,stack:'s',yAxisID:'y',datalabels:barDL()},
-    {type:'bar',label:'7–9 min',data:p79,backgroundColor:FD2C.a,stack:'s',yAxisID:'y',datalabels:barDL()},
-    {type:'bar',label:'> 9 min',data:p9,backgroundColor:FD2C.r,stack:'s',yAxisID:'y',datalabels:barDL()},
-    {type:'line',label:'Avg RTWT (min)',data:rt,borderColor:FD2C.ind,backgroundColor:FD2C.ind,tension:.3,pointRadius:3,pointBackgroundColor:FD2C.ind,borderWidth:2,yAxisID:'y1',spanGaps:true,datalabels:{align:'top',anchor:'end',color:FD2C.ind,font:{size:9,weight:'600'},formatter:function(v){return v==null?'':v.toFixed(1);}}}
-  ]},options:{maintainAspectRatio:false,layout:{padding:{top:14}},interaction:{mode:'index',intersect:false},
-    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10}}},
-      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.dataset.type==='line'?(c.parsed.y==null?'—':c.parsed.y.toFixed(2)+' min'):c.parsed.y+'%');}}}},
-    scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9},maxRotation:60,minRotation:45}},
-      y:{stacked:true,min:0,max:100,ticks:{callback:function(v){return v+'%';},font:{size:9}},title:{display:true,text:'% de órdenes',font:{size:9}}},
-      y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{font:{size:9}},title:{display:true,text:'RTWT (min)',font:{size:9}}}}}});
 
-  // chart 2 — conteos por rango
-  var c7=top.map(function(c){return c.r7;}),c79=top.map(function(c){return c.r79;}),c9=top.map(function(c){return c.r9;});
-  var cntDL=function(){return {display:function(x){return x.dataset.data[x.dataIndex]>=25;},color:'#fff',font:{size:9,weight:'600'},formatter:function(v){return v;}};};
-  fd2mk('count','fd2Count',{data:{labels:labels,datasets:[
-    {label:'≤ 7 min',data:c7,backgroundColor:FD2C.g,stack:'s',datalabels:cntDL()},
-    {label:'7–9 min',data:c79,backgroundColor:FD2C.a,stack:'s',datalabels:cntDL()},
-    {label:'> 9 min',data:c9,backgroundColor:FD2C.r,stack:'s',datalabels:cntDL()}
-  ]},options:{maintainAspectRatio:false,layout:{padding:{top:6}},interaction:{mode:'index',intersect:false},
-    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10}}},
-      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y.toLocaleString('es')+' órd';}}}},
-    scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9},maxRotation:60,minRotation:45}},
-      y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Órdenes',font:{size:9}}}}}});
+  // ---- Chart 1: barras = órdenes (altura por volumen), % en etiqueta, línea RTWT (aislado) ----
+  try{
+    var labels=top.map(function(c){return c.k;});
+    var c7=top.map(function(c){return c.r7;}),c79=top.map(function(c){return c.r79;}),c9=top.map(function(c){return c.r9;});
+    var rt=top.map(function(c){return c.rtwt==null?null:+c.rtwt.toFixed(2);});
+    var pctDL=function(){return {display:function(x){var d=x.dataset.data[x.dataIndex]||0;return d>=140;},color:'#fff',font:{size:9,weight:'600'},
+      formatter:function(v,x){var t=top[x.dataIndex];var tot=t?t.n:0;return tot?Math.round(100*v/tot)+' %':'';}};};
+    fd2mk('range','fd2Range',{data:{labels:labels,datasets:[
+      {type:'bar',label:'7 min o menos',data:c7,backgroundColor:FD2C.navy,stack:'s',yAxisID:'y',datalabels:pctDL()},
+      {type:'bar',label:'7 a 9 min',data:c79,backgroundColor:FD2C.gray,stack:'s',yAxisID:'y',datalabels:pctDL()},
+      {type:'bar',label:'9+ min',data:c9,backgroundColor:FD2C.pink,stack:'s',yAxisID:'y',datalabels:pctDL()},
+      {type:'line',label:'Avg RTWT (min)',data:rt,borderColor:FD2C.line,backgroundColor:FD2C.line,tension:.3,pointRadius:3,pointBackgroundColor:FD2C.line,borderWidth:2,yAxisID:'y1',spanGaps:true,
+        datalabels:{align:'top',anchor:'end',color:FD2C.navy,backgroundColor:FD2C.cream,borderRadius:4,padding:{top:2,bottom:1,left:4,right:4},font:{size:9,weight:'600'},formatter:function(v){return v==null?'':v.toFixed(2);}}}
+    ]},options:{maintainAspectRatio:false,layout:{padding:{top:18}},interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10},usePointStyle:true}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.dataset.type==='line'?(c.parsed.y==null?'—':c.parsed.y.toFixed(2)+' min'):c.parsed.y.toLocaleString('es')+' órd');}}}},
+      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9},maxRotation:60,minRotation:45}},
+        y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Órdenes',font:{size:9}}},
+        y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{font:{size:9}},title:{display:true,text:'RTWT (min)',font:{size:9}}}}}});
+  }catch(e){console.error('fd2 range',e);}
 
-  // tabla 1 — RTWT crítico marca/cocina (desde D)
-  var t1=Object.keys(Dm.BK).map(function(k){return Dm.BK[k];})
-    .filter(function(b){return (CITY==='ALL'||b.city===CITY)&&(OPS==='ALL'||b.ops===OPS);})
-    .map(function(b){return {city:b.city,k:b.k,b:b.b,v:fd2avg(b),vp:fd2avgp(b)};})
-    .filter(function(r){return r.v!=null;})
-    .sort(function(a,b){return b.v-a.v;});
-  var h1='<thead><tr><th>Ciudad</th><th>Cocina</th><th>Marca</th><th class="num">RTWT últ. sem</th></tr></thead><tbody>';
-  t1.forEach(function(r){h1+='<tr><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp)+'</tr>';});
-  h1+='</tbody>';
-  var e1=document.getElementById('fd2t1');if(e1)e1.innerHTML=h1||'';
-  if(e1&&!t1.length)e1.innerHTML='<tbody><tr><td class="hint" style="padding:14px">Sin datos de RTWT para el filtro actual.</td></tr></tbody>';
+  // ---- Chart 2: barras horizontales de conteo por rango (aislado) ----
+  try{
+    var top2=cocinas.slice(0,22);
+    var labels2=top2.map(function(c){return c.k;});
+    var box=document.getElementById('fd2CountBox');if(box)box.style.height=Math.max(360,top2.length*26+70)+'px';
+    var cntDL=function(clr){return {display:function(x){return (x.dataset.data[x.dataIndex]||0)>=60;},color:clr,font:{size:9,weight:'600'},formatter:function(v){return v.toLocaleString('es');}};};
+    fd2mk('count','fd2Count',{data:{labels:labels2,datasets:[
+      {label:'7 min o menos',data:top2.map(function(c){return c.r7;}),backgroundColor:FD2C.navy,stack:'s',datalabels:cntDL('#fff')},
+      {label:'7 a 9 min',data:top2.map(function(c){return c.r79;}),backgroundColor:FD2C.gray,stack:'s',datalabels:cntDL('#fff')},
+      {label:'9+ min',data:top2.map(function(c){return c.r9;}),backgroundColor:FD2C.pink,stack:'s',datalabels:cntDL('#3a2233')}
+    ]},options:{indexAxis:'y',maintainAspectRatio:false,layout:{padding:{right:10}},interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10},usePointStyle:true}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.x.toLocaleString('es')+' órd';}}}},
+      scales:{x:{stacked:true,beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Órdenes',font:{size:9}}},
+        y:{stacked:true,grid:{display:false},ticks:{font:{size:10},autoSkip:false}}}}});
+  }catch(e){console.error('fd2 count',e);}
 
-  // tabla 2 — RTWT crítico cocina (desde D) + órdenes (warehouse)
-  var whN={};cocinas.forEach(function(c){whN[fd2dkey(c.k)]=(whN[fd2dkey(c.k)]||0)+c.n;});
-  var t2=Object.keys(Dm.K).map(function(k){return Dm.K[k];})
-    .filter(function(a){return (CITY==='ALL'||a.city===CITY)&&(OPS==='ALL'||a.ops===OPS);})
-    .map(function(a){return {city:a.city,k:a.label,v:fd2avg(a),vp:fd2avgp(a),n:whN[fd2norm(a.label)]||0};})
-    .filter(function(r){return r.v!=null;})
-    .sort(function(a,b){return b.v-a.v;});
-  var h2='<thead><tr><th>Ciudad</th><th>Cocina</th><th class="num">RTWT últ. sem</th><th class="num">Órdenes</th></tr></thead><tbody>';
-  t2.forEach(function(r){h2+='<tr><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td></tr>';});
-  h2+='</tbody>';
-  var e2=document.getElementById('fd2t2');if(e2)e2.innerHTML=h2;
-  if(e2&&!t2.length)e2.innerHTML='<tbody><tr><td class="hint" style="padding:14px">Sin datos de RTWT para el filtro actual.</td></tr></tbody>';
+  // ---- Tabla 1: RTWT crítico marca/cocina (aislado) ----
+  try{
+    var t1=Object.keys(Dm.BK).map(function(k){return Dm.BK[k];})
+      .filter(function(b){return (CITY==='ALL'||b.city===CITY)&&(OPS==='ALL'||b.ops===OPS);})
+      .map(function(b){return {city:b.city,k:b.k,b:b.b,v:fd2avg(b),vp:fd2avgp(b)};})
+      .filter(function(r){return r.v!=null;}).sort(function(a,b){return b.v-a.v;});
+    var h1='<thead><tr><th>Ciudad</th><th>Cocina</th><th>Marca</th><th class="num">RTWT</th></tr></thead><tbody>';
+    t1.forEach(function(r){h1+='<tr><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp)+'</tr>';});
+    h1+='</tbody>';
+    var e1=document.getElementById('fd2t1');
+    if(e1)e1.innerHTML=t1.length?h1:'<tbody><tr><td class="hint" style="padding:14px">Sin datos de RTWT para el filtro actual.</td></tr></tbody>';
+  }catch(e){console.error('fd2 t1',e);}
 
-  // detalle (warehouse) + guardar para CSV
-  var det=rows.map(function(r){var tot=r[2];var m=meta[fd2dkey(r[0])];var rk=Dm.K[fd2dkey(r[0])];var rv=fd2avg(rk);
-    return {city:m?m.city:'—',k:r[0],b:fd2title(r[1]),n:tot,p7:tot?r[3]/tot:0,p79:tot?r[4]/tot:0,p9:tot?r[5]/tot:0,cook:r[6],rt:rv};})
-    .sort(function(a,b){return b.n-a.n;});
-  FDGY2ST.det=det;FDGY2ST.short=short;
-  var hd='<thead><tr><th>Ciudad</th><th>Cocina</th><th>Marca</th><th class="num">Órd</th><th class="num">≤7</th><th class="num">7–9</th><th class="num">&gt;9</th><th class="num">Cook prom</th><th class="num">RTWT coc.</th></tr></thead><tbody>';
-  det.forEach(function(r){
-    hd+='<tr><td>'+fd2esc(r.city)+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'
-      +'<td class="num">'+r.n+'</td>'
-      +'<td class="num" style="color:'+FD2C.g+'">'+Math.round(100*r.p7)+'%</td>'
-      +'<td class="num" style="color:'+FD2C.a+'">'+Math.round(100*r.p79)+'%</td>'
-      +'<td class="num" style="color:'+FD2C.r+'">'+Math.round(100*r.p9)+'%</td>'
-      +'<td class="num">'+r.cook.toFixed(1)+'</td>'
-      +'<td class="num">'+(r.rt==null?'—':r.rt.toFixed(2))+'</td></tr>';
-  });
-  hd+='</tbody>';
-  var ed=document.getElementById('fd2det');if(ed)ed.innerHTML=hd;
-  if(ed&&!det.length)ed.innerHTML='<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';
+  // ---- Tabla 2: RTWT crítico cocina + órdenes warehouse (aislado) ----
+  try{
+    var whN={};cocinas.forEach(function(c){whN[fd2dkey(c.k)]=(whN[fd2dkey(c.k)]||0)+c.n;});
+    var t2=Object.keys(Dm.K).map(function(k){return Dm.K[k];})
+      .filter(function(a){return (CITY==='ALL'||a.city===CITY)&&(OPS==='ALL'||a.ops===OPS);})
+      .map(function(a){return {city:a.city,k:a.label,v:fd2avg(a),vp:fd2avgp(a),n:whN[fd2norm(a.label)]||0};})
+      .filter(function(r){return r.v!=null;}).sort(function(a,b){return b.v-a.v;});
+    var h2='<thead><tr><th>Ciudad</th><th>Cocina</th><th class="num">RTWT</th><th class="num">Órdenes</th></tr></thead><tbody>';
+    t2.forEach(function(r){h2+='<tr><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td></tr>';});
+    h2+='</tbody>';
+    var e2=document.getElementById('fd2t2');
+    if(e2)e2.innerHTML=t2.length?h2:'<tbody><tr><td class="hint" style="padding:14px">Sin datos de RTWT para el filtro actual.</td></tr></tbody>';
+  }catch(e){console.error('fd2 t2',e);}
+
+  // ---- Detalle (warehouse) + CSV (aislado) ----
+  try{
+    var det=rows.map(function(r){var tot=r[2];var m=meta[fd2dkey(r[0])];var rv=fd2avg(Dm.K[fd2dkey(r[0])]);
+      return {city:m?m.city:'—',k:r[0],b:fd2title(r[1]),n:tot,p7:tot?r[3]/tot:0,p79:tot?r[4]/tot:0,p9:tot?r[5]/tot:0,cook:r[6],rt:rv};})
+      .sort(function(a,b){return b.n-a.n;});
+    FDGY2ST.det=det;FDGY2ST.short=short;
+    var hd='<thead><tr><th>Ciudad</th><th>Cocina</th><th>Marca</th><th class="num">Órd</th><th class="num">≤7</th><th class="num">7–9</th><th class="num">&gt;9</th><th class="num">Cook prom</th><th class="num">RTWT coc.</th></tr></thead><tbody>';
+    det.forEach(function(r){
+      hd+='<tr><td>'+fd2esc(r.city)+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'
+        +'<td class="num">'+r.n+'</td>'
+        +'<td class="num" style="color:'+FD2C.navy+'">'+Math.round(100*r.p7)+'%</td>'
+        +'<td class="num" style="color:'+FD2C.gray+'">'+Math.round(100*r.p79)+'%</td>'
+        +'<td class="num" style="color:'+FD2C.pink+'">'+Math.round(100*r.p9)+'%</td>'
+        +'<td class="num">'+r.cook.toFixed(1)+'</td>'
+        +'<td class="num">'+(r.rt==null?'—':r.rt.toFixed(2))+'</td></tr>';
+    });
+    hd+='</tbody>';
+    var ed=document.getElementById('fd2det');
+    if(ed)ed.innerHTML=det.length?hd:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';
+  }catch(e){console.error('fd2 det',e);}
 }
-
-function fd2kpi(l,v,st){return '<div class="k2"><div class="k2l">'+l+'</div><div class="k2v" style="'+(st||'')+'">'+v+'</div></div>';}
 
 window.fd2csv=function(){
   var d=FDGY2ST.det||[];if(!d.length){return;}
