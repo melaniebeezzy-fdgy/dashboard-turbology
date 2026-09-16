@@ -1060,21 +1060,23 @@ function fd2esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function fd2msDate(off){var t=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minDate:'2026-08-01')+'T00:00:00Z')+off*86400000;return new Date(t).toISOString().slice(0,10);}
 function fd2dateOff(v){var min=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minDate:'2026-08-01')+'T00:00:00Z');var d=Date.parse(v+'T00:00:00Z');if(isNaN(d))return null;return Math.round((d-min)/86400000);}
 
-// RTWT desde D (métrica Rappi, última semana; ponderado por órdenes)
-function fd2D(){
+var FD2MON={Ene:0,Jan:0,Feb:1,Mar:2,Abr:3,Apr:3,May:4,Jun:5,Jul:6,Ago:7,Aug:7,Sep:8,Set:8,Oct:9,Nov:10,Dic:11,Dec:11};
+function fd2parseWk(lbl){var mm=(''+lbl).trim().match(/^([A-Za-z\u00c0-\u017f]+)\s+(\d{1,2})$/);if(!mm)return null;var mo=FD2MON[mm[1]];if(mo==null)return null;return Date.UTC(2026,mo,+mm[2]);}
+function fd2weeksInRange(fromOff,toOff){var min=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minDate:'2026-08-01')+'T00:00:00Z');var fromD=min+fromOff*86400000,toD=min+toOff*86400000,wk=(typeof W!=='undefined'?W:((typeof D!=='undefined'&&D.weeks)||[])),idx=[];for(var i=0;i<wk.length;i++){var end=fd2parseWk(wk[i]);if(end==null)continue;var start=end-6*86400000;if(start<=toD&&end>=fromD)idx.push(i);}return idx;}
+function fd2wavg(rt,ow,idxs){var s=0,w=0;for(var j=0;j<idxs.length;j++){var i=idxs[j],v=rt[i];if(v!=null&&v<=30){var ww=(ow[i]||1);s+=v*ww;w+=ww;}}return {s:s,w:w};}
+// RTWT desde D (métrica Rappi; promediado sobre las semanas del rango; ponderado por órdenes)
+function fd2D(wsel,wprev){
   var meta={},K={},BK={};
   (D.stores||[]).forEach(function(s){
     var kk=fd2norm(s.k),rt=s.rt||[],ow=s.ow||[];
-    var v=rt[LI],vp=(LI>0?rt[LI-1]:null),w=(ow[LI]||0);
+    var cur=fd2wavg(rt,ow,wsel),prv=fd2wavg(rt,ow,wprev),w=0;
+    for(var j=0;j<wsel.length;j++){w+=(ow[wsel[j]]||0);}
     if(!meta[kk]) meta[kk]={city:s.c,ops:s.op,label:s.k};
     var a=K[kk]||(K[kk]={sw:0,ww:0,swp:0,wwp:0,city:s.c,ops:s.op,label:s.k});
-    if(v!=null&&v<=30){a.sw+=v*(w||1);a.ww+=(w||1);}
-    if(vp!=null&&vp<=30){a.swp+=vp*(w||1);a.wwp+=(w||1);}
+    a.sw+=cur.s;a.ww+=cur.w;a.swp+=prv.s;a.wwp+=prv.w;
     var bkey=kk+'||'+fd2norm(s.b);
     var b=BK[bkey]||(BK[bkey]={sw:0,ww:0,swp:0,wwp:0,n:0,k:s.k,b:s.b,city:s.c,ops:s.op});
-    if(v!=null&&v<=30){b.sw+=v*(w||1);b.ww+=(w||1);}
-    if(vp!=null&&vp<=30){b.swp+=vp*(w||1);b.wwp+=(w||1);}
-    b.n+=w;
+    b.sw+=cur.s;b.ww+=cur.w;b.swp+=prv.s;b.wwp+=prv.w;b.n+=w;
   });
   return {meta:meta,K:K,BK:BK};
 }
@@ -1124,14 +1126,14 @@ function fd2HTML(short){
     +'<label class="fd2dt">Hasta <input type="date" id="fd2to" min="'+minD+'" max="'+maxD+'" value="'+defTo+'" onchange="fd2apply()"></label>'
     +'<button class="fd2reset" onclick="fd2resetF()">↺ Reset</button></div>';
   return '<h1>Turbo <span>· tiempos de cocción &amp; RTWT</span></h1>'
-   +'<div class="sub">Tiempo de <b>cocción hasta el empacado</b> por orden (warehouse) por rango, y <b>RTWT</b> por cocina (métrica Rappi de la última semana). Filtra por <b>cocina, marca y rango de fechas</b>; además respeta <b>ciudad y ops</b>.</div>'
+   +'<div class="sub">Tiempo de <b>cocción hasta el empacado</b> por orden (warehouse) por rango, y <b>RTWT</b> por cocina (métrica Rappi, promediada sobre las semanas del rango que filtres). Filtra por <b>cocina, marca y rango de fechas</b>; además respeta <b>ciudad y ops</b>.</div>'
    +filters
    +'<div class="grid4" id="fd2kpis" style="margin-bottom:14px"></div>'
-   +'<div class="fd2row"><div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina (min, semana '+fd2esc(wk)+').</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
+   +'<div class="fd2row"><div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina en el rango filtrado (min).</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
    +'<div class="card fd2c2"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div></div>'
    +'<div class="grid" style="margin-bottom:14px">'
-     +'<div class="card"><h2>🚩 RTWT crítico · Marca / Cocina</h2><div class="hint">RTWT de la última semana por marca dentro de cada cocina (filtra por cocina/ciudad/ops). <b>⚑ rojo ≥ 3</b>, ⚑ ámbar ≥ 2.4 min.</div><div class="scroll" style="max-height:360px"><table id="fd2t1" class="fd2tbl"></table></div></div>'
-     +'<div class="card"><h2>🚩 RTWT crítico · Cocina</h2><div class="hint">RTWT de la última semana agregado por cocina (ponderado por órdenes). <b>Δ</b> vs semana anterior.</div><div class="scroll" style="max-height:360px"><table id="fd2t2" class="fd2tbl"></table></div></div>'
+     +'<div class="card"><h2>🚩 RTWT crítico · Marca / Cocina</h2><div class="hint">RTWT (promedio del rango) por marca dentro de cada cocina (filtra por cocina/ciudad/ops). <b>⚑ rojo ≥ 3</b>, ⚑ ámbar ≥ 2.4 min.</div><div class="scroll" style="max-height:360px"><table id="fd2t1" class="fd2tbl"></table></div></div>'
+     +'<div class="card"><h2>🚩 RTWT crítico · Cocina</h2><div class="hint">RTWT (promedio del rango) agregado por cocina (ponderado por órdenes). <b>Δ</b> vs periodo anterior.</div><div class="scroll" style="max-height:360px"><table id="fd2t2" class="fd2tbl"></table></div></div>'
    +'</div>'
    +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">📋 Detalle · cocina × marca</h2><button class="dlbtn" onclick="fd2csv()">⬇ Descargar CSV</button></div><div class="hint">Detalle por marca y cocina en el rango seleccionado: órdenes, distribución por rango, cocción promedio y RTWT de la cocina. Clic en el encabezado para ordenar.</div><div class="scroll" style="max-height:460px"><table id="fd2det" class="fd2tbl"></table></div></div>';
 }
@@ -1140,8 +1142,6 @@ function fd2Render(cc){
   var short=FD2CC[cc]||cc;
   var D2=(typeof FDGY2!=='undefined'&&FDGY2[short])?FDGY2[short]:{K:[],B:[],R:[]};
   FDGY2ST.week=(typeof FDGY2!=='undefined'&&FDGY2.label)?FDGY2.label:'';
-  var Dm=fd2D(),meta=Dm.meta,allow=fd2allow(meta);
-
   // selección de filtros (fuente de verdad = DOM)
   var kitEls=document.querySelectorAll('.fd2kit'), brEls=document.querySelectorAll('.fd2brand');
   var kitSel={},brSel={},kitN=0,brN=0,kitTot=kitEls.length,brTot=brEls.length;
@@ -1155,6 +1155,9 @@ function fd2Render(cc){
   var bsum=document.getElementById('fd2brandSum'); if(bsum)bsum.textContent=brAll?'Todas':brN;
   // dkeys de cocinas seleccionadas (para filtrar tablas RTWT que usan nombres de D)
   var kitDkeys={}; if(!kitAll){Object.keys(kitSel).forEach(function(kn){kitDkeys[fd2dkey(kn)]=1;});}
+  var wsel=fd2weeksInRange(fromOff,toOff); if(!wsel.length)wsel=[LI];
+  var wa=wsel[0],wspan=wsel.length,wprev=[]; for(var wp=wa-wspan;wp<wa;wp++){if(wp>=0)wprev.push(wp);}
+  var Dm=fd2D(wsel,wprev),meta=Dm.meta,allow=fd2allow(meta);
 
   // filtrar y decodificar filas diarias -> agregado por cocina y por cocina×marca
   var K=D2.K||[], B=D2.B||[], R=D2.R||[];
