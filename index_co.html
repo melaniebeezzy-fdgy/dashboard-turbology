@@ -1214,7 +1214,7 @@ function fd2Render(cc){
     var labels2=top2.map(function(c){return c.k;});
     var box=document.getElementById('fd2CountBox');if(box)box.style.height=Math.max(360,top2.length*26+70)+'px';
     var cntDL=function(clr){return {display:function(x){return (x.dataset.data[x.dataIndex]||0)>=60;},color:clr,font:{size:9,weight:'600'},formatter:function(v){return v.toLocaleString('es');}};};
-    fd2mk('count','fd2Count',{data:{labels:labels2,datasets:[
+    fd2mk('count','fd2Count',{type:'bar',data:{labels:labels2,datasets:[
       {label:'7 min o menos',data:top2.map(function(c){return c.r7;}),backgroundColor:FD2C.navy,stack:'s',datalabels:cntDL('#fff')},
       {label:'7 a 9 min',data:top2.map(function(c){return c.r79;}),backgroundColor:FD2C.gray,stack:'s',datalabels:cntDL('#fff')},
       {label:'9+ min',data:top2.map(function(c){return c.r9;}),backgroundColor:FD2C.pink,stack:'s',datalabels:cntDL('#3a2233')}
