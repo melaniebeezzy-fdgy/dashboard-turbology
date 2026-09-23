@@ -13,7 +13,10 @@ export default async function handler(req, res) {
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
     const { password, html } = body || {};
     const ADMIN = process.env.ADMIN_PASSWORD_TURBO || process.env.ADMIN_PASSWORD;
-    if (!ADMIN) return res.status(500).json({ error: 'Falta ADMIN_PASSWORD_TURBO en el servidor.' });
+    if (!ADMIN) {
+      const seen = Object.keys(process.env).filter(k => /ADMIN|GITHUB|TURBO|PASSWORD|TOKEN/i.test(k));
+      return res.status(500).json({ error: 'Falta ADMIN_PASSWORD_TURBO. El servidor ve estas variables: ' + (seen.join(', ') || 'ninguna relacionada') + '. Si no aparece, haz Redeploy en Vercel DESPUÉS de crearla.' });
+    }
     if (!password || password !== ADMIN) return res.status(401).json({ error: 'Clave incorrecta.' });
     const token = process.env.GITHUB_TOKEN_TURBO || process.env.GITHUB_TOKEN;
     if (!token) return res.status(500).json({ error: 'Falta GITHUB_TOKEN_TURBO en el servidor.' });
