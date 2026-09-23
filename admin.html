@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turbology · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1e2a5a;--ind:#6366f1;--bd:#e2e8f0;--mut:#64748b}
+*{box-sizing:border-box}
+body{font-family:Poppins,system-ui,sans-serif;background:#f1f4f9;margin:0;color:#0f172a}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:22px;margin:0 0 2px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:22px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(20,30,60,.04)}
+.card h2{font-size:15px;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.card .h{color:var(--mut);font-size:12px;margin-bottom:12px}
+label.lbl{font-size:12px;font-weight:600;color:#334155;display:block;margin-bottom:6px}
+input[type=file],input[type=password]{width:100%;border:1px solid var(--bd);border-radius:9px;padding:9px 11px;font:500 13px Poppins;background:#fff}
+input[type=file]::file-selector-button{border:none;background:#eef2ff;color:var(--ind);font:600 12px Poppins;padding:6px 12px;border-radius:7px;margin-right:10px;cursor:pointer}
+button.btn{border:none;background:var(--ind);color:#fff;font:600 13px Poppins;padding:9px 18px;border-radius:9px;cursor:pointer}
+button.btn:hover{opacity:.92}button.btn:disabled{opacity:.45;cursor:not-allowed}
+button.ghost{background:#fff;border:1px solid var(--bd);color:#334155}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.badge{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:20px}
+.b-ok{background:#dcfce7;color:#166534}.b-soon{background:#fef9c3;color:#854d0e}.b-off{background:#f1f5f9;color:#64748b}
+#log{background:#0f172a;color:#cbd5e1;border-radius:10px;padding:12px 14px;font:500 12px/1.5 'IBM Plex Mono',ui-monospace,monospace;white-space:pre-wrap;max-height:260px;overflow:auto;display:none}
+.gate{max-width:360px;margin:8vh auto 0}
+.disabled{opacity:.6}
+.preview{background:#f8fafc;border:1px dashed var(--bd);border-radius:9px;padding:10px 12px;font-size:12.5px;margin-top:12px;display:none}
+a.link{color:var(--ind);font-size:12px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="gate" class="gate card">
+    <h1>Turbology · Admin</h1>
+    <div class="sub">Ingresa la clave para cargar datos.</div>
+    <label class="lbl">Clave</label>
+    <input type="password" id="pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')enter()">
+    <div class="row"><button class="btn" onclick="enter()">Entrar</button></div>
+  </div>
+
+  <div id="panel" style="display:none">
+    <h1>Turbology · Admin</h1>
+    <div class="sub">Carga la información semanal por país y publícala. Al publicar, el dashboard se actualiza para todos (Vercel redepliega en ~1 min).</div>
+
+    <div class="card">
+      <h2>🇨🇴 Colombia <span class="badge b-ok">Activo</span></h2>
+      <div class="h">Sube el <b>HTML del Dashboard RT</b> (el que generas cada semana). Se agrega la semana nueva (RTWT + polígono) sin borrar el histórico.</div>
+      <label class="lbl">Archivo HTML de CO</label>
+      <input type="file" id="coFile" accept=".html,.htm" onchange="analizarCO()">
+      <div class="preview" id="coPrev"></div>
+      <div class="row">
+        <button class="btn" id="coPub" onclick="publicarCO()" disabled>Publicar Colombia</button>
+        <span id="coState" style="font-size:12px;color:var(--mut)"></span>
+      </div>
+    </div>
+
+    <div class="card disabled">
+      <h2>🇲🇽 México <span class="badge b-soon">Próximamente</span></h2>
+      <div class="h">Reporte Unificado (.xlsx). Por ahora se carga vía script; el botón se habilitará en la próxima iteración.</div>
+      <input type="file" accept=".xlsx" disabled>
+    </div>
+
+    <div class="card disabled">
+      <h2>🇵🇪 Perú <span class="badge b-soon">Próximamente</span></h2>
+      <div class="h">Coberturas (.xlsx). Requiere adaptar el cálculo al formato unificado; se habilitará luego.</div>
+      <input type="file" accept=".xlsx" disabled>
+    </div>
+
+    <div id="log"></div>
+  </div>
+
+</div>
+
+<script>
+var PW='';
+function enter(){ PW=document.getElementById('pw').value||''; if(!PW){alert('Escribe la clave');return;} document.getElementById('gate').style.display='none'; document.getElementById('panel').style.display='block'; }
+function log(m){ var el=document.getElementById('log'); el.style.display='block'; el.textContent+=(el.textContent?'\n':'')+m; el.scrollTop=el.scrollHeight; }
+
+// ---------- Parser CO (idéntico a build_co_update.py, validado) ----------
+var MI={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function nextLabel(l){var m=l.trim().match(/([A-Za-z]{3}) (\d{1,2})/);var dt=new Date(Date.UTC(2026,MI[m[1]],+m[2]+7));return MONTHS[dt.getUTCMonth()]+' '+dt.getUTCDate();}
+function parseReport(txt){
+  var rx=/\{"brand": "(.*?)", "storeId": "(\d+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": (\d+), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)\}/g;
+  var rep={},m,n=0;while((m=rx.exec(txt))){rep[m[2]]={cov:+m[4],w4:(m[5]==='null'?null:+(+m[5]).toFixed(6))};n++;}
+  return {rep:rep,n:n};
+}
+function applyCO(H,reportTxt){
+  var a=H.indexOf('let D=');if(a<0)throw new Error('No encontré let D= en el index.');a+=6;
+  var i=a,d=0,st=false,e=-1;for(;i<H.length;i++){var c=H[i];if(c==='{'){d++;st=true;}else if(c==='}'){d--;if(st&&d===0){e=i+1;break;}}}
+  var D=JSON.parse(H.slice(a,e)),oldLen=D.weeks.length;
+  var pr=parseReport(reportTxt);if(pr.n===0)throw new Error('El HTML no parece un reporte RT válido (0 tiendas).');
+  var newlbl=nextLabel(D.weeks[oldLen-1]);
+  if(D.weeks.indexOf(newlbl)>=0)throw new Error('La semana '+newlbl+' ya existe en el dashboard. ¿Ya la cargaste?');
+  D.weeks.push(newlbl);var nrt=0,npoly=0;
+  D.stores.forEach(function(s){var sid=String(s.sid),r=pr.rep[sid];
+    s.gw=s.gw||new Array(oldLen).fill(0);s.ow=s.ow||new Array(oldLen).fill(0);
+    ['rt','fin','gw','ow'].forEach(function(k){s[k]=s[k]||[];while(s[k].length<oldLen)s[k].push(k==='rt'||k==='fin'?null:0);});
+    if(r&&r.w4!=null){s.rt.push(r.w4);nrt++;}else s.rt.push(null);
+    if(r){s.fin.push(r.cov);s.cc=r.cov;npoly++;}else s.fin.push(s.fin.length?s.fin[s.fin.length-1]:null);
+    s.gw.push(0);s.ow.push(0);});
+  var payload='let D='+JSON.stringify(D);
+  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n};
+}
+
+var CO_TXT=null;
+function analizarCO(){
+  var f=document.getElementById('coFile').files[0]; var prev=document.getElementById('coPrev');
+  document.getElementById('coPub').disabled=true; CO_TXT=null;
+  if(!f)return;
+  var fr=new FileReader();
+  fr.onload=function(){ CO_TXT=fr.result;
+    try{ var pr=parseReport(CO_TXT);
+      if(pr.n===0){prev.style.display='block';prev.innerHTML='⚠️ No se detectaron tiendas. ¿Es el HTML del Dashboard RT?';return;}
+      var nn=0;for(var k in pr.rep)if(pr.rep[k].w4!=null)nn++;
+      prev.style.display='block';
+      prev.innerHTML='✔️ Reporte leído: <b>'+pr.n+'</b> tiendas, <b>'+nn+'</b> con RTWT de la semana nueva. Listo para publicar.';
+      document.getElementById('coPub').disabled=false;
+    }catch(err){prev.style.display='block';prev.innerHTML='⚠️ '+err.message;}
+  };
+  fr.readAsText(f);
+}
+
+async function publicarCO(){
+  if(!CO_TXT){alert('Primero sube el archivo');return;}
+  var btn=document.getElementById('coPub');btn.disabled=true;
+  var stt=document.getElementById('coState');stt.textContent='Procesando…';
+  try{
+    log('› Descargando dashboard actual…');
+    var r=await fetch('/index.html?_='+Date.now()); if(!r.ok)throw new Error('No pude leer el index actual ('+r.status+')');
+    var H=await r.text(); log('  index actual: '+(H.length/1e6).toFixed(2)+' MB');
+    log('› Aplicando semana nueva…');
+    var res=applyCO(H,CO_TXT);
+    log('  semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
+    log('› Publicando (commit al repo)…');
+    var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,html:res.html})});
+    var j=await p.json();
+    if(!p.ok)throw new Error(j.error||('HTTP '+p.status));
+    log('✅ '+(j.message||'Publicado.'));
+    stt.textContent='✅ Publicado — refresca el dashboard en ~1 min.';
+  }catch(err){ log('❌ '+err.message); stt.textContent='❌ '+err.message; btn.disabled=false; }
+}
+</script>
+</body>
+</html>
