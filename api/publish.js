@@ -12,10 +12,11 @@ export default async function handler(req, res) {
     let body = req.body;
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
     const { password, html } = body || {};
-    if (!process.env.ADMIN_PASSWORD) return res.status(500).json({ error: 'Falta ADMIN_PASSWORD en el servidor.' });
-    if (!password || password !== process.env.ADMIN_PASSWORD) return res.status(401).json({ error: 'Clave incorrecta.' });
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) return res.status(500).json({ error: 'Falta GITHUB_TOKEN en el servidor.' });
+    const ADMIN = process.env.ADMIN_PASSWORD_TURBO || process.env.ADMIN_PASSWORD;
+    if (!ADMIN) return res.status(500).json({ error: 'Falta ADMIN_PASSWORD_TURBO en el servidor.' });
+    if (!password || password !== ADMIN) return res.status(401).json({ error: 'Clave incorrecta.' });
+    const token = process.env.GITHUB_TOKEN_TURBO || process.env.GITHUB_TOKEN;
+    if (!token) return res.status(500).json({ error: 'Falta GITHUB_TOKEN_TURBO en el servidor.' });
     if (!html || typeof html !== 'string' || html.length < 200000) return res.status(400).json({ error: 'HTML inválido o incompleto.' });
 
     const b64 = Buffer.from(html, 'utf8').toString('base64');
