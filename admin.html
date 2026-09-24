@@ -136,10 +136,11 @@ async function publicarCO(){
     log('› Aplicando semana nueva…');
     var res=applyCO(H,CO_TXT);
     log('  semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
-    log('› Publicando (commit al repo)…');
-    var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,html:res.html})});
+    log('› Publicando (commit al repo + venta del warehouse)…');
+    var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:'CO',week:res.newlbl,html:res.html})});
     var j=await p.json();
     if(!p.ok)throw new Error(j.error||('HTTP '+p.status));
+    if(j.detail&&j.detail.length)j.detail.forEach(function(d){log('  '+d);});
     log('✅ '+(j.message||'Publicado.'));
     stt.textContent='✅ Publicado — refresca el dashboard en ~1 min.';
   }catch(err){ log('❌ '+err.message); stt.textContent='❌ '+err.message; btn.disabled=false; }
