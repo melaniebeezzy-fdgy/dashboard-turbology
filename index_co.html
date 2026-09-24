@@ -208,6 +208,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
   <div class="card"><h2 id="brTitle">Marcas–cocinas penalizadas y con RTWT crítico</h2><div class="hint" id="brHint">Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico/penalizado (≥6 → 0% cobertura). Ordenadas de peor a mejor.</div><div class="scroll"><table id="tbBrand" class="dense"></table></div></div>
   <div class="card"><h2>📈 RTWT en aumento (2+ semanas seguidas)</h2><div class="hint">Tiendas cuyo RTWT lleva <b>2 o más semanas seguidas subiendo</b> y que <b>en la semana más reciente sigue subiendo</b>. Si la última semana bajó, no aparece. Cada flecha = 1 semana.</div><div class="scroll"><table id="tbConsec" class="dense"></table></div></div>
 </div>
+<div class="card"><h2>🚨 Dejaron de vender la última semana (posible penalización)</h2><div class="hint">Marcas–cocina que venían vendiendo de forma consistente (≥3 de las últimas 4 semanas y ~casi a diario) y que <b>cayeron a 0 la semana pasada</b>. Sirve para revisar si están penalizadas <b>antes</b> de recibir el reporte de Rappi. RTWT 4 sem en 🔴 ≥6 refuerza la sospecha. Respeta el filtro de ciudad/ops.</div><div class="scroll"><table id="tbNoSale" class="dense"></table></div></div>
 <div class="grid" id="alertas2">
   <div class="card"><h2>🔀 Marcas que cambiaron de polígono</h2><div class="hint">Tiendas cuyo <b>polígono efectivo</b> cambió vs la semana pasada — <b>subió</b> o <b>bajó</b>, ya sea por reasignación de polígono o por entrar/salir de penalización (0%). Ant → act.</div><div class="scroll"><table id="tbPolyChg" class="dense"></table></div></div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">📉 RTWT mejorando (candidatas a subir polígono)</h2><button class="dlbtn" onclick="dlRtImp()">⬇ Excel</button></div><div class="hint">RTWT bajando <b>2+ semanas seguidas</b> (últimas 4) o <b>RTWT 4 sem &lt; 2 min</b>, <b>excluyendo</b> las que ya tienen polígono de 3.0 km. Se ve la evolución, el promedio y el polígono.</div><div class="scroll"><table id="tbRtImp" class="dense"></table></div></div>
@@ -651,6 +652,29 @@ function update(){
    (rimp.length?rimp.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td class="num"><span class="pill" style="background:#1e8e5a">${r.ev.join(' → ')}</span></td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${r.cc==null?'–':`<span class="pill" style="background:${scol[r.cc]||'#345964'}">${km(r.cc)} km</span>`}</td></tr>`).join('')
     :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin marcas mejorando en este alcance</td></tr>');
   renderOpp();
+
+ // 🚨 alerta: venían vendiendo y cayeron a 0 la última semana (posible penalización)
+ (function(){
+   var host=document.getElementById('tbNoSale'); if(!host) return;
+   var wkTot=st.reduce(function(a,s){return a+(((s.ow||[])[LI])||0);},0);
+   if(wkTot===0){ host.innerHTML='<tr><td class="hint" style="padding:12px">Las ventas de la última semana ('+W[LI]+') aún no están cargadas; la alerta se activa cuando se cargue la venta.</td></tr>'; return; }
+   var rows=[];
+   st.forEach(function(s){
+     var ow=s.ow||[]; if((ow[LI]||0)>0) return;
+     var prev=[]; for(var w=LI-1; w>=Math.max(0,LI-4); w--) prev.push(ow[w]||0);
+     var sold=prev.filter(function(x){return x>0;});
+     if(sold.length<3) return;
+     var a=sold.reduce(function(x,y){return x+y;},0)/sold.length;
+     if(a<5) return;
+     rows.push({b:s.b,k:s.k,c:s.c,avg:a,prev:prev,r4:avg4(s)});
+   });
+   rows.sort(function(x,y){return y.avg-x.avg;});
+   window.NOSALE=rows;
+   function rc(v){ if(v==null) return '<span class="num">—</span>'; var col=v>=6?'#dc2626':(v>=3?'#f59e0b':'#0f172a'); return '<b style="color:'+col+'">'+v.toFixed(2)+'</b>'; }
+   host.innerHTML='<tr><th>Ciudad</th><th>Cocina</th><th>Marca</th><th class="num">Prom. previo (órd/sem)</th><th class="num">Últimas 4 sem → hoy</th><th class="num">RTWT 4 sem</th></tr>'+
+     (rows.length?rows.map(function(r){return '<tr><td>'+r.c+'</td><td>'+r.k+'</td><td>'+r.b+'</td><td class="num">'+Math.round(r.avg)+'</td><td class="num" style="font-family:monospace;font-size:11px">'+r.prev.slice().reverse().join(' · ')+' · <b style="color:#dc2626">0</b></td><td class="num">'+rc(r.r4)+'</td></tr>';}).join('')
+       :'<tr><td class="hint" style="padding:12px">Ninguna marca que vendiera consistentemente cayó a 0 esta semana. 🎉</td></tr>');
+ })();
 }
 
 // ---------- drill-down cobertura ----------
