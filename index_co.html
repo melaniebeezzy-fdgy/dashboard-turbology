@@ -365,7 +365,7 @@ const lineDL={display:true,align:'top',anchor:'end',offset:2,color:'#345964',fon
 const chR=new Chart(chRtwt,{type:'line',data:{labels:W,datasets:[{data:[],borderColor:'#0F9ED5',backgroundColor:'rgba(15,158,213,.15)',tension:.3,fill:true,pointRadius:2.5,pointBackgroundColor:'#156082'}]},
  options:{maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:false},datalabels:{...lineDL,formatter:v=>v==null?'':v.toFixed(2)}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}}});
 const chC=new Chart(chCov,{type:'bar',data:{labels:W,datasets:[
- {type:'line',label:'Cobertura',data:[],borderColor:'#153D64',backgroundColor:'rgba(21,61,100,.15)',tension:.3,fill:true,pointRadius:2.5,pointBackgroundColor:'#153D64',yAxisID:'y',order:0},
+ {type:'line',label:'Cobertura',data:[],borderColor:'#153D64',backgroundColor:'rgba(21,61,100,.15)',cubicInterpolationMode:'monotone',tension:.35,fill:true,pointRadius:2.5,pointBackgroundColor:'#153D64',yAxisID:'y',order:0},
  {type:'bar',label:'$ perdido/sem',data:[],backgroundColor:'rgba(150,96,125,.45)',borderColor:'#96607D',borderWidth:1,yAxisID:'y1',order:1,datalabels:{display:false}}]},
  options:{maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:10}},datalabels:{...lineDL,formatter:(v,ctx)=>ctx.dataset.type==='line'?(v==null?'':(+v).toFixed(1)+'%'):''}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{min:50,max:100,position:'left',ticks:{callback:v=>v+'%',font:{size:10}}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>'$'+(v/1e6).toFixed(0)+'M',font:{size:10}}}}}});
 
