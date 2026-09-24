@@ -86,7 +86,7 @@ var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','D
 function nextLabel(l){var m=l.trim().match(/([A-Za-z]{3}) (\d{1,2})/);var dt=new Date(Date.UTC(2026,MI[m[1]],+m[2]+7));return MONTHS[dt.getUTCMonth()]+' '+dt.getUTCDate();}
 function parseReport(txt){
   var rx=/\{"brand": "(.*?)", "storeId": "(\d+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": (\d+), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)\}/g;
-  var rep={},m,n=0;while((m=rx.exec(txt))){rep[m[2]]={cov:+m[4],w4:(m[5]==='null'?null:+(+m[5]).toFixed(6))};n++;}
+  var rep={},m,n=0;while((m=rx.exec(txt))){rep[m[2]]={cov:Math.min(+m[4],3000),w4:(m[5]==='null'?null:+(+m[5]).toFixed(6))};n++;}
   return {rep:rep,n:n};
 }
 function applyCO(H,reportTxt){
