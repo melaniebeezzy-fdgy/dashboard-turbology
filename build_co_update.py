@@ -54,24 +54,33 @@ print('Semana nueva:', newlbl, '(D terminaba en %s)' % weeks[-1])
 
 def strip_brand(b): return re.sub(r'\s*-?\s*Turbo.*$', '', b, flags=re.I).strip()
 
-weeks.append(newlbl)
+# ¿La última semana ya existe SIN RTWT (placeholder de venta)? Entonces la rellenamos
+# en vez de agregar una nueva (evita duplicar la semana). Si ya tiene RTWT, agregamos.
+li = oldLen - 1
+last_has_rt = oldLen > 0 and any(((s.get('rt') or []) [li:li+1] or [None])[0] is not None for s in D['stores'])
+appended = last_has_rt
+if appended:
+    weeks.append(newlbl); wi = oldLen
+else:
+    wi = li; newlbl = weeks[li]
+
 nrt = 0; npoly = 0
 for s in D['stores']:
-    sid = str(s['sid'])
-    r = rep.get(sid)
+    sid = str(s['sid']); r = rep.get(sid)
     s.setdefault('gw', [0]*oldLen); s.setdefault('ow', [0]*oldLen)
-    # asegurar longitudes previas
     for key, fill in (('rt', None), ('fin', None), ('gw', 0), ('ow', 0)):
         while len(s.get(key, [])) < oldLen: s[key].append(fill)
-    if r and r['w4'] is not None:
-        s['rt'].append(r['w4']); nrt += 1
-    else:
-        s['rt'].append(None)
-    if r:
-        s['fin'].append(r['cov']); s['cc'] = r['cov']; npoly += 1
-    else:
-        s['fin'].append(s['fin'][-1] if s['fin'] else None)
-    s['gw'].append(0); s['ow'].append(0)
+    if appended:
+        s['rt'].append(r['w4'] if (r and r['w4'] is not None) else None)
+        s['fin'].append(r['cov'] if r else (s['fin'][-1] if s['fin'] else None))
+        s['gw'].append(0); s['ow'].append(0)
+        if r and r['w4'] is not None: nrt += 1
+        if r: s['cc'] = r['cov']; npoly += 1
+    else:  # rellenar la semana pendiente (no tocar gw/ow que ya traen venta)
+        while len(s['rt']) <= wi: s['rt'].append(None)
+        while len(s['fin']) <= wi: s['fin'].append(None)
+        if r and r['w4'] is not None: s['rt'][wi] = r['w4']; nrt += 1
+        if r: s['fin'][wi] = r['cov']; s['cc'] = r['cov']; npoly += 1
 
 D['weeks'] = weeks
 startD = H.index('let D=')
@@ -79,5 +88,5 @@ payload = 'let D=' + json.dumps(D, ensure_ascii=False)  # el ';' original queda 
 H = H[:startD] + payload + H[end:]
 open(HTML, 'w', encoding='utf-8').write(H)
 open('index.html', 'w', encoding='utf-8').write(H)
-print('CO actualizado: %d semanas | RTWT nueva sem: %d tiendas | polígono actualizado: %d' % (len(weeks), nrt, npoly))
-print('Nota: ventas de la semana nueva = 0 (el reporte RT no trae ventas).')
+print('CO actualizado (%s semana %s): %d semanas | RTWT: %d tiendas | polígono: %d' % ('AGREGA' if appended else 'RELLENA', newlbl, len(weeks), nrt, npoly))
+if appended: print('Nota: ventas de la semana nueva = 0 (el reporte RT no trae ventas).')

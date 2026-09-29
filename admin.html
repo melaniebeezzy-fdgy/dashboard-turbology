@@ -94,17 +94,27 @@ function applyCO(H,reportTxt){
   var i=a,d=0,st=false,e=-1;for(;i<H.length;i++){var c=H[i];if(c==='{'){d++;st=true;}else if(c==='}'){d--;if(st&&d===0){e=i+1;break;}}}
   var D=JSON.parse(H.slice(a,e)),oldLen=D.weeks.length;
   var pr=parseReport(reportTxt);if(pr.n===0)throw new Error('El HTML no parece un reporte RT válido (0 tiendas).');
-  var newlbl=nextLabel(D.weeks[oldLen-1]);
-  if(D.weeks.indexOf(newlbl)>=0)throw new Error('La semana '+newlbl+' ya existe en el dashboard. ¿Ya la cargaste?');
-  D.weeks.push(newlbl);var nrt=0,npoly=0;
+  // Si la última semana ya existe SIN RTWT (placeholder de venta), la rellenamos; si no, agregamos una nueva.
+  var li=oldLen-1;
+  var lastHasRt=oldLen>0&&D.stores.some(function(s){return (s.rt||[])[li]!=null;});
+  var appended=lastHasRt,newlbl,wi;
+  if(appended){ newlbl=nextLabel(D.weeks[li]); if(D.weeks.indexOf(newlbl)>=0)throw new Error('La semana '+newlbl+' ya existe en el dashboard. ¿Ya la cargaste?'); D.weeks.push(newlbl); wi=oldLen; }
+  else { wi=li; newlbl=D.weeks[li]; }
+  var nrt=0,npoly=0;
   D.stores.forEach(function(s){var sid=String(s.sid),r=pr.rep[sid];
     s.gw=s.gw||new Array(oldLen).fill(0);s.ow=s.ow||new Array(oldLen).fill(0);
     ['rt','fin','gw','ow'].forEach(function(k){s[k]=s[k]||[];while(s[k].length<oldLen)s[k].push(k==='rt'||k==='fin'?null:0);});
-    if(r&&r.w4!=null){s.rt.push(r.w4);nrt++;}else s.rt.push(null);
-    if(r){s.fin.push(r.cov);s.cc=r.cov;npoly++;}else s.fin.push(s.fin.length?s.fin[s.fin.length-1]:null);
-    s.gw.push(0);s.ow.push(0);});
+    if(appended){
+      if(r&&r.w4!=null){s.rt.push(r.w4);nrt++;}else s.rt.push(null);
+      if(r){s.fin.push(r.cov);s.cc=r.cov;npoly++;}else s.fin.push(s.fin.length?s.fin[s.fin.length-1]:null);
+      s.gw.push(0);s.ow.push(0);
+    } else {
+      while(s.rt.length<=wi)s.rt.push(null); while(s.fin.length<=wi)s.fin.push(null);
+      if(r&&r.w4!=null){s.rt[wi]=r.w4;nrt++;} if(r){s.fin[wi]=r.cov;s.cc=r.cov;npoly++;}
+    }
+  });
   var payload='let D='+JSON.stringify(D);
-  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n};
+  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n,mode:(appended?'agregó':'rellenó')};
 }
 
 var CO_TXT=null;
@@ -135,7 +145,7 @@ async function publicarCO(){
     var H=await r.text(); log('  index actual: '+(H.length/1e6).toFixed(2)+' MB');
     log('› Aplicando semana nueva…');
     var res=applyCO(H,CO_TXT);
-    log('  semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
+    log('  '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
     log('› Publicando (commit al repo + venta del warehouse)…');
     var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:'CO',week:res.newlbl,html:res.html})});
     var j=await p.json();
