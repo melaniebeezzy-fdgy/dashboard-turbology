@@ -58,6 +58,25 @@ a.link{color:var(--ind);font-size:12px;text-decoration:none}
       </div>
     </div>
 
+    <div class="card">
+      <h2>📋 Detalle orden-por-orden <span class="badge b-ok">Warehouse</span></h2>
+      <div class="h">Carga el detalle (una fila por orden: fecha, hora, order id, cocción, RTWT) directo del warehouse para el rango seleccionado. Reemplaza el detalle previo de ese país.</div>
+      <div class="row" style="margin-top:0">
+        <label class="lbl" style="margin:0">País</label>
+        <select id="odCountry" style="border:1px solid var(--bd);border-radius:9px;padding:8px 10px;font:600 13px Poppins">
+          <option value="CO">🇨🇴 Colombia</option>
+          <option value="MX">🇲🇽 México</option>
+          <option value="PE">🇵🇪 Perú</option>
+        </select>
+        <label class="lbl" style="margin:0">Desde</label><input type="date" id="odFrom" style="width:auto">
+        <label class="lbl" style="margin:0">Hasta</label><input type="date" id="odTo" style="width:auto">
+      </div>
+      <div class="row">
+        <button class="btn" id="odBtn" onclick="cargarDetalle()">Cargar detalle</button>
+        <span id="odState" style="font-size:12px;color:var(--mut)"></span>
+      </div>
+    </div>
+
     <div class="card disabled">
       <h2>🇲🇽 México <span class="badge b-soon">Próximamente</span></h2>
       <div class="h">Reporte Unificado (.xlsx). Por ahora se carga vía script; el botón se habilitará en la próxima iteración.</div>
@@ -133,6 +152,33 @@ function analizarCO(){
     }catch(err){prev.style.display='block';prev.innerHTML='⚠️ '+err.message;}
   };
   fr.readAsText(f);
+}
+
+// Default del rango: última semana lun–dom
+(function(){ try{
+  var t=new Date(); var dow=(t.getUTCDay()+6)%7; // 0=lunes
+  var lastSun=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate()-dow-1));
+  var lastMon=new Date(lastSun.getTime()-6*86400000);
+  var f=document.getElementById('odFrom'), tt=document.getElementById('odTo');
+  if(f)f.value=lastMon.toISOString().slice(0,10); if(tt)tt.value=lastSun.toISOString().slice(0,10);
+}catch(e){} })();
+
+async function cargarDetalle(){
+  var country=document.getElementById('odCountry').value;
+  var from=document.getElementById('odFrom').value, to=document.getElementById('odTo').value;
+  if(!from||!to){alert('Selecciona el rango de fechas');return;}
+  var btn=document.getElementById('odBtn'); btn.disabled=true;
+  var stt=document.getElementById('odState'); stt.textContent='Consultando warehouse…';
+  try{
+    log('› Cargando detalle '+country+' '+from+'→'+to+' (warehouse)…');
+    var p=await fetch('/api/orders-detail',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:country,from:from,to:to})});
+    var j=await p.json();
+    if(!p.ok)throw new Error(j.error||('HTTP '+p.status));
+    if(j.detail&&j.detail.length)j.detail.forEach(function(d){log('  '+d);});
+    log('✅ '+(j.message||'Publicado.'));
+    stt.textContent='✅ Publicado — refresca el dashboard en ~1 min.';
+  }catch(err){ log('❌ '+err.message); stt.textContent='❌ '+err.message; }
+  btn.disabled=false;
 }
 
 async function publicarCO(){
