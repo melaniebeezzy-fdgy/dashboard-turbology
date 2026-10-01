@@ -1241,8 +1241,8 @@ function fd2Render(cc){
       plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10},usePointStyle:true}},
         tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.dataset.type==='line'?(c.parsed.y==null?'—':c.parsed.y.toFixed(2)+' min'):c.parsed.y.toLocaleString('es')+' órd');},footer:function(items){var t=top[items[0].dataIndex];return t?('Total órdenes: '+(t.d.r7+t.d.r79+t.d.r9).toLocaleString('es')):'';}}}},
       scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9},maxRotation:60,minRotation:45}},
-        y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Órdenes',font:{size:9}}},
-        y1:{position:'right',min:-rtMx*1.35,max:rtMx*1.1,grid:{display:false},ticks:{font:{size:9},callback:function(v){return v<0?'':v;}},title:{display:true,text:'RTWT (min)',font:{size:9}}}}}});
+        y:{stacked:true,beginAtZero:true,ticks:{font:{size:9},precision:0},title:{display:true,text:'Órdenes',font:{size:9}}},
+        y1:{position:'right',min:Math.floor(-rtMx*1.35),max:Math.ceil(rtMx*1.1),grid:{display:false},ticks:{font:{size:9},precision:0,callback:function(v){return v<0?'':Math.round(v);}},title:{display:true,text:'RTWT (min)',font:{size:9}}}}}});
   }catch(e){console.error('fd2 range',e);}
 
   // Chart 2
