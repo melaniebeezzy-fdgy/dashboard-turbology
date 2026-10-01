@@ -1217,8 +1217,8 @@ function fd2Render(cc){
     var c7=top.map(function(c){return c.d.r7;}),c79=top.map(function(c){return c.d.r79;}),c9=top.map(function(c){return c.d.r9;});
     var rt=top.map(function(c){return c.rtwt==null?null:+c.rtwt.toFixed(2);});
     var rtMx=Math.max.apply(null,rt.filter(function(v){return v!=null;}).concat([1]));
-    var pctDL=function(){return {display:function(x){return (x.dataset.data[x.dataIndex]||0)>=140;},color:'#fff',font:{size:9,weight:'600'},
-      formatter:function(v,x){var t=top[x.dataIndex];var tot=t?(t.d.r7+t.d.r79+t.d.r9):0;return tot?Math.round(100*v/tot)+' %':'';}};};
+    var pctDL=function(){return {display:function(x){return (x.dataset.data[x.dataIndex]||0)>=40;},color:'#fff',font:{size:7,weight:'600'},
+      formatter:function(v,x){var t=top[x.dataIndex];var tot=t?(t.d.r7+t.d.r79+t.d.r9):0;return tot?Math.round(100*v/tot)+'%':'';}};};
     fd2mk('range','fd2Range',{type:'bar',data:{labels:labels,datasets:[
       {type:'bar',label:'7 min o menos',data:c7,backgroundColor:FD2C.navy,stack:'s',yAxisID:'y',datalabels:pctDL()},
       {type:'bar',label:'7 a 9 min',data:c79,backgroundColor:FD2C.gray,stack:'s',yAxisID:'y',datalabels:pctDL()},
@@ -1227,7 +1227,7 @@ function fd2Render(cc){
         datalabels:{align:'top',anchor:'end',color:FD2C.navy,backgroundColor:FD2C.cream,borderRadius:4,padding:{top:2,bottom:1,left:4,right:4},font:{size:9,weight:'600'},formatter:function(v){return v==null?'':v.toFixed(2);}}}
     ]},options:{maintainAspectRatio:false,layout:{padding:{top:18}},interaction:{mode:'index',intersect:false},
       plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:6,font:{size:10},usePointStyle:true}},
-        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.dataset.type==='line'?(c.parsed.y==null?'—':c.parsed.y.toFixed(2)+' min'):c.parsed.y.toLocaleString('es')+' órd');}}}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.dataset.type==='line'?(c.parsed.y==null?'—':c.parsed.y.toFixed(2)+' min'):c.parsed.y.toLocaleString('es')+' órd');},footer:function(items){var t=top[items[0].dataIndex];return t?('Total órdenes: '+(t.d.r7+t.d.r79+t.d.r9).toLocaleString('es')):'';}}}},
       scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9},maxRotation:60,minRotation:45}},
         y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Órdenes',font:{size:9}}},
         y1:{position:'right',min:-rtMx*1.35,max:rtMx*1.1,grid:{display:false},ticks:{font:{size:9},callback:function(v){return v<0?'':v;}},title:{display:true,text:'RTWT (min)',font:{size:9}}}}}});
