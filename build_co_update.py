@@ -21,7 +21,7 @@ if not report or not os.path.exists(report):
 print('Reporte:', report)
 
 htmlR = open(report, encoding='utf-8').read()
-rx = re.compile(r'\{"brand": "(.*?)", "storeId": "(\d+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": (\d+), "coverageResult".*?"w4": ([0-9.]+|null)\}')
+rx = re.compile(r'"brand": "(.*?)", "storeId": "(\d+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": ([0-9.]+), "coverageResult".*?"w4": ([0-9.]+|null)')
 rep = {}
 for brand, sid, sname, cov, w4 in rx.findall(htmlR):
     rep[sid] = dict(brand=brand, sname=sname, cov=min(float(cov),3000.0), w4=(None if w4 == 'null' else round(float(w4), 6)))
