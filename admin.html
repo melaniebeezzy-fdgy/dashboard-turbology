@@ -47,8 +47,8 @@ a.link{color:var(--ind);font-size:12px;text-decoration:none}
     <div class="sub">Carga la información semanal por país y publícala. Al publicar, el dashboard se actualiza para todos (Vercel redepliega en ~1 min).</div>
 
     <div class="card">
-      <h2>🇨🇴 Colombia <span class="badge b-ok">Activo</span></h2>
-      <div class="h">Sube el <b>HTML del Dashboard RT</b> (el que generas cada semana). Se agrega la semana nueva (RTWT + polígono) sin borrar el histórico.</div>
+      <h2>🇨🇴 Colombia + 🇵🇪 Perú <span class="badge b-ok">Activo</span></h2>
+      <div class="h">Sube el <b>HTML del Dashboard RT</b> (el que generas cada semana). Ahora trae ambos países: se agrega la semana nueva de <b>Colombia</b> (RTWT + polígono) y de <b>Perú</b> (RTWT; la cobertura de PE se mantiene porque el reporte no la incluye), sin borrar el histórico.</div>
       <label class="lbl">Archivo HTML de CO</label>
       <input type="file" id="coFile" accept=".html,.htm" onchange="analizarCO()">
       <div class="preview" id="coPrev"></div>
@@ -83,10 +83,9 @@ a.link{color:var(--ind);font-size:12px;text-decoration:none}
       <input type="file" accept=".xlsx" disabled>
     </div>
 
-    <div class="card disabled">
-      <h2>🇵🇪 Perú <span class="badge b-soon">Próximamente</span></h2>
-      <div class="h">Coberturas (.xlsx). Requiere adaptar el cálculo al formato unificado; se habilitará luego.</div>
-      <input type="file" accept=".xlsx" disabled>
+    <div class="card">
+      <h2>🇵🇪 Perú <span class="badge b-ok">Incluido arriba</span></h2>
+      <div class="h">Perú se actualiza con el <b>mismo HTML</b> de arriba (ya trae Colombia y Perú). No necesitas subir nada aparte.</div>
     </div>
 
     <div id="log"></div>
@@ -104,9 +103,15 @@ var MI={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:1
 var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function nextLabel(l){var m=l.trim().match(/([A-Za-z]{3}) (\d{1,2})/);var dt=new Date(Date.UTC(2026,MI[m[1]],+m[2]+7));return MONTHS[dt.getUTCMonth()]+' '+dt.getUTCDate();}
 function parseReport(txt){
-  var rx=/"brand": "(.*?)", "storeId": "(\d+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": ([0-9.]+), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)/g;
-  var rep={},m,n=0;while((m=rx.exec(txt))){rep[m[2]]={cov:Math.min(+m[4],3000),w4:(m[5]==='null'?null:+(+m[5]).toFixed(6))};n++;}
-  return {rep:rep,n:n};
+  var rx=/"country": "(.*?)", "brand": "(.*?)", "storeId": "([^"]+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": ([0-9.]+|null), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)/g;
+  var co={},pe=[],m,nco=0,npe=0;
+  while((m=rx.exec(txt))){
+    var cov=(m[5]==='null'?null:Math.min(+m[5],3000));
+    var w4=(m[6]==='null'?null:+(+m[6]).toFixed(6));
+    if(/colomb/i.test(m[1])){ co[m[3]]={cov:cov,w4:w4}; nco++; }
+    else if(/per/i.test(m[1])){ pe.push({brand:m[2],sname:m[4],cov:cov,w4:w4}); npe++; }
+  }
+  return {rep:co,n:nco,co:co,pe:pe,nco:nco,npe:npe};
 }
 function applyCO(H,reportTxt){
   var a=H.indexOf('let D=');if(a<0)throw new Error('No encontré let D= en el index.');a+=6;
@@ -123,17 +128,56 @@ function applyCO(H,reportTxt){
   D.stores.forEach(function(s){var sid=String(s.sid),r=pr.rep[sid];
     s.gw=s.gw||new Array(oldLen).fill(0);s.ow=s.ow||new Array(oldLen).fill(0);
     ['rt','fin','gw','ow'].forEach(function(k){s[k]=s[k]||[];while(s[k].length<oldLen)s[k].push(k==='rt'||k==='fin'?null:0);});
+    var carry=s.fin.length?s.fin[s.fin.length-1]:null;
     if(appended){
       if(r&&r.w4!=null){s.rt.push(r.w4);nrt++;}else s.rt.push(null);
-      if(r){s.fin.push(r.cov);s.cc=r.cov;npoly++;}else s.fin.push(s.fin.length?s.fin[s.fin.length-1]:null);
+      if(r&&r.cov!=null){s.fin.push(r.cov);s.cc=r.cov;npoly++;}else s.fin.push(carry);
       s.gw.push(0);s.ow.push(0);
     } else {
       while(s.rt.length<=wi)s.rt.push(null); while(s.fin.length<=wi)s.fin.push(null);
-      if(r&&r.w4!=null){s.rt[wi]=r.w4;nrt++;} if(r){s.fin[wi]=r.cov;s.cc=r.cov;npoly++;}
+      if(r&&r.w4!=null){s.rt[wi]=r.w4;nrt++;} if(r&&r.cov!=null){s.fin[wi]=r.cov;s.cc=r.cov;npoly++;}
     }
   });
   var payload='let D='+JSON.stringify(D);
   return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n,mode:(appended?'agregó':'rellenó')};
+}
+
+// ---------- Perú: actualiza PEDATA por (marca, distrito) ----------
+function applyPE(H,peRows,newlbl){
+  var tag='const PEDATA=';var start=H.indexOf(tag);if(start<0)return {html:H,nrt:0,nnew:0,note:'PEDATA no encontrado'};
+  var a=start+tag.length;var i=a,d=0,st=false,e=-1;for(;i<H.length;i++){var c=H[i];if(c==='{'){d++;st=true;}else if(c==='}'){d--;if(st&&d===0){e=i+1;break;}}}
+  var W=JSON.parse(H.slice(a,e));var D=W.D;var oldLen=D.weeks.length;
+  function nrm(s){return (s==null?'':''+s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();}
+  function stripN(b){return nrm(b).replace(/\s*-?\s*turbo.*$/,'').trim();}
+  function stripDisp(b){return (''+b).replace(/\s*-?\s*[Tt]urbo.*$/,'').trim();}
+  var DMAP={'manuel gonzalez prada':'Gonzáles Prada','gonzales prada':'Gonzáles Prada','principal':'Gonzáles Prada','san isidro':'San Isidro','la molina':'La Molina','surquillo':'Surquillo'};
+  var DKEYS=Object.keys(DMAP).sort(function(x,y){return y.length-x.length;});
+  function district(sn){var n=nrm(sn);for(var j=0;j<DKEYS.length;j++){if(n.indexOf(DKEYS[j])>=0)return DMAP[DKEYS[j]];}return null;}
+  var wi;
+  if(D.weeks.indexOf(newlbl)>=0){ wi=D.weeks.indexOf(newlbl); } else { D.weeks.push(newlbl); wi=D.weeks.length-1; }
+  var want={};
+  peRows.forEach(function(r){ if(r.w4==null)return; var k=district(r.sname); if(!k)return; want[stripN(r.brand)+'|'+nrm(k)]={w4:r.w4,disp:stripDisp(r.brand),k:k}; });
+  var nrt=0,nnew=0;
+  D.stores.forEach(function(s){
+    ['rt','fin','gw','ow'].forEach(function(key){ if(!Array.isArray(s[key]))s[key]=[]; });
+    while(s.rt.length<wi)s.rt.push(null);
+    while(s.fin.length<wi)s.fin.push(s.fin.length?s.fin[s.fin.length-1]:(s.cc||3000));
+    while(s.gw.length<wi)s.gw.push(0); while(s.ow.length<wi)s.ow.push(0);
+    var cv=s.fin.length?s.fin[s.fin.length-1]:(s.cc||3000);
+    var w=want[nrm(s.b)+'|'+nrm(s.k)];
+    s.rt[wi]=w?w.w4:(s.rt[wi]!=null?s.rt[wi]:null);
+    if(s.fin[wi]==null)s.fin[wi]=cv; if(s.gw[wi]==null)s.gw[wi]=0; if(s.ow[wi]==null)s.ow[wi]=0;
+    if(w){nrt++;delete want[nrm(s.b)+'|'+nrm(s.k)];}
+  });
+  Object.keys(want).forEach(function(key){
+    var w=want[key];var rt=[],fin=[],gw=[],ow=[];
+    for(var z=0;z<=wi;z++){rt.push(null);fin.push(3000);gw.push(0);ow.push(0);}
+    rt[wi]=w.w4;
+    D.stores.push({b:w.disp,k:w.k,c:'Lima',sid:w.disp+'|'+w.k,cc:3000,fin:fin,rt:rt,op:null,g:0,gw:gw,ow:ow});
+    nnew++;
+  });
+  W.D=D;
+  return {html:H.slice(0,start)+tag+JSON.stringify(W)+H.slice(e), nrt:nrt, nnew:nnew, weeks:D.weeks.length};
 }
 
 var CO_TXT=null;
@@ -146,8 +190,9 @@ function analizarCO(){
     try{ var pr=parseReport(CO_TXT);
       if(pr.n===0){prev.style.display='block';prev.innerHTML='⚠️ No se detectaron tiendas. ¿Es el HTML del Dashboard RT?';return;}
       var nn=0;for(var k in pr.rep)if(pr.rep[k].w4!=null)nn++;
+      var penn=0;pr.pe.forEach(function(r){if(r.w4!=null)penn++;});
       prev.style.display='block';
-      prev.innerHTML='✔️ Reporte leído: <b>'+pr.n+'</b> tiendas, <b>'+nn+'</b> con RTWT de la semana nueva. Listo para publicar.';
+      prev.innerHTML='✔️ Reporte leído:<br>🇨🇴 CO: <b>'+pr.nco+'</b> tiendas, <b>'+nn+'</b> con RTWT.<br>🇵🇪 PE: <b>'+pr.npe+'</b> tiendas, <b>'+penn+'</b> con RTWT. Listo para publicar.';
       document.getElementById('coPub').disabled=false;
     }catch(err){prev.style.display='block';prev.innerHTML='⚠️ '+err.message;}
   };
@@ -190,10 +235,13 @@ async function publicarCO(){
     var r=await fetch('/index.html?_='+Date.now()); if(!r.ok)throw new Error('No pude leer el index actual ('+r.status+')');
     var H=await r.text(); log('  index actual: '+(H.length/1e6).toFixed(2)+' MB');
     log('› Aplicando semana nueva…');
+    var pr=parseReport(CO_TXT);
     var res=applyCO(H,CO_TXT);
-    log('  '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
+    log('  🇨🇴 '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
+    var peRes=applyPE(res.html,pr.pe,res.newlbl);
+    log('  🇵🇪 semana '+res.newlbl+' · '+peRes.nrt+' cocinas con RTWT'+(peRes.nnew?(' · '+peRes.nnew+' nuevas'):'')+' · total '+peRes.weeks+' semanas PE');
     log('› Publicando (commit al repo + venta del warehouse)…');
-    var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:'CO',week:res.newlbl,html:res.html})});
+    var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:'CO',week:res.newlbl,html:peRes.html})});
     var j=await p.json();
     if(!p.ok)throw new Error(j.error||('HTTP '+p.status));
     if(j.detail&&j.detail.length)j.detail.forEach(function(d){log('  '+d);});
