@@ -1110,6 +1110,7 @@ function fd2ms(kind,label,items,dispFn){
     +'<div class="mspanel"><div class="msact"><button type="button" onclick="fd2setAll(\''+kind+'\',true)">Todas</button><button type="button" onclick="fd2setAll(\''+kind+'\',false)">Ninguna</button></div>'
     +boxes+'</div></details>';
 }
+if(!window.__fd2msOutside){window.__fd2msOutside=1;document.addEventListener('click',function(e){document.querySelectorAll('details.ms[open]').forEach(function(d){if(!d.contains(e.target))d.removeAttribute('open');});});}
 window.fd2setAll=function(kind,on){document.querySelectorAll('.fd2'+kind).forEach(function(c){c.checked=on;});fd2apply();};
 window.fd2apply=function(){try{if(FDGY2ST.ccFull)fd2Render(FDGY2ST.ccFull);}catch(e){console.error('fd2apply',e);}};
 window.fd2resetF=function(){
