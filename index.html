@@ -1210,7 +1210,7 @@ function fd2Render(cc){
      +fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);
   }catch(e){console.error('fd2 kpis',e);}
 
-  var top=cocinas.slice(0,20);
+  var top=cocinas.slice(0,24);
   // Chart 1
   try{
     var labels=top.map(function(c){return c.k;});
