@@ -1112,6 +1112,18 @@ function fd2ms(kind,label,items,dispFn){
 }
 if(!window.__fd2msOutside){window.__fd2msOutside=1;document.addEventListener('click',function(e){document.querySelectorAll('details.ms[open]').forEach(function(d){if(!d.contains(e.target))d.removeAttribute('open');});});}
 window.fd2setAll=function(kind,on){document.querySelectorAll('.fd2'+kind).forEach(function(c){c.checked=on;});fd2apply();};
+window.fd2pick=function(kit,braw){
+  var kits=[].slice.call(document.querySelectorAll('.fd2kit')),brs=[].slice.call(document.querySelectorAll('.fd2brand'));
+  if(!kits.length)return;
+  var ck=kits.filter(function(c){return c.checked;}),cb=brs.filter(function(c){return c.checked;});
+  var sameK=(ck.length===1&&ck[0].getAttribute('data-val')===kit);
+  var sameB=(braw==null)?(cb.length===brs.length):(cb.length===1&&cb[0].getAttribute('data-val')===braw);
+  if(sameK&&sameB){kits.forEach(function(c){c.checked=true;});brs.forEach(function(c){c.checked=true;});}
+  else{kits.forEach(function(c){c.checked=(c.getAttribute('data-val')===kit);});
+    if(braw==null){brs.forEach(function(c){c.checked=true;});}else{brs.forEach(function(c){c.checked=(c.getAttribute('data-val')===braw);});}}
+  fd2apply();
+};
+window.fd2pickRow=function(tbl,ix){var r=(tbl===1?FDGY2ST._t1:FDGY2ST._t2)||[];r=r[ix];if(!r)return;fd2pick(r.k,tbl===1?r.braw:null);};
 window.fd2apply=function(){try{if(FDGY2ST.ccFull)fd2Render(FDGY2ST.ccFull);}catch(e){console.error('fd2apply',e);}};
 window.fd2resetF=function(){
   document.querySelectorAll('.fd2kit,.fd2brand').forEach(function(c){c.checked=true;});
@@ -1151,13 +1163,13 @@ function fd2sortRows(rows,key,dir){var num=(key==='v'||key==='n');return rows.sl
 function fd2Hdr(cols,st,fn){return '<thead><tr>'+cols.map(function(c){var ar=st.key===c.k?(st.dir===1?' ↑':' ↓'):'';return '<th class="'+(c.num?'num ':'')+'sortable" style="cursor:pointer;user-select:none" onclick="'+fn+'(\''+c.k+'\')">'+c.l+ar+'</th>';}).join('')+'</tr></thead>';}
 function fd2drawT1(){var e1=document.getElementById('fd2t1');if(!e1)return;var st=FDGY2ST.t1sort||(FDGY2ST.t1sort={key:'v',dir:-1});var rows=fd2sortRows(FDGY2ST.t1rows||[],st.key,st.dir);
   var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'v',l:'RTWT',num:true}];
-  var h=fd2Hdr(cols,st,'fd2sortT1')+'<tbody>';
-  rows.forEach(function(r){h+='<tr><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp)+'</tr>';});
+  var h=fd2Hdr(cols,st,'fd2sortT1')+'<tbody>';FDGY2ST._t1=rows;
+  rows.forEach(function(r,ix){h+='<tr class="fd2clk" title="Filtrar dashboard por esta marca/cocina" onclick="fd2pickRow(1,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp)+'</tr>';});
   h+='</tbody>';e1.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';}
 function fd2drawT2(){var e2=document.getElementById('fd2t2');if(!e2)return;var st=FDGY2ST.t2sort||(FDGY2ST.t2sort={key:'v',dir:-1});var rows=fd2sortRows(FDGY2ST.t2rows||[],st.key,st.dir);
   var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'v',l:'RTWT',num:true},{k:'n',l:'Órdenes',num:true}];
-  var h=fd2Hdr(cols,st,'fd2sortT2')+'<tbody>';
-  rows.forEach(function(r){h+='<tr><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td></tr>';});
+  var h=fd2Hdr(cols,st,'fd2sortT2')+'<tbody>';FDGY2ST._t2=rows;
+  rows.forEach(function(r,ix){h+='<tr class="fd2clk" title="Filtrar dashboard por esta cocina" onclick="fd2pickRow(2,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td></tr>';});
   h+='</tbody>';e2.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';}
 window.fd2sortT1=function(k){var st=FDGY2ST.t1sort||(FDGY2ST.t1sort={key:'v',dir:-1});st.dir=st.key===k?-st.dir:((k==='v'||k==='n')?-1:1);st.key=k;fd2drawT1();};
 window.fd2sortT2=function(k){var st=FDGY2ST.t2sort||(FDGY2ST.t2sort={key:'v',dir:-1});st.dir=st.key===k?-st.dir:((k==='v'||k==='n')?-1:1);st.key=k;fd2drawT2();};
@@ -1256,7 +1268,7 @@ function fd2Render(cc){
   // Tabla 1: RTWT crítico marca/cocina (warehouse)
   try{
     FDGY2ST.t1rows=Object.keys(byKB).map(function(kb){var d=byKB[kb];var p=kb.split('||');var v=fd2avgRt(d);var vp=fd2avgRt(byKBp[kb]);var m=meta[fd2dkey(p[0])];
-      return {city:m?m.city:'—',k:p[0],b:fd2title(p[1]),v:v,vp:vp};})
+      return {city:m?m.city:'—',k:p[0],b:fd2title(p[1]),braw:p[1],v:v,vp:vp};})
       .filter(function(r){return r.v!=null;});
     fd2drawT1();
   }catch(e){console.error('fd2 t1',e);}
