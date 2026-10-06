@@ -60,15 +60,16 @@ export default async function handler(req, res) {
     let rows;
     try {
       await client.connect();
-      const q = `SELECT kitchen, brand, order_day,
-                   FLOOR(order_hour)::int AS hr,
-                   provider_order_id AS oid,
-                   ROUND(minutes_cooking_time,1)::float AS cook,
-                   ROUND(GREATEST(0, EXTRACT(EPOCH FROM (order_state_handed_to_delivery - GREATEST(domiciliary_in_store, order_date_local + interval '5 minute')))/60.0)::numeric,2)::float AS rt
-                 FROM fdgy_views.orders_consolidado
-                 WHERE company_id='fdgy' AND country=$1 AND provider_new_name='Rappi' AND brand ILIKE '%Turbo%'
-                   AND order_day BETWEEN $2 AND $3
-                 ORDER BY order_day, order_date_local`;
+      const q = `SELECT o.kitchen, o.brand, o.order_day,
+                   FLOOR(o.order_hour)::int AS hr,
+                   o.provider_order_id AS oid,
+                   ROUND(o.minutes_cooking_time,1)::float AS cook,
+                   ROUND(GREATEST(0, EXTRACT(EPOCH FROM (oi.provider_delivered_to_domiciliary - GREATEST(o.domiciliary_in_store, o.order_date_local + interval '5 minute')))/60.0)::numeric,2)::float AS rt
+                 FROM fdgy_views.orders_consolidado o
+                 LEFT JOIN fdgy_views.ontime_infull_order oi ON oi.order_id = o.id
+                 WHERE o.company_id='fdgy' AND o.country=$1 AND o.provider_new_name='Rappi' AND o.brand ILIKE '%Turbo%'
+                   AND o.order_day BETWEEN $2 AND $3
+                 ORDER BY o.order_day, o.order_date_local`;
       const r = await client.query(q, [cc, from, to]);
       rows = r.rows;
     } finally { try { await client.end(); } catch (e) {} }
