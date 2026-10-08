@@ -1,8 +1,10 @@
 // GET /api/detail  — Detalle orden-por-orden (reemplazo futuro de FDGYD).
 // Devuelve solo las columnas que usa el dashboard (sin PII). RTWT con la lógica actual.
-// Params: country=CO|MX|PE  from=YYYY-MM-DD  to=YYYY-MM-DD  [kitchen=] [brand=] [limit=]
+// Params: country=CO|MX|PE  from=YYYY-MM-DD  to=YYYY-MM-DD  [kitchen=] [brand=] [limit=] [offset=]
+// Paginación por bloques: el cliente pide bloques (limit) con offset creciente hasta que
+// un bloque devuelve < limit (hasMore=false). Evita descargar todo el período de una vez.
 // Shape de salida (compatible con FDGYD[pais]):
-//   { from, to, K:[cocinas], B:[marcas], days:[ISO...], O:[[ki,bi,di,hr,oid,cook,rt],...], n }
+//   { from, to, K:[cocinas], B:[marcas], days:[ISO...], O:[[ki,bi,di,hr,oid,cook,rt],...], n, offset, hasMore }
 import { guard, parseCountry, parseRange, cleanStr, clampLimit, getClient, setCache, sendJson, httpError, serverError, BASE_WHERE, RTWT_EXPR } from './_db.js';
 
 export default async function handler(req, res) {
@@ -14,14 +16,16 @@ export default async function handler(req, res) {
   if (r.err) return httpError(res, 400, r.err);
   const kitchen = cleanStr(q.kitchen), brand = cleanStr(q.brand);
   const limit = clampLimit(q.limit);
+  const offset = Math.max(0, Math.min(5000000, parseInt(q.offset, 10) || 0));
 
   const params = [country, r.from, r.to];
   let where = BASE_WHERE;
   if (kitchen) { params.push(kitchen); where += ` AND o.kitchen=$${params.length}`; }
   if (brand) { params.push(brand); where += ` AND o.brand=$${params.length}`; }
-  params.push(limit);
-  const limIx = params.length;
+  params.push(limit); const limIx = params.length;
+  params.push(offset); const offIx = params.length;
 
+  // Orden estable (incluye provider_order_id) para que la paginación por offset sea determinista.
   const sql = `
     SELECT o.kitchen AS k, o.brand AS b, o.order_day::text AS d,
       FLOOR(o.order_hour)::int AS hr,
@@ -32,8 +36,8 @@ export default async function handler(req, res) {
     FROM fdgy_views.orders_consolidado o
     LEFT JOIN fdgy_views.ontime_infull_order oi ON oi.order_id = o.id
     WHERE ${where}
-    ORDER BY o.order_day, o.order_date_local
-    LIMIT $${limIx}`;
+    ORDER BY o.order_day, o.order_date_local, o.provider_order_id
+    LIMIT $${limIx} OFFSET $${offIx}`;
 
   let client;
   try {
@@ -50,7 +54,7 @@ export default async function handler(req, res) {
         x.cook == null ? null : x.cook, x.rt == null ? null : x.rt]);
     }
     setCache(res, 3600);
-    sendJson(res, { from: r.from, to: r.to, K, B, days, O, n: O.length, truncated: O.length >= limit });
+    sendJson(res, { from: r.from, to: r.to, K, B, days, O, n: O.length, offset, hasMore: O.length >= limit });
   } catch (e) {
     return serverError(res, e, 'detail');
   } finally { try { if (client) await client.end(); } catch (e) {} }

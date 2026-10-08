@@ -1443,10 +1443,13 @@ ctryHeader();
 </script><!--FASE2_API_LAYER_START-->
 <script>
 /* Fase 2 — Capa de acceso a datos vía API (DEFAULT: API / datos en vivo).
-   ?apidata=0  fuerza snapshot embebido (rollback).   ?apidata=1  fuerza API (explícito).
-   Flujo: agg al abrir FDGY · detail bajo demanda (ventana/filtro) · timeline al abrir orden.
-   Caché en memoria por sesión. Límite de detail = 12000.
-   En fallo NO hay fallback silencioso al snapshot: se muestra error claro + console.error. */
+   ?apidata=0 fuerza snapshot (rollback). ?apidata=1 fuerza API.
+   - Carga inicial: últimos 7 días completos (fin = D-1 America/Bogota).
+   - Selector de fechas: hasta 3 meses hacia atrás (min/max en los inputs lo acotan).
+   - agg: se consulta por el período seleccionado (dinámico, rebase de di al minDate fijo).
+   - detail: BAJO DEMANDA y PAGINADO por bloques (sin tope fijo de 12000); no descarga todo de una vez.
+   - timeline: una orden a la vez.
+   - En fallo: error claro + console.error, SIN fallback silencioso al snapshot. */
 (function(){
   var USE_API_DATA = true;
   try {
@@ -1454,66 +1457,88 @@ ctryHeader();
     else if (/[?&]apidata=1(&|$)/.test(location.search)) USE_API_DATA = true;
   } catch(e){}
   window.USE_API_DATA = USE_API_DATA;
-  if (!USE_API_DATA) return;                 // modo snapshot: no se toca nada
+  if (!USE_API_DATA) return;
 
+  var DAY=86400000, BLOCK=4000, CAP=40000;      // bloque de paginación y tope de seguridad del detalle
   var aggCache={}, detCache={}, tlCache={};
   function getJSON(url){ return fetch(url).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
   function shortOf(cc){ return (window.FD2CC && FD2CC[cc]) || cc; }
   function curShort(){ var cc=(typeof FDGY2ST!=='undefined' && FDGY2ST.ccFull); return cc ? shortOf(cc) : null; }
-  function fmtLabel(a,b){ return a+' – '+b; }
-
-  // Fecha final = último día completo = D-1 en America/Bogota (UTC-5); nunca el día actual.
-  // Rango inicial visible: 7 días. Se cargan ~35 días de agregados para poder navegar fechas.
-  function bogotaDMinus1(){
-    var b=new Date(Date.now() - 5*3600000);                 // "ahora" en Bogota (UTC-5)
-    return new Date(Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate()) - 86400000); // ayer
-  }
   function isoOf(dt){ return dt.toISOString().slice(0,10); }
-  var _to = bogotaDMinus1();
-  var WIN = { from: isoOf(new Date(_to.getTime() - 34*86400000)), to: isoOf(_to) };
 
-  function ensureAgg(short){
-    var key=short+'|'+WIN.from+'|'+WIN.to;
-    if (aggCache[key]) return aggCache[key];
-    aggCache[key]=getJSON('/api/agg?country='+short+'&from='+WIN.from+'&to='+WIN.to).then(function(res){
-      if (typeof FDGY2==='undefined') window.FDGY2={};
-      FDGY2.minDate=res.from; FDGY2.maxDate=res.to; FDGY2.days=res.days.length; FDGY2.label=fmtLabel(res.from,res.to);
-      FDGY2[short]={K:res.K, B:res.B, R:res.R};
-      return true;
-    });
-    return aggCache[key];
+  // Límites fijos: fin = D-1 America/Bogota (UTC-5); inicio = 3 meses atrás (91 días) para el selector.
+  function bogotaDMinus1(){ var b=new Date(Date.now()-5*3600000); return new Date(Date.UTC(b.getUTCFullYear(),b.getUTCMonth(),b.getUTCDate())-DAY); }
+  var MAXd=bogotaDMinus1(), MINd=new Date(MAXd.getTime()-91*DAY);
+  var MIN=isoOf(MINd), MAX=isoOf(MAXd), NDAYS=Math.round((MAXd-MINd)/DAY)+1;  // 92
+  function setBounds(){
+    if (typeof FDGY2==='undefined') window.FDGY2={};
+    FDGY2.minDate=MIN; FDGY2.maxDate=MAX; FDGY2.days=NDAYS; FDGY2.label=MIN+' – '+MAX;
   }
-  function curWindowFilters(){
+  function clampDate(v,def){ if(!v) return def; if(v<MIN) return MIN; if(v>MAX) return MAX; return v; }
+  function default7(){ return { from: isoOf(new Date(MAXd.getTime()-6*DAY)), to: MAX }; }   // 7 días completos
+  function curWindow(){
     var f=document.getElementById('fd2from'), t=document.getElementById('fd2to');
-    var from=(f&&f.value)||WIN.from, to=(t&&t.value)||WIN.to;
+    if(!f||!t) return default7();
+    var from=clampDate(f.value, default7().from), to=clampDate(t.value, MAX);
+    if(from>to) from=to;
+    return { from:from, to:to };
+  }
+
+  // AGREGADOS por período seleccionado. Rebasa di al minDate fijo para que el filtro de fechas del front calce.
+  function ensureAgg(short, from, to){
+    var key=short+'|'+from+'|'+to;
+    if (aggCache[key]) { var c=aggCache[key]; return c.then(function(v){ setAgg(short,v); return true; }); }
+    aggCache[key]=getJSON('/api/agg?country='+short+'&from='+from+'&to='+to).then(function(res){
+      var base=Math.round((Date.parse(res.from+'T00:00:00Z')-Date.parse(MIN+'T00:00:00Z'))/DAY);
+      var R=res.R.map(function(r){ var x=r.slice(); x[2]=r[2]+base; return x; });
+      return { K:res.K, B:res.B, R:R };
+    });
+    return aggCache[key].then(function(v){ setAgg(short,v); return true; });
+  }
+  function setAgg(short,v){ if(typeof FDGY2==='undefined') window.FDGY2={}; FDGY2[short]={K:v.K,B:v.B,R:v.R}; }
+
+  function curFilters(){
     var kits=[].slice.call(document.querySelectorAll('.fd2kit')), brs=[].slice.call(document.querySelectorAll('.fd2brand'));
     var ck=kits.filter(function(c){return c.checked;}), cb=brs.filter(function(c){return c.checked;});
-    return { from:from, to:to,
-      kitchen:(ck.length===1)?ck[0].getAttribute('data-val'):null,
-      brand:(cb.length===1)?cb[0].getAttribute('data-val'):null };
+    return { kitchen:(ck.length===1)?ck[0].getAttribute('data-val'):null, brand:(cb.length===1)?cb[0].getAttribute('data-val'):null };
   }
+
+  // DETALLE paginado por bloques (offset). Acumula con índices globales consistentes. Caché por período+filtro.
   function ensureDetail(short){
-    var q=curWindowFilters();
-    var key=short+'|'+q.from+'|'+q.to+'|'+(q.kitchen||'')+'|'+(q.brand||'');
-    if (detCache[key]) return detCache[key];
-    var url='/api/detail?country='+short+'&from='+q.from+'&to='+q.to+'&limit=12000';
-    if (q.kitchen) url+='&kitchen='+encodeURIComponent(q.kitchen);
-    if (q.brand)   url+='&brand='+encodeURIComponent(q.brand);
-    detCache[key]=getJSON(url).then(function(res){
-      if (typeof FDGYD==='undefined') window.FDGYD={};
-      FDGYD[short]={from:res.from, to:res.to, K:res.K, B:res.B, days:res.days, O:res.O, n:res.n};
-      return true;
-    });
-    return detCache[key];
+    var w=curWindow(), fl=curFilters();
+    var key=short+'|'+w.from+'|'+w.to+'|'+(fl.kitchen||'')+'|'+(fl.brand||'');
+    if (detCache[key]) { var c=detCache[key]; return c.then(function(v){ setDet(short,v); return v; }); }
+    var baseUrl='/api/detail?country='+short+'&from='+w.from+'&to='+w.to+'&limit='+BLOCK;
+    if (fl.kitchen) baseUrl+='&kitchen='+encodeURIComponent(fl.kitchen);
+    if (fl.brand)   baseUrl+='&brand='+encodeURIComponent(fl.brand);
+    var K=[],Ki={},B=[],Bi={},days=[],Di={},O=[], blocks=0, truncated=false;
+    function pull(offset){
+      return getJSON(baseUrl+'&offset='+offset).then(function(res){
+        res.O.forEach(function(row){
+          var kn=res.K[row[0]], bn=res.B[row[1]], ds=res.days[row[2]];
+          var ki=Ki[kn]; if(ki===undefined){ki=K.push(kn)-1;Ki[kn]=ki;}
+          var bi=Bi[bn]; if(bi===undefined){bi=B.push(bn)-1;Bi[bn]=bi;}
+          var di=Di[ds]; if(di===undefined){di=days.push(ds)-1;Di[ds]=di;}
+          O.push([ki,bi,di,row[3],row[4],row[5],row[6]]);
+        });
+        blocks++;
+        if (res.hasMore && O.length<CAP) return pull(offset+BLOCK);
+        if (res.hasMore && O.length>=CAP) truncated=true;
+        return { from:w.from, to:w.to, K:K, B:B, days:days, O:O, n:O.length, blocks:blocks, truncated:truncated };
+      });
+    }
+    detCache[key]=pull(0);
+    return detCache[key].then(function(v){ setDet(short,v); return v; });
   }
+  function setDet(short,v){ if(typeof FDGYD==='undefined') window.FDGYD={}; FDGYD[short]={from:v.from,to:v.to,K:v.K,B:v.B,days:v.days,O:v.O,n:v.n}; }
+
   function ensureTimeline(short, oid){
     if (tlCache[oid]) return tlCache[oid];
-    var q=curWindowFilters();
-    tlCache[oid]=getJSON('/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+q.from+'&to='+q.to).then(function(res){
+    var w=curWindow();
+    tlCache[oid]=getJSON('/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+w.from+'&to='+w.to).then(function(res){
       if (typeof FDGYT==='undefined') window.FDGYT={};
       if (!FDGYT[short]) FDGYT[short]={};
-      FDGYT[short][oid]=res.t;
-      return true;
+      FDGYT[short][oid]=res.t; return true;
     });
     return tlCache[oid];
   }
@@ -1521,7 +1546,6 @@ ctryHeader();
   function showHostErr(host,msg){ if(host) host.innerHTML='<div class="card"><div class="hint" style="color:#dc2626">'+msg+'</div></div>'; }
   function showDetErr(msg){ var ed=document.getElementById('fd2det'); if(ed) ed.innerHTML='<tbody><tr><td class="hint" style="padding:14px;color:#dc2626">'+msg+'</td></tr></tbody>'; }
   function clearDetail(short){ try{ if(typeof FDGYD!=='undefined') FDGYD[short]={K:[],B:[],days:[],O:[],n:0}; }catch(_){} }
-  // Indicador discreto de datos en vivo.
   function addLiveBadge(host){
     if(!host) return; var h1=host.querySelector('h1'); if(!h1 || h1.querySelector('#fd2live')) return;
     var b=document.createElement('span'); b.id='fd2live'; b.textContent='● live';
@@ -1535,17 +1559,19 @@ ctryHeader();
 
   function renderDetailThenApply(short){
     ensureDetail(short).then(function(){ origApply(); })
-      .catch(function(e){ clearDetail(short); origApply(); showDetErr('No se pudo cargar el detalle en vivo. Reintenta.'); console.error('fase2 detail', e); });
+      .catch(function(e){ clearDetail(short); origApply(); showDetErr('No se pudo cargar el detalle en vivo. Reintenta o reduce el rango.'); console.error('fase2 detail', e); });
   }
 
   window.__fdgyRender=function(cc,cid){
     var host=document.getElementById(cid); if(!host) return;
     var short=shortOf(cc);
     host.innerHTML='<div class="card"><div class="hint">Cargando datos en vivo…</div></div>'; host.dataset.built='';
-    ensureAgg(short).then(function(){
-      origRender(cc,cid);               // charts / KPIs / tablas desde agregados
+    setBounds();
+    var w=default7();
+    ensureAgg(short, w.from, w.to).then(function(){
+      origRender(cc,cid);
       addLiveBadge(host);
-      renderDetailThenApply(short);     // detalle bajo demanda (ventana visible)
+      renderDetailThenApply(short);
     }).catch(function(e){
       showHostErr(host,'No se pudieron cargar los datos en vivo del warehouse (API). Reintenta, o abre con ?apidata=0 para ver el snapshot.');
       console.error('fase2 agg', e);
@@ -1554,7 +1580,9 @@ ctryHeader();
 
   window.fd2apply=function(){
     var short=curShort(); if(!short) return origApply.apply(this, arguments);
-    renderDetailThenApply(short);
+    var w=curWindow();
+    ensureAgg(short, w.from, w.to).then(function(){ renderDetailThenApply(short); })
+      .catch(function(e){ showDetErr('No se pudieron cargar los datos en vivo para el período. Reintenta o reduce el rango.'); console.error('fase2 agg', e); });
   };
 
   window.fd2showOrder=function(oid){
@@ -1564,14 +1592,12 @@ ctryHeader();
       .catch(function(e){ console.error('fase2 timeline', e); alert('No se pudo cargar el timeline de la orden en vivo. Reintenta.'); });
   };
 
-  // En modo API el timeline es perezoso: las filas del detalle no traen onclick nativo
-  // (ese solo aparece cuando FDGYT ya tiene la orden). Hacemos las filas clickeables por
-  // delegacion para conservar la MISMA UX (abrir la linea de tiempo al hacer clic).
+  // Detalle clickeable por delegación (timeline perezoso): conserva la UX de abrir la línea de tiempo.
   try{ var _st=document.createElement('style'); _st.textContent='#fd2det tbody tr{cursor:pointer}'; document.head.appendChild(_st); }catch(_){}
   document.addEventListener('click', function(e){
     var tr=(e.target && e.target.closest) ? e.target.closest('tr') : null; if(!tr) return;
     if(!tr.closest('#fd2det')) return;
-    if(tr.getAttribute('onclick')) return;            // fila ya manejada nativamente
+    if(tr.getAttribute('onclick')) return;
     var tds=tr.querySelectorAll('td'), oid=null;
     for(var i=0;i<tds.length;i++){ var t=(tds[i].textContent||'').trim(); if(/^\d{10}$/.test(t)){ oid=t; break; } }
     if(oid) window.fd2showOrder(oid);
