@@ -1440,4 +1440,126 @@ if(typeof update==='function'){var _uf=update; update=function(){_uf.apply(this,
 update();
 renderSales();
 ctryHeader();
-</script></body></html>
+</script><!--FASE2_API_LAYER_START-->
+<script>
+/* Fase 2 — Capa de acceso a datos vía API con feature flag.
+   USE_API_DATA=false por defecto: NO cambia el comportamiento (usa los bloques embebidos).
+   Override solo para pruebas (no cambia el default): agregar ?apidata=1 a la URL.
+   Con true: FDGY2<-/api/agg, FDGYD<-/api/detail (perezoso por ventana/filtro),
+   FDGYT<-/api/timeline (bajo demanda al abrir una orden). Caché en memoria por sesión. */
+(function(){
+  var USE_API_DATA = false;
+  try { if (/[?&]apidata=1(&|$)/.test(location.search)) USE_API_DATA = true; } catch(e){}
+  window.USE_API_DATA = USE_API_DATA;
+  if (!USE_API_DATA) return;               // modo snapshot: no se toca nada
+
+  var aggCache = {}, detCache = {}, tlCache = {};
+  function getJSON(url){ return fetch(url).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+  function shortOf(cc){ return (window.FD2CC && FD2CC[cc]) || cc; }
+  function fmtLabel(a,b){ return a + ' – ' + b; }
+
+  // Ventana por defecto para los AGREGADOS: la del snapshot embebido (paridad); si no hay, 35 días.
+  function defaultWindow(){
+    var mn = (typeof FDGY2!=='undefined' && FDGY2.minDate) ? FDGY2.minDate : null;
+    var mx = (typeof FDGY2!=='undefined' && FDGY2.maxDate) ? FDGY2.maxDate : null;
+    if (mn && mx) return { from: mn, to: mx };
+    var to = new Date(); var from = new Date(to.getTime() - 34*86400000);
+    return { from: from.toISOString().slice(0,10), to: to.toISOString().slice(0,10) };
+  }
+  var WIN = defaultWindow();
+
+  // AGREGADOS (una sola carga por país/ventana; pequeño). Adapta a la forma de FDGY2.
+  function ensureAgg(short){
+    var key = short+'|'+WIN.from+'|'+WIN.to;
+    if (aggCache[key]) return aggCache[key];
+    aggCache[key] = getJSON('/api/agg?country='+short+'&from='+WIN.from+'&to='+WIN.to).then(function(res){
+      if (typeof FDGY2==='undefined') window.FDGY2 = {};
+      FDGY2.minDate = res.from; FDGY2.maxDate = res.to; FDGY2.days = res.days.length;
+      FDGY2.label = fmtLabel(res.from, res.to);
+      FDGY2[short] = { K: res.K, B: res.B, R: res.R };
+      return true;
+    });
+    return aggCache[key];
+  }
+
+  // Lee ventana + filtro actual del DOM (para acotar el detalle).
+  function curWindowFilters(){
+    var f=document.getElementById('fd2from'), t=document.getElementById('fd2to');
+    var from=(f&&f.value)||WIN.from, to=(t&&t.value)||WIN.to;
+    var kits=[].slice.call(document.querySelectorAll('.fd2kit'));
+    var brs=[].slice.call(document.querySelectorAll('.fd2brand'));
+    var ck=kits.filter(function(c){return c.checked;}), cb=brs.filter(function(c){return c.checked;});
+    return { from:from, to:to,
+      kitchen:(ck.length===1)?ck[0].getAttribute('data-val'):null,
+      brand:(cb.length===1)?cb[0].getAttribute('data-val'):null };
+  }
+
+  // DETALLE perezoso, acotado a la ventana/filtro visible (no descarga masiva). Caché por request.
+  function ensureDetail(short){
+    var q=curWindowFilters();
+    var key=short+'|'+q.from+'|'+q.to+'|'+(q.kitchen||'')+'|'+(q.brand||'');
+    if (detCache[key]) return detCache[key];
+    var url='/api/detail?country='+short+'&from='+q.from+'&to='+q.to+'&limit=8000';
+    if (q.kitchen) url+='&kitchen='+encodeURIComponent(q.kitchen);
+    if (q.brand)   url+='&brand='+encodeURIComponent(q.brand);
+    detCache[key]=getJSON(url).then(function(res){
+      if (typeof FDGYD==='undefined') window.FDGYD = {};
+      FDGYD[short] = { from:res.from, to:res.to, K:res.K, B:res.B, days:res.days, O:res.O, n:res.n };
+      return true;
+    });
+    return detCache[key];
+  }
+
+  // TIMELINE bajo demanda (al abrir una orden). Caché por oid.
+  function ensureTimeline(short, oid){
+    if (tlCache[oid]) return tlCache[oid];
+    var q=curWindowFilters();
+    var url='/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+q.from+'&to='+q.to;
+    tlCache[oid]=getJSON(url).then(function(res){
+      if (typeof FDGYT==='undefined') window.FDGYT = {};
+      if (!FDGYT[short]) FDGYT[short] = {};
+      FDGYT[short][oid] = res.t;
+      return true;
+    });
+    return tlCache[oid];
+  }
+
+  // ---- Envolturas (no modifican la lógica interna; solo cargan datos antes de renderizar) ----
+  var origRender = window.__fdgyRender;
+  var origApply  = window.fd2apply;
+  var origShow   = window.fd2showOrder;
+  window.__fd2apply_orig = origApply;
+
+  window.__fdgyRender = function(cc, cid){
+    var host=document.getElementById(cid); if(!host) return;
+    var short=shortOf(cc);
+    host.innerHTML='<div class="card"><div class="hint">Cargando datos del warehouse…</div></div>';
+    host.dataset.built='';
+    ensureAgg(short).then(function(){
+      origRender(cc, cid);               // construye shell + primer render (agregados ya listos)
+      return ensureDetail(short);        // detalle de la ventana/filtro visible
+    }).then(function(){
+      if (origApply) origApply();        // re-render con el detalle ya presente
+    }).catch(function(e){
+      host.innerHTML='<div class="card"><div class="hint">No se pudieron cargar los datos del warehouse.</div></div>';
+      try{ console.error('fase2 render', e); }catch(_){}
+    });
+  };
+
+  window.fd2apply = function(){
+    var ccFull=(window.FDGY2ST && FDGY2ST.ccFull);
+    if (!ccFull) return origApply.apply(this, arguments);
+    var short=shortOf(ccFull);
+    ensureDetail(short).then(function(){ origApply(); }).catch(function(){ origApply(); });
+  };
+
+  window.fd2showOrder = function(oid){
+    var ccFull=(window.FDGY2ST && FDGY2ST.ccFull), short=shortOf(ccFull);
+    if (window.FDGYT && FDGYT[short] && FDGYT[short][oid]) return origShow(oid);
+    ensureTimeline(short, oid).then(function(){ origShow(oid); })
+      .catch(function(e){ try{ console.error('fase2 timeline', e); }catch(_){}; });
+  };
+})();
+</script>
+<!--FASE2_API_LAYER_END-->
+</body></html>
