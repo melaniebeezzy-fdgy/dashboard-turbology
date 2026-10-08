@@ -41,7 +41,9 @@ export function httpError(res, code, msg) {
 // Error interno: loguea el detalle SOLO en el servidor (Vercel logs) y devuelve un
 // mensaje genérico. Nunca expone el error de pg/Redshift ni WAREHOUSE_URL al cliente.
 export function serverError(res, e, tag) {
-  try { console.error('[' + (tag || 'api') + ']', (e && e.stack) || e); } catch (_) {}
+  // Log mínimo y seguro: solo nombre + SQLSTATE/code. Nunca el mensaje/stack (que podría
+  // contener usuario o host), ni variables de entorno.
+  try { console.error('[' + (tag || 'api') + '] name=' + (e && e.name) + ' code=' + (e && e.code)); } catch (_) {}
   res.status(500).json({ error: 'Error interno al consultar los datos.' });
   return null;
 }
@@ -97,16 +99,29 @@ export function cleanStr(v, max = 80) {
 
 // Devuelve un cliente pg conectado. Lanza si falta WAREHOUSE_URL o pg.
 export async function getClient() {
-  const url = process.env.WAREHOUSE_URL;
-  if (!url) throw new Error('Falta WAREHOUSE_URL en el servidor.');
   const pg = await import('pg');
   const Client = pg.default ? pg.default.Client : pg.Client;
-  const client = new Client({
-    connectionString: url,
-    ssl: { rejectUnauthorized: false },
-    connectionTimeoutMillis: 8000,
-    query_timeout: 45000,
-  });
+  const common = { ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 8000, query_timeout: 45000 };
+
+  // Prioridad: variables separadas (evita problemas de URL-encoding en la contraseña).
+  const host = process.env.WAREHOUSE_HOST;
+  let cfg;
+  if (host) {
+    cfg = {
+      host,
+      port: parseInt(process.env.WAREHOUSE_PORT || '5439', 10),
+      database: process.env.WAREHOUSE_DATABASE,
+      user: process.env.WAREHOUSE_USER,
+      password: process.env.WAREHOUSE_PASSWORD,
+      ...common,
+    };
+  } else if (process.env.WAREHOUSE_URL) {
+    // Fallback temporal a connection string.
+    cfg = { connectionString: process.env.WAREHOUSE_URL, ...common };
+  } else {
+    throw new Error('Falta configuración de conexión al warehouse.');
+  }
+  const client = new Client(cfg);
   await client.connect();
   return client;
 }
