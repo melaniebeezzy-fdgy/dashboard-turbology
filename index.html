@@ -1487,12 +1487,15 @@ ctryHeader();
   // AGREGADOS por período seleccionado. Rebasa di al minDate fijo para que el filtro de fechas del front calce.
   function ensureAgg(short, from, to){
     var key=short+'|'+from+'|'+to;
-    if (aggCache[key]) { var c=aggCache[key]; return c.then(function(v){ setAgg(short,v); return true; }); }
-    aggCache[key]=getJSON('/api/agg?country='+short+'&from='+from+'&to='+to).then(function(res){
-      var base=Math.round((Date.parse(res.from+'T00:00:00Z')-Date.parse(MIN+'T00:00:00Z'))/DAY);
-      var R=res.R.map(function(r){ var x=r.slice(); x[2]=r[2]+base; return x; });
-      return { K:res.K, B:res.B, R:R };
-    });
+    if (!aggCache[key]){
+      var p=getJSON('/api/agg?country='+short+'&from='+from+'&to='+to).then(function(res){
+        var base=Math.round((Date.parse(res.from+'T00:00:00Z')-Date.parse(MIN+'T00:00:00Z'))/DAY);
+        var R=res.R.map(function(r){ var x=r.slice(); x[2]=r[2]+base; return x; });
+        return { K:res.K, B:res.B, R:R };
+      });
+      p.catch(function(){ delete aggCache[key]; });        // no cachear rechazos (permite reintento)
+      aggCache[key]=p;
+    }
     return aggCache[key].then(function(v){ setAgg(short,v); return true; });
   }
   function setAgg(short,v){ if(typeof FDGY2==='undefined') window.FDGY2={}; FDGY2[short]={K:v.K,B:v.B,R:v.R}; }
@@ -1527,20 +1530,24 @@ ctryHeader();
         return { from:w.from, to:w.to, K:K, B:B, days:days, O:O, n:O.length, blocks:blocks, truncated:truncated };
       });
     }
-    detCache[key]=pull(0);
-    return detCache[key].then(function(v){ setDet(short,v); return v; });
+    var p=pull(0);
+    p.catch(function(){ delete detCache[key]; });          // no cachear rechazos (permite reintento)
+    detCache[key]=p;
+    return p.then(function(v){ setDet(short,v); return v; });
   }
   function setDet(short,v){ if(typeof FDGYD==='undefined') window.FDGYD={}; FDGYD[short]={from:v.from,to:v.to,K:v.K,B:v.B,days:v.days,O:v.O,n:v.n}; }
 
   function ensureTimeline(short, oid){
     if (tlCache[oid]) return tlCache[oid];
     var w=curWindow();
-    tlCache[oid]=getJSON('/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+w.from+'&to='+w.to).then(function(res){
+    var p=getJSON('/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+w.from+'&to='+w.to).then(function(res){
       if (typeof FDGYT==='undefined') window.FDGYT={};
       if (!FDGYT[short]) FDGYT[short]={};
       FDGYT[short][oid]=res.t; return true;
     });
-    return tlCache[oid];
+    p.catch(function(){ delete tlCache[oid]; });           // no cachear rechazos (permite reintento)
+    tlCache[oid]=p;
+    return p;
   }
 
   function showHostErr(host,msg){ if(host) host.innerHTML='<div class="card"><div class="hint" style="color:#dc2626">'+msg+'</div></div>'; }
