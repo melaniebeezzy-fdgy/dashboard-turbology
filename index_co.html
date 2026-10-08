@@ -1442,59 +1442,56 @@ renderSales();
 ctryHeader();
 </script><!--FASE2_API_LAYER_START-->
 <script>
-/* Fase 2 — Capa de acceso a datos vía API con feature flag.
-   USE_API_DATA=false por defecto: NO cambia el comportamiento (usa los bloques embebidos).
-   Override solo para pruebas (no cambia el default): agregar ?apidata=1 a la URL.
-   Con true: FDGY2<-/api/agg, FDGYD<-/api/detail (perezoso por ventana/filtro),
-   FDGYT<-/api/timeline (bajo demanda al abrir una orden). Caché en memoria por sesión. */
+/* Fase 2 — Capa de acceso a datos vía API (DEFAULT: API / datos en vivo).
+   ?apidata=0  fuerza snapshot embebido (rollback).   ?apidata=1  fuerza API (explícito).
+   Flujo: agg al abrir FDGY · detail bajo demanda (ventana/filtro) · timeline al abrir orden.
+   Caché en memoria por sesión. Límite de detail = 12000.
+   En fallo NO hay fallback silencioso al snapshot: se muestra error claro + console.error. */
 (function(){
-  var USE_API_DATA = false;
-  try { if (/[?&]apidata=1(&|$)/.test(location.search)) USE_API_DATA = true; } catch(e){}
+  var USE_API_DATA = true;
+  try {
+    if (/[?&]apidata=0(&|$)/.test(location.search)) USE_API_DATA = false;
+    else if (/[?&]apidata=1(&|$)/.test(location.search)) USE_API_DATA = true;
+  } catch(e){}
   window.USE_API_DATA = USE_API_DATA;
-  if (!USE_API_DATA) return;               // modo snapshot: no se toca nada
+  if (!USE_API_DATA) return;                 // modo snapshot: no se toca nada
 
-  var aggCache = {}, detCache = {}, tlCache = {};
+  var aggCache={}, detCache={}, tlCache={};
   function getJSON(url){ return fetch(url).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
   function shortOf(cc){ return (window.FD2CC && FD2CC[cc]) || cc; }
-  function fmtLabel(a,b){ return a + ' – ' + b; }
+  function curShort(){ var cc=(typeof FDGY2ST!=='undefined' && FDGY2ST.ccFull); return cc ? shortOf(cc) : null; }
+  function fmtLabel(a,b){ return a+' – '+b; }
 
-  // Ventana por defecto para los AGREGADOS: la del snapshot embebido (paridad); si no hay, 35 días.
-  function defaultWindow(){
-    var mn = (typeof FDGY2!=='undefined' && FDGY2.minDate) ? FDGY2.minDate : null;
-    var mx = (typeof FDGY2!=='undefined' && FDGY2.maxDate) ? FDGY2.maxDate : null;
-    if (mn && mx) return { from: mn, to: mx };
-    var to = new Date(); var from = new Date(to.getTime() - 34*86400000);
-    return { from: from.toISOString().slice(0,10), to: to.toISOString().slice(0,10) };
+  // Fecha final = último día completo = D-1 en America/Bogota (UTC-5); nunca el día actual.
+  // Rango inicial visible: 7 días. Se cargan ~35 días de agregados para poder navegar fechas.
+  function bogotaDMinus1(){
+    var b=new Date(Date.now() - 5*3600000);                 // "ahora" en Bogota (UTC-5)
+    return new Date(Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate()) - 86400000); // ayer
   }
-  var WIN = defaultWindow();
+  function isoOf(dt){ return dt.toISOString().slice(0,10); }
+  var _to = bogotaDMinus1();
+  var WIN = { from: isoOf(new Date(_to.getTime() - 34*86400000)), to: isoOf(_to) };
 
-  // AGREGADOS (una sola carga por país/ventana; pequeño). Adapta a la forma de FDGY2.
   function ensureAgg(short){
-    var key = short+'|'+WIN.from+'|'+WIN.to;
+    var key=short+'|'+WIN.from+'|'+WIN.to;
     if (aggCache[key]) return aggCache[key];
-    aggCache[key] = getJSON('/api/agg?country='+short+'&from='+WIN.from+'&to='+WIN.to).then(function(res){
-      if (typeof FDGY2==='undefined') window.FDGY2 = {};
-      FDGY2.minDate = res.from; FDGY2.maxDate = res.to; FDGY2.days = res.days.length;
-      FDGY2.label = fmtLabel(res.from, res.to);
-      FDGY2[short] = { K: res.K, B: res.B, R: res.R };
+    aggCache[key]=getJSON('/api/agg?country='+short+'&from='+WIN.from+'&to='+WIN.to).then(function(res){
+      if (typeof FDGY2==='undefined') window.FDGY2={};
+      FDGY2.minDate=res.from; FDGY2.maxDate=res.to; FDGY2.days=res.days.length; FDGY2.label=fmtLabel(res.from,res.to);
+      FDGY2[short]={K:res.K, B:res.B, R:res.R};
       return true;
     });
     return aggCache[key];
   }
-
-  // Lee ventana + filtro actual del DOM (para acotar el detalle).
   function curWindowFilters(){
     var f=document.getElementById('fd2from'), t=document.getElementById('fd2to');
     var from=(f&&f.value)||WIN.from, to=(t&&t.value)||WIN.to;
-    var kits=[].slice.call(document.querySelectorAll('.fd2kit'));
-    var brs=[].slice.call(document.querySelectorAll('.fd2brand'));
+    var kits=[].slice.call(document.querySelectorAll('.fd2kit')), brs=[].slice.call(document.querySelectorAll('.fd2brand'));
     var ck=kits.filter(function(c){return c.checked;}), cb=brs.filter(function(c){return c.checked;});
     return { from:from, to:to,
       kitchen:(ck.length===1)?ck[0].getAttribute('data-val'):null,
       brand:(cb.length===1)?cb[0].getAttribute('data-val'):null };
   }
-
-  // DETALLE perezoso, acotado a la ventana/filtro visible (no descarga masiva). Caché por request.
   function ensureDetail(short){
     var q=curWindowFilters();
     var key=short+'|'+q.from+'|'+q.to+'|'+(q.kitchen||'')+'|'+(q.brand||'');
@@ -1503,61 +1500,68 @@ ctryHeader();
     if (q.kitchen) url+='&kitchen='+encodeURIComponent(q.kitchen);
     if (q.brand)   url+='&brand='+encodeURIComponent(q.brand);
     detCache[key]=getJSON(url).then(function(res){
-      if (typeof FDGYD==='undefined') window.FDGYD = {};
-      FDGYD[short] = { from:res.from, to:res.to, K:res.K, B:res.B, days:res.days, O:res.O, n:res.n };
+      if (typeof FDGYD==='undefined') window.FDGYD={};
+      FDGYD[short]={from:res.from, to:res.to, K:res.K, B:res.B, days:res.days, O:res.O, n:res.n};
       return true;
     });
     return detCache[key];
   }
-
-  // TIMELINE bajo demanda (al abrir una orden). Caché por oid.
   function ensureTimeline(short, oid){
     if (tlCache[oid]) return tlCache[oid];
     var q=curWindowFilters();
-    var url='/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+q.from+'&to='+q.to;
-    tlCache[oid]=getJSON(url).then(function(res){
-      if (typeof FDGYT==='undefined') window.FDGYT = {};
-      if (!FDGYT[short]) FDGYT[short] = {};
-      FDGYT[short][oid] = res.t;
+    tlCache[oid]=getJSON('/api/timeline?oid='+encodeURIComponent(oid)+'&country='+short+'&from='+q.from+'&to='+q.to).then(function(res){
+      if (typeof FDGYT==='undefined') window.FDGYT={};
+      if (!FDGYT[short]) FDGYT[short]={};
+      FDGYT[short][oid]=res.t;
       return true;
     });
     return tlCache[oid];
   }
 
-  // ---- Envolturas (no modifican la lógica interna; solo cargan datos antes de renderizar) ----
-  var origRender = window.__fdgyRender;
-  var origApply  = window.fd2apply;
-  var origShow   = window.fd2showOrder;
-  window.__fd2apply_orig = origApply;
+  function showHostErr(host,msg){ if(host) host.innerHTML='<div class="card"><div class="hint" style="color:#dc2626">'+msg+'</div></div>'; }
+  function showDetErr(msg){ var ed=document.getElementById('fd2det'); if(ed) ed.innerHTML='<tbody><tr><td class="hint" style="padding:14px;color:#dc2626">'+msg+'</td></tr></tbody>'; }
+  function clearDetail(short){ try{ if(typeof FDGYD!=='undefined') FDGYD[short]={K:[],B:[],days:[],O:[],n:0}; }catch(_){} }
+  // Indicador discreto de datos en vivo.
+  function addLiveBadge(host){
+    if(!host) return; var h1=host.querySelector('h1'); if(!h1 || h1.querySelector('#fd2live')) return;
+    var b=document.createElement('span'); b.id='fd2live'; b.textContent='● live';
+    b.title='Datos en vivo desde el warehouse (API). Usa ?apidata=0 para ver el snapshot.';
+    b.style.cssText='margin-left:10px;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.12);vertical-align:middle;';
+    h1.appendChild(b);
+  }
 
-  window.__fdgyRender = function(cc, cid){
+  var origRender=window.__fdgyRender, origApply=window.fd2apply, origShow=window.fd2showOrder;
+  window.__fd2apply_orig=origApply;
+
+  function renderDetailThenApply(short){
+    ensureDetail(short).then(function(){ origApply(); })
+      .catch(function(e){ clearDetail(short); origApply(); showDetErr('No se pudo cargar el detalle en vivo. Reintenta.'); console.error('fase2 detail', e); });
+  }
+
+  window.__fdgyRender=function(cc,cid){
     var host=document.getElementById(cid); if(!host) return;
     var short=shortOf(cc);
-    host.innerHTML='<div class="card"><div class="hint">Cargando datos del warehouse…</div></div>';
-    host.dataset.built='';
+    host.innerHTML='<div class="card"><div class="hint">Cargando datos en vivo…</div></div>'; host.dataset.built='';
     ensureAgg(short).then(function(){
-      origRender(cc, cid);               // construye shell + primer render (agregados ya listos)
-      return ensureDetail(short);        // detalle de la ventana/filtro visible
-    }).then(function(){
-      if (origApply) origApply();        // re-render con el detalle ya presente
+      origRender(cc,cid);               // charts / KPIs / tablas desde agregados
+      addLiveBadge(host);
+      renderDetailThenApply(short);     // detalle bajo demanda (ventana visible)
     }).catch(function(e){
-      host.innerHTML='<div class="card"><div class="hint">No se pudieron cargar los datos del warehouse.</div></div>';
-      try{ console.error('fase2 render', e); }catch(_){}
+      showHostErr(host,'No se pudieron cargar los datos en vivo del warehouse (API). Reintenta, o abre con ?apidata=0 para ver el snapshot.');
+      console.error('fase2 agg', e);
     });
   };
 
-  window.fd2apply = function(){
-    var ccFull=(typeof FDGY2ST!=='undefined' && FDGY2ST.ccFull);
-    if (!ccFull) return origApply.apply(this, arguments);
-    var short=shortOf(ccFull);
-    ensureDetail(short).then(function(){ origApply(); }).catch(function(){ origApply(); });
+  window.fd2apply=function(){
+    var short=curShort(); if(!short) return origApply.apply(this, arguments);
+    renderDetailThenApply(short);
   };
 
-  window.fd2showOrder = function(oid){
-    var ccFull=(typeof FDGY2ST!=='undefined' && FDGY2ST.ccFull), short=shortOf(ccFull);
-    if (window.FDGYT && FDGYT[short] && FDGYT[short][oid]) return origShow(oid);
+  window.fd2showOrder=function(oid){
+    var short=curShort();
+    if (typeof FDGYT!=='undefined' && FDGYT[short] && FDGYT[short][oid]) return origShow(oid);
     ensureTimeline(short, oid).then(function(){ origShow(oid); })
-      .catch(function(e){ try{ console.error('fase2 timeline', e); }catch(_){}; });
+      .catch(function(e){ console.error('fase2 timeline', e); alert('No se pudo cargar el timeline de la orden en vivo. Reintenta.'); });
   };
 })();
 </script>
