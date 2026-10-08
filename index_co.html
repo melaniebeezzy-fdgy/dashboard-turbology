@@ -1499,7 +1499,7 @@ ctryHeader();
     var q=curWindowFilters();
     var key=short+'|'+q.from+'|'+q.to+'|'+(q.kitchen||'')+'|'+(q.brand||'');
     if (detCache[key]) return detCache[key];
-    var url='/api/detail?country='+short+'&from='+q.from+'&to='+q.to+'&limit=8000';
+    var url='/api/detail?country='+short+'&from='+q.from+'&to='+q.to+'&limit=12000';
     if (q.kitchen) url+='&kitchen='+encodeURIComponent(q.kitchen);
     if (q.brand)   url+='&brand='+encodeURIComponent(q.brand);
     detCache[key]=getJSON(url).then(function(res){
@@ -1547,14 +1547,14 @@ ctryHeader();
   };
 
   window.fd2apply = function(){
-    var ccFull=(window.FDGY2ST && FDGY2ST.ccFull);
+    var ccFull=(typeof FDGY2ST!=='undefined' && FDGY2ST.ccFull);
     if (!ccFull) return origApply.apply(this, arguments);
     var short=shortOf(ccFull);
     ensureDetail(short).then(function(){ origApply(); }).catch(function(){ origApply(); });
   };
 
   window.fd2showOrder = function(oid){
-    var ccFull=(window.FDGY2ST && FDGY2ST.ccFull), short=shortOf(ccFull);
+    var ccFull=(typeof FDGY2ST!=='undefined' && FDGY2ST.ccFull), short=shortOf(ccFull);
     if (window.FDGYT && FDGYT[short] && FDGYT[short][oid]) return origShow(oid);
     ensureTimeline(short, oid).then(function(){ origShow(oid); })
       .catch(function(e){ try{ console.error('fase2 timeline', e); }catch(_){}; });
