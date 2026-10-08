@@ -1563,6 +1563,19 @@ ctryHeader();
     ensureTimeline(short, oid).then(function(){ origShow(oid); })
       .catch(function(e){ console.error('fase2 timeline', e); alert('No se pudo cargar el timeline de la orden en vivo. Reintenta.'); });
   };
+
+  // En modo API el timeline es perezoso: las filas del detalle no traen onclick nativo
+  // (ese solo aparece cuando FDGYT ya tiene la orden). Hacemos las filas clickeables por
+  // delegacion para conservar la MISMA UX (abrir la linea de tiempo al hacer clic).
+  try{ var _st=document.createElement('style'); _st.textContent='#fd2det tbody tr{cursor:pointer}'; document.head.appendChild(_st); }catch(_){}
+  document.addEventListener('click', function(e){
+    var tr=(e.target && e.target.closest) ? e.target.closest('tr') : null; if(!tr) return;
+    if(!tr.closest('#fd2det')) return;
+    if(tr.getAttribute('onclick')) return;            // fila ya manejada nativamente
+    var tds=tr.querySelectorAll('td'), oid=null;
+    for(var i=0;i<tds.length;i++){ var t=(tds[i].textContent||'').trim(); if(/^\d{10}$/.test(t)){ oid=t; break; } }
+    if(oid) window.fd2showOrder(oid);
+  });
 })();
 </script>
 <!--FASE2_API_LAYER_END-->
