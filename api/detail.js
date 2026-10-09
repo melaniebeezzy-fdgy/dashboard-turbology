@@ -32,7 +32,8 @@ export default async function handler(req, res) {
       o.provider_order_id AS oid,
       ROUND(o.minutes_cooking_time,1)::float AS cook,
       CASE WHEN oi.provider_delivered_to_domiciliary IS NULL OR o.domiciliary_in_store IS NULL
-           THEN NULL ELSE ROUND((${RTWT_EXPR})::numeric,2)::float END AS rt
+           THEN NULL ELSE ROUND((${RTWT_EXPR})::numeric,2)::float END AS rt,
+      ROUND(o.minutes_received_to_destination,1)::float AS ot
     FROM fdgy_views.orders_consolidado o
     LEFT JOIN fdgy_views.ontime_infull_order oi ON oi.order_id = o.id
     WHERE ${where}
@@ -51,7 +52,7 @@ export default async function handler(req, res) {
       const ds = String(x.d).slice(0, 10);
       let di = Di.get(ds); if (di === undefined) { di = days.push(ds) - 1; Di.set(ds, di); }
       O.push([ki, bi, di, x.hr == null ? null : (x.hr | 0), String(x.oid),
-        x.cook == null ? null : x.cook, x.rt == null ? null : x.rt]);
+        x.cook == null ? null : x.cook, x.rt == null ? null : x.rt, x.ot == null ? null : x.ot]);
     }
     setCache(res, 3600);
     sendJson(res, { from: r.from, to: r.to, K, B, days, O, n: O.length, offset, hasMore: O.length >= limit });
