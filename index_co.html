@@ -1647,6 +1647,49 @@ ctryHeader();
     try{ if(typeof renderSales==='function') renderSales(); }catch(_){}
     try{ if(typeof renderMoSales==='function') renderMoSales(); }catch(_){}
   }).catch(function(e){ try{ console.error('fase2 sales', e); }catch(_){} });
+
+  // ---- Venta en vivo MX/PE: redibuja las tarjetas de venta desde /api/sales (cocina x semana),
+  //      intercambiando D sólo durante el render de venta (no toca RTWT/polígono del snapshot). ----
+  var ventasLive={}, MON3=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function mondayOf(dt){ var d=new Date(Date.UTC(dt.getUTCFullYear(),dt.getUTCMonth(),dt.getUTCDate())); return new Date(d.getTime()-((d.getUTCDay()+6)%7)*DAY); }
+  function build26(){ var curMon=mondayOf(MAXd), weeks=[], mon=[];
+    for(var i=25;i>=0;i--){ var m=new Date(curMon.getTime()-i*7*DAY), sun=new Date(m.getTime()+6*DAY);
+      weeks.push(MON3[sun.getUTCMonth()]+' '+sun.getUTCDate()); mon.push(isoOf(m)); }
+    return { weeks:weeks, mon:mon, from:mon[0], to:isoOf(new Date(curMon.getTime()+6*DAY)) };
+  }
+  function k2cityMap(cc){ var m={}; try{ (ALLDATA[cc].D.stores||[]).forEach(function(s){ if(s.k&&!(s.k in m)) m[s.k]=s.c; }); }catch(e){} return m; }
+  function ensureVentas(cc){
+    if(ventasLive[cc]) return Promise.resolve(ventasLive[cc]);
+    if(cc!=='MX'&&cc!=='PE') return Promise.resolve(null);
+    var W26=build26(), k2c=k2cityMap(cc);
+    var p=getJSON('/api/sales?country='+cc+'&group=kitchen&period=week&from='+W26.from+'&to='+W26.to).then(function(res){
+      var km={};
+      res.rows.forEach(function(r){ var k=res.G[r[0]], wk=res.P[r[1]]; (km[k]||(km[k]={}))[wk]=[r[2],r[3]]; });
+      var stores=Object.keys(km).map(function(k){ var ow=[],gw=[];
+        for(var w=0;w<W26.mon.length;w++){ var c=km[k][W26.mon[w]]; ow.push(c?c[0]:0); gw.push(c?c[1]:0); }
+        return {c:k2c[k]||'—', k:k, b:'', sid:k, ow:ow, gw:gw, rt:[], fin:[], cc:null};
+      });
+      ventasLive[cc]={ weeks:W26.weeks, n4:4, stores:stores };
+      return ventasLive[cc];
+    });
+    p.catch(function(){});
+    return p;
+  }
+  function withSwap(cc, fn){ if(!ventasLive[cc]) return; var rD=D, rW=W; try{ D=ventasLive[cc]; W=D.weeks; fn(); } finally{ D=rD; W=rW; } }
+  var _origRS=window.renderSales, _origRMS=window.renderMoSales;
+  window.renderSales=function(){
+    if(CTRY!=='MX'&&CTRY!=='PE') return _origRS&&_origRS();
+    if(ventasLive[CTRY]) return withSwap(CTRY,_origRS);
+    if(_origRS)_origRS();                         // snapshot mientras llega lo vivo
+    var cc=CTRY;
+    ensureVentas(cc).then(function(v){ if(v&&CTRY===cc){ withSwap(cc,_origRS); if(_origRMS)withSwap(cc,_origRMS); } })
+      .catch(function(e){ try{ console.error('fase2 ventas', e); }catch(_){} });
+  };
+  window.renderMoSales=function(){
+    if(CTRY!=='MX'&&CTRY!=='PE') return _origRMS&&_origRMS();
+    if(ventasLive[CTRY]) return withSwap(CTRY,_origRMS);
+    if(_origRMS)_origRMS();
+  };
 })();
 </script>
 <!--FASE2_API_LAYER_END-->
