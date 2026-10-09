@@ -1096,10 +1096,10 @@ function fd2delta(v,vp){
   return ' <span style="font-size:9px;color:'+c+'">'+ar+' '+(dd>0?'+':'')+dd.toFixed(2)+'</span>';
 }
 function fd2rtTone(v){
-  if(v>6) return {bg:'#fde4e4',fg:'#b91c1c'};      // rojo (crítico)
-  if(v>3) return {bg:'#fdebd0',fg:'#b45309'};      // ámbar
-  if(v>=2) return {bg:'#fef9c3',fg:'#854d0e'};     // amarillo
-  return {bg:'#dcfce7',fg:'#166534'};              // verde (saludable)
+  if(v>6) return {bg:'#fde4e4',fg:'#5c0505'};      // rojo (crítico)
+  if(v>3) return {bg:'#fdebd0',fg:'#5a2600'};      // ámbar
+  if(v>=2) return {bg:'#fef9c3',fg:'#4a3000'};     // amarillo
+  return {bg:'#dcfce7',fg:'#0a3d1e'};              // verde (saludable)
 }
 function fd2rtCell(v,vp,tint){
   if(v==null) return '<td class="num fd2rt" data-v="-1">—</td>';
