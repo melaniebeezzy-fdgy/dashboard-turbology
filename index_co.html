@@ -1618,6 +1618,35 @@ ctryHeader();
     for(var i=0;i<tds.length;i++){ var t=(tds[i].textContent||'').trim(); if(/^\d{10}$/.test(t)){ oid=t; break; } }
     if(oid) window.fd2showOrder(oid);
   });
+
+  // ---- Venta en vivo (pestaña Rappi CO): llena D.ow/gw desde /api/sales (tienda x semana) ----
+  var MI_={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  function wkSunday(label){ var m=String(label).match(/([A-Za-z]{3})\s+(\d{1,2})/); if(!m||MI_[m[1]]==null) return null; return new Date(Date.UTC(2026,MI_[m[1]],+m[2])); }
+  function wkMonday(label){ var s=wkSunday(label); return s?isoOf(new Date(s.getTime()-6*DAY)):null; }
+  var salesP=null;
+  function ensureSales(){
+    if(salesP) return salesP;
+    if(typeof D==='undefined' || !D || !D.weeks || !D.weeks.length || !D.stores) return Promise.resolve(false);
+    var from=wkMonday(D.weeks[0]); var lastSun=wkSunday(D.weeks[D.weeks.length-1]);
+    if(!from) return Promise.resolve(false);
+    var to=lastSun?isoOf(lastSun):MAX;
+    salesP=getJSON('/api/sales?country=CO&group=store&period=week&from='+from+'&to='+to).then(function(res){
+      var m={};
+      res.rows.forEach(function(r){ var sid=res.G[r[0]], wk=res.P[r[1]]; (m[sid]||(m[sid]={}))[wk]=[r[2],r[3]]; });
+      var mon=D.weeks.map(wkMonday);
+      D.stores.forEach(function(s){
+        var sm=m[String(s.sid)]; s.ow=s.ow||[]; s.gw=s.gw||[];
+        for(var w=0;w<D.weeks.length;w++){ var c=sm?sm[mon[w]]:null; s.ow[w]=c?c[0]:0; s.gw[w]=c?c[1]:0; }
+      });
+      return true;
+    });
+    salesP.catch(function(){ salesP=null; });   // no cachear rechazos
+    return salesP;
+  }
+  ensureSales().then(function(ok){ if(!ok) return;
+    try{ if(typeof renderSales==='function') renderSales(); }catch(_){}
+    try{ if(typeof renderMoSales==='function') renderMoSales(); }catch(_){}
+  }).catch(function(e){ try{ console.error('fase2 sales', e); }catch(_){} });
 })();
 </script>
 <!--FASE2_API_LAYER_END-->
