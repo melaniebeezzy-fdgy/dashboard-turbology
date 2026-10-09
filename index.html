@@ -1740,17 +1740,17 @@ ctryHeader();
     for(var i=0;i<n;i++){ sx+=xs[i];sy+=ys[i];sxx+=xs[i]*xs[i];sxy+=xs[i]*ys[i]; }
     var den=(n*sxx-sx*sx)||1, b=(n*sxy-sx*sy)/den, a=(sy-b*sx)/n; return {a:a,b:b}; }
   function csInterpret(r,n,reg){
-    if(r==null||n<3) return 'Datos insuficientes para evaluar la relación (se necesitan ≥3 puntos en el período/filtro actual).';
-    var ar=Math.abs(r), r2=r*r, dir=r>0?'positiva':'negativa';
-    var fuerza=ar<0.1?'prácticamente nula':(ar<0.3?'débil':(ar<0.5?'moderada':(ar<0.7?'considerable':'fuerte')));
-    var t='Con r = '+r.toFixed(2)+' sobre '+n+' puntos (cocina·día), la correlación lineal entre % de cobertura y venta es '+fuerza+(ar<0.1?'. ':(' y '+dir+' (R²≈'+r2.toFixed(2)+', ~'+Math.round(r2*100)+'% de la variación de la venta). '));
-    if(ar<0.1) t+='No se evidencia una relación lineal clara: en el período y filtro seleccionados, más (o menos) cobertura no se asocia con cambios consistentes en la venta. ';
-    else if(ar<0.3) t+='La señal es '+dir+' pero muy tenue; la cobertura explica muy poco de la venta y hay alta dispersión. ';
-    else if(ar<0.5) t+='Hay una tendencia '+dir+' moderada, pero con bastante dispersión: la cobertura no sería el único factor. ';
-    else t+='La relación '+dir+' es marcada en estos datos. ';
-    if(reg&&isFinite(reg.b)) t+='La pendiente estimada es ~$'+Math.round(reg.b).toLocaleString('es')+' de venta por cada +1 punto de cobertura (referencial). ';
-    t+='Es asociación, no causalidad: no controla estacionalidad, tamaño/mezcla de cada cocina ni rezagos, y la cobertura es semanal mientras la venta es diaria.';
-    return t;
+    if(r==null||n<3) return 'Todavía no hay suficientes datos en este período/filtro para sacar una conclusión.';
+    var ar=Math.abs(r), pos=r>=0, otros='Conviene evaluar otros factores: estacionalidad, demanda por zona/ciudad, marketing y descuentos, surtido de marcas y la operación/tiempos de entrega.';
+    if(ar<0.15) return 'No es concluyente. En este período no se observa que más cobertura venga acompañada de más venta, así que no se puede afirmar que la venta suba por la cobertura. '+otros+' (Es una relación observada, no una prueba de causa‑efecto.)';
+    if(ar<0.35) return (pos?'Señal débil. Las cocinas con más cobertura venden un poco más, '
+                           :'Señal débil e inversa. A más cobertura se ve algo menos de venta, ')+'pero es leve y con mucha dispersión: no alcanza para decir que la venta suba por la cobertura. '+otros+' (Relación observada, no causa‑efecto.)';
+    if(ar<0.55) return (pos?'Relación moderada. En general, las cocinas con más cobertura tienden a vender más, aunque no siempre: la cobertura parece ayudar pero no lo explica todo. '
+                           :'Relación moderada e inversa: a más cobertura tiende a haber menos venta, algo contraintuitivo que conviene revisar. ')+'Antes de atribuir la venta a la cobertura, '+otros.charAt(0).toLowerCase()+otros.slice(1)+' (Relación observada, no causa‑efecto.)';
+    if(ar<0.7)  return (pos?'Relación clara. En este período, más cobertura suele ir de la mano de más venta. '
+                           :'Relación clara pero inversa: más cobertura va con menos venta, algo inesperado que conviene investigar. ')+'Aun así es una relación observada: no prueba por sí sola que la venta suba por la cobertura.';
+    return (pos?'Relación fuerte. A mayor cobertura, claramente mayor venta en este período. '
+               :'Relación fuerte pero inversa (a más cobertura, menos venta), lo que amerita revisión. ')+'Es una señal potente, pero sigue siendo una relación observada, no una prueba de causa‑efecto.';
   }
 
   var csDays=30, chS=null, chT=null, csCache={}, chI=null, incrCache={};
