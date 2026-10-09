@@ -825,7 +825,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
      :'<tr><td colspan="6" style="color:var(--mut);font-size:12px;padding:10px 6px">Sin órdenes de esta cocina en la última semana registrada.</td></tr>');}
  let pSort={key:'orders',dir:-1};
  window.vSortProb=function(k){if(pSort.key===k)pSort.dir*=-1;else{pSort.key=k;pSort.dir=(k==='coc')?1:-1;}renderProb();};
- function renderProb(){const D=sub();if(!D)return;const d=D.top5_detail[+document.getElementById('vBrandSel').value];if(!d)return;
+ function renderProb(){const D=sub();if(!D)return;const d=D.top5_detail[+document.getElementById('vBrandSel').value];if(!d){document.getElementById('vProblemas').innerHTML='<div class="hint" style="padding:10px">Sin datos de venta cargados para este país/semana.</div>';document.getElementById('vBrandSum').innerHTML='';return;}
    const nb=d.rows.filter(r=>r.sev==='bad').length,nw=d.rows.filter(r=>r.sev==='warn').length;
    document.getElementById('vBrandSum').innerHTML=`${nb} crítica(s) · ${nw} en alerta · ${d.rows.length} cocinas`;
    const cols=[{k:'coc',l:'Cocina'},{k:'orders',l:'Órdenes',num:1},{k:'rt',l:'RTWT',num:1},{k:'size',l:'Polígono',num:1},{k:'cov',l:'Cobert.',num:1}];
@@ -839,8 +839,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
    const wk=document.getElementById('vWk'); if(wk) wk.textContent='· '+(W[W.length-1])+(OPS!=='ALL'?' · ops: '+OPS:(CITY!=='ALL'?' · '+CITY:''));
    const vk=document.getElementById('vKpis');
    const cvp=document.getElementById('chPareto');
-   if(!D){if(vk)vk.innerHTML='';
-     document.getElementById('vTop5Cards').innerHTML='';document.getElementById('vCocinaTable').innerHTML='';document.getElementById('vProblemas').innerHTML='';document.getElementById('vBrandSum').innerHTML='';
+   if(!D || !D.top5_detail || !D.top5_detail.length){if(vk)vk.innerHTML='';
+     document.getElementById('vTop5Cards').innerHTML='';document.getElementById('vCocinaTable').innerHTML='';
+     document.getElementById('vProblemas').innerHTML='<div class="hint" style="padding:10px">Sin datos de venta cargados para este país/semana.</div>';document.getElementById('vBrandSum').innerHTML='';
      if(chPar){chPar.destroy();chPar=null;} return;}
    const M=D.meta; let n80=D.pareto.findIndex(p=>p.cum>=80)+1; if(n80<=0)n80=D.pareto.length;
    if(vk) vk.innerHTML=[
