@@ -1330,7 +1330,7 @@ function fd2Render(cc){
         if(!kitAll&&!kitSel[kn]) continue;
         var bn=FD.B[o[1]]; if(!brAll&&!brSel[bn]) continue;
         var m=meta[fd2dkey(kn)];
-        ords.push({city:m?m.city:'—',k:kn,b:fd2title(bn),day:FD.days[o[2]],off:off,hr:(o[3]==null?null:o[3]),oid:o[4],cook:(o[5]==null?null:o[5]),rt:(o[6]==null?null:o[6]),ot:(o[7]==null?null:o[7])});
+        ords.push({city:m?m.city:'—',k:kn,b:fd2title(bn),day:FD.days[o[2]],off:off,hr:(o[3]==null?null:o[3]),oid:o[4],cook:(o[5]==null?null:o[5]),rt:(o[6]==null?null:o[6]),ot:(o[7]==null?null:o[7]),resp:(o[8]==null?null:o[8])});
       }
     }
     FDGY2ST.detOrders=ords; FDGY2ST.short=short; FDGY2ST.detHasFD=!!(FD&&FD.O&&FD.O.length);
@@ -1351,7 +1351,7 @@ function fd2drawDet(){
     if(num[k]){x=(x==null?-Infinity:(k==='oid'?+x:x));y=(y==null?-Infinity:(k==='oid'?+y:y));return (x-y)*st.dir;}
     return (''+x).localeCompare(''+y,'es')*st.dir;
   });
-  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'fecha',l:'Fecha'},{k:'hr',l:'Hora',num:1},{k:'oid',l:'Order ID'},{k:'cook',l:'Cook',num:1},{k:'rt',l:'RTWT',num:1},{k:'ot',l:'Order time',num:1}];
+  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'fecha',l:'Fecha'},{k:'hr',l:'Hora',num:1},{k:'oid',l:'Order ID'},{k:'cook',l:'Cook',num:1},{k:'rt',l:'RTWT',num:1},{k:'ot',l:'Order time',num:1},{k:'resp',l:'Responsable demora'}];
   var h='<thead><tr>'+cols.map(function(c){var ar=st.key===c.k?(st.dir===1?' ↑':' ↓'):'';return '<th class="'+(c.num?'num ':'')+'sortable" style="cursor:pointer;user-select:none" onclick="fd2sortDet(\''+c.k+'\')">'+c.l+ar+'</th>';}).join('')+'</tr></thead><tbody>';
   rows.forEach(function(r){
     var clk=(typeof FDGYT!=='undefined'&&FDGYT[FDGY2ST.short]&&FDGYT[FDGY2ST.short][r.oid]);
@@ -1360,7 +1360,8 @@ function fd2drawDet(){
       +'<td class="num">'+(r.hr==null?'—':r.hr)+'</td>'
       +'<td class="num">'+fd2esc(r.oid)+'</td>'
       +'<td class="num">'+(r.cook==null?'—':r.cook.toFixed(1))+'</td>'
-      +fd2rtCell(r.rt,null)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td></tr>';
+      +fd2rtCell(r.rt,null)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td>'
+      +'<td>'+(r.resp==null?'—':(r.resp==='RT'?'<span style="color:#e67e22;font-weight:700">RT</span>':'<span style="color:#156082;font-weight:700">Cocina</span>'))+'</td></tr>';
   });
   h+='</tbody>';
   ed.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin órdenes para el filtro actual.</td></tr></tbody>';
@@ -1555,7 +1556,7 @@ ctryHeader();
           var ki=Ki[kn]; if(ki===undefined){ki=K.push(kn)-1;Ki[kn]=ki;}
           var bi=Bi[bn]; if(bi===undefined){bi=B.push(bn)-1;Bi[bn]=bi;}
           var di=Di[ds]; if(di===undefined){di=days.push(ds)-1;Di[ds]=di;}
-          O.push([ki,bi,di,row[3],row[4],row[5],row[6],row[7]]);
+          O.push([ki,bi,di,row[3],row[4],row[5],row[6],row[7],row[8]]);
         });
         blocks++;
         if (res.hasMore && O.length<CAP) return pull(offset+BLOCK);
