@@ -629,11 +629,11 @@ function update(){
   const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
   const effAt=(s,w)=>{if(s.fin[w]==null)return null;const a=ma4at(s,w);return (penOn()&&a!=null&&a>6)?0:s.fin[w];};
   const pchg=st.filter(s=>{const a=effAt(s,LI-1),b=effAt(s,LI);return a!=null&&b!=null&&a!==b;})
-    .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s)}))
+    .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s),rtlw:s.rt[LI]}))
     .sort((x,y)=>(x.to-x.from)-(y.to-y.from));
-  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">'+rtH()+'</th></tr>'+
-   (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td></tr>`).join('')
-    :'<tr><td colspan="6" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin cambios de polígono en la última semana ✓</td></tr>');
+  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">'+rtH()+'</th><th class="num">RTWT últ. sem</th></tr>'+
+   (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${rt4fmt(r.rtlw)}</td></tr>`).join('')
+    :'<tr><td colspan="7" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin cambios de polígono en la última semana ✓</td></tr>');
 
   // ---- RTWT mejorando: bajando 2+ semanas, o avg 4 sem < 2 min sin polígono 3.0 km ----
   const Lw=W.length-1; const rimp=[];
