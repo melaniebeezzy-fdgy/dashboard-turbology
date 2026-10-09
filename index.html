@@ -270,6 +270,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
     <div class="chartbox" style="height:380px"><canvas id="chCovTime"></canvas></div>
   </div>
   <div class="hint" id="csNote" style="margin-top:6px"></div>
+  <div id="csConcl" style="margin-top:8px;padding:10px 12px;border-left:3px solid #e67e22;background:rgba(230,126,34,.07);border-radius:6px;font-size:12.5px;line-height:1.45;color:#3a3a3a"></div>
 </div>
 <!--COVSALES_END-->
 <!--INCR_START-->
@@ -1738,6 +1739,19 @@ ctryHeader();
   function linreg(xs,ys){ var n=xs.length,sx=0,sy=0,sxx=0,sxy=0;
     for(var i=0;i<n;i++){ sx+=xs[i];sy+=ys[i];sxx+=xs[i]*xs[i];sxy+=xs[i]*ys[i]; }
     var den=(n*sxx-sx*sx)||1, b=(n*sxy-sx*sy)/den, a=(sy-b*sx)/n; return {a:a,b:b}; }
+  function csInterpret(r,n,reg){
+    if(r==null||n<3) return 'Datos insuficientes para evaluar la relación (se necesitan ≥3 puntos en el período/filtro actual).';
+    var ar=Math.abs(r), r2=r*r, dir=r>0?'positiva':'negativa';
+    var fuerza=ar<0.1?'prácticamente nula':(ar<0.3?'débil':(ar<0.5?'moderada':(ar<0.7?'considerable':'fuerte')));
+    var t='Con r = '+r.toFixed(2)+' sobre '+n+' puntos (cocina·día), la correlación lineal entre % de cobertura y venta es '+fuerza+(ar<0.1?'. ':(' y '+dir+' (R²≈'+r2.toFixed(2)+', ~'+Math.round(r2*100)+'% de la variación de la venta). '));
+    if(ar<0.1) t+='No se evidencia una relación lineal clara: en el período y filtro seleccionados, más (o menos) cobertura no se asocia con cambios consistentes en la venta. ';
+    else if(ar<0.3) t+='La señal es '+dir+' pero muy tenue; la cobertura explica muy poco de la venta y hay alta dispersión. ';
+    else if(ar<0.5) t+='Hay una tendencia '+dir+' moderada, pero con bastante dispersión: la cobertura no sería el único factor. ';
+    else t+='La relación '+dir+' es marcada en estos datos. ';
+    if(reg&&isFinite(reg.b)) t+='La pendiente estimada es ~'+money(reg.b)+' de venta por cada +1 punto de cobertura (referencial). ';
+    t+='Es asociación, no causalidad: no controla estacionalidad, tamaño/mezcla de cada cocina ni rezagos, y la cobertura es semanal mientras la venta es diaria.';
+    return t;
+  }
 
   var csDays=30, chS=null, chT=null, csCache={}, chI=null, incrCache={};
   window.covSalesSet=function(n){ csDays=n; ['7','30','92'].forEach(function(d){ var el=document.getElementById('csP'+d); if(el) el.classList.toggle('on', +d===n); }); renderCovSales(); renderIncr(); };
@@ -1774,6 +1788,7 @@ ctryHeader();
     if(corrEl) corrEl.innerHTML='· Correlación cobertura vs ventas (Pearson): '+(r==null?'—':r.toFixed(2))+' <span style="color:var(--mut);font-weight:400">('+pts.length+' puntos)</span>';
     var reg=(xs.length>=3)?linreg(xs,ys):null, trend=[];
     if(reg){ var mn=Math.min.apply(null,xs), mx=Math.max.apply(null,xs); trend=[{x:+mn.toFixed(1),y:reg.a+reg.b*mn},{x:+mx.toFixed(1),y:reg.a+reg.b*mx}]; }
+    var cel=document.getElementById('csConcl'); if(cel) cel.innerHTML='<b>🤖 Lectura automática:</b> '+csInterpret(r, pts.length, reg);
     if(chS)chS.destroy();
     chS=new Chart(document.getElementById('chCovScatter'),{ data:{datasets:[
         {type:'scatter',label:'Cocina·día',data:pts,backgroundColor:'rgba(21,96,130,.5)',pointRadius:3},
