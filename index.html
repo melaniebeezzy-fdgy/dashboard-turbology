@@ -1748,7 +1748,7 @@ ctryHeader();
     else if(ar<0.3) t+='La señal es '+dir+' pero muy tenue; la cobertura explica muy poco de la venta y hay alta dispersión. ';
     else if(ar<0.5) t+='Hay una tendencia '+dir+' moderada, pero con bastante dispersión: la cobertura no sería el único factor. ';
     else t+='La relación '+dir+' es marcada en estos datos. ';
-    if(reg&&isFinite(reg.b)) t+='La pendiente estimada es ~'+money(reg.b)+' de venta por cada +1 punto de cobertura (referencial). ';
+    if(reg&&isFinite(reg.b)) t+='La pendiente estimada es ~$'+Math.round(reg.b).toLocaleString('es')+' de venta por cada +1 punto de cobertura (referencial). ';
     t+='Es asociación, no causalidad: no controla estacionalidad, tamaño/mezcla de cada cocina ni rezagos, y la cobertura es semanal mientras la venta es diaria.';
     return t;
   }
