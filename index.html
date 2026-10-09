@@ -1841,7 +1841,7 @@ ctryHeader();
     var reg=(xs.length>=3)?linreg(xs,ys):null, trend=[];
     if(reg){ var mn=Math.min.apply(null,xs), mx=Math.max.apply(null,xs); trend=[{x:+mn.toFixed(1),y:reg.a+reg.b*mn},{x:+mx.toFixed(1),y:reg.a+reg.b*mx}]; }
     if(chI)chI.destroy();
-    chI=new Chart(cv,{ data:{datasets:[
+    chI=new Chart(document.getElementById('chIncr'),{ data:{datasets:[
         {type:'scatter',label:'Cocina·semana',data:pts,backgroundColor:'rgba(30,142,90,.5)',pointRadius:3},
         {type:'line',label:'Tendencia',data:trend,borderColor:'#c0392b',borderWidth:2,pointRadius:0,fill:false}
       ]},
