@@ -1760,7 +1760,7 @@ ctryHeader();
     var st=F(), byK={}; st.forEach(function(s){ (byK[s.k]||(byK[s.k]=[])).push(s); });
     var covCache={};
     function covKW(k,w){ var ky=k+'|'+w; if(ky in covCache) return covCache[ky]; var v=(byK[k]&&w>=0)?covWeekAtPen(byK[k],w):null; return covCache[ky]=v; }
-    var pts=[], xs=[], ys=[], byDay={};
+    var pts=[], xs=[], ys=[], byWk={};
     res.rows.forEach(function(r){
       var k=res.G[r[0]], dayISO=res.P[r[1]], q=r[2], gmv=r[3];
       if(!byK[k]) return;
@@ -1768,7 +1768,7 @@ ctryHeader();
       var cov=covKW(k,w); if(cov==null) return;
       pts.push({x:+cov.toFixed(1), y:gmv, k:k, day:dayISO, cov:cov, ord:q, aov:(q>0?gmv/q:null)});
       xs.push(cov); ys.push(gmv);
-      var d=byDay[dayISO]||(byDay[dayISO]={gmv:0,covs:[]}); d.gmv+=gmv; d.covs.push(cov);
+      var bw=byWk[w]||(byWk[w]={gmv:0,covs:[],label:D.weeks[w]}); bw.gmv+=gmv; bw.covs.push(cov);
     });
     var r=pearson(xs,ys), corrEl=document.getElementById('csCorr');
     if(corrEl) corrEl.innerHTML='· Correlación cobertura vs ventas (Pearson): '+(r==null?'—':r.toFixed(2))+' <span style="color:var(--mut);font-weight:400">('+pts.length+' puntos)</span>';
@@ -1784,11 +1784,11 @@ ctryHeader();
           return [o.k+' · '+o.day,'Cobertura: '+o.cov.toFixed(1)+'%','Venta: '+money(o.y),'Órdenes: '+o.ord,'AOV: '+(o.aov==null?'—':money(o.aov))]; }}}},
         scales:{x:{title:{display:true,text:'% cobertura',font:{size:10}},ticks:{callback:function(v){return v+'%';},font:{size:9}}},
           y:{beginAtZero:true,title:{display:true,text:'Venta ($)',font:{size:10}},ticks:{callback:money,font:{size:9}}}}} });
-    var days=Object.keys(byDay).sort();
-    var covS=days.map(function(d){ var a=byDay[d].covs; return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null; });
-    var gmvS=days.map(function(d){ return byDay[d].gmv; });
+    var wks=Object.keys(byWk).map(Number).sort(function(a,b){return a-b;});
+    var covS=wks.map(function(w){ var a=byWk[w].covs; return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null; });
+    var gmvS=wks.map(function(w){ return byWk[w].gmv; });
     if(chT)chT.destroy();
-    chT=new Chart(document.getElementById('chCovTime'),{ data:{labels:days.map(function(d){return d.slice(5);}),datasets:[
+    chT=new Chart(document.getElementById('chCovTime'),{ data:{labels:wks.map(function(w){return byWk[w].label;}),datasets:[
         {type:'bar',label:'Venta ($)',data:gmvS,yAxisID:'y',backgroundColor:'rgba(21,96,130,.5)',order:1,datalabels:{display:false}},
         {type:'line',label:'% cobertura',data:covS,yAxisID:'y1',borderColor:'#e67e22',backgroundColor:'transparent',tension:.3,pointRadius:1.5,order:0,datalabels:{display:false}}
       ]},
