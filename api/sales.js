@@ -4,14 +4,14 @@
 //   country=CO|MX|PE  (oblig.)
 //   from=YYYY-MM-DD  to=YYYY-MM-DD  (oblig.; rango máx. 400 días para permitir vistas mensuales)
 //   group = city | kitchen | brand | store   (default city)
-//   period = week | month                    (default week)
+//   period = day | week | month              (default week)
 // Shape (compacto, indexado):
 //   { country, from, to, group, period, G:[etiquetas de grupo], P:[periodos ISO],
 //     rows:[[gi, pi, q, gmv], ...] }           // q = órdenes, gmv = suma de gmv
 import { guard, parseCountry, parseDate, getClient, setCache, sendJson, httpError, serverError } from './_db.js';
 
 const GROUP_COL = { city: 'o.city', kitchen: 'o.kitchen', brand: 'o.brand', store: 'o.store_id' };
-const PERIOD_COL = { week: 'o.order_week', month: 'o.order_month' };
+const PERIOD_COL = { day: 'o.order_day', week: 'o.order_week', month: 'o.order_month' };
 const MAX_SPAN_DAYS = 400;
 
 export default async function handler(req, res) {

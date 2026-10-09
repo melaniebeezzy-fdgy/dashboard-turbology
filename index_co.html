@@ -258,6 +258,20 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
   <div class="card"><h2>Top 5 marcas — venta mensual</h2><div class="hint">Cómo se ha movido la <b>venta ($)</b> de las 5 marcas más grandes (por GMV total). Sep parcial.</div><div class="chartbox" style="height:420px"><canvas id="chMoTopSales"></canvas></div></div>
   <div class="card"><h2>Top 5 marcas — % cobertura mensual</h2><div class="hint">Cobertura efectiva mensual de esas mismas 5 marcas (desde mayo). Mismos colores que la gráfica de venta.</div><div class="chartbox" style="height:420px"><canvas id="chMoTopCov"></canvas></div></div>
 </div>
+<!--COVSALES_START-->
+<div class="card" style="margin-bottom:14px" id="mo-covsales">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+    <h2 style="margin:0">📈 ¿Más cobertura = más venta?</h2>
+    <div class="tgl"><button id="csP7" onclick="covSalesSet(7)">7 días</button><button id="csP30" class="on" onclick="covSalesSet(30)">1 mes</button><button id="csP92" onclick="covSalesSet(92)">3 meses</button></div>
+  </div>
+  <div class="hint">Cada punto = una <b>cocina</b> en un <b>día</b>. Eje X = % cobertura efectiva (polígono, desde la fuente de cobertura actual); eje Y = venta ($). <b>No implica causalidad.</b> Respeta país y filtro de ciudad/ops. <span id="csCorr" style="font-weight:700"></span></div>
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <div class="chartbox" style="height:380px"><canvas id="chCovScatter"></canvas></div>
+    <div class="chartbox" style="height:380px"><canvas id="chCovTime"></canvas></div>
+  </div>
+  <div class="hint" id="csNote" style="margin-top:6px"></div>
+</div>
+<!--COVSALES_END-->
 </div><!--/co-monthly-->
 <div id="co-fdgy" style="display:none"></div>
 
@@ -1694,4 +1708,95 @@ ctryHeader();
 })();
 </script>
 <!--FASE2_API_LAYER_END-->
+<!--COVSALES_JS_START-->
+<script>
+/* Visualización "¿Más cobertura = más venta?" (Mensual Rappi).
+   Correlación (no causal) cobertura vs venta. Fuentes REUTILIZADAS:
+   - Cobertura: D (covWeekAtPen por cocina/semana) — misma fuente del dashboard.
+   - Venta: /api/sales?group=kitchen&period=day (agregado en SQL; NO trae órdenes individuales).
+   Alinea por cocina + (semana del día). Respeta país y filtro de ciudad/ops (via F()). */
+(function(){
+  var DAY=86400000, MON3={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  function isoOf(dt){ return dt.toISOString().slice(0,10); }
+  function dMinus1(){ var b=new Date(Date.now()-5*3600000); return new Date(Date.UTC(b.getUTCFullYear(),b.getUTCMonth(),b.getUTCDate())-DAY); }
+  var MAXd=dMinus1();
+  function wkMonday(label){ var m=String(label).match(/([A-Za-z]{3})\s+(\d{1,2})/); if(!m||MON3[m[1]]==null) return null; var sun=Date.UTC(2026,MON3[m[1]],+m[2]); return sun-6*DAY; }
+  function getJSON(u){ return fetch(u).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+  function money(v){ return (typeof swMoney==='function')?swMoney(v):('$'+Math.round(v).toLocaleString('es')); }
+  function pearson(xs,ys){ var n=xs.length; if(n<3) return null; var sx=0,sy=0,sxx=0,syy=0,sxy=0;
+    for(var i=0;i<n;i++){ var x=xs[i],y=ys[i]; sx+=x;sy+=y;sxx+=x*x;syy+=y*y;sxy+=x*y; }
+    var num=n*sxy-sx*sy, dx=Math.sqrt(n*sxx-sx*sx), dy=Math.sqrt(n*syy-sy*sy);
+    return (dx===0||dy===0)?null:num/(dx*dy); }
+  function linreg(xs,ys){ var n=xs.length,sx=0,sy=0,sxx=0,sxy=0;
+    for(var i=0;i<n;i++){ sx+=xs[i];sy+=ys[i];sxx+=xs[i]*xs[i];sxy+=xs[i]*ys[i]; }
+    var den=(n*sxx-sx*sx)||1, b=(n*sxy-sx*sy)/den, a=(sy-b*sx)/n; return {a:a,b:b}; }
+
+  var csDays=30, chS=null, chT=null, csCache={};
+  window.covSalesSet=function(n){ csDays=n; ['7','30','92'].forEach(function(d){ var el=document.getElementById('csP'+d); if(el) el.classList.toggle('on', +d===n); }); renderCovSales(); };
+
+  function renderCovSales(){
+    var mo=document.getElementById('co-monthly'); var scat=document.getElementById('chCovScatter');
+    if(!mo||!scat) return;
+    if(typeof D==='undefined'||!D||!D.weeks||typeof covWeekAtPen!=='function'||typeof F!=='function'||typeof CTRY==='undefined'||typeof Chart==='undefined') return;
+    var cc=CTRY, to=isoOf(MAXd), from=isoOf(new Date(MAXd.getTime()-(csDays-1)*DAY));
+    var key=cc+'|'+from+'|'+to;
+    var p=csCache[key];
+    if(!p){ p=getJSON('/api/sales?country='+cc+'&group=kitchen&period=day&from='+from+'&to='+to); p.catch(function(){ delete csCache[key]; }); csCache[key]=p; }
+    p.then(function(res){ if(CTRY!==cc) return; drawCovSales(res, from, to); })
+     .catch(function(e){ var nt=document.getElementById('csNote'); if(nt) nt.textContent='No se pudo cargar la venta en vivo para esta gráfica.'; try{console.error('covsales',e);}catch(_){} });
+  }
+
+  function drawCovSales(res, from, to){
+    var wkMon=D.weeks.map(wkMonday);
+    function weekOf(ms){ for(var w=0;w<wkMon.length;w++){ if(wkMon[w]!=null && ms>=wkMon[w] && ms<=wkMon[w]+6*DAY) return w; } return -1; }
+    var st=F(), byK={}; st.forEach(function(s){ (byK[s.k]||(byK[s.k]=[])).push(s); });
+    var covCache={};
+    function covKW(k,w){ var ky=k+'|'+w; if(ky in covCache) return covCache[ky]; var v=(byK[k]&&w>=0)?covWeekAtPen(byK[k],w):null; return covCache[ky]=v; }
+    var pts=[], xs=[], ys=[], byDay={};
+    res.rows.forEach(function(r){
+      var k=res.G[r[0]], dayISO=res.P[r[1]], q=r[2], gmv=r[3];
+      if(!byK[k]) return;
+      var w=weekOf(Date.parse(dayISO+'T00:00:00Z')); if(w<0) return;
+      var cov=covKW(k,w); if(cov==null) return;
+      pts.push({x:+cov.toFixed(1), y:gmv, k:k, day:dayISO, cov:cov, ord:q, aov:(q>0?gmv/q:null)});
+      xs.push(cov); ys.push(gmv);
+      var d=byDay[dayISO]||(byDay[dayISO]={gmv:0,covs:[]}); d.gmv+=gmv; d.covs.push(cov);
+    });
+    var r=pearson(xs,ys), corrEl=document.getElementById('csCorr');
+    if(corrEl) corrEl.innerHTML='· Correlación cobertura vs ventas (Pearson): '+(r==null?'—':r.toFixed(2))+' <span style="color:var(--mut);font-weight:400">('+pts.length+' puntos)</span>';
+    var reg=(xs.length>=3)?linreg(xs,ys):null, trend=[];
+    if(reg){ var mn=Math.min.apply(null,xs), mx=Math.max.apply(null,xs); trend=[{x:+mn.toFixed(1),y:reg.a+reg.b*mn},{x:+mx.toFixed(1),y:reg.a+reg.b*mx}]; }
+    if(chS)chS.destroy();
+    chS=new Chart(document.getElementById('chCovScatter'),{ data:{datasets:[
+        {type:'scatter',label:'Cocina·día',data:pts,backgroundColor:'rgba(21,96,130,.5)',pointRadius:3},
+        {type:'line',label:'Tendencia',data:trend,borderColor:'#c0392b',borderWidth:2,pointRadius:0,fill:false}
+      ]},
+      options:{maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{display:false},
+        tooltip:{callbacks:{label:function(c){ if(c.dataset.type!=='scatter') return ''; var o=c.raw;
+          return [o.k+' · '+o.day,'Cobertura: '+o.cov.toFixed(1)+'%','Venta: '+money(o.y),'Órdenes: '+o.ord,'AOV: '+(o.aov==null?'—':money(o.aov))]; }}}},
+        scales:{x:{title:{display:true,text:'% cobertura',font:{size:10}},ticks:{callback:function(v){return v+'%';},font:{size:9}}},
+          y:{beginAtZero:true,title:{display:true,text:'Venta ($)',font:{size:10}},ticks:{callback:money,font:{size:9}}}}} });
+    var days=Object.keys(byDay).sort();
+    var covS=days.map(function(d){ var a=byDay[d].covs; return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null; });
+    var gmvS=days.map(function(d){ return byDay[d].gmv; });
+    if(chT)chT.destroy();
+    chT=new Chart(document.getElementById('chCovTime'),{ data:{labels:days.map(function(d){return d.slice(5);}),datasets:[
+        {type:'bar',label:'Venta ($)',data:gmvS,yAxisID:'y',backgroundColor:'rgba(21,96,130,.5)',order:1,datalabels:{display:false}},
+        {type:'line',label:'% cobertura',data:covS,yAxisID:'y1',borderColor:'#e67e22',backgroundColor:'transparent',tension:.3,pointRadius:1.5,order:0,datalabels:{display:false}}
+      ]},
+      options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,font:{size:9}}},datalabels:{display:false}},
+        scales:{x:{ticks:{font:{size:8},maxRotation:70,minRotation:55,autoSkip:true}},
+          y:{position:'left',beginAtZero:true,ticks:{callback:money,font:{size:9}},title:{display:true,text:'Venta ($)',font:{size:9}}},
+          y1:{position:'right',min:0,max:100,grid:{display:false},ticks:{callback:function(v){return v+'%';},font:{size:9}},title:{display:true,text:'% cobertura',font:{size:9}}}}} });
+    var nt=document.getElementById('csNote');
+    if(nt) nt.textContent = pts.length? ('Período '+from+' → '+to+'. Cobertura semanal (fuente actual) alineada por cocina + semana del día. No implica causalidad.')
+      : 'Sin puntos alineables: no hay cobertura (D) para el período/país seleccionado (ej. MX/PE con snapshot de cobertura antiguo).';
+  }
+
+  // Engancha al render del tab Mensual (cubre apertura de pestaña, cambio de país y de ciudad/ops).
+  if(typeof window.renderMonthly==='function'){ var _rm=window.renderMonthly; window.renderMonthly=function(){ _rm.apply(this,arguments); try{ renderCovSales(); }catch(e){ try{console.error('covsales',e);}catch(_){} } }; }
+})();
+</script>
+<!--COVSALES_JS_END-->
 </body></html>
