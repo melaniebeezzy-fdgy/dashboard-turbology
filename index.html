@@ -1794,8 +1794,12 @@ ctryHeader();
       : 'Sin puntos alineables: no hay cobertura (D) para el período/país seleccionado (ej. MX/PE con snapshot de cobertura antiguo).';
   }
 
-  // Engancha al render del tab Mensual (cubre apertura de pestaña, cambio de país y de ciudad/ops).
-  if(typeof window.renderMonthly==='function'){ var _rm=window.renderMonthly; window.renderMonthly=function(){ _rm.apply(this,arguments); try{ renderCovSales(); }catch(e){ try{console.error('covsales',e);}catch(_){} } }; }
+  // Engancha vía funciones window (fiables desde onclick): abrir pestaña Mensual, cambio de país, filtros.
+  function hookTrigger(){ try{ var mo=document.getElementById('co-monthly'); if(mo && mo.style.display!=='none') renderCovSales(); }catch(e){} }
+  function rAF2(fn){ requestAnimationFrame(function(){ requestAnimationFrame(fn); }); }
+  if(typeof window.coView==='function'){ var _cv=window.coView; window.coView=function(x){ _cv.apply(this,arguments); if(x==='m') rAF2(hookTrigger); }; }
+  if(typeof window.setCountry==='function'){ var _sc=window.setCountry; window.setCountry=function(){ _sc.apply(this,arguments); rAF2(hookTrigger); }; }
+  if(typeof window.update==='function'){ var _up=window.update; window.update=function(){ _up.apply(this,arguments); hookTrigger(); }; }
 })();
 </script>
 <!--COVSALES_JS_END-->
