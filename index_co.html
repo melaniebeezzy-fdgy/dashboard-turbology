@@ -1095,9 +1095,18 @@ function fd2delta(v,vp){
   var dd=v-vp,ar=dd>0.05?'▲':(dd<-0.05?'▼':'—'),c=dd>0.05?FD2C.red:(dd<-0.05?'#16a34a':'#94a3b8');
   return ' <span style="font-size:9px;color:'+c+'">'+ar+' '+(dd>0?'+':'')+dd.toFixed(2)+'</span>';
 }
-function fd2rtCell(v,vp){
+function fd2rtTone(v){
+  if(v>6) return {bg:'#fde4e4',fg:'#b91c1c'};      // rojo (crítico)
+  if(v>3) return {bg:'#fdebd0',fg:'#b45309'};      // ámbar
+  if(v>=2) return {bg:'#fef9c3',fg:'#854d0e'};     // amarillo
+  return {bg:'#dcfce7',fg:'#166534'};              // verde (saludable)
+}
+function fd2rtCell(v,vp,tint){
   if(v==null) return '<td class="num fd2rt" data-v="-1">—</td>';
   var flag = '<span style="color:'+fd2flagColor(v)+'">⚑</span> ';
+  if(tint){ var c=fd2rtTone(v);
+    return '<td class="num fd2rt" data-v="'+v.toFixed(3)+'" style="background:'+c.bg+'">'+flag+'<b style="color:'+c.fg+'">'+v.toFixed(2)+'</b></td>';
+  }
   return '<td class="num fd2rt" data-v="'+v.toFixed(3)+'">'+flag+'<b>'+v.toFixed(2)+'</b></td>';
 }
 function fd2mk(slot,canvasId,cfg){try{var s=FDGY2ST.ch;if(s[slot]){s[slot].destroy();}var el=document.getElementById(canvasId);if(el)s[slot]=new Chart(el,cfg);}catch(e){console.error('fd2 chart '+slot,e);}}
@@ -1164,12 +1173,12 @@ function fd2Hdr(cols,st,fn){return '<thead><tr>'+cols.map(function(c){var ar=st.
 function fd2drawT1(){var e1=document.getElementById('fd2t1');if(!e1)return;var st=FDGY2ST.t1sort||(FDGY2ST.t1sort={key:'v',dir:-1});var rows=fd2sortRows(FDGY2ST.t1rows||[],st.key,st.dir);
   var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'v',l:'RTWT',num:true}];
   var h=fd2Hdr(cols,st,'fd2sortT1')+'<tbody>';FDGY2ST._t1=rows;
-  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta marca/cocina" onclick="fd2pickRow(1,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp)+'</tr>';});
+  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta marca/cocina" onclick="fd2pickRow(1,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp,1)+'</tr>';});
   h+='</tbody>';e1.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';}
 function fd2drawT2(){var e2=document.getElementById('fd2t2');if(!e2)return;var st=FDGY2ST.t2sort||(FDGY2ST.t2sort={key:'v',dir:-1});var rows=fd2sortRows(FDGY2ST.t2rows||[],st.key,st.dir);
   var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'v',l:'RTWT',num:true},{k:'n',l:'Órdenes',num:true}];
   var h=fd2Hdr(cols,st,'fd2sortT2')+'<tbody>';FDGY2ST._t2=rows;
-  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta cocina" onclick="fd2pickRow(2,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td></tr>';});
+  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta cocina" onclick="fd2pickRow(2,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp,1)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td></tr>';});
   h+='</tbody>';e2.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';}
 window.fd2sortT1=function(k){var st=FDGY2ST.t1sort||(FDGY2ST.t1sort={key:'v',dir:-1});st.dir=st.key===k?-st.dir:((k==='v'||k==='n')?-1:1);st.key=k;fd2drawT1();};
 window.fd2sortT2=function(k){var st=FDGY2ST.t2sort||(FDGY2ST.t2sort={key:'v',dir:-1});st.dir=st.key===k?-st.dir:((k==='v'||k==='n')?-1:1);st.key=k;fd2drawT2();};
