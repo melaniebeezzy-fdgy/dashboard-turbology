@@ -1133,6 +1133,16 @@ function fd2rtCell(v,vp,tint){
   }
   return '<td class="num fd2rt" data-v="'+v.toFixed(3)+'">'+flag+'<b>'+v.toFixed(2)+'</b></td>';
 }
+// Etiqueta de la columna "Responsable demora" (6 categorías).
+var FD2RESP={
+  'COCINA':['Cocina','#156082'],
+  'RT':['RT','#e67e22'],
+  'MIXTO':['Mixto','#9c4a8b'],
+  'SIN ESPERA':['Sin espera','#1e8e5a'],
+  'LISTO_SIN_TOMA_RT':['Listo sin toma RT','#d99a1b'],
+  'SIN DATOS':['Sin datos','#8b96ab']
+};
+function fd2respLabel(x){ var v=FD2RESP[x]; return v?'<span style="color:'+v[1]+';font-weight:700">'+v[0]+'</span>':'—'; }
 function fd2mk(slot,canvasId,cfg){try{var s=FDGY2ST.ch;if(s[slot]){s[slot].destroy();}var el=document.getElementById(canvasId);if(el)s[slot]=new Chart(el,cfg);}catch(e){console.error('fd2 chart '+slot,e);}}
 function fd2kpi(l,v,st){return '<div class="k2"><div class="k2l">'+l+'</div><div class="k2v" style="'+(st||'')+'">'+v+'</div></div>';}
 
@@ -1361,7 +1371,7 @@ function fd2drawDet(){
       +'<td class="num">'+fd2esc(r.oid)+'</td>'
       +'<td class="num">'+(r.cook==null?'—':r.cook.toFixed(1))+'</td>'
       +fd2rtCell(r.rt,null)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td>'
-      +'<td>'+(r.resp==null?'—':(r.resp==='RT'?'<span style="color:#e67e22;font-weight:700">RT</span>':'<span style="color:#156082;font-weight:700">Cocina</span>'))+'</td></tr>';
+      +'<td>'+fd2respLabel(r.resp)+'</td></tr>';
   });
   h+='</tbody>';
   ed.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin órdenes para el filtro actual.</td></tr></tbody>';
