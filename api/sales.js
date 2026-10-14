@@ -8,7 +8,7 @@
 // Shape (compacto, indexado):
 //   { country, from, to, group, period, G:[etiquetas de grupo], P:[periodos ISO],
 //     rows:[[gi, pi, q, gmv], ...] }           // q = órdenes, gmv = suma de gmv
-import { guard, parseCountry, parseDate, getClient, setCache, sendJson, httpError, serverError } from './_db.js';
+import { guard, parseCountry, parseDate, cleanStr, getClient, setCache, sendJson, httpError, serverError } from './_db.js';
 
 const GROUP_COL = { city: 'o.city', kitchen: 'o.kitchen', brand: 'o.brand', store: 'o.store_id' };
 const PERIOD_COL = { day: 'o.order_day', week: 'o.order_week', month: 'o.order_month' };
@@ -31,19 +31,25 @@ export default async function handler(req, res) {
   if (!gcol) return httpError(res, 400, 'group inválido (city, kitchen, brand o store).');
   if (!pcol) return httpError(res, 400, 'period inválido (week o month).');
 
+  // Filtro opcional por marca (exacto). Permite segmentar la venta por marca sin cambiar el group.
+  const brand = cleanStr(q.brand);
+  const params = [country, from, to];
+  let where = `o.company_id='fdgy' AND o.country=$1 AND o.provider_new_name='Rappi'
+      AND o.brand ILIKE '%Turbo%' AND o.order_state='Finalized'
+      AND o.order_day BETWEEN $2 AND $3`;
+  if (brand) { params.push(brand); where += ` AND o.brand=$${params.length}`; }
+
   const sql = `
     SELECT ${gcol} AS g, ${pcol}::text AS p,
       COUNT(*)::int AS q, ROUND(SUM(o.gmv))::float AS gmv
     FROM fdgy_views.orders_consolidado o
-    WHERE o.company_id='fdgy' AND o.country=$1 AND o.provider_new_name='Rappi'
-      AND o.brand ILIKE '%Turbo%' AND o.order_state='Finalized'
-      AND o.order_day BETWEEN $2 AND $3
+    WHERE ${where}
     GROUP BY ${gcol}, ${pcol}`;
 
   let client;
   try {
     client = await getClient();
-    const rows = (await client.query(sql, [country, from, to])).rows;
+    const rows = (await client.query(sql, params)).rows;
     const G = [], Gi = new Map(), pset = new Set(), tmp = [];
     for (const x of rows) {
       const gl = x.g == null ? '—' : String(x.g);
