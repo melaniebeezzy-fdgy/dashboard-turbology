@@ -305,7 +305,7 @@ let D={"weeks":["May 10","May 17","May 24","May 31","Jun 7","Jun 14","Jun 21","J
 
 let W=D.weeks, LI=W.length-1;
 const LV=[1000,1800,2100,2400,2700,3000];
-const HIDDEN=['Plaza Claro','Engativá','Envigado','Otra'];
+const HIDDEN=['Plaza Claro','Engativá','Otra'];
 const scol={3000:'#0E2841',2700:'#153D64',2400:'#156082',2100:'#0B769F',1800:'#B15C8C',1000:'#96607D'};
 const lcol={3000:'#8FB8E8',2700:'#9FD8F0',2400:'#FFD98E',2100:'#FFE9C0',1800:'#F5DCEA',1000:'#2B1622'};
 let CTRY='CO';
@@ -1111,7 +1111,11 @@ function fd2msDate(off){var t=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minDa
 function fd2dateOff(v){var min=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minDate:'2026-09-01')+'T00:00:00Z');var d=Date.parse(v+'T00:00:00Z');if(isNaN(d))return null;return Math.round((d-min)/86400000);}
 
 // kitchen->{city,ops} desde D SOLO como etiquetas para el filtro compartido de ciudad/ops
-function fd2meta(){var m={};(typeof D!=='undefined'?(D.stores||[]):[]).forEach(function(s){var k=fd2norm(s.k);if(!m[k])m[k]={city:s.c,ops:s.op,label:s.k};});return m;}
+function fd2meta(){var m={};(typeof D!=='undefined'?(D.stores||[]):[]).forEach(function(s){var k=fd2norm(s.k);if(!m[k])m[k]={city:s.c,ops:s.op,label:s.k};});
+  // Cocinas con operación Turbo pero sin tiendas en el snapshot: mapeo ciudad/ops para que el filtro las incluya.
+  var OVR={'envigado':{city:'Medellín',ops:'Ulises Torres Diosa',label:'Envigado'}};
+  for(var ok in OVR){if(!m[ok])m[ok]=OVR[ok];}
+  return m;}
 function fd2allow(meta){return function(kw){var m=meta[fd2dkey(kw)];return (CITY==='ALL'||(m&&m.city===CITY))&&(OPS==='ALL'||(m&&m.ops===OPS));};}
 function fd2avgRt(o){return o&&o.rtcnt>0?o.rtsum/o.rtcnt:null;}
 function fd2delta(v,vp){
