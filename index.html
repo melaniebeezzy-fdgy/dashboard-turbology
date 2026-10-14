@@ -540,7 +540,8 @@ const selOps=document.getElementById('selOps');
 function rebuildSelects(){
   const allCities=[...new Set(D.stores.map(s=>s.c))].filter(c=>D.stores.filter(s=>s.c===c&&s.fin[LI]!=null).length>5).sort();
   sel.innerHTML='<option value="ALL">🌎 Todas las ciudades</option>'+allCities.map(c=>`<option>${c}</option>`).join('');
-  const allOps=[...new Set(D.stores.map(s=>s.op).filter(Boolean))].sort();
+  const _metaOps=(typeof fd2meta==='function')?Object.keys(fd2meta()).map(k=>fd2meta()[k].ops):[];
+  const allOps=[...new Set(D.stores.map(s=>s.op).concat(_metaOps).filter(Boolean))].sort();
   selOps.innerHTML='<option value="ALL">👤 Todos los ops</option>'+allOps.map(o=>`<option>${o}</option>`).join('');
   sel.value='ALL'; selOps.value='ALL';
 }
