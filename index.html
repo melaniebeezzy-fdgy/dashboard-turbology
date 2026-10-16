@@ -333,9 +333,10 @@ function rtH(){return CTRY==='CO'?'RTWT 4 sem':'RTWT últ. sem';}
 function avg4(s){ if(CTRY!=='CO'){const v=s.rt[W.length-1];return v==null?null:v;} return avg(W4.map(i=>s.rt[i]));}
 function avg4prev(s){ if(CTRY!=='CO'){const v=s.rt[W.length-2];return v==null?null:v;} return avg(W4.map(i=>i-1).filter(i=>i>=0).map(i=>s.rt[i]));}
 function penOn(){return CTRY==='CO';} // penalización solo aplica en Colombia
-function covResult(s){if(s.cc==null)return null;const a=avg4(s);return (penOn()&&a!=null&&a>6)?0:s.cc;} // 0% si >6 min (solo CO)
-function penal(s){if(!penOn())return false;const a=avg4(s);return a!=null&&a>6;} // penalizada (pierde cobertura) -> no cuenta en su bucket de km
-function covResultPrev(s){if(s.cc==null)return null;const a=avg4prev(s);return (penOn()&&a!=null&&a>6)?0:s.cc;} // result de la ventana de la semana anterior
+function covResult(s){if(s.cc==null)return null;return s.cc;} // cobertura real (la penalización ya viene como 1 km en el dato)
+function penal(s){return penOn() && !!s._pen1k;} // penalizada = cobertura reducida a 1 km (del dato, ya no del RTWT)
+function critico(s){if(!penOn())return false;const a=avg4(s);return a!=null&&a>6;} // crítica = RTWT 4 sem > 6 min (riesgo, informativo)
+function covResultPrev(s){if(s.cc==null)return null;return s.cc;}
 // polígono MÁXIMO de la zona = el mayor que la tienda ha tenido asignado (no todas llegan a 3 km)
 function mxp(s){ return 3000; /* Polígono máximo (ideal) = 3 km para todas las marca-cocinas (CO/MX/PE) */ }
 // cobertura % (0-100) promedio sobre tiendas, normalizando cada una a SU polígono máximo
@@ -344,7 +345,7 @@ function covPctAvg(st,effOf){const p=st.map(s=>{const e=effOf(s),m=mxp(s);return
 function mxAt(s,w){let m=null;for(let i=0;i<=w;i++){const v=s.fin[i];if(v!=null&&(m==null||v>m))m=v;}return m;}
 function covWeekAt(st,w){const p=st.map(s=>{const e=s.fin[w],m=mxp(s);return (e==null||m==null||m===0)?null:100*Math.min(e,3000)/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
 // cobertura efectiva de la semana w: polígono congelado fin[w], 0 si penalizada (media móvil 4 sem>6), ÷ máximo conocido a esa semana
-function covWeekAtPen(st,w){const p=st.map(s=>{if(s.fin[w]==null)return null;const m=mxp(s);if(m==null||m===0)return null;const a=ma4at(s,w);const e=(penOn()&&a!=null&&a>6)?0:Math.min(s.fin[w],3000);return 100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;}
+function covWeekAtPen(st,w){const p=st.map(s=>{if(s.fin[w]==null)return null;const m=mxp(s);if(m==null||m===0)return null;const e=Math.min(s.fin[w],3000);return 100*e/m;}).filter(x=>x!=null);return p.length?avg(p):null;} // cobertura real del polígono (1 km si penalizada)
 function stcol(a){return a==null?'#8b96ab':(a<=2?'#1e8e5a':(a<=3?'#d99a1b':(a<6?'#e67e22':'#c0392b')));}
 function stlabel(a){return a==null?'⚪ Sin datos':(a<=2?'🟢 Saludable':(a<=3?'🟡 Atención':(a<6?'🟠 Riesgo':'🔴 Crítico')));}
 const rt4fmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(v)}"></span>`;
@@ -552,6 +553,13 @@ rebuildSelects();
 sel.onchange=()=>{CITY=sel.value; OPS='ALL'; selOps.value='ALL'; update();};
 selOps.onchange=()=>{OPS=selOps.value; CITY='ALL'; sel.value='ALL'; update();};
 const ALLDATA={CO:{D:D,MO:MO}, MX:MXDATA, PE:PEDATA};
+// CO: la penalización ahora llega en el dato como cobertura = 1 km (centinela "1"). La normalizamos a 1000 m (1 km)
+// y marcamos _pen1k, para que km/%/buckets funcionen y las penalizadas se cuenten del dato (no se derivan del RTWT).
+(function(){ try{ var st=(ALLDATA.CO&&ALLDATA.CO.D&&ALLDATA.CO.D.stores)||[]; st.forEach(function(s){
+  s._pen1k = (s.cc===1) || (Array.isArray(s.fin)&&s.fin.length&&s.fin[s.fin.length-1]===1);
+  if(s.cc===1) s.cc=1000;
+  if(Array.isArray(s.fin)) s.fin=s.fin.map(function(v){return v===1?1000:v;});
+}); }catch(e){} })();
 const CTRY3={CO:'COL',MX:'MEX',PE:'PER'};
 function ctryHeader(){
   var lbl={CO:'Colombia',MX:'México',PE:'Perú'}[CTRY]||CTRY;
@@ -591,9 +599,10 @@ function update(){
  const cctot=st.filter(s=>s.cc!=null).length||1;
  const nCC=sz=>st.filter(s=>s.cc!=null&&!penal(s)&&LV[lvlIdx(s.cc)]===sz).length;
  // conteo la semana pasada (polígono congelado fin[LI-1], 0 si penalizada esa ventana) para el delta
- const effP=s=>{if(s.fin[LI-1]==null)return null;const a=ma4at(s,LI-1);return (penOn()&&a!=null&&a>6)?0:s.fin[LI-1];};
+ const effP=s=>{if(s.fin[LI-1]==null)return null;return s.fin[LI-1];};
  const nCCp=sz=>st.filter(s=>{const e=effP(s);return e!=null&&e!==0&&LV[lvlIdx(e)]===sz;}).length;
  const losePrev=st.filter(s=>{const a=avg4prev(s);return a!=null&&a>6;}).length;
+ const nPen1k=st.filter(s=>s.cc!=null&&s._pen1k).length;   // penalizadas = cobertura 1 km (del dato)
  const kdiff=(now,prev,goodUp)=>{const d=now-prev;if(!d)return '';const up=d>0,good=goodUp?up:!up;return ` · <span title="vs semana pasada" style="color:${good?'var(--good)':'var(--bad)'};font-weight:700">${up?'▲':'▼'}${Math.abs(d)}</span>`;};
  const al=alertsOf(st);
  const pct=sz=>`<span class="warnc">${(100*nCC(sz)/cctot).toFixed(0)}% del total</span>`;
@@ -606,9 +615,10 @@ function update(){
   {l:'Marcas en 2.4 km', v:nCC(2400)+' / '+cctot, d:pct(2400)+kdiff(nCC(2400),nCCp(2400),true), click:'showPoly(2400)'},
   {l:'Marcas en 2.1 km (alerta)', v:pink(nCC(2100)+' / '+cctot), d:pct(2100)+kdiff(nCC(2100),nCCp(2100),false), click:'showPoly(2100)'},
   (function(){var cl=CTRY==='PE'?1000:1800,kml=(cl/1000).toFixed(1);return {l:'Marcas en '+kml+' km (crítico)', v:pink(nCC(cl)+' / '+cctot), d:pct(cl)+kdiff(nCC(cl),nCCp(cl),false), click:'showPoly('+cl+')'};})(),
-  (CTRY==='CO'
-    ? {l:'Tiendas que pierden cobertura', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min → 0% + penalización</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'}
-    : {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'}),
+  ...(CTRY==='CO'
+    ? [ {l:'Marcas críticas (&gt; 6 min)', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min (riesgo)</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'},
+        {l:'Marcas penalizadas (1 km)', v:pink(nPen1k), d:'<span class="warnc">Cobertura reducida a 1 km por la plataforma</span>', click:'showPenal()'} ]
+    : [ {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'} ]),
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
  var _NW=15, _wl=W.slice(-_NW);   // solo las últimas 15 semanas en estas dos gráficas
@@ -647,8 +657,8 @@ function update(){
  const gbk=groupBy(st,s=>s.b+'||'+s.k);
  const brc=Object.keys(gbk).map(key=>{const g=gbk[key];const v=g.map(avg4).filter(x=>x!=null);if(!v.length)return null;const vp=g.map(avg4prev).filter(x=>x!=null);const vl=g.map(s=>s.rt[LI]).filter(x=>x!=null);const cr=g.map(covResult).filter(x=>x!=null);return {brand:g[0].b,coc:g[0].k,city:g[0].c,rtwt:avg(v),rtwtPrev:vp.length?avg(vp):null,rtLast:vl.length?avg(vl):null,res:cr.length?Math.round(avg(cr)):null};}).filter(r=>r&&r.rtwt!=null&&r.rtwt>3).sort((a,b)=>b.rtwt-a.rtwt);
  const _co=CTRY==='CO';
- {var _bt=document.getElementById('brTitle'); if(_bt)_bt.textContent=_co?'Marcas–cocinas penalizadas y con RTWT crítico':'Marcas–cocinas con RTWT sobre 6 min';
-  var _bh=document.getElementById('brHint'); if(_bh)_bh.innerHTML=_co?'Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico/penalizado (≥6 → 0% cobertura). Ordenadas de peor a mejor.':'Combinaciones marca–cocina con RTWT de la <b>última semana</b> en 🟠 naranja (3–6) o 🔴 <b>sobre 6 min</b> (≥6). Ordenadas de peor a mejor.';}
+ {var _bt=document.getElementById('brTitle'); if(_bt)_bt.textContent=_co?'Marcas–cocinas con RTWT crítico (riesgo)':'Marcas–cocinas con RTWT sobre 6 min';
+  var _bh=document.getElementById('brHint'); if(_bh)_bh.innerHTML=_co?'Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico (≥6 min). La penalización por cobertura (1 km) se mide aparte. Ordenadas de peor a mejor.':'Combinaciones marca–cocina con RTWT de la <b>última semana</b> en 🟠 naranja (3–6) o 🔴 <b>sobre 6 min</b> (≥6). Ordenadas de peor a mejor.';}
  document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th>'+(_co?'<th class="num">RTWT últ. sem</th>':'')+'<th class="num">Polígono efectivo</th></tr>'+
   (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td>${_co?`<td class="num">${rt4fmt(r.rtLast)}</td>`:''}<td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>')}</td></tr>`).join('')
    :`<tr><td colspan="${_co?5:4}" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>`);
@@ -741,6 +751,15 @@ window.showPoly=function(sz){
   document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">'+rtH()+'</th><th class="num">Polígono</th></tr>'+
    (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.rt)}</td><td class="num"><span class="pill" style="background:${scol[r.cc]||'#345964'}">${km(r.cc)} km</span></td></tr>`).join('')
     :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin tiendas en este polígono ✓</td></tr>');
+  document.getElementById('modalBg').classList.add('open');
+};
+window.showPenal=function(){
+  const rows=F().filter(s=>s.cc!=null&&s._pen1k).map(s=>({b:s.b,k:s.k,c:s.c,rt:avg4(s)})).sort((a,b)=>(''+a.b).localeCompare(''+b.b,'es'));
+  document.getElementById('mTitle').textContent='Marcas penalizadas (cobertura 1 km) — '+rows.length+' tienda(s)';
+  document.getElementById('mSum').innerHTML='Tiendas con cobertura reducida a <b>1 km</b> por la plataforma (penalización vigente en el dato). RTWT = promedio móvil de 4 semanas.';
+  document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">'+rtH()+'</th><th class="num">Cobertura</th></tr>'+
+   (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.rt)}</td><td class="num"><span class="pill" style="background:${scol[1000]||'#96607D'}">1.0 km</span></td></tr>`).join('')
+    :'<tr><td colspan="5" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca penalizada ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
 };
 window.showLost=function(){
