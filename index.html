@@ -178,6 +178,8 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 <div id="filters">
   <select id="selCity" title="Filtro global por ciudad"></select>
   <select id="selOps" title="Filtro global por ops"></select>
+  <select id="selKitchen" title="Filtro por cocina"></select>
+  <select id="selBrand" title="Filtro por marca"></select>
 </div>
 <div class="subtabs">
   <button id="coTabW" class="subtab on" onclick="coView('w')"><span class="ic">📅</span>Semanal <span style="opacity:.6">(Rappi)</span></button>
@@ -314,6 +316,8 @@ const lcol={3000:'#8FB8E8',2700:'#9FD8F0',2400:'#FFD98E',2100:'#FFE9C0',1800:'#F
 let CTRY='CO';
 let CITY='ALL';
 let OPS='ALL';
+let KIT='ALL';
+let BRAND='ALL';
 const km=m=>m==null?'–':(m/1000).toFixed(1);
 const rtcol=v=>v==null?null:(v<=2?'#1e8e5a':(v<=3?'#d99a1b':(v<6?'#e67e22':'#c0392b')));
 const rtfmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${rtcol(v)}"></span>`;
@@ -323,7 +327,7 @@ function lvlIdx(m){let bi=0,bd=1e9;LV.forEach((l,i)=>{const d=Math.abs(l-m);if(d
 function delta(el,val,goodDown){ if(val==null)return '–';
   const good = goodDown? val<0 : val>0; const arrow = val>0?'▲':(val<0?'▼':'•');
   return `<span style="color:${val==0?'var(--mut)':(good?'var(--good)':'var(--bad)')}">${arrow} ${Math.abs(val).toFixed(el)}</span>`}
-function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'||s.op===OPS));}
+function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'||s.op===OPS)&&(KIT==='ALL'||s.k===KIT)&&(BRAND==='ALL'||s.b===BRAND));}
 
 // ---------- lógica 4 semanas móviles (stakeholder) ----------
 let N4=D.n4||4;
@@ -541,17 +545,25 @@ function renderComb(){
 }
 const sel=document.getElementById('selCity');
 const selOps=document.getElementById('selOps');
+const selKit=document.getElementById('selKitchen');
+const selBrand=document.getElementById('selBrand');
 function rebuildSelects(){
   const allCities=[...new Set(D.stores.map(s=>s.c))].filter(c=>D.stores.filter(s=>s.c===c&&s.fin[LI]!=null).length>5).sort();
   sel.innerHTML='<option value="ALL">🌎 Todas las ciudades</option>'+allCities.map(c=>`<option>${c}</option>`).join('');
   const _metaOps=(typeof fd2meta==='function')?Object.keys(fd2meta()).map(k=>fd2meta()[k].ops):[];
   const allOps=[...new Set(D.stores.map(s=>s.op).concat(_metaOps).filter(Boolean))].sort();
   selOps.innerHTML='<option value="ALL">👤 Todos los ops</option>'+allOps.map(o=>`<option>${o}</option>`).join('');
-  sel.value='ALL'; selOps.value='ALL';
+  if(selKit){ const allKit=[...new Set(D.stores.map(s=>s.k))].filter(k=>!HIDDEN.includes(k)).sort();
+    selKit.innerHTML='<option value="ALL">🍳 Todas las cocinas</option>'+allKit.map(k=>`<option>${k}</option>`).join(''); }
+  if(selBrand){ const allBr=[...new Set(D.stores.map(s=>s.b))].filter(Boolean).sort();
+    selBrand.innerHTML='<option value="ALL">🍔 Todas las marcas</option>'+allBr.map(b=>`<option>${b}</option>`).join(''); }
+  sel.value='ALL'; selOps.value='ALL'; if(selKit)selKit.value='ALL'; if(selBrand)selBrand.value='ALL';
 }
 rebuildSelects();
 sel.onchange=()=>{CITY=sel.value; OPS='ALL'; selOps.value='ALL'; update();};
 selOps.onchange=()=>{OPS=selOps.value; CITY='ALL'; sel.value='ALL'; update();};
+if(selKit)selKit.onchange=()=>{KIT=selKit.value; update();};
+if(selBrand)selBrand.onchange=()=>{BRAND=selBrand.value; update();};
 const ALLDATA={CO:{D:D,MO:MO}, MX:MXDATA, PE:PEDATA};
 // CO: la penalización ahora llega en el dato como cobertura = 1 km (centinela "1"). La normalizamos a 1000 m (1 km)
 // y marcamos _pen1k, para que km/%/buckets funcionen y las penalizadas se cuenten del dato (no se derivan del RTWT).
@@ -573,7 +585,7 @@ function ctryHeader(){
 window.setCountry=function(cc){
   if(!ALLDATA[cc])return; CTRY=cc; D=ALLDATA[cc].D; MO=ALLDATA[cc].MO;
   W=D.weeks; LI=W.length-1; N4=D.n4||4; W4=(function(){const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.push(i);return a;})();
-  CITY='ALL'; OPS='ALL'; rebuildSelects();
+  CITY='ALL'; OPS='ALL'; KIT='ALL'; BRAND='ALL'; rebuildSelects();
   document.querySelectorAll('.ctab').forEach(t=>t.classList.toggle('on', t.dataset.c===cc));
   // resetear sub-vista a Semanal y re-render
   var fd=document.getElementById('co-fdgy'); if(fd){fd.dataset.built='';}
