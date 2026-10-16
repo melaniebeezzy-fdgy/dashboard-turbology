@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       SUM(CASE WHEN o.minutes_cooking_time<=7 THEN 1 ELSE 0 END)::int AS c7,
       SUM(CASE WHEN o.minutes_cooking_time>7 AND o.minutes_cooking_time<=9 THEN 1 ELSE 0 END)::int AS c79,
       SUM(CASE WHEN o.minutes_cooking_time>9 THEN 1 ELSE 0 END)::int AS c9,
-      ROUND(AVG(o.minutes_cooking_time),1)::float AS cavg,
+      ROUND(AVG(o.minutes_cooking_time),2)::float AS cavg,
       ROUND(SUM(${RTWT_EXPR}),1)::float AS rtsum,
       COUNT(${RTWT_EXPR})::int AS rtcnt
     FROM fdgy_views.orders_consolidado o

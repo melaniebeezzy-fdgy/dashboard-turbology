@@ -1400,7 +1400,7 @@ function fd2drawDet(){
       +'<td class="num">'+fd2fmtDay(r.day)+'</td>'
       +'<td class="num">'+(r.hr==null?'—':r.hr)+'</td>'
       +'<td class="num">'+fd2esc(r.oid)+'</td>'
-      +'<td class="num">'+(r.cook==null?'—':r.cook.toFixed(1))+'</td>'
+      +'<td class="num">'+(r.cook==null?'—':r.cook.toFixed(2))+'</td>'
       +fd2rtCell(r.rt,null)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td>'
       +'<td>'+fd2respLabel(r.resp)+'</td></tr>';
   });
@@ -1425,7 +1425,7 @@ window.fd2showOrder=function(oid){
   ];
   var late=T[7]?'S\u00ed':'No'; var wait=(T[8]==null?'\u2014':T[8]+' min');
   var brand=o?o.b:''; var city=o?o.city:''; var coc=o?o.k:''; var fecha=o?fd2fmtDay(o.day):'';
-  var cook=(o&&o.cook!=null)?o.cook.toFixed(1)+' min':'\u2014';
+  var cook=(o&&o.cook!=null)?o.cook.toFixed(2)+' min':'\u2014';
   var rtwt=(o&&o.rt!=null)?o.rt.toFixed(2)+' min':'\u2014';
   var ottot=(o&&o.ot!=null)?o.ot.toFixed(1)+' min':'\u2014';
   var pts=steps.filter(function(s){return s.m!=null;}).slice().sort(function(a,b){return a.m-b.m;});
@@ -1459,7 +1459,7 @@ window.fd2csv=function(){
   var head=['Ciudad','Cocina','Marca','Fecha','Hora','Order_ID','Cook_min','RTWT_min','Order_time_min'];
   var lines=[head.join(',')];
   d.forEach(function(r){
-    var row=[r.city,r.k,r.b,r.day,(r.hr==null?'':r.hr),r.oid,(r.cook==null?'':r.cook.toFixed(1)),(r.rt==null?'':r.rt.toFixed(2)),(r.ot==null?'':r.ot.toFixed(1))];
+    var row=[r.city,r.k,r.b,r.day,(r.hr==null?'':r.hr),r.oid,(r.cook==null?'':r.cook.toFixed(2)),(r.rt==null?'':r.rt.toFixed(2)),(r.ot==null?'':r.ot.toFixed(1))];
     lines.push(row.map(function(x){var s=(''+x).replace(/"/g,'""');return /[",\n]/.test(s)?'"'+s+'"':s;}).join(','));
   });
   var blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});

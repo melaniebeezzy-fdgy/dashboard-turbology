@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     SELECT o.kitchen AS k, o.brand AS b, o.order_day::text AS d,
       FLOOR(o.order_hour)::int AS hr,
       o.provider_order_id AS oid,
-      ROUND(o.minutes_cooking_time,1)::float AS cook,
+      ROUND(o.minutes_cooking_time,2)::float AS cook,
       CASE WHEN oi.provider_delivered_to_domiciliary IS NULL OR o.domiciliary_in_store IS NULL
            THEN NULL ELSE ROUND((${RTWT_EXPR})::numeric,2)::float END AS rt,
       ROUND(o.minutes_received_to_destination,1)::float AS ot,
