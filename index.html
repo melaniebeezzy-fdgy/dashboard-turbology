@@ -559,26 +559,34 @@ const selOps=document.getElementById('selOps');
 const selKit=document.getElementById('selKitchen');
 const selBrand=document.getElementById('selBrand');
 const selCM=document.getElementById('selCM');
-function rebuildSelects(){
-  const allCities=[...new Set(D.stores.map(s=>s.c))].filter(c=>D.stores.filter(s=>s.c===c&&s.fin[LI]!=null).length>5).sort();
-  sel.innerHTML='<option value="ALL">🌎 Todas las ciudades</option>'+allCities.map(c=>`<option>${c}</option>`).join('');
-  const _metaOps=(typeof fd2meta==='function')?Object.keys(fd2meta()).map(k=>fd2meta()[k].ops):[];
-  const allOps=[...new Set(D.stores.map(s=>s.op).concat(_metaOps).filter(Boolean))].sort();
-  selOps.innerHTML='<option value="ALL">👤 Todos los ops</option>'+allOps.map(o=>`<option>${o}</option>`).join('');
-  if(selKit){ const allKit=[...new Set(D.stores.map(s=>s.k))].filter(k=>!HIDDEN.includes(k)).sort();
-    selKit.innerHTML='<option value="ALL">🍳 Todas las cocinas</option>'+allKit.map(k=>`<option>${k}</option>`).join(''); }
-  if(selBrand){ const allBr=[...new Set(D.stores.map(s=>brNorm(s.b)))].filter(Boolean).sort();
-    selBrand.innerHTML='<option value="ALL">🍔 Todas las marcas</option>'+allBr.map(b=>`<option>${b}</option>`).join(''); }
-  if(selCM){ const allCM=[...new Set(Object.keys(OPS2CM).map(k=>OPS2CM[k]))].sort();
-    selCM.innerHTML='<option value="ALL">🧑‍💼 Todos los City Managers</option>'+allCM.map(c=>`<option>${c}</option>`).join(''); }
-  sel.value='ALL'; selOps.value='ALL'; if(selCM)selCM.value='ALL'; if(selKit)selKit.value='ALL'; if(selBrand)selBrand.value='ALL';
+// Filtros encadenados (faceted): cada dropdown muestra solo las opciones válidas según los demás filtros activos.
+function _filtStores(exclude){ return D.stores.filter(function(s){
+  if(exclude!=='city' && CITY!=='ALL' && s.c!==CITY) return false;
+  if(exclude!=='cm' && CM!=='ALL' && cmOf(s.op)!==CM) return false;
+  if(exclude!=='ops' && OPS!=='ALL' && s.op!==OPS) return false;
+  if(exclude!=='kit' && KIT!=='ALL' && s.k!==KIT) return false;
+  if(exclude!=='brand' && BRAND!=='ALL' && brNorm(s.b)!==BRAND) return false;
+  return true; }); }
+function _fill(selEl,allLbl,vals,cur){ if(!selEl) return; selEl.innerHTML='<option value="ALL">'+allLbl+'</option>'+vals.map(function(v){return '<option>'+v+'</option>';}).join(''); selEl.value=(cur!=='ALL'&&vals.indexOf(cur)>=0)?cur:'ALL'; }
+function refreshSelects(){
+  var cityVals=[...new Set(_filtStores('city').map(s=>s.c))].filter(function(c){return D.stores.filter(function(s){return s.c===c&&s.fin[LI]!=null;}).length>5;}).sort();
+  var cmVals=[...new Set(_filtStores('cm').map(s=>cmOf(s.op)).filter(Boolean))].sort();
+  var opsVals=[...new Set(_filtStores('ops').map(s=>s.op).filter(Boolean))];
+  if(typeof fd2meta==='function'){ var mm=fd2meta(); Object.keys(mm).forEach(function(k){ var o=mm[k].ops; if(!o) return; if(CM!=='ALL'&&cmOf(o)!==CM) return; if(CITY!=='ALL'&&mm[k].city!==CITY) return; if(opsVals.indexOf(o)<0) opsVals.push(o); }); }
+  opsVals.sort();
+  var kitVals=[...new Set(_filtStores('kit').map(s=>s.k))].filter(function(k){return !HIDDEN.includes(k);}).sort();
+  var brVals=[...new Set(_filtStores('brand').map(s=>brNorm(s.b)))].filter(Boolean).sort();
+  _fill(sel,'🌎 Todas las ciudades',cityVals,CITY);
+  _fill(selCM,'🧑‍💼 Todos los City Managers',cmVals,CM);
+  _fill(selOps,'👤 Todos los ops',opsVals,OPS);
+  _fill(selKit,'🍳 Todas las cocinas',kitVals,KIT);
+  _fill(selBrand,'🍔 Todas las marcas',brVals,BRAND);
 }
+function rebuildSelects(){ CITY='ALL';OPS='ALL';CM='ALL';KIT='ALL';BRAND='ALL'; refreshSelects(); }
+function _syncGlobals(){ CITY=sel.value; CM=selCM?selCM.value:'ALL'; OPS=selOps.value; KIT=selKit?selKit.value:'ALL'; BRAND=selBrand?selBrand.value:'ALL'; }
+function onFilterChange(){ _syncGlobals(); refreshSelects(); _syncGlobals(); update(); }
 rebuildSelects();
-sel.onchange=()=>{CITY=sel.value; OPS='ALL'; CM='ALL'; selOps.value='ALL'; if(selCM)selCM.value='ALL'; update();};
-selOps.onchange=()=>{OPS=selOps.value; CITY='ALL'; CM='ALL'; sel.value='ALL'; if(selCM)selCM.value='ALL'; update();};
-if(selCM)selCM.onchange=()=>{CM=selCM.value; CITY='ALL'; OPS='ALL'; sel.value='ALL'; selOps.value='ALL'; update();};
-if(selKit)selKit.onchange=()=>{KIT=selKit.value; update();};
-if(selBrand)selBrand.onchange=()=>{BRAND=selBrand.value; update();};
+sel.onchange=onFilterChange; selOps.onchange=onFilterChange; if(selCM)selCM.onchange=onFilterChange; if(selKit)selKit.onchange=onFilterChange; if(selBrand)selBrand.onchange=onFilterChange;
 const ALLDATA={CO:{D:D,MO:MO}, MX:MXDATA, PE:PEDATA};
 // CO: la penalización ahora llega en el dato como cobertura = 1 km (centinela "1"). La normalizamos a 1000 m (1 km)
 // y marcamos _pen1k, para que km/%/buckets funcionen y las penalizadas se cuenten del dato (no se derivan del RTWT).
