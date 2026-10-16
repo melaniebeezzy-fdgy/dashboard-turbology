@@ -1127,6 +1127,11 @@ window.coView=function(x){
   document.getElementById('coTabW').classList.toggle('on',x==='w');
   document.getElementById('coTabM').classList.toggle('on',x==='m');
   var ft=document.getElementById('coTabF'); if(ft)ft.classList.toggle('on',x==='f');
+  // Filtros de cocina/marca: solo en vistas Rappi (Semanal y Mensual). En Fdgy se ocultan y se resetean para no filtrar en silencio.
+  var _kbW=(x==='w'||x==='m'), _sk=document.getElementById('selKitchen'), _sb=document.getElementById('selBrand');
+  if(_sk)_sk.style.display=_kbW?'':'none';
+  if(_sb)_sb.style.display=_kbW?'':'none';
+  if(!_kbW && (KIT!=='ALL'||BRAND!=='ALL')){ KIT='ALL'; BRAND='ALL'; if(_sk)_sk.value='ALL'; if(_sb)_sb.value='ALL'; }
   if(x==='m'){ requestAnimationFrame(()=>requestAnimationFrame(()=>{try{renderMonthly();}catch(e){console.error(e);}})); }
   if(x==='f'){ requestAnimationFrame(()=>requestAnimationFrame(()=>{try{if(window.__fdgyRender)window.__fdgyRender(CTRY3[CTRY],'co-fdgy');}catch(e){console.error(e);}})); }
 };
