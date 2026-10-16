@@ -407,7 +407,7 @@ let DIST={d:[],tot:[]};
 const chD=new Chart(chDist,{type:'bar',
  data:{labels:W,datasets:[...LV].reverse().map(s=>({label:(s/1000).toFixed(1)+' km',_size:s,data:[],backgroundColor:scol[s],stack:'s'}))},
  options:{maintainAspectRatio:false,layout:{padding:{top:4}},
-  onClick:(e,els)=>{ if(!els.length)return; const el=els[0]; const size=chD.data.datasets[el.datasetIndex]._size; coShowDist(el.index,size); },
+  onClick:(e,els)=>{ if(!els.length)return; const el=els[0]; const size=chD.data.datasets[el.datasetIndex]._size; coShowDist(el.index+(chD._woff||0),size); },
   plugins:{legend:{position:'top',align:'center',labels:{boxWidth:10,padding:8,font:{size:11}}},
    tooltip:{callbacks:{label:ctx=>{const v=ctx.raw||0;const t=DIST.tot[ctx.dataIndex]||1;return `${ctx.dataset.label}: ${v} marcas (${(100*v/t).toFixed(1)}%)`}}},
    datalabels:{
@@ -636,7 +636,7 @@ function update(){
  var _NW=15, _wl=W.slice(-_NW);   // solo las últimas 15 semanas en estas dos gráficas
  chR.data.labels=_wl; chR.data.datasets[0].data=(o.rtwt||[]).slice(-_NW); chR.update();
  chC.data.labels=_wl; chC.data.datasets[0].data=(o.cov||[]).slice(-_NW); chC.data.datasets[1].data=W.map((_,w)=>{let t=0;st.forEach(s=>{const gv=(s.gw||[])[w]; const fw=(s.fin||[])[w]; const mx=mxp(s); if(gv&&fw&&mx&&fw<mx) t+=gv*(mx/fw-1);});return Math.round(t);}).slice(-_NW); chC.update();
- chD.data.labels=W; chD.data.datasets.forEach(ds=>{ds.data=W.map((_,w)=>DIST.d[w][ds._size]||0)}); chD.update();
+ {const _o=Math.max(0,W.length-15); chD._woff=_o; chD.data.labels=W.slice(_o); chD.data.datasets.forEach(ds=>{ds.data=W.slice(_o).map((_,wj)=>DIST.d[wj+_o][ds._size]||0)}); chD.update();}
 
  // ciudades
  const gc=groupBy(st,s=>s.c);
@@ -973,9 +973,11 @@ function renderSales(){
     document.getElementById('swTitle').textContent = swMetric==='gmv'?'🛒 Monto por ciudad':'🛒 Cantidad (Q) por ciudad';
     datasets=cities.map(c=>({type:'line',label:c,data:coWkTot(g[c],arr),borderColor:SWCITYCOL[c]||'#345964',backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:2,datalabels:{display:false}}));
   }
+  const _swOff=Math.max(0,WK.length-15); const WKs=WK.slice(_swOff);   // solo las últimas 15 semanas
+  datasets.forEach(d=>{ if(Array.isArray(d.data)) d.data=d.data.slice(_swOff); });
   if(chSales)chSales.destroy();
   const gmvAxis = swView==='global' || isCoc || swMetric==='gmv';
-  chSales=new Chart(document.getElementById('chSales'),{data:{labels:WK,datasets},
+  chSales=new Chart(document.getElementById('chSales'),{data:{labels:WKs,datasets},
     options:{maintainAspectRatio:false,layout:{padding:{top:6}},interaction:{mode:'nearest',intersect:false},
      onClick:(e,els)=>{ if(!els.length)return;
        if(swView==='global'){ swView='city'; swMetric=(els[0].datasetIndex===0)?'gmv':'ord'; swSyncBtns(); renderSales(); }
