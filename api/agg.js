@@ -4,7 +4,7 @@
 // Shape de salida (compatible con FDGY2[pais]):
 //   { country, from, to, days:[ISO...], K:[cocinas], B:[marcas],
 //     R:[[ki,bi,di,n,c7,c79,c9,cavg,rtsum,rtcnt], ...] }
-import { guard, parseCountry, parseRange, cleanStr, getClient, setCache, sendJson, httpError, serverError, BASE_WHERE, RTWT_EXPR } from './_db.js';
+import { guard, parseCountry, parseRange, cleanStr, getClient, setCache, sendJson, httpError, serverError, BASE_WHERE, RTWT_EXPR, COOK_EXPR } from './_db.js';
 
 export default async function handler(req, res) {
   if (!guard(req, res)) return;
@@ -23,10 +23,10 @@ export default async function handler(req, res) {
   const sql = `
     SELECT o.kitchen AS k, o.brand AS b, o.order_day::text AS d,
       COUNT(*)::int AS n,
-      SUM(CASE WHEN o.minutes_cooking_time<=7 THEN 1 ELSE 0 END)::int AS c7,
-      SUM(CASE WHEN o.minutes_cooking_time>7 AND o.minutes_cooking_time<=9 THEN 1 ELSE 0 END)::int AS c79,
-      SUM(CASE WHEN o.minutes_cooking_time>9 THEN 1 ELSE 0 END)::int AS c9,
-      ROUND(AVG(o.minutes_cooking_time),2)::float AS cavg,
+      SUM(CASE WHEN (${COOK_EXPR})<=7 THEN 1 ELSE 0 END)::int AS c7,
+      SUM(CASE WHEN (${COOK_EXPR})>7 AND (${COOK_EXPR})<=9 THEN 1 ELSE 0 END)::int AS c79,
+      SUM(CASE WHEN (${COOK_EXPR})>9 THEN 1 ELSE 0 END)::int AS c9,
+      ROUND(AVG(${COOK_EXPR})::numeric,2)::float AS cavg,
       ROUND(SUM(${RTWT_EXPR}),1)::float AS rtsum,
       COUNT(${RTWT_EXPR})::int AS rtcnt
     FROM fdgy_views.orders_consolidado o
