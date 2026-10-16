@@ -25,11 +25,9 @@ export const RTWT_EXPR =
   "GREATEST(0, EXTRACT(EPOCH FROM (oi.provider_delivered_to_domiciliary - " +
   "GREATEST(o.domiciliary_in_store, o.order_date_local + interval '5 minute')))/60.0)";
 
-// Cooking time real = recepción -> listo para entregar (order_state_waiting_for_delivery - order_date_local).
-// NO incluye la espera de que el RT recoja el pedido (eso inflaba minutes_cooking_time). NULL si falta waiting o es negativo.
-export const COOK_EXPR =
-  "CASE WHEN o.order_state_waiting_for_delivery IS NULL OR o.order_state_waiting_for_delivery < o.order_date_local " +
-  "THEN NULL ELSE EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - o.order_date_local))/60.0 END";
+// Cooking time = platform_cooking_time (tiempo de preparación reportado por la plataforma).
+// Nota: para la mayoría de órdenes es un valor casi constante (~4 min), no el ciclo real de cocina.
+export const COOK_EXPR = "o.platform_cooking_time";
 
 export const BASE_WHERE =
   "o.company_id='fdgy' AND o.country=$1 AND o.provider_new_name='Rappi' " +
