@@ -215,7 +215,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 </div>
 <!--VENTAS_HTML_START-->
 <h1 id="vpareto">Ventas <span>· última semana</span> <span id="vWk" style="font-size:14px;color:var(--mut)"></span></h1>
-<div class="sub">Órdenes totales por marca y cocina de la última semana (31 ago–6 sep). Se aplica el <b>filtro de ciudad</b> de la barra superior. RTWT y polígonos son del cierre más reciente.</div>
+<div class="sub">Órdenes totales por marca y cocina de la última semana (<span id="vWkRange">—</span>). Se aplica el <b>filtro de ciudad</b> de la barra superior. RTWT y polígonos son del cierre más reciente (Redshift, D-1).</div>
 
 <div class="card" style="margin-bottom:14px" id="vtop5"><h2>Top 5 marcas — cobertura & RTWT</h2>
   <div class="hint">Semáforo RTWT: <span style="color:#1e8e5a;font-weight:700">≤2</span> · <span style="color:#d99a1b;font-weight:700">2–3</span> · <span style="color:#e67e22;font-weight:700">3–6</span> · <span style="color:#c0392b;font-weight:700">≥6</span>. «Mejor/peor cocina» por RTWT. Cobertura = polígono final vs. 3.0 km.</div>
@@ -320,6 +320,8 @@ const km=m=>m==null?'–':(m/1000).toFixed(1);
 const rtcol=v=>v==null?null:(v<=2?'#1e8e5a':(v<=3?'#d99a1b':(v<6?'#e67e22':'#c0392b')));
 const rtfmt=(v,d=2)=>v==null?'–':`<span style="font-weight:600;color:var(--navy2)">${v.toFixed(d)}</span> <span class="sdot" style="background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${rtcol(v)}"></span>`;
 function fmt(x,d=2){return x==null?'–':x.toFixed(d)}
+// Rango (lun–dom) de la semana a partir de su etiqueta domingo "Mmm D" (p.ej. "Oct 18" -> "12 oct–18 oct").
+function wkRangeLbl(lbl){var MM={ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11,jan:0,apr:3,aug:7,dec:11};var m=String(lbl||'').toLowerCase().match(/([a-zá-ú]{3})\s*(\d{1,2})/);if(!m||MM[m[1]]==null)return lbl||'—';var end=new Date(2026,MM[m[1]],+m[2]);var st=new Date(end.getTime()-6*86400000);var N=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return st.getDate()+' '+N[st.getMonth()]+'–'+end.getDate()+' '+N[end.getMonth()];}
 function avg(a){a=a.filter(x=>x!=null);return a.length?a.reduce((s,x)=>s+x,0)/a.length:null}
 function lvlIdx(m){let bi=0,bd=1e9;LV.forEach((l,i)=>{const d=Math.abs(l-m);if(d<bd){bd=d;bi=i}});return bi}
 function delta(el,val,goodDown){ if(val==null)return '–';
@@ -872,6 +874,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
  function renderV(){
    const D=sub();
    const wk=document.getElementById('vWk'); if(wk) wk.textContent='· '+(W[W.length-1])+(OPS!=='ALL'?' · ops: '+OPS:(CITY!=='ALL'?' · '+CITY:''));
+   const _vr=document.getElementById('vWkRange'); if(_vr) _vr.textContent=wkRangeLbl(W[W.length-1]);
    const vk=document.getElementById('vKpis');
    const cvp=document.getElementById('chPareto');
    if(!D || !D.top5_detail || !D.top5_detail.length){if(vk)vk.innerHTML='';
