@@ -1408,7 +1408,7 @@ function fd2drawDet(){
       +'<td class="num">'+(r.hr==null?'—':r.hr)+'</td>'
       +'<td class="num">'+fd2esc(r.oid)+'</td>'
       +'<td class="num">'+(r.cook==null?'—':r.cook.toFixed(2))+'</td>'
-      +fd2rtCell(r.rt,null)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td>'
+      +fd2rtCell(r.rt,null,1)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td>'
       +'<td>'+fd2respLabel(r.resp)+'</td></tr>';
   });
   h+='</tbody>';
