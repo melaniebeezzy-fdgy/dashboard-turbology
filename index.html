@@ -189,11 +189,11 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 </div><!--/stickybar-->
 <div id="co-weekly">
 <h1 id="resumen">Resumen <span>ejecutivo</span> <span id="cityTag" style="font-size:14px;color:var(--mut)"></span></h1>
-<div class="sub" id="resSub">Semanas del 10 may al 6 sep 2026 · Evaluación por <b>promedio móvil de 4 semanas</b> (16 ago–6 sep). Cobertura =polígono efectivo (<b>coverageCurrent</b>) sobre el <b>polígono máximo de cada zona</b> (no todas llegan a 3 km); cae a <b>0%</b> si el RTWT promedio de 4 semanas supera <b>6 min</b> (penalización 4 semanas). El filtro de ciudad aplica a todo el dashboard.</div>
+<div class="sub" id="resSub">Semanas del 10 may al 6 sep 2026 · Evaluación por <b>promedio móvil de 4 semanas</b> (16 ago–6 sep). Cobertura =polígono efectivo (<b>coverageCurrent</b>) sobre el <b>polígono máximo de cada zona</b> (no todas llegan a 3 km); una cocina se marca <b>crítica</b> si el RTWT promedio de 4 semanas supera <b>6 min</b>; la penalización reduce la cobertura a <b>1 km</b>. El filtro de ciudad aplica a todo el dashboard.</div>
 <div class="kpis" id="kpis"></div>
 
 <div class="grid" id="tendencias">
-  <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">Promedio de RTWT por semana. Estados (sobre el promedio móvil de 4 semanas): <span style="color:#1e8e5a;font-weight:700">🟢 ≤2</span> · <span style="color:#d99a1b;font-weight:700">🟡 2–3</span> · <span style="color:#e67e22;font-weight:700">🟠 3–6</span> · <span style="color:#c0392b;font-weight:700">🔴 ≥6 (pierde cobertura)</span>.</div><div class="chartbox" style="min-height:280px"><canvas id="chRtwt"></canvas></div></div>
+  <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">Promedio de RTWT por semana. Estados (sobre el promedio móvil de 4 semanas): <span style="color:#1e8e5a;font-weight:700">🟢 ≤2</span> · <span style="color:#d99a1b;font-weight:700">🟡 2–3</span> · <span style="color:#e67e22;font-weight:700">🟠 3–6</span> · <span style="color:#c0392b;font-weight:700">🔴 ≥6 (crítica)</span>.</div><div class="chartbox" style="min-height:280px"><canvas id="chRtwt"></canvas></div></div>
   <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Promedio del polígono vs. el ideal de 3.0 km (100%).</div><div class="chartbox" style="min-height:280px"><canvas id="chCov"></canvas></div></div>
 </div>
 <div class="grid" id="opp-grid" style="grid-template-columns:1.05fr .95fr">
@@ -202,7 +202,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 </div>
 <div class="grid" id="poligonos">
   <div class="card"><h2>Distribución de polígonos por semana</h2><div class="hint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div></div>
-  <div class="card" id="cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="tgCoc" class="on" onclick="coSetComb('cocina')">Cocinas</button><button id="tgCity" onclick="coSetComb('city')">Ciudades</button></div></div><div class="hint" id="combHint">RTWT promedio móvil de 4 semanas (16 ago–6 sep), estado (🟢🟡🟠🔴) y cobertura efectiva (0% si penalizada). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.</div><div id="combBC" style="margin:2px 0 6px"></div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="tbComb"></table></div></div>
+  <div class="card" id="cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="tgCoc" class="on" onclick="coSetComb('cocina')">Cocinas</button><button id="tgCity" onclick="coSetComb('city')">Ciudades</button></div></div><div class="hint" id="combHint">RTWT promedio móvil de 4 semanas (16 ago–6 sep), estado (🟢🟡🟠🔴) y cobertura efectiva (🔴 crítica si RTWT &gt; 6 min). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.</div><div id="combBC" style="margin:2px 0 6px"></div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="tbComb"></table></div></div>
 </div>
 <div id="distDetail"></div>
 <div class="card" style="margin-bottom:14px"><h2>Mapa de calor — % cobertura por cocina y semana</h2><div class="hint">Escala continua: vino &lt; 70% → malva → verde azulado → azul → azul oscuro ≥ 98%. Cada punto porcentual cambia el tono.</div><div class="hscroll"><table class="hm" id="tbHeat"></table></div><div id="heatDetail"></div></div>
@@ -240,11 +240,11 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 </div><!--/co-weekly-->
 <div id="co-monthly" style="display:none">
 <h1>Vista <span>mensual</span> <span id="moCityTag" style="font-size:14px;color:var(--mut)"></span></h1>
-<div class="sub">Agregado por mes desde el histórico semanal del período. <b>Venta, RTWT, cobertura, polígonos y heatmap</b> se calculan a nivel de tienda, así que <b>respetan el filtro de ciudad y ops</b>. El último mes es parcial. Cobertura = polígono efectivo vs. máximo de zona (0% si penalizada, solo Colombia).Respeta el filtro de ciudad/ops.</div>
+<div class="sub">Agregado por mes desde el histórico semanal del período. <b>Venta, RTWT, cobertura, polígonos y heatmap</b> se calculan a nivel de tienda, así que <b>respetan el filtro de ciudad y ops</b>. El último mes es parcial. Cobertura = polígono efectivo vs. máximo de zona (crítica si RTWT &gt; 6 min, solo Colombia).Respeta el filtro de ciudad/ops.</div>
 
 <div class="grid" id="mo-g1">
   <div class="card"><h2>Avg RTWT mensual</h2><div class="hint">Promedio de RTWT por mes (media de las semanas del mes). Estados: <span style="color:#1e8e5a;font-weight:700">🟢 ≤2</span> · <span style="color:#d99a1b;font-weight:700">🟡 2–3</span> · <span style="color:#e67e22;font-weight:700">🟠 3–6</span> · <span style="color:#c0392b;font-weight:700">🔴 ≥6</span>.</div><div class="chartbox" style="min-height:280px"><canvas id="chMoRtwt"></canvas></div></div>
-  <div class="card"><h2>% Cobertura mensual</h2><div class="hint">Cobertura efectiva promedio del mes (0% si penalizada), vs. el máximo de zona.</div><div class="chartbox" style="min-height:280px"><canvas id="chMoCov"></canvas></div></div>
+  <div class="card"><h2>% Cobertura mensual</h2><div class="hint">Cobertura efectiva promedio del mes (crítica si RTWT &gt; 6 min), vs. el máximo de zona.</div><div class="chartbox" style="min-height:280px"><canvas id="chMoCov"></canvas></div></div>
 </div>
 
 <div class="grid" id="mo-g2">
@@ -486,7 +486,7 @@ function showHeat(hi,wi){
   if(!st.length){ dd.innerHTML=`<div class="ddh">${close}<b>${k}</b> · semana <b>${W[wi]}</b>: todas las marcas están en 3.0 km ✓</div>`; }
   else{ dd.innerHTML=`<div class="ddh">${close}<b>${k}</b> · semana <b>${W[wi]}</b> — <b>${st.length}</b> marca(s) fuera de 3.0 km (peor → mejor):</div>`+
     '<div class="scroll" style="max-height:260px"><table class="dense"><tr><th>Marca</th><th class="num">Polígono</th><th class="num">Caída de polígono</th><th class="num">RTWT</th></tr>'+
-    st.map(x=>{const sz=x.sz;const pill=sz===0?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':`<span class="pill" style="background:${scol[sz]||'#888'};color:${lcol[sz]||'#fff'}">${km(sz)} km</span>`;const caida=x.drop?`<span style="color:var(--plum);font-weight:600">${km(x.drop[0])} km → ${x.drop[1]===0?'0 km · 0%':km(x.drop[1])+' km'}</span>`:'–';return `<tr><td>${x.b}</td><td class="num">${pill}</td><td class="num">${caida}</td><td class="num">${rtfmt(x.rt)}</td></tr>`}).join('')+'</table></div>'; }
+    st.map(x=>{const sz=x.sz;const pill=sz===0?'<span class="pill" style="background:#1a1a1a;color:#fff">Crítica</span>':`<span class="pill" style="background:${scol[sz]||'#888'};color:${lcol[sz]||'#fff'}">${km(sz)} km</span>`;const caida=x.drop?`<span style="color:var(--plum);font-weight:600">${km(x.drop[0])} km → ${x.drop[1]===0?'Crítica':km(x.drop[1])+' km'}</span>`:'–';return `<tr><td>${x.b}</td><td class="num">${pill}</td><td class="num">${caida}</td><td class="num">${rtfmt(x.rt)}</td></tr>`}).join('')+'</table></div>'; }
   dd.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 window.showHeat=showHeat;
@@ -528,7 +528,7 @@ function renderComb(){
   COLS[2].l=CTRY==='CO'?'RTWT 4 sem':'RTWT últ. sem';
   var _rl=CTRY==='CO'?'promedio móvil 4 semanas':'RTWT última semana';
   var _ct=document.getElementById('combTitle'); if(_ct)_ct.textContent=(combView==='cocina'?'Cocinas':'Ciudades')+' — '+_rl;
-  var _ch=document.getElementById('combHint'); if(_ch)_ch.innerHTML=(CTRY==='CO'?'RTWT promedio móvil de 4 semanas':'RTWT de la <b>última semana</b>')+', estado (🟢🟡🟠🔴) y cobertura efectiva (0% si penalizada). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.';
+  var _ch=document.getElementById('combHint'); if(_ch)_ch.innerHTML=(CTRY==='CO'?'RTWT promedio móvil de 4 semanas':'RTWT de la <b>última semana</b>')+', estado (🟢🟡🟠🔴) y cobertura efectiva (🔴 crítica si RTWT &gt; 6 min). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.';
   const el=document.getElementById('tbComb'), bc=document.getElementById('combBC');
   if(combDrill.length===0){
     if(bc) bc.innerHTML='';
@@ -578,7 +578,7 @@ function ctryHeader(){
   var t=document.querySelector('#topbar .t'); if(t)t.innerHTML='Foodology <span>· Turbo '+lbl+'</span> — RTWT & Polígonos';
   var rs=document.getElementById('resSub'); if(rs){
     var wk=W.length?(W[0]+' – '+W[W.length-1]):'';
-    var pen=CTRY==='CO'?' La cobertura cae a <b>0%</b> si el RTWT promedio de 4 semanas supera <b>6 min</b> (penalización, solo Colombia).':' (México y Perú no penalizan por RTWT: cobertura = polígono asignado).';
+    var pen=CTRY==='CO'?' Una cocina se marca <b>crítica</b> si el RTWT promedio de 4 semanas supera <b>6 min</b> (solo Colombia); la penalización de la plataforma reduce la cobertura a <b>1 km</b>.':' (México y Perú: cobertura = polígono asignado).';
     rs.innerHTML='Semanas <b>'+wk+'</b> · '+lbl+'. Evaluación por <b>promedio móvil de 4 semanas</b>. Cobertura = polígono efectivo sobre el <b>polígono máximo de cada zona</b>.'+pen+' El filtro de ciudad/ops aplica a todo el dashboard.';
   }
 }
@@ -673,11 +673,11 @@ function update(){
  {var _bt=document.getElementById('brTitle'); if(_bt)_bt.textContent=_co?'Marcas–cocinas con RTWT crítico (riesgo)':'Marcas–cocinas con RTWT sobre 6 min';
   var _bh=document.getElementById('brHint'); if(_bh)_bh.innerHTML=_co?'Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico (≥6 min). La penalización por cobertura (1 km) se mide aparte. Ordenadas de peor a mejor.':'Combinaciones marca–cocina con RTWT de la <b>última semana</b> en 🟠 naranja (3–6) o 🔴 <b>sobre 6 min</b> (≥6). Ordenadas de peor a mejor.';}
  document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th>'+(_co?'<th class="num">RTWT últ. sem</th>':'')+'<th class="num">Polígono efectivo</th></tr>'+
-  (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td>${_co?`<td class="num">${rt4fmt(r.rtLast)}</td>`:''}<td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>')}</td></tr>`).join('')
+  (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td>${_co?`<td class="num">${rt4fmt(r.rtLast)}</td>`:''}<td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">Crítica</span>')}</td></tr>`).join('')
    :`<tr><td colspan="${_co?5:4}" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>`);
 
   // ---- marcas que cambiaron de polígono efectivo (sem pasada vs actual) ----
-  const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
+  const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">Crítica</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
   const effAt=(s,w)=>{if(s.fin[w]==null)return null;const a=ma4at(s,w);return (penOn()&&a!=null&&a>6)?0:s.fin[w];};
   const pchg=st.filter(s=>{const a=effAt(s,LI-1),b=effAt(s,LI);return a!=null&&b!=null&&a!==b;})
     .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s),rtlw:s.rt[LI]}))
@@ -716,7 +716,7 @@ function showDetail(dim,name){
   document.getElementById('mTitle').textContent=(dim==='city'?'Ciudad: ':'Cocina: ')+name+' — polígonos efectivos al 16 ago';
   document.getElementById('mSum').innerHTML=`Cobertura efectiva: <b>${cov.toFixed(1)}%</b> · ${full} de ${tot} marcas en 3.0 km${npen?` · <b style="color:var(--plum)">${npen}</b> penalizada(s) por RTWT &gt; 8 (0%)`:''} · para llegar al 100% hay que subir <b>${tot-full}</b> marcas.`;
   document.getElementById('mTable').innerHTML='<tr><th>Marca</th>'+(dim==='city'?'<th>Cocina</th>':'<th>Ciudad</th>')+'<th class="num">Polígono efectivo</th><th class="num">Falta para 3.0</th></tr>'+
-   rows.map(r=>`<tr><td>${r.b}</td><td>${dim==='city'?r.k:r.c}</td><td class="num">${r.pen?'<span class="pill" style="background:#1a1a1a">0 km · 0%</span>':`<span class="pill" style="background:${scol[r.eff]||'#345964'}">${km(r.eff)} km</span>`}</td><td class="num">${r.pen?'<span style="color:var(--mut)">RTWT&gt;8</span>':(r.eff>=3000?'—':'+'+km(3000-r.eff)+' km')}</td></tr>`).join('');
+   rows.map(r=>`<tr><td>${r.b}</td><td>${dim==='city'?r.k:r.c}</td><td class="num">${r.pen?'<span class="pill" style="background:#1a1a1a">Crítica</span>':`<span class="pill" style="background:${scol[r.eff]||'#345964'}">${km(r.eff)} km</span>`}</td><td class="num">${r.pen?'<span style="color:var(--mut)">Crítica</span>':(r.eff>=3000?'—':'+'+km(3000-r.eff)+' km')}</td></tr>`).join('');
   document.getElementById('modalBg').classList.add('open');
 }
 let BRLIST=[];
@@ -755,13 +755,11 @@ window.showPenal=function(){
 window.showLost=function(){
   const rows=lostCoverage(F()).sort((a,b)=>(a.pw-b.pw)||(b.a4-a.a4));   // menos → más semanas penalizadas
   const _pen=CTRY==='CO';
-  document.getElementById('mTitle').textContent=(_pen?'Tiendas que pierden cobertura':'Tiendas con RTWT > 6 min')+' — '+rows.length+' tienda(s)';
-  document.getElementById('mSum').innerHTML=_pen
-    ? `Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> → <b>0% de cobertura</b> (penalización 4 semanas). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas penalizadas</b> (menos → más).`
-    : `Tiendas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b>. Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas &gt; 6 min</b> (menos → más).`;
+  document.getElementById('mTitle').textContent='Marcas críticas (RTWT > 6 min) — '+rows.length+' tienda(s)';
+  document.getElementById('mSum').innerHTML=`Marcas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> (crítico). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas &gt; 6 min</b> (menos → más).`;
   document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">'+rtH()+'</th><th class="num">Δ</th><th class="num">Polígono'+(_pen?' efectivo':'')+'</th><th class="num">Sem. &gt; 6 min</th><th class="num">Sem. con dato</th></tr>'+
-   (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num">${_pen?'<span class="pill" style="background:#1a1a1a;color:#fff">0 km · 0%</span>':('<span class="pill" style="background:'+(scol[r.cc]||'#345964')+'">'+km(r.cc)+' km</span>')}</td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
-    :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda pierde cobertura en este alcance ✓</td></tr>');
+   (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num">${_pen?'<span class="pill" style="background:#1a1a1a;color:#fff">Crítica</span>':('<span class="pill" style="background:'+(scol[r.cc]||'#345964')+'">'+km(r.cc)+' km</span>')}</td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
+    :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca crítica en este alcance ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
 };
 window.dlRtImp=function(){
