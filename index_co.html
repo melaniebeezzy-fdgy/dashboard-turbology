@@ -611,8 +611,9 @@ function update(){
     : {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'}),
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
- chR.data.labels=W; chR.data.datasets[0].data=o.rtwt; chR.update();
- chC.data.labels=W; chC.data.datasets[0].data=o.cov; chC.data.datasets[1].data=W.map((_,w)=>{let t=0;st.forEach(s=>{const gv=(s.gw||[])[w]; const fw=(s.fin||[])[w]; const mx=mxp(s); if(gv&&fw&&mx&&fw<mx) t+=gv*(mx/fw-1);});return Math.round(t);}); chC.update();
+ var _NW=15, _wl=W.slice(-_NW);   // solo las últimas 15 semanas en estas dos gráficas
+ chR.data.labels=_wl; chR.data.datasets[0].data=(o.rtwt||[]).slice(-_NW); chR.update();
+ chC.data.labels=_wl; chC.data.datasets[0].data=(o.cov||[]).slice(-_NW); chC.data.datasets[1].data=W.map((_,w)=>{let t=0;st.forEach(s=>{const gv=(s.gw||[])[w]; const fw=(s.fin||[])[w]; const mx=mxp(s); if(gv&&fw&&mx&&fw<mx) t+=gv*(mx/fw-1);});return Math.round(t);}).slice(-_NW); chC.update();
  chD.data.labels=W; chD.data.datasets.forEach(ds=>{ds.data=W.map((_,w)=>DIST.d[w][ds._size]||0)}); chD.update();
 
  // ciudades
