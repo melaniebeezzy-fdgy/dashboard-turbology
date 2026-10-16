@@ -28,7 +28,10 @@ export default async function handler(req, res) {
       SUM(CASE WHEN (${COOK_EXPR})>9 THEN 1 ELSE 0 END)::int AS c9,
       ROUND(AVG(${COOK_EXPR})::numeric,2)::float AS cavg,
       ROUND(SUM(${RTWT_EXPR}),1)::float AS rtsum,
-      COUNT(${RTWT_EXPR})::int AS rtcnt
+      COUNT(${RTWT_EXPR})::int AS rtcnt,
+      -- Responsabilidad de la demora (minutos): Kitchen_Wait (cocina) y RT_Wait (rt)
+      ROUND(SUM(GREATEST(0, EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store)))/60.0)),1)::float AS kwsum,
+      ROUND(SUM(GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0)),1)::float AS rwsum
     FROM fdgy_views.orders_consolidado o
     LEFT JOIN fdgy_views.ontime_infull_order oi ON oi.order_id = o.id
     WHERE ${where}
@@ -52,7 +55,8 @@ export default async function handler(req, res) {
       const di = dIx.get(String(x.d).slice(0, 10));
       if (di === undefined) continue;
       R.push([ki, bi, di, x.n | 0, x.c7 | 0, x.c79 | 0, x.c9 | 0,
-        x.cavg == null ? null : x.cavg, x.rtsum == null ? 0 : x.rtsum, x.rtcnt | 0]);
+        x.cavg == null ? null : x.cavg, x.rtsum == null ? 0 : x.rtsum, x.rtcnt | 0,
+        x.kwsum == null ? 0 : x.kwsum, x.rwsum == null ? 0 : x.rwsum]);
     }
     setCache(res, 3600);
     sendJson(res, { country, from: r.from, to: r.to, days, K, B, R });
