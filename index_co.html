@@ -1710,7 +1710,8 @@ ctryHeader();
     return salesP;
   }
   ensureSales().then(function(ok){ if(!ok) return;
-    try{ if(typeof renderSales==='function') renderSales(); }catch(_){}
+    // re-render completo para refrescar también la sección "Ventas · última semana" (Top5/cocina) con la venta recién cargada
+    try{ if(typeof update==='function') update(); }catch(_){}
     try{ if(typeof renderMoSales==='function') renderMoSales(); }catch(_){}
   }).catch(function(e){ try{ console.error('fase2 sales', e); }catch(_){} });
 
