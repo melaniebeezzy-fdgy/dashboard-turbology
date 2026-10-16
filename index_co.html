@@ -828,7 +828,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
    const covOf=s=>s.cc!=null?Math.round(100*s.cc/3000):null;
    const sevOf=(rt,size)=>((rt!=null&&rt>3)||(size!=null&&size<=1000))?'bad':(((rt!=null&&rt>2)||(size!=null&&size<=2100))?'warn':'ok');
    let total=0; st.forEach(s=>total+=owf(s,li)); const T=total||1;
-   const byB={}; st.forEach(s=>{(byB[s.b]=byB[s.b]||[]).push(s);});
+   const byB={}; st.forEach(s=>{const bn=brNorm(s.b);(byB[bn]=byB[bn]||[]).push(s);});   // unifica marcas (quita sufijo "Turbo")
    const brands=Object.keys(byB).map(b=>{
      const g=byB[b], orders=g.reduce((t,s)=>t+owf(s,li),0), prev=g.reduce((t,s)=>t+owf(s,lp),0);
      const rts=g.map(avg4).filter(x=>x!=null), rtp=g.map(avg4prev).filter(x=>x!=null);
@@ -851,7 +851,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
    const bk={}; st.forEach(s=>{(bk[s.k]=bk[s.k]||[]).push(s);});
    const cocinas=Object.keys(bk).sort(); const per_cocina={};
    cocinas.forEach(k=>{const g=bk[k], tot=g.reduce((t,s)=>t+owf(s,li),0)||1, bb={};
-     g.forEach(s=>{(bb[s.b]=bb[s.b]||[]).push(s);});
+     g.forEach(s=>{const bn=brNorm(s.b);(bb[bn]=bb[bn]||[]).push(s);});
      per_cocina[k]=Object.keys(bb).map(b=>{const gg=bb[b], o=gg.reduce((t,s)=>t+owf(s,li),0), r=avg(gg.map(avg4).filter(x=>x!=null)), size=Math.max.apply(null,gg.map(s=>s.cc||0))||null;
        return {brand:b,orders:o,pct:+(100*o/tot).toFixed(1),rt:r==null?null:+r.toFixed(2),size:size};}).filter(x=>x.orders>0).sort((a,b)=>b.orders-a.orders).slice(0,5);});
    const t5s=top5.reduce((t,cb)=>{const b=brands.find(x=>x.cb===cb);return t+(b?b.orders:0);},0);
