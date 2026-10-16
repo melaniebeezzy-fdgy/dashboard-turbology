@@ -658,8 +658,9 @@ function update(){
  // heatmap
  const hk=kc.map(r=>r.k); GK=gk; HK=hk;
  document.getElementById('heatDetail').style.display='none';
- document.getElementById('tbHeat').innerHTML='<tr><th>Cocina</th>'+W.map(w=>`<th class="num">${w}</th>`).join('')+'</tr>'+
-  hk.map((k,hi)=>`<tr><td>${k}</td>`+kagg[k].cov.map((v,wi)=>{const [bg,fg]=hcol(v);const clk=v==null?'':` class="hc" onclick="showHeat(${hi},${wi})" title="Ver marcas fuera de 3.0 km"`;return `<td${clk} style="background:${bg};color:${fg}">${v==null?'–':v.toFixed(1)+'%'}</td>`}).join('')+'</tr>').join('');
+ const _hoff=Math.max(0,W.length-15);   // mostrar solo las últimas 15 semanas
+ document.getElementById('tbHeat').innerHTML='<tr><th>Cocina</th>'+W.slice(_hoff).map(w=>`<th class="num">${w}</th>`).join('')+'</tr>'+
+  hk.map((k,hi)=>`<tr><td>${k}</td>`+kagg[k].cov.slice(_hoff).map((v,wj)=>{const wi=wj+_hoff;const [bg,fg]=hcol(v);const clk=v==null?'':` class="hc" onclick="showHeat(${hi},${wi})" title="Ver marcas fuera de 3.0 km"`;return `<td${clk} style="background:${bg};color:${fg}">${v==null?'–':v.toFixed(1)+'%'}</td>`}).join('')+'</tr>').join('');
 
  // alertas
  const rr=rtRising(st);
