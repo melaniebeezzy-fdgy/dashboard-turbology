@@ -634,7 +634,7 @@ function update(){
   {l:'Marcas en 2.1 km (alerta)', v:pink(nCC(2100)+' / '+cctot), d:pct(2100)+kdiff(nCC(2100),nCCp(2100),false), click:'showPoly(2100)'},
   (function(){var cl=CTRY==='PE'?1000:1800,kml=(cl/1000).toFixed(1);return {l:'Marcas en '+kml+' km (crítico)', v:pink(nCC(cl)+' / '+cctot), d:pct(cl)+kdiff(nCC(cl),nCCp(cl),false), click:'showPoly('+cl+')'};})(),
   ...(CTRY==='CO'
-    ? [ {l:'Marcas críticas (&gt; 6 min)', v:pink(A.lose), d:'<span class="warnc">RTWT 4 sem &gt; 6 min (riesgo)</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'},
+    ? [ {l:'Tiendas críticas (&gt; 6 min)', v:pink(A.lose), d:'<span class="warnc">marca–cocina con RTWT 4 sem &gt; 6 min (riesgo)</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'},
         {l:'Marcas penalizadas (1 km)', v:pink(nPen1k), d:'<span class="warnc">Cobertura reducida a 1 km por la plataforma</span>', click:'showPenal()'} ]
     : [ {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'} ]),
  ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
@@ -761,11 +761,11 @@ window.showPenal=function(){
 window.showLost=function(){
   const rows=lostCoverage(F()).sort((a,b)=>(a.pw-b.pw)||(b.a4-a.a4));   // menos → más semanas penalizadas
   const _pen=CTRY==='CO';
-  document.getElementById('mTitle').textContent='Marcas críticas (RTWT > 6 min) — '+rows.length+' tienda(s)';
-  document.getElementById('mSum').innerHTML=`Marcas con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> (crítico). Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas &gt; 6 min</b> (menos → más).`;
+  document.getElementById('mTitle').textContent='Tiendas críticas (RTWT > 6 min) — '+rows.length+' tienda(s)';
+  document.getElementById('mSum').innerHTML=`Combinaciones <b>marca–cocina</b> con <b>RTWT promedio móvil de 4 semanas &gt; 6 min</b> (crítico). Una marca puede aparecer en varias cocinas. Δ = variación de la media móvil vs la semana pasada. Ordenadas por <b>semanas &gt; 6 min</b> (menos → más).`;
   document.getElementById('mTable').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">'+rtH()+'</th><th class="num">Δ</th><th class="num">Polígono'+(_pen?' efectivo':'')+'</th><th class="num">Sem. &gt; 6 min</th><th class="num">Sem. con dato</th></tr>'+
    (rows.length?rows.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${rt4fmt(r.a4)}</td><td class="num">${delta(2,(r.a4!=null&&r.a4p!=null)?+(r.a4-r.a4p).toFixed(2):null,true)}</td><td class="num">${_pen?'<span class="pill" style="background:#1a1a1a;color:#fff">Crítica</span>':('<span class="pill" style="background:'+(scol[r.cc]||'#345964')+'">'+km(r.cc)+' km</span>')}</td><td class="num"><b>${r.pw}</b> sem</td><td class="num">${r.wd}/4</td></tr>`).join('')
-    :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca crítica en este alcance ✓</td></tr>');
+    :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna tienda crítica en este alcance ✓</td></tr>');
   document.getElementById('modalBg').classList.add('open');
 };
 window.dlRtImp=function(){
