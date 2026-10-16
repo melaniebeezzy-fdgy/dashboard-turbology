@@ -647,7 +647,7 @@ function update(){
  // ciudades
  const gc=groupBy(st,s=>s.c);
  const wc=Object.keys(gc).map(c=>{const g=gc[c];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k:c,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
-   .filter(r=>r.n>5).sort((a,b)=>(a.cov??999)-(b.cov??999));
+   .filter(r=>(BRAND!=='ALL'||KIT!=='ALL')?r.n>0:r.n>5).sort((a,b)=>(a.cov??999)-(b.cov??999));
  WC=wc;
 
  // cocinas
@@ -656,7 +656,7 @@ function update(){
  // heatmap: la semana más reciente usa cobertura efectiva (coverageResult, 0% si penalizada)
  Object.keys(gk).forEach(k=>{const cr=covWeekAtPen(gk[k],LI); if(cr!=null&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+cr.toFixed(1); const cp=covWeekAtPen(gk[k],LI-1); if(cp!=null&&kagg[k].cov[LI-1]!=null) kagg[k].cov[LI-1]=+cp.toFixed(1);});
  const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
-   .filter(r=>r.n>3).sort((a,b)=>(a.cov??999)-(b.cov??999));
+   .filter(r=>(BRAND!=='ALL'||KIT!=='ALL')?r.n>0:r.n>3).sort((a,b)=>(a.cov??999)-(b.cov??999));
  KC=kc; renderComb();
 
  // heatmap
