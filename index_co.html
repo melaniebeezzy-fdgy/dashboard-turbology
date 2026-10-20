@@ -336,7 +336,8 @@ function delta(el,val,goodDown){ if(val==null)return '–';
 // Normaliza el nombre de marca: quita el sufijo " Turbo" (dato inconsistente: p.ej. "Avocalia" vs "Avocalia Turbo").
 function brNorm(b){return (b==null?'':(''+b)).replace(/\s*turbo\s*$/i,'').trim();}
 // City Manager: agrupa a los ops (cada ops pertenece a un CM).
-var OPS2CM={'juan pablo gomez':'Diego Mejía','sebastian bernal':'Jaime Losada','laura hernandez':'Jaime Losada','leidy pinzon':'Jaime Losada','andres pulgarin':'Juan Antonio Angel','sara sierra':'Juan Antonio Angel','jose rodriguez':'Jose Rodriguez','ulises torres diosa':'Jose Rodriguez'};
+var OPS2CM={'juan pablo gomez':'Diego Mejía','sebastian bernal':'Jaime Losada','laura hernandez':'Jaime Losada','leidy pinzon':'Jaime Losada','andres pulgarin':'Juan Antonio Angel','sara sierra':'Juan Antonio Angel','jose rodriguez':'Jose Rodriguez','ulises torres diosa':'Jose Rodriguez',
+  'sergio torres':'Nicolas Gomez','guillermo villalva':'Nicolas Gomez','claudia valdez':'Nicolas Gomez','carlos garcia':'Sara Rivera','selene cabrera':'Sara Rivera'};
 function cmOf(op){ if(op==null) return null; var k=(''+op).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim(); return OPS2CM[k]||null; }
 function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'||s.op===OPS)&&(CM==='ALL'||cmOf(s.op)===CM)&&(KIT==='ALL'||s.k===KIT)&&(BRAND==='ALL'||brNorm(s.b)===BRAND));}
 
@@ -1156,9 +1157,9 @@ function fd2dateOff(v){var min=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minD
 
 // kitchen->{city,ops} desde D SOLO como etiquetas para el filtro compartido de ciudad/ops
 function fd2meta(){var m={};(typeof D!=='undefined'?(D.stores||[]):[]).forEach(function(s){var k=fd2norm(s.k);if(!m[k])m[k]={city:s.c,ops:s.op,label:s.k};});
-  // Cocinas con operación Turbo pero sin tiendas en el snapshot: mapeo ciudad/ops para que el filtro las incluya.
-  var OVR={'envigado':{city:'Medellín',ops:'Ulises Torres Diosa',label:'Envigado'}};
-  for(var ok in OVR){if(!m[ok])m[ok]=OVR[ok];}
+  // Envigado: cocina CO con operación Turbo pero sin tiendas en el snapshot. Mapeo SOLO para Colombia (no debe aparecer en MX/PE).
+  if(typeof CTRY!=='undefined' && CTRY==='CO'){ var OVR={'envigado':{city:'Medellín',ops:'Ulises Torres Diosa',label:'Envigado'}};
+    for(var ok in OVR){if(!m[ok])m[ok]=OVR[ok];} }
   return m;}
 function fd2allow(meta){return function(kw){var m=meta[fd2dkey(kw)];return (CITY==='ALL'||(m&&m.city===CITY))&&(OPS==='ALL'||(m&&m.ops===OPS))&&(CM==='ALL'||(m&&cmOf(m.ops)===CM));};}
 function fd2avgRt(o){return o&&o.rtcnt>0?o.rtsum/o.rtcnt:null;}
