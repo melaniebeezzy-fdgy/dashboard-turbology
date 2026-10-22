@@ -514,7 +514,7 @@ function showHeat(hi,wi){
 }
 window.showHeat=showHeat;
 const sortC={key:'cov',dir:1}, sortK={key:'cov',dir:1}; let sortD={key:'cov',dir:1};
-const COLS=[{k:'k',l:'Nombre'},{k:'n',l:'Tiendas',num:1},{k:'rtwt',l:'RTWT 4 sem',num:1},{k:'estado',l:'Estado'},{k:'cov',l:'Cobertura',num:1},{k:'lost',l:'$ perd./sem',num:1},{k:'lose',l:'Penaliz.',num:1}];
+const COLS=[{k:'k',l:'Nombre'},{k:'n',l:'Tiendas',num:1},{k:'rtwt',l:'RTWT 4 sem',num:1},{k:'estado',l:'Estado'},{k:'cov',l:'Cobertura',num:1},{k:'inf',l:'InFull',num:1},{k:'lost',l:'$ perd./sem',num:1},{k:'lose',l:'Penaliz.',num:1}];
 function sortRows(rows,st){const k=st.key,d=st.dir;
   return [...rows].sort((a,b)=>{const av=a[k],bv=b[k];
     if(av==null&&bv==null)return 0; if(av==null)return 1; if(bv==null)return -1;
@@ -526,12 +526,12 @@ function rowHtml(r,dim,nav){
   const name = nav ? `<span class="covlink" onclick="${nav}('${nmeta(r.k)}')" title="Desglosar">${r.k} ▸</span>` : r.k;
   const arr = covArrow(r.dcov);
   const cov = (dim==='marca') ? `${fmt(r.cov,1)}%${arr}` : `<span class="covlink" onclick="showDetail('${dim}','${nmeta(r.k)}')">${fmt(r.cov,1)}%</span>${arr}`;
-  return `<tr><td>${name}</td><td class="num">${r.n}</td><td class="num">${rt4fmt(r.rtwt)}</td><td style="font-size:11px">${stlabel(r.rtwt)}</td><td class="num">${cov}</td><td class="num">${r.lost?('$'+(r.lost/1e6).toFixed(1)+'M'):'–'}</td><td class="num">${r.lose?('<span style="color:var(--plum);font-weight:700">'+r.lose+'</span>'):'0'}</td></tr>`;
+  return `<tr><td>${name}</td><td class="num">${r.n}</td><td class="num">${rt4fmt(r.rtwt)}</td><td style="font-size:11px">${stlabel(r.rtwt)}</td><td class="num">${cov}</td><td class="num">${ifCellHtml(r.inf)}</td><td class="num">${r.lost?('$'+(r.lost/1e6).toFixed(1)+'M'):'–'}</td><td class="num">${r.lose?('<span style="color:var(--plum);font-weight:700">'+r.lose+'</span>'):'0'}</td></tr>`;
 }
 function aggRowsBy(stores,keyf){
   const g=groupBy(stores.filter(s=>!HIDDEN.includes(s.k)),keyf);
   return Object.keys(g).map(k=>{const gr=g[k];const a=agg4(gr);let cov=a.cov==null?null:+a.cov.toFixed(1);const cr=covWeekAtPen(gr,LI);if(cr!=null)cov=+cr.toFixed(1);const cp=covWeekAtPen(gr,LI-1);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);
-    return {k,n:gr.length,rtwt:rt,estado:rt,cov,dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:gr.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)};});
+    return {k,n:gr.length,rtwt:rt,estado:rt,cov,dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,inf:ifPct(gr),lose:a.lose,lost:gr.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)};});
 }
 let combView='cocina', combDrill=[];
 window.coSetComb=function(v){combView=v;combDrill=[];document.getElementById('tgCoc').classList.toggle('on',v==='cocina');document.getElementById('tgCity').classList.toggle('on',v==='city');document.getElementById('combTitle').textContent=(v==='cocina'?'Cocinas':'Ciudades')+' — promedio móvil 4 semanas';renderComb();};
@@ -678,7 +678,7 @@ function update(){
 
  // ciudades
  const gc=groupBy(st,s=>s.c);
- const wc=Object.keys(gc).map(c=>{const g=gc[c];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k:c,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
+ const wc=Object.keys(gc).map(c=>{const g=gc[c];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k:c,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,inf:ifPct(g),lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
    .filter(r=>(BRAND!=='ALL'||KIT!=='ALL')?r.n>0:r.n>5).sort((a,b)=>(a.cov??999)-(b.cov??999));
  WC=wc;
 
@@ -687,7 +687,7 @@ function update(){
  const kagg={}; Object.keys(gk).forEach(k=>kagg[k]=weekly(gk[k]));
  // heatmap: la semana más reciente usa cobertura efectiva (coverageResult, 0% si penalizada)
  Object.keys(gk).forEach(k=>{const cr=covWeekAtPen(gk[k],LI); if(cr!=null&&kagg[k].cov[LI]!=null) kagg[k].cov[LI]=+cr.toFixed(1); const cp=covWeekAtPen(gk[k],LI-1); if(cp!=null&&kagg[k].cov[LI-1]!=null) kagg[k].cov[LI-1]=+cp.toFixed(1);});
- const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
+ const kc=Object.keys(gk).map(k=>{const g=gk[k];const a=agg4(g);const rt=a.rtwt==null?null:+a.rtwt.toFixed(2);const cr=covWeekAtPen(g,LI),cp=covWeekAtPen(g,LI-1);return {k,n:g.length,rtwt:rt,estado:rt,cov:a.cov==null?null:+a.cov.toFixed(1),dcov:(cr!=null&&cp!=null)?+(cr-cp).toFixed(1):null,inf:ifPct(g),lose:a.lose,lost:g.reduce((t,x)=>{const m=mxp(x);return t+((x.g&&x.cc&&m&&x.cc<m)?x.g*(m/x.cc-1):0);},0)}})
    .filter(r=>(BRAND!=='ALL'||KIT!=='ALL')?r.n>0:r.n>3).sort((a,b)=>(a.cov??999)-(b.cov??999));
  KC=kc; renderComb();
 
@@ -706,23 +706,23 @@ function update(){
 
  // ranking marcas
  const gbk=groupBy(st,s=>s.b+'||'+s.k);
- const brc=Object.keys(gbk).map(key=>{const g=gbk[key];const v=g.map(avg4).filter(x=>x!=null);if(!v.length)return null;const vp=g.map(avg4prev).filter(x=>x!=null);const vl=g.map(s=>s.rt[LI]).filter(x=>x!=null);const cr=g.map(covResult).filter(x=>x!=null);return {brand:g[0].b,coc:g[0].k,city:g[0].c,rtwt:avg(v),rtwtPrev:vp.length?avg(vp):null,rtLast:vl.length?avg(vl):null,res:cr.length?Math.round(avg(cr)):null};}).filter(r=>r&&r.rtwt!=null&&r.rtwt>3).sort((a,b)=>b.rtwt-a.rtwt);
+ const brc=Object.keys(gbk).map(key=>{const g=gbk[key];const v=g.map(avg4).filter(x=>x!=null);if(!v.length)return null;const vp=g.map(avg4prev).filter(x=>x!=null);const vl=g.map(s=>s.rt[LI]).filter(x=>x!=null);const cr=g.map(covResult).filter(x=>x!=null);return {brand:g[0].b,coc:g[0].k,city:g[0].c,rtwt:avg(v),rtwtPrev:vp.length?avg(vp):null,rtLast:vl.length?avg(vl):null,res:cr.length?Math.round(avg(cr)):null,inf:ifPct(g)};}).filter(r=>r&&r.rtwt!=null&&r.rtwt>3).sort((a,b)=>b.rtwt-a.rtwt);
  const _co=CTRY==='CO';
  {var _bt=document.getElementById('brTitle'); if(_bt)_bt.textContent=_co?'Marcas–cocinas con RTWT crítico (riesgo)':'Marcas–cocinas con RTWT sobre 6 min';
   var _bh=document.getElementById('brHint'); if(_bh)_bh.innerHTML=_co?'Combinaciones marca–cocina con RTWT promedio móvil de 4 semanas en 🟠 naranja (3–6) o 🔴 crítico (≥6 min). La penalización por cobertura (1 km) se mide aparte. Ordenadas de peor a mejor.':'Combinaciones marca–cocina con RTWT de la <b>última semana</b> en 🟠 naranja (3–6) o 🔴 <b>sobre 6 min</b> (≥6). Ordenadas de peor a mejor.';}
- document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th>'+(_co?'<th class="num">RTWT últ. sem</th>':'')+'<th class="num">Polígono efectivo</th></tr>'+
-  (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td>${_co?`<td class="num">${rt4fmt(r.rtLast)}</td>`:''}<td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">Crítica</span>')}</td></tr>`).join('')
-   :`<tr><td colspan="${_co?5:4}" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>`);
+ document.getElementById('tbBrand').innerHTML='<tr><th>Marca</th><th>Cocina</th><th class="num">'+rtH()+'</th>'+(_co?'<th class="num">RTWT últ. sem</th>':'')+'<th class="num">Polígono efectivo</th><th class="num">InFull</th></tr>'+
+  (brc.length?brc.map(r=>`<tr class="sev-${r.rtwt>=6?'bad':'warn'}"><td>${r.brand}</td><td>${r.coc}</td><td class="num">${rt4fmt(r.rtwt)} <span style="font-size:11px;${(r.rtwt!=null&&r.rtwtPrev!=null)?'':'visibility:hidden'}">${(r.rtwt!=null&&r.rtwtPrev!=null)?delta(2,+(r.rtwt-r.rtwtPrev).toFixed(2),true):'▲ 0.00'}</span></td>${_co?`<td class="num">${rt4fmt(r.rtLast)}</td>`:''}<td class="num">${r.res==null?'–':(r.res?`<span class="pill" style="background:${scol[r.res]||'#345964'}">${km(r.res)} km</span>`:'<span class="pill" style="background:#1a1a1a">Crítica</span>')}</td><td class="num">${ifCellHtml(r.inf)}</td></tr>`).join('')
+   :`<tr><td colspan="${_co?6:5}" style="color:var(--mut);font-size:12px;padding:8px 6px">Ninguna marca–cocina en naranja o crítico ✓</td></tr>`);
 
   // ---- marcas que cambiaron de polígono efectivo (sem pasada vs actual) ----
   const ppill=v=>v===0?'<span class="pill" style="background:#1a1a1a;color:#fff">Crítica</span>':`<span class="pill" style="background:${scol[v]||'#345964'}">${km(v)} km</span>`;
   const effAt=(s,w)=>{if(s.fin[w]==null)return null;const a=ma4at(s,w);return (penOn()&&a!=null&&a>6)?0:s.fin[w];};
   const pchg=st.filter(s=>{const a=effAt(s,LI-1),b=effAt(s,LI);return a!=null&&b!=null&&a!==b;})
-    .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s),rtlw:s.rt[LI]}))
+    .map(s=>({b:s.b,k:s.k,c:s.c,from:effAt(s,LI-1),to:effAt(s,LI),rt:avg4(s),rtlw:s.rt[LI],inf:ifPct([s])}))
     .sort((x,y)=>(x.to-x.from)-(y.to-y.from));
-  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">'+rtH()+'</th><th class="num">RTWT últ. sem</th></tr>'+
-   (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${rt4fmt(r.rtlw)}</td></tr>`).join('')
-    :'<tr><td colspan="7" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin cambios de polígono en la última semana ✓</td></tr>');
+  document.getElementById('tbPolyChg').innerHTML='<tr><th>Marca</th><th>Cocina</th><th>Ciudad</th><th class="num">Polígono (ant → act)</th><th class="num">Cambio</th><th class="num">'+rtH()+'</th><th class="num">RTWT últ. sem</th><th class="num">InFull</th></tr>'+
+   (pchg.length?pchg.map(r=>`<tr><td>${r.b}</td><td>${r.k}</td><td>${r.c}</td><td class="num">${ppill(r.from)} → ${ppill(r.to)}</td><td class="num"><span style="color:${r.to>r.from?'var(--good)':'var(--plum)'};font-weight:700">${r.to>r.from?'▲ subió':'▼ bajó'}</span></td><td class="num">${rt4fmt(r.rt)}</td><td class="num">${rt4fmt(r.rtlw)}</td><td class="num">${ifCellHtml(r.inf)}</td></tr>`).join('')
+    :'<tr><td colspan="8" style="color:var(--mut);font-size:12px;padding:8px 6px">Sin cambios de polígono en la última semana ✓</td></tr>');
 
   // ---- RTWT mejorando: bajando 2+ semanas, o avg 4 sem < 2 min sin polígono 3.0 km ----
   const Lw=W.length-1; const rimp=[];
@@ -885,7 +885,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
    cocinas.forEach(k=>{const g=bk[k], tot=g.reduce((t,s)=>t+owf(s,li),0)||1, bb={};
      g.forEach(s=>{const bn=brNorm(s.b);(bb[bn]=bb[bn]||[]).push(s);});
      per_cocina[k]=Object.keys(bb).map(b=>{const gg=bb[b], o=gg.reduce((t,s)=>t+owf(s,li),0), r=avg(gg.map(avg4).filter(x=>x!=null)), size=Math.max.apply(null,gg.map(s=>s.cc||0))||null;
-       return {brand:b,orders:o,pct:+(100*o/tot).toFixed(1),rt:r==null?null:+r.toFixed(2),size:size};}).filter(x=>x.orders>0).sort((a,b)=>b.orders-a.orders).slice(0,5);});
+       return {brand:b,orders:o,pct:+(100*o/tot).toFixed(1),rt:r==null?null:+r.toFixed(2),size:size,inf:ifPct(gg)};}).filter(x=>x.orders>0).sort((a,b)=>b.orders-a.orders).slice(0,5);});
    const t5s=top5.reduce((t,cb)=>{const b=brands.find(x=>x.cb===cb);return t+(b?b.orders:0);},0);
    return {meta:{total_orders:Math.round(total),n_brands:brands.filter(b=>b.orders>0).length,top5_share:Math.round(100*t5s/T)},
      pareto:pareto,top5:top5,top5_detail:top5_detail,per_cocina:per_cocina,cocinas:cocinas};
@@ -893,9 +893,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
  const sub=()=>computeVentas(F());
  let chPar=null;
  function renderCoc(){const D=sub();if(!D)return;const c=document.getElementById('vCocinaSel').value,rows=(D.per_cocina[c]||[]);
-   document.getElementById('vCocinaTable').innerHTML='<tr><th>#</th><th>Marca</th><th class="num">Órdenes</th><th class="num">% cocina</th><th class="num">RTWT</th><th class="num">Polígono</th></tr>'+
-   (rows.length?rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td>${r.brand}</td><td class="num">${r.orders}</td><td class="num">${r.pct}%</td><td class="num">${rtfmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td></tr>`).join('')
-     :'<tr><td colspan="6" style="color:var(--mut);font-size:12px;padding:10px 6px">Sin órdenes de esta cocina en la última semana registrada.</td></tr>');}
+   document.getElementById('vCocinaTable').innerHTML='<tr><th>#</th><th>Marca</th><th class="num">Órdenes</th><th class="num">% cocina</th><th class="num">RTWT</th><th class="num">Polígono</th><th class="num">InFull</th></tr>'+
+   (rows.length?rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td>${r.brand}</td><td class="num">${r.orders}</td><td class="num">${r.pct}%</td><td class="num">${rtfmt(r.rt)}</td><td class="num">${pillSize(r.size)}</td><td class="num">${ifCellHtml(r.inf)}</td></tr>`).join('')
+     :'<tr><td colspan="7" style="color:var(--mut);font-size:12px;padding:10px 6px">Sin órdenes de esta cocina en la última semana registrada.</td></tr>');}
  let pSort={key:'orders',dir:-1};
  window.vSortProb=function(k){if(pSort.key===k)pSort.dir*=-1;else{pSort.key=k;pSort.dir=(k==='coc')?1:-1;}renderProb();};
  function renderProb(){const D=sub();if(!D)return;const d=D.top5_detail[+document.getElementById('vBrandSel').value];if(!d){document.getElementById('vProblemas').innerHTML='<div class="hint" style="padding:10px">Sin datos de venta cargados para este país/semana.</div>';document.getElementById('vBrandSum').innerHTML='';return;}
@@ -1215,6 +1215,9 @@ function fd2respBar(coc,rt){ if(coc==null) return '<span style="color:var(--mut)
     +'</div> <span style="font-size:10px;color:var(--mut)">'+coc+'/'+rt+'</span>'; }
 // InFull = % de órdenes sin queja = (n - quejas)/n. Recibe el % ya calculado.
 function fd2infCell(p){ if(p==null) return '<td class="num">—</td>'; var c=p>=98?'#1e8e5a':(p>=95?'#d99a1b':'#c0392b'); return '<td class="num"><b style="color:'+c+'">'+p.toFixed(1)+'%</b></td>'; }
+// InFull% para un conjunto de tiendas (usa ifn/ifq adjuntados en vivo). Devuelve % o null.
+function ifPct(st){var n=0,q=0;st.forEach(function(s){n+=(s.ifn||0);q+=(s.ifq||0);});return n?+(100*(n-q)/n).toFixed(1):null;}
+function ifCellHtml(p){ if(p==null) return '—'; var c=p>=98?'#1e8e5a':(p>=95?'#d99a1b':'#c0392b'); return '<b style="color:'+c+'">'+p.toFixed(1)+'%</b>'; }
 function fd2mk(slot,canvasId,cfg){try{var s=FDGY2ST.ch;if(s[slot]){s[slot].destroy();}var el=document.getElementById(canvasId);if(el)s[slot]=new Chart(el,cfg);}catch(e){console.error('fd2 chart '+slot,e);}}
 function fd2kpi(l,v,st){return '<div class="k2"><div class="k2l">'+l+'</div><div class="k2v" style="'+(st||'')+'">'+v+'</div></div>';}
 
@@ -1757,6 +1760,25 @@ ctryHeader();
     try{ if(typeof update==='function') update(); }catch(_){}
     try{ if(typeof renderMoSales==='function') renderMoSales(); }catch(_){}
   }).catch(function(e){ try{ console.error('fase2 sales', e); }catch(_){} });
+
+  // InFull por tienda (órdenes y quejas) para las tablas del snapshot. Adjunta s.ifn / s.ifq por sid.
+  var infullP=null;
+  function ensureInfull(){
+    if(infullP) return infullP;
+    if(typeof D==='undefined' || !D || !D.weeks || !D.weeks.length || !D.stores) return Promise.resolve(false);
+    var from=wkMonday(D.weeks[0]); var lastSun=wkSunday(D.weeks[D.weeks.length-1]);
+    if(!from) return Promise.resolve(false);
+    var to=lastSun?isoOf(lastSun):MAX;
+    infullP=getJSON('/api/infull?country=CO&from='+from+'&to='+to).then(function(res){
+      var m={}; res.rows.forEach(function(r){ m[String(r[0])]=[r[1],r[2]]; });
+      D.stores.forEach(function(s){ var c=m[String(s.sid)]; s.ifn=c?c[0]:0; s.ifq=c?c[1]:0; });
+      return true;
+    });
+    infullP.catch(function(){ infullP=null; });
+    return infullP;
+  }
+  ensureInfull().then(function(ok){ if(!ok) return; try{ if(typeof update==='function') update(); }catch(_){} })
+    .catch(function(e){ try{ console.error('fase2 infull', e); }catch(_){} });
 
   // ---- Venta en vivo MX/PE: redibuja las tarjetas de venta desde /api/sales (cocina x semana),
   //      intercambiando D sólo durante el render de venta (no toca RTWT/polígono del snapshot). ----
