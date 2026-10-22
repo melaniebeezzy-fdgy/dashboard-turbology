@@ -411,7 +411,7 @@ function weekly(st){ const r=[],c=[],n=[];
     c.push(covWeekAt(st,w)); n.push(f.length); }
   return {rtwt:r.map(x=>x==null?null:+x.toFixed(2)),cov:c.map(x=>x==null?null:+x.toFixed(1)),n:n}; }
 function distOf(st){ const d=W.map(()=>({})), tot=W.map(()=>0);
-  st.forEach(s=>s.fin.forEach((m,w)=>{ if(m!=null){const l=LV[lvlIdx(m)]; d[w][l]=(d[w][l]||0)+1; tot[w]++;} }));
+  st.forEach(s=>s.fin.forEach((m,w)=>{ if(m!=null && w<W.length){const l=LV[lvlIdx(m)]; d[w][l]=(d[w][l]||0)+1; tot[w]++;} }));
   return {d,tot}; }
 function groupBy(st,keyf){ const g={}; st.forEach(s=>{(g[keyf(s)]=g[keyf(s)]||[]).push(s)}); return g; }
 
