@@ -181,6 +181,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
   <select id="selOps" title="Filtro global por ops"></select>
   <select id="selKitchen" title="Filtro por cocina"></select>
   <select id="selBrand" title="Filtro por marca"></select>
+  <button id="btnTop" onclick="toggleTop()" title="Solo las marcas que acumulan el 80% de la venta (Pareto)" style="font-size:12px;padding:4px 10px;border:1px solid #156082;border-radius:6px;background:#fff;color:#156082;cursor:pointer;font-weight:600">⭐ Top marcas</button>
 </div>
 <div class="subtabs">
   <button id="coTabW" class="subtab on" onclick="coView('w')"><span class="ic">📅</span>Semanal <span style="opacity:.6">(Rappi)</span></button>
@@ -316,6 +317,7 @@ let CTRY='CO';
 let CITY='ALL';
 let OPS='ALL';
 let CM='ALL';
+let TOPONLY=false;
 let KIT='ALL';
 let BRAND='ALL';
 const km=m=>m==null?'–':(m/1000).toFixed(1);
@@ -339,7 +341,14 @@ function brNorm(b){return (b==null?'':(''+b)).replace(/\s*turbo\s*$/i,'').trim()
 var OPS2CM={'juan pablo gomez':'Diego Mejía','sebastian bernal':'Jaime Losada','laura hernandez':'Jaime Losada','leidy pinzon':'Jaime Losada','andres pulgarin':'Juan Antonio Angel','sara sierra':'Juan Antonio Angel','jose rodriguez':'Jose Rodriguez','ulises torres diosa':'Jose Rodriguez',
   'sergio torres':'Nicolas Gomez','guillermo villalva':'Nicolas Gomez','claudia valdez':'Nicolas Gomez','carlos garcia':'Sara Rivera','selene cabrera':'Sara Rivera'};
 function cmOf(op){ if(op==null) return null; var k=(''+op).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim(); return OPS2CM[k]||null; }
-function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'||s.op===OPS)&&(CM==='ALL'||cmOf(s.op)===CM)&&(KIT==='ALL'||s.k===KIT)&&(BRAND==='ALL'||brNorm(s.b)===BRAND));}
+// Pareto "Top marcas": conjunto de marcas que acumulan el 80% de la venta (GMV total por tienda = s.g).
+function brKey(b){return brNorm(b).toLowerCase();}
+var PARETO=new Set();
+function computePareto(){ var byB={}; (typeof D!=='undefined'?(D.stores||[]):[]).forEach(function(s){var b=brKey(s.b); if(!b) return; byB[b]=(byB[b]||0)+(s.g||0);});
+  var arr=Object.keys(byB).map(function(b){return [b,byB[b]];}).sort(function(x,y){return y[1]-x[1];});
+  var tot=arr.reduce(function(a,x){return a+x[1];},0)||1, cum=0; PARETO=new Set();
+  for(var i=0;i<arr.length;i++){ if(arr[i][1]<=0) break; PARETO.add(arr[i][0]); cum+=arr[i][1]; if(cum>=0.8*tot) break; } }
+function F(){return D.stores.filter(s=>(CITY==='ALL'||s.c===CITY)&&(OPS==='ALL'||s.op===OPS)&&(CM==='ALL'||cmOf(s.op)===CM)&&(KIT==='ALL'||s.k===KIT)&&(BRAND==='ALL'||brNorm(s.b)===BRAND)&&(!TOPONLY||!brKey(s.b)||PARETO.has(brKey(s.b))));}
 
 // ---------- lógica 4 semanas móviles (stakeholder) ----------
 let N4=D.n4||4;
@@ -567,6 +576,7 @@ function _filtStores(exclude){ return D.stores.filter(function(s){
   if(exclude!=='ops' && OPS!=='ALL' && s.op!==OPS) return false;
   if(exclude!=='kit' && KIT!=='ALL' && s.k!==KIT) return false;
   if(exclude!=='brand' && BRAND!=='ALL' && brNorm(s.b)!==BRAND) return false;
+  if(exclude!=='brand' && TOPONLY && brKey(s.b) && !PARETO.has(brKey(s.b))) return false;
   return true; }); }
 function _fill(selEl,allLbl,vals,cur){ if(!selEl) return; selEl.innerHTML='<option value="ALL">'+allLbl+'</option>'+vals.map(function(v){return '<option>'+v+'</option>';}).join(''); selEl.value=(cur!=='ALL'&&vals.indexOf(cur)>=0)?cur:'ALL'; }
 function refreshSelects(){
@@ -583,9 +593,11 @@ function refreshSelects(){
   _fill(selKit,'🍳 Todas las cocinas',kitVals,KIT);
   _fill(selBrand,'🍔 Todas las marcas',brVals,BRAND);
 }
-function rebuildSelects(){ CITY='ALL';OPS='ALL';CM='ALL';KIT='ALL';BRAND='ALL'; refreshSelects(); }
+function _syncTopBtn(){ var b=document.getElementById('btnTop'); if(b){ b.classList.toggle('on',TOPONLY); b.style.background=TOPONLY?'#156082':'#fff'; b.style.color=TOPONLY?'#fff':'#156082'; } }
+function rebuildSelects(){ CITY='ALL';OPS='ALL';CM='ALL';KIT='ALL';BRAND='ALL';TOPONLY=false; computePareto(); refreshSelects(); _syncTopBtn(); }
 function _syncGlobals(){ CITY=sel.value; CM=selCM?selCM.value:'ALL'; OPS=selOps.value; KIT=selKit?selKit.value:'ALL'; BRAND=selBrand?selBrand.value:'ALL'; }
 function onFilterChange(){ _syncGlobals(); refreshSelects(); _syncGlobals(); update(); }
+window.toggleTop=function(){ TOPONLY=!TOPONLY; _syncTopBtn(); refreshSelects(); _syncGlobals(); update(); };
 rebuildSelects();
 sel.onchange=onFilterChange; selOps.onchange=onFilterChange; if(selCM)selCM.onchange=onFilterChange; if(selKit)selKit.onchange=onFilterChange; if(selBrand)selBrand.onchange=onFilterChange;
 const ALLDATA={CO:{D:D,MO:MO}, MX:MXDATA, PE:PEDATA};
@@ -1305,6 +1317,7 @@ function fd2Render(cc){
     if(inP){ accK(byKpAll,kn,r); accK(byKBpAll,kbk,r); }
     if(!kitAll&&!kitSel[kn]) continue;
     if(!brAll&&!brSel[bn]) continue;
+    if(TOPONLY && !PARETO.has(brKey(bn))) continue;
     if(inR){ accK(byK,kn,r); accK(byKB,kbk,r); }
     if(inP){ accK(byKp,kn,r); accK(byKBp,kbk,r); }
   }
