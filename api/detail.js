@@ -49,7 +49,8 @@ export default async function handler(req, res) {
          AND GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0) > 0 THEN 'MIXTO'
         WHEN GREATEST(0, EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store)))/60.0) > 0 THEN 'COCINA'
         WHEN GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0) > 0 THEN 'RT'
-        ELSE 'SIN ESPERA' END AS resp
+        ELSE 'SIN ESPERA' END AS resp,
+      CASE WHEN o.is_complaint=1 THEN 1 ELSE 0 END AS q   -- 1 = la orden tuvo queja (InFull)
     FROM fdgy_views.orders_consolidado o
     LEFT JOIN fdgy_views.ontime_infull_order oi ON oi.order_id = o.id
     WHERE ${where}
@@ -68,7 +69,7 @@ export default async function handler(req, res) {
       const ds = String(x.d).slice(0, 10);
       let di = Di.get(ds); if (di === undefined) { di = days.push(ds) - 1; Di.set(ds, di); }
       O.push([ki, bi, di, x.hr == null ? null : (x.hr | 0), String(x.oid),
-        x.cook == null ? null : x.cook, x.rt == null ? null : x.rt, x.ot == null ? null : x.ot, x.resp || null]);
+        x.cook == null ? null : x.cook, x.rt == null ? null : x.rt, x.ot == null ? null : x.ot, x.resp || null, x.q | 0]);
     }
     setCache(res, 3600);
     sendJson(res, { from: r.from, to: r.to, K, B, days, O, n: O.length, offset, hasMore: O.length >= limit });

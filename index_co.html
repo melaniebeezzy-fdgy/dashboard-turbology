@@ -1211,6 +1211,8 @@ function fd2respBar(coc,rt){ if(coc==null) return '<span style="color:var(--mut)
     +(coc>0?'<div style="width:'+coc+'%;background:#156082"></div>':'')
     +(rt>0?'<div style="width:'+rt+'%;background:#1e8e5a"></div>':'')
     +'</div> <span style="font-size:10px;color:var(--mut)">'+coc+'/'+rt+'</span>'; }
+// InFull = % de órdenes sin queja = (n - quejas)/n. Recibe el % ya calculado.
+function fd2infCell(p){ if(p==null) return '<td class="num">—</td>'; var c=p>=98?'#1e8e5a':(p>=95?'#d99a1b':'#c0392b'); return '<td class="num"><b style="color:'+c+'">'+p.toFixed(1)+'%</b></td>'; }
 function fd2mk(slot,canvasId,cfg){try{var s=FDGY2ST.ch;if(s[slot]){s[slot].destroy();}var el=document.getElementById(canvasId);if(el)s[slot]=new Chart(el,cfg);}catch(e){console.error('fd2 chart '+slot,e);}}
 function fd2kpi(l,v,st){return '<div class="k2"><div class="k2l">'+l+'</div><div class="k2v" style="'+(st||'')+'">'+v+'</div></div>';}
 
@@ -1270,17 +1272,17 @@ function fd2HTML(short){
    +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">📋 Detalle · orden por orden</h2><button class="dlbtn" onclick="fd2csv()">⬇ Descargar CSV</button></div><div class="hint">Una fila por orden Rappi Turbo: fecha, hora de recepción, order id, cocción, RTWT y order time (tiempo total recepción→entrega al cliente). Responde a cocina/marca/fecha/ciudad/ops. Clic en el encabezado para ordenar.</div><div class="scroll" style="max-height:440px"><table id="fd2det" class="fd2tbl fd2tight"></table></div></div>';
 }
 
-function fd2sortRows(rows,key,dir){var num=(key==='v'||key==='n'||key==='cocPct');return rows.slice().sort(function(a,b){var x=a[key],y=b[key];if(num){x=(x==null?-Infinity:x);y=(y==null?-Infinity:y);return (x-y)*dir;}return (''+x).localeCompare(''+y,'es')*dir;});}
+function fd2sortRows(rows,key,dir){var num=(key==='v'||key==='n'||key==='cocPct'||key==='inf');return rows.slice().sort(function(a,b){var x=a[key],y=b[key];if(num){x=(x==null?-Infinity:x);y=(y==null?-Infinity:y);return (x-y)*dir;}return (''+x).localeCompare(''+y,'es')*dir;});}
 function fd2Hdr(cols,st,fn){return '<thead><tr>'+cols.map(function(c){var ar=st.key===c.k?(st.dir===1?' ↑':' ↓'):'';return '<th class="'+(c.num?'num ':'')+'sortable" style="cursor:pointer;user-select:none;'+(c.center?'text-align:center;':'')+'" onclick="'+fn+'(\''+c.k+'\')">'+c.l+ar+'</th>';}).join('')+'</tr></thead>';}
 function fd2drawT1(){var e1=document.getElementById('fd2t1');if(!e1)return;var st=FDGY2ST.t1sort||(FDGY2ST.t1sort={key:'v',dir:-1});var rows=fd2sortRows(FDGY2ST.t1rows||[],st.key,st.dir);
-  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'v',l:'RTWT',num:true}];
+  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'v',l:'RTWT',num:true},{k:'inf',l:'InFull',num:true}];
   var h=fd2Hdr(cols,st,'fd2sortT1')+'<tbody>';FDGY2ST._t1=rows;
-  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta marca/cocina" onclick="fd2pickRow(1,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp,1)+'</tr>';});
+  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta marca/cocina" onclick="fd2pickRow(1,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td><td>'+fd2esc(r.b)+'</td>'+fd2rtCell(r.v,r.vp,1)+fd2infCell(r.inf)+'</tr>';});
   h+='</tbody>';e1.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';}
 function fd2drawT2(){var e2=document.getElementById('fd2t2');if(!e2)return;var st=FDGY2ST.t2sort||(FDGY2ST.t2sort={key:'v',dir:-1});var rows=fd2sortRows(FDGY2ST.t2rows||[],st.key,st.dir);
-  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'v',l:'RTWT',num:true},{k:'n',l:'Órdenes',num:true},{k:'cocPct',l:'Responsable demora (🟦cocina/🟩RT)',center:true}];
+  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'v',l:'RTWT',num:true},{k:'n',l:'Órdenes',num:true},{k:'inf',l:'InFull',num:true},{k:'cocPct',l:'Responsable demora (🟦cocina/🟩RT)',center:true}];
   var h=fd2Hdr(cols,st,'fd2sortT2')+'<tbody>';FDGY2ST._t2=rows;
-  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta cocina" onclick="fd2pickRow(2,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp,1)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td><td style="text-align:center">'+fd2respBar(r.cocPct,r.rtPct)+'</td></tr>';});
+  rows.forEach(function(r,ix){h+='<tr class="fd2clk'+(FDGY2ST._anyFilt?(r.sel?' fd2selrow':' fd2dim'):'')+'" title="Filtrar dashboard por esta cocina" onclick="fd2pickRow(2,'+ix+')"><td>'+fd2esc(r.city||'—')+'</td><td>'+fd2esc(r.k)+'</td>'+fd2rtCell(r.v,r.vp,1)+'<td class="num">'+(r.n?r.n.toLocaleString('es'):'—')+'</td>'+fd2infCell(r.inf)+'<td style="text-align:center">'+fd2respBar(r.cocPct,r.rtPct)+'</td></tr>';});
   h+='</tbody>';e2.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin datos para el filtro actual.</td></tr></tbody>';}
 window.fd2sortT1=function(k){var st=FDGY2ST.t1sort||(FDGY2ST.t1sort={key:'v',dir:-1});st.dir=st.key===k?-st.dir:((k==='v'||k==='n')?-1:1);st.key=k;fd2drawT1();};
 window.fd2sortT2=function(k){var st=FDGY2ST.t2sort||(FDGY2ST.t2sort={key:'v',dir:-1});st.dir=st.key===k?-st.dir:((k==='v'||k==='n')?-1:1);st.key=k;fd2drawT2();};
@@ -1306,7 +1308,7 @@ function fd2Render(cc){
 
   var K=D2.K||[], B=D2.B||[], R=D2.R||[];
   var byK={}, byKB={}, byKp={}, byKBp={}, byKall={}, byKBall={}, byKpAll={}, byKBpAll={};
-  function accK(map,key,r){var a=map[key]||(map[key]={n:0,r7:0,r79:0,r9:0,cs:0,rtsum:0,rtcnt:0,kw:0,rw:0});a.n+=r[3];a.r7+=r[4];a.r79+=r[5];a.r9+=r[6];a.cs+=(r[7]||0)*(r[4]+r[5]+r[6]);a.rtsum+=(r[8]||0);a.rtcnt+=(r[9]||0);a.kw+=(r[10]||0);a.rw+=(r[11]||0);}
+  function accK(map,key,r){var a=map[key]||(map[key]={n:0,r7:0,r79:0,r9:0,cs:0,rtsum:0,rtcnt:0,kw:0,rw:0,nq:0});a.n+=r[3];a.r7+=r[4];a.r79+=r[5];a.r9+=r[6];a.cs+=(r[7]||0)*(r[4]+r[5]+r[6]);a.rtsum+=(r[8]||0);a.rtcnt+=(r[9]||0);a.kw+=(r[10]||0);a.rw+=(r[11]||0);a.nq+=(r[12]||0);}
   for(var i=0;i<R.length;i++){
     var r=R[i], off=r[2];
     var inR=off>=fromOff&&off<=toOff, inP=off>=prevFrom&&off<=prevTo;
@@ -1382,7 +1384,7 @@ function fd2Render(cc){
   // Tabla 1: RTWT crítico marca/cocina (warehouse)
   try{
     FDGY2ST.t1rows=Object.keys(byKBall).map(function(kb){var d=byKBall[kb];var p=kb.split('||');var v=fd2avgRt(d);var vp=fd2avgRt(byKBpAll[kb]);var m=meta[fd2dkey(p[0])];
-      return {city:m?m.city:'—',k:p[0],b:fd2title(p[1]),braw:p[1],v:v,vp:vp,sel:((kitAll||!!kitSel[p[0]])&&(brAll||!!brSel[p[1]]))};})
+      return {city:m?m.city:'—',k:p[0],b:fd2title(p[1]),braw:p[1],v:v,vp:vp,inf:(d.n?+(100*(d.n-(d.nq||0))/d.n).toFixed(1):null),sel:((kitAll||!!kitSel[p[0]])&&(brAll||!!brSel[p[1]]))};})
       .filter(function(r){return r.v!=null;});
     fd2drawT1();
   }catch(e){console.error('fd2 t1',e);}
@@ -1390,7 +1392,7 @@ function fd2Render(cc){
   // Tabla 2: RTWT crítico cocina (warehouse)
   try{
     FDGY2ST._anyFilt=(!kitAll||!brAll);
-    FDGY2ST.t2rows=Object.keys(byKall).map(function(k){var d=byKall[k];var m=meta[fd2dkey(k)];var tw=(d.kw||0)+(d.rw||0);var cocPct=tw>0?+(100*d.kw/tw).toFixed(0):null;return {city:m?m.city:'—',k:k,v:fd2avgRt(d),vp:fd2avgRt(byKpAll[k]),n:d.n,cocPct:cocPct,rtPct:(cocPct==null?null:100-cocPct),sel:(kitAll||!!kitSel[k])};})
+    FDGY2ST.t2rows=Object.keys(byKall).map(function(k){var d=byKall[k];var m=meta[fd2dkey(k)];var tw=(d.kw||0)+(d.rw||0);var cocPct=tw>0?+(100*d.kw/tw).toFixed(0):null;return {city:m?m.city:'—',k:k,v:fd2avgRt(d),vp:fd2avgRt(byKpAll[k]),n:d.n,inf:(d.n?+(100*(d.n-(d.nq||0))/d.n).toFixed(1):null),cocPct:cocPct,rtPct:(cocPct==null?null:100-cocPct),sel:(kitAll||!!kitSel[k])};})
       .filter(function(r){return r.v!=null;});
     fd2drawT2();
   }catch(e){console.error('fd2 t2',e);}
@@ -1409,7 +1411,7 @@ function fd2Render(cc){
         if(!kitAll&&!kitSel[kn]) continue;
         var bn=FD.B[o[1]]; if(!brAll&&!brSel[bn]) continue;
         var m=meta[fd2dkey(kn)];
-        ords.push({city:m?m.city:'—',k:kn,b:fd2title(bn),day:FD.days[o[2]],off:off,hr:(o[3]==null?null:o[3]),oid:o[4],cook:(o[5]==null?null:o[5]),rt:(o[6]==null?null:o[6]),ot:(o[7]==null?null:o[7]),resp:(o[8]==null?null:o[8])});
+        ords.push({city:m?m.city:'—',k:kn,b:fd2title(bn),day:FD.days[o[2]],off:off,hr:(o[3]==null?null:o[3]),oid:o[4],cook:(o[5]==null?null:o[5]),rt:(o[6]==null?null:o[6]),ot:(o[7]==null?null:o[7]),resp:(o[8]==null?null:o[8]),q:(o[9]==null?null:o[9])});
       }
     }
     FDGY2ST.detOrders=ords; FDGY2ST.short=short; FDGY2ST.detHasFD=!!(FD&&FD.O&&FD.O.length);
@@ -1430,7 +1432,7 @@ function fd2drawDet(){
     if(num[k]){x=(x==null?-Infinity:(k==='oid'?+x:x));y=(y==null?-Infinity:(k==='oid'?+y:y));return (x-y)*st.dir;}
     return (''+x).localeCompare(''+y,'es')*st.dir;
   });
-  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'fecha',l:'Fecha'},{k:'hr',l:'Hora',num:1},{k:'oid',l:'Order ID'},{k:'cook',l:'Cook',num:1},{k:'rt',l:'RTWT',num:1},{k:'ot',l:'Order time',num:1},{k:'resp',l:'Responsable demora'}];
+  var cols=[{k:'city',l:'Ciudad'},{k:'k',l:'Cocina'},{k:'b',l:'Marca'},{k:'fecha',l:'Fecha'},{k:'hr',l:'Hora',num:1},{k:'oid',l:'Order ID'},{k:'cook',l:'Cook',num:1},{k:'rt',l:'RTWT',num:1},{k:'ot',l:'Order time',num:1},{k:'resp',l:'Responsable demora'},{k:'q',l:'InFull'}];
   var h='<thead><tr>'+cols.map(function(c){var ar=st.key===c.k?(st.dir===1?' ↑':' ↓'):'';return '<th class="'+(c.num?'num ':'')+'sortable" style="cursor:pointer;user-select:none" onclick="fd2sortDet(\''+c.k+'\')">'+c.l+ar+'</th>';}).join('')+'</tr></thead><tbody>';
   rows.forEach(function(r){
     var clk=(typeof FDGYT!=='undefined'&&FDGYT[FDGY2ST.short]&&FDGYT[FDGY2ST.short][r.oid]);
@@ -1440,7 +1442,8 @@ function fd2drawDet(){
       +'<td class="num">'+fd2esc(r.oid)+'</td>'
       +'<td class="num">'+(r.cook==null?'—':r.cook.toFixed(2))+'</td>'
       +fd2rtCell(r.rt,null,1)+'<td class="num">'+(r.ot==null?'—':r.ot.toFixed(1))+'</td>'
-      +'<td>'+fd2respLabel(r.resp)+'</td></tr>';
+      +'<td>'+fd2respLabel(r.resp)+'</td>'
+      +'<td>'+(r.q==null?'—':(r.q?'<span style="color:#c0392b;font-weight:700">⚠ Queja</span>':'<span style="color:#1e8e5a;font-weight:700">✓ Sin queja</span>'))+'</td></tr>';
   });
   h+='</tbody>';
   ed.innerHTML=rows.length?h:'<tbody><tr><td class="hint" style="padding:14px">Sin órdenes para el filtro actual.</td></tr></tbody>';
@@ -1635,7 +1638,7 @@ ctryHeader();
           var ki=Ki[kn]; if(ki===undefined){ki=K.push(kn)-1;Ki[kn]=ki;}
           var bi=Bi[bn]; if(bi===undefined){bi=B.push(bn)-1;Bi[bn]=bi;}
           var di=Di[ds]; if(di===undefined){di=days.push(ds)-1;Di[ds]=di;}
-          O.push([ki,bi,di,row[3],row[4],row[5],row[6],row[7],row[8]]);
+          O.push([ki,bi,di,row[3],row[4],row[5],row[6],row[7],row[8],row[9]]);
         });
         blocks++;
         if (res.hasMore && O.length<CAP) return pull(offset+BLOCK);

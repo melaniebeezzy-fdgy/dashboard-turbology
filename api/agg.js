@@ -31,7 +31,8 @@ export default async function handler(req, res) {
       COUNT(${RTWT_EXPR})::int AS rtcnt,
       -- Responsabilidad de la demora (minutos): Kitchen_Wait (cocina) y RT_Wait (rt)
       ROUND(SUM(GREATEST(0, EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store)))/60.0)),1)::float AS kwsum,
-      ROUND(SUM(GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0)),1)::float AS rwsum
+      ROUND(SUM(GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0)),1)::float AS rwsum,
+      SUM(CASE WHEN o.is_complaint=1 THEN 1 ELSE 0 END)::int AS nq   -- quejas (para InFull = (n - nq)/n)
     FROM fdgy_views.orders_consolidado o
     LEFT JOIN fdgy_views.ontime_infull_order oi ON oi.order_id = o.id
     WHERE ${where}
@@ -56,7 +57,7 @@ export default async function handler(req, res) {
       if (di === undefined) continue;
       R.push([ki, bi, di, x.n | 0, x.c7 | 0, x.c79 | 0, x.c9 | 0,
         x.cavg == null ? null : x.cavg, x.rtsum == null ? 0 : x.rtsum, x.rtcnt | 0,
-        x.kwsum == null ? 0 : x.kwsum, x.rwsum == null ? 0 : x.rwsum]);
+        x.kwsum == null ? 0 : x.kwsum, x.rwsum == null ? 0 : x.rwsum, x.nq | 0]);
     }
     setCache(res, 3600);
     sendJson(res, { country, from: r.from, to: r.to, days, K, B, R });
