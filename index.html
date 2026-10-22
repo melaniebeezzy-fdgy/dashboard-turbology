@@ -308,7 +308,7 @@ let D={"weeks":["May 10","May 17","May 24","May 31","Jun 7","Jun 14","Jun 21","J
 
 
 
-let W=D.weeks, LI=W.length-1;
+let W=trimW(D.weeks), LI=W.length-1;
 const LV=[1000,1800,2100,2400,2700,3000];
 const HIDDEN=['Plaza Claro','Engativá','Otra'];
 const scol={3000:'#0E2841',2700:'#153D64',2400:'#156082',2100:'#0B769F',1800:'#B15C8C',1000:'#96607D'};
@@ -328,6 +328,8 @@ function fmt(x,d=2){return x==null?'–':x.toFixed(d)}
 function wkRangeLbl(lbl){var MM={ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11,jan:0,apr:3,aug:7,dec:11};var m=String(lbl||'').toLowerCase().match(/([a-zá-ú]{3})\s*(\d{1,2})/);if(!m||MM[m[1]]==null)return lbl||'—';var end=new Date(2026,MM[m[1]],+m[2]);var st=new Date(end.getTime()-6*86400000);var N=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return st.getDate()+' '+N[st.getMonth()]+'–'+end.getDate()+' '+N[end.getMonth()];}
 // Fecha fin (domingo) de una semana a partir de su etiqueta "Mmm D".
 function wkEndDate(lbl){var MM={ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11,jan:0,apr:3,aug:7,dec:11};var m=String(lbl||'').toLowerCase().match(/([a-zá-ú]{3})\s*(\d{1,2})/);if(!m||MM[m[1]]==null)return null;return new Date(2026,MM[m[1]],+m[2],23,59,59);}
+// Recorta la semana en curso (parcial): deja solo hasta la última semana COMPLETA (cuyo domingo ya pasó).
+function trimW(weeks){ if(!weeks||!weeks.length) return weeks; var today=new Date(); for(var w=weeks.length-1;w>=0;w--){ var e=wkEndDate(weeks[w]); if(e&&e.getTime()<=today.getTime()) return weeks.slice(0,w+1); } return weeks; }
 // Última semana COMPLETA: la más reciente cuyo domingo ya pasó (excluye la semana en curso/parcial).
 function lastFullWeekIdx(){var today=new Date();for(var w=W.length-1;w>=0;w--){var e=wkEndDate(W[w]);if(e&&e.getTime()<=today.getTime())return w;}return W.length-1;}
 function avg(a){a=a.filter(x=>x!=null);return a.length?a.reduce((s,x)=>s+x,0)/a.length:null}
@@ -620,7 +622,7 @@ function ctryHeader(){
 }
 window.setCountry=function(cc){
   if(!ALLDATA[cc])return; CTRY=cc; D=ALLDATA[cc].D; MO=ALLDATA[cc].MO;
-  W=D.weeks; LI=W.length-1; N4=D.n4||4; W4=(function(){const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.push(i);return a;})();
+  W=trimW(D.weeks); LI=W.length-1; N4=D.n4||4; W4=(function(){const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.push(i);return a;})();
   CITY='ALL'; OPS='ALL'; CM='ALL'; KIT='ALL'; BRAND='ALL'; rebuildSelects();
   document.querySelectorAll('.ctab').forEach(t=>t.classList.toggle('on', t.dataset.c===cc));
   // resetear sub-vista a Semanal y re-render
@@ -1783,7 +1785,7 @@ ctryHeader();
     p.catch(function(){});
     return p;
   }
-  function withSwap(cc, fn){ if(!ventasLive[cc]) return; var rD=D, rW=W; try{ D=ventasLive[cc]; W=D.weeks; fn(); } finally{ D=rD; W=rW; } }
+  function withSwap(cc, fn){ if(!ventasLive[cc]) return; var rD=D, rW=W; try{ D=ventasLive[cc]; W=trimW(D.weeks); fn(); } finally{ D=rD; W=rW; } }
   var _origRS=window.renderSales, _origRMS=window.renderMoSales;
   window.renderSales=function(){
     if(CTRY!=='MX'&&CTRY!=='PE') return _origRS&&_origRS();
