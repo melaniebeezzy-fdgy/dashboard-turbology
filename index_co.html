@@ -1172,7 +1172,7 @@ function fd2dateOff(v){var min=Date.parse((typeof FDGY2!=='undefined'?FDGY2.minD
 // kitchen->{city,ops} desde D SOLO como etiquetas para el filtro compartido de ciudad/ops
 function fd2meta(){var m={};(typeof D!=='undefined'?(D.stores||[]):[]).forEach(function(s){var k=fd2norm(s.k);if(!m[k])m[k]={city:s.c,ops:s.op,label:s.k};});
   // Envigado: cocina CO con operación Turbo pero sin tiendas en el snapshot. Mapeo SOLO para Colombia (no debe aparecer en MX/PE).
-  if(typeof CTRY!=='undefined' && CTRY==='CO'){ var OVR={'envigado':{city:'Medellín',ops:'Ulises Torres Diosa',label:'Envigado'}};
+  if(typeof CTRY!=='undefined' && CTRY==='CO'){ var OVR={'envigado':{city:'Medellín',ops:'Ulises Torres Diosa',label:'Envigado'},'riomar':{city:'Barranquilla',ops:'Juan Pablo Gómez',label:'Riomar'}};
     for(var ok in OVR){if(!m[ok])m[ok]=OVR[ok];} }
   return m;}
 function fd2allow(meta){return function(kw){var m=meta[fd2dkey(kw)];return (CITY==='ALL'||(m&&m.city===CITY))&&(OPS==='ALL'||(m&&m.ops===OPS))&&(CM==='ALL'||(m&&cmOf(m.ops)===CM));};}

@@ -139,7 +139,7 @@ function applyCO(H,reportTxt){
     }
   });
   // Agregar tiendas NUEVAS del reporte para cocinas que el build base no incluyó (p.ej. Envigado).
-  var NEWKITS=['Envigado'], NEWCITY={'Envigado':'Medellín'}, NEWOPS={'Envigado':'Ulises Torres Diosa'};
+  var NEWKITS=['Envigado','Riomar'], NEWCITY={'Envigado':'Medellín','Riomar':'Barranquilla'}, NEWOPS={'Envigado':'Ulises Torres Diosa','Riomar':'Juan Pablo Gómez'};
   var haveSids={}; D.stores.forEach(function(s){haveSids[String(s.sid)]=1;});
   var WL=D.weeks.length, nadd=0;
   Object.keys(pr.rep).forEach(function(sid){
