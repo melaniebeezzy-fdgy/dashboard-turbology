@@ -108,7 +108,7 @@ function parseReport(txt){
   while((m=rx.exec(txt))){
     var cov=(m[5]==='null'?null:Math.min(+m[5],3000));
     var w4=(m[6]==='null'?null:+(+m[6]).toFixed(6));
-    if(/colomb/i.test(m[1])){ co[m[3]]={cov:cov,w4:w4}; nco++; }
+    if(/colomb/i.test(m[1])){ co[m[3]]={cov:cov,w4:w4,brand:m[2],sname:m[4]}; nco++; }
     else if(/per/i.test(m[1])){ pe.push({brand:m[2],sname:m[4],cov:cov,w4:w4}); npe++; }
   }
   return {rep:co,n:nco,co:co,pe:pe,nco:nco,npe:npe};
@@ -138,8 +138,23 @@ function applyCO(H,reportTxt){
       if(r&&r.w4!=null){s.rt[wi]=r.w4;nrt++;} if(r&&r.cov!=null){s.fin[wi]=r.cov;s.cc=r.cov;npoly++;}
     }
   });
+  // Agregar tiendas NUEVAS del reporte para cocinas que el build base no incluyó (p.ej. Envigado).
+  var NEWKITS=['Envigado'], NEWCITY={'Envigado':'Medellín'}, NEWOPS={'Envigado':'Ulises Torres Diosa'};
+  var haveSids={}; D.stores.forEach(function(s){haveSids[String(s.sid)]=1;});
+  var WL=D.weeks.length, nadd=0;
+  Object.keys(pr.rep).forEach(function(sid){
+    if(haveSids[sid]) return;
+    var r=pr.rep[sid], sn=(r.sname||'').toLowerCase(), kit=null;
+    for(var ki=0;ki<NEWKITS.length;ki++){ if(sn.indexOf(NEWKITS[ki].toLowerCase())>=0){ kit=NEWKITS[ki]; break; } }
+    if(!kit) return;
+    var bn=(r.brand||'').replace(/\s*-?\s*turbo\s*$/i,'').trim();
+    var fin=new Array(WL).fill(null), rt=new Array(WL).fill(null), gw=new Array(WL).fill(0), ow=new Array(WL).fill(0);
+    if(r.cov!=null) fin[wi]=r.cov; if(r.w4!=null) rt[wi]=r.w4;
+    D.stores.push({b:bn,k:kit,c:(NEWCITY[kit]||'—'),sid:sid,cc:(r.cov!=null?r.cov:3000),fin:fin,rt:rt,op:(NEWOPS[kit]||null),g:0,gw:gw,ow:ow});
+    nadd++;
+  });
   var payload='let D='+JSON.stringify(D);
-  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n,mode:(appended?'agregó':'rellenó')};
+  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n,mode:(appended?'agregó':'rellenó'),nadd:nadd};
 }
 
 // ---------- Perú: actualiza PEDATA por (marca, distrito) ----------
@@ -237,7 +252,7 @@ async function publicarCO(){
     log('› Aplicando semana nueva…');
     var pr=parseReport(CO_TXT);
     var res=applyCO(H,CO_TXT);
-    log('  🇨🇴 '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos · total '+res.weeks+' semanas');
+    log('  🇨🇴 '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos'+(res.nadd?(' · '+res.nadd+' tiendas nuevas (Envigado)'):'')+' · total '+res.weeks+' semanas');
     var peRes=applyPE(res.html,pr.pe,res.newlbl);
     log('  🇵🇪 semana '+res.newlbl+' · '+peRes.nrt+' cocinas con RTWT'+(peRes.nnew?(' · '+peRes.nnew+' nuevas'):'')+' · total '+peRes.weeks+' semanas PE');
     log('› Publicando (commit al repo + venta del warehouse)…');
