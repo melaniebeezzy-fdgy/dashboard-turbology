@@ -657,8 +657,10 @@ function update(){
  const al=alertsOf(st);
  const pct=sz=>`<span class="warnc">${(100*nCC(sz)/cctot).toFixed(0)}% del total</span>`;
  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
+ // RTWT general: promedio ponderado por órdenes (una sola media sobre todas las órdenes), no promedio de promedios.
+ const rtwtGen=(function(){var n=0,d=0;st.forEach(function(s){W4.forEach(function(w){var rt=(s.rt||[])[w],ow=(s.ow||[])[w];if(rt!=null&&ow>0){n+=rt*ow;d+=ow;}});});return d>0?n/d:A.rtwt;})();
  document.getElementById('kpis').innerHTML=[
-  {l:CTRY==='CO'?'Avg RTWT (4 sem. móviles)':'RTWT (última semana)', v:A.rtwt==null?'–':`<span style="white-space:nowrap">${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
+  {l:CTRY==='CO'?'Avg RTWT (4 sem. móviles)':'RTWT (última semana)', v:rtwtGen==null?'–':`<span style="white-space:nowrap">${rtwtGen.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(rtwtGen)}"></span></span>`, d:`<span style="color:${stcol(rtwtGen)}">${stlabel(rtwtGen)}</span> <span style="color:var(--mut);font-size:10.5px">prom. ponderado x órdenes</span>`},
   {l:'Cobertura efectiva vs máximo por zona', v:fmt(covRes,1)+'%', d:delta(1, (covRes!=null&&o.cov[LI-1]!=null)?+(covRes-o.cov[LI-1]).toFixed(1):null, false)+' pts vs sem. pasada'},
   {l:'Marcas en 3.0 km (ideal)', v:nCC(3000)+' / '+cctot, d:pct(3000)+kdiff(nCC(3000),nCCp(3000),true), click:'showPoly(3000)'},
   {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700)+kdiff(nCC(2700),nCCp(2700),true), click:'showPoly(2700)'},
