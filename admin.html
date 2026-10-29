@@ -102,6 +102,10 @@ function log(m){ var el=document.getElementById('log'); el.style.display='block'
 var MI={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
 var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function nextLabel(l){var m=l.trim().match(/([A-Za-z]{3}) (\d{1,2})/);var dt=new Date(Date.UTC(2026,MI[m[1]],+m[2]+7));return MONTHS[dt.getUTCMonth()]+' '+dt.getUTCDate();}
+// Fin de semana (domingo 23:59, hora local) de una etiqueta — igual que trimW del dashboard.
+function wkEndLocalMs(lbl){var m=String(lbl).match(/([A-Za-z]{3})\s*(\d{1,2})/);if(!m||MI[m[1]]==null)return null;return new Date(2026,MI[m[1]],+m[2],23,59,59).getTime();}
+// Etiqueta del último domingo COMPLETO según la fecha real (nunca una semana futura).
+function lastCompleteSundayLabel(){var now=new Date();var d=new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59);while(!(d.getDay()===0&&d.getTime()<=now.getTime()))d.setDate(d.getDate()-1);return MONTHS[d.getMonth()]+' '+d.getDate();}
 function parseReport(txt){
   var rx=/"country": "(.*?)", "brand": "(.*?)", "storeId": "([^"]+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": ([0-9.]+|null), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)/g;
   var co={},pe=[],m,nco=0,npe=0;
@@ -116,14 +120,19 @@ function parseReport(txt){
 function applyCO(H,reportTxt){
   var a=H.indexOf('let D=');if(a<0)throw new Error('No encontré let D= en el index.');a+=6;
   var i=a,d=0,st=false,e=-1;for(;i<H.length;i++){var c=H[i];if(c==='{'){d++;st=true;}else if(c==='}'){d--;if(st&&d===0){e=i+1;break;}}}
-  var D=JSON.parse(H.slice(a,e)),oldLen=D.weeks.length;
+  var D=JSON.parse(H.slice(a,e));
   var pr=parseReport(reportTxt);if(pr.n===0)throw new Error('El HTML no parece un reporte RT válido (0 tiendas).');
-  // Si la última semana ya existe SIN RTWT (placeholder de venta), la rellenamos; si no, agregamos una nueva.
-  var li=oldLen-1;
-  var lastHasRt=oldLen>0&&D.stores.some(function(s){return (s.rt||[])[li]!=null;});
-  var appended=lastHasRt,newlbl,wi;
-  if(appended){ newlbl=nextLabel(D.weeks[li]); if(D.weeks.indexOf(newlbl)>=0)throw new Error('La semana '+newlbl+' ya existe en el dashboard. ¿Ya la cargaste?'); D.weeks.push(newlbl); wi=oldLen; }
-  else { wi=li; newlbl=D.weeks[li]; }
+  // Auto-sanar: quitar semanas con fecha futura (domingo posterior a hoy) que hayan quedado por cargas previas.
+  var todayMs=Date.now(),ndrop=0;
+  for(var dw=D.weeks.length-1;dw>=0;dw--){ var en=wkEndLocalMs(D.weeks[dw]); if(en!=null&&en>todayMs){ D.weeks.pop(); D.stores.forEach(function(s){['fin','rt','gw','ow'].forEach(function(k){if(Array.isArray(s[k]))s[k].pop();});}); ndrop++; } else break; }
+  var oldLen=D.weeks.length;
+  // La semana destino es SIEMPRE el último domingo completo según la fecha real (nunca futura).
+  // Si ya existe, se ACTUALIZA; si no, se AGREGA. Así recargar el mismo reporte no crea semanas fantasma.
+  var newlbl=lastCompleteSundayLabel();
+  var existing=D.weeks.indexOf(newlbl);
+  var appended,wi;
+  if(existing>=0){ appended=false; wi=existing; }
+  else { appended=true; D.weeks.push(newlbl); wi=oldLen; }
   var nrt=0,npoly=0;
   D.stores.forEach(function(s){var sid=String(s.sid),r=pr.rep[sid];
     s.gw=s.gw||new Array(oldLen).fill(0);s.ow=s.ow||new Array(oldLen).fill(0);
@@ -154,7 +163,7 @@ function applyCO(H,reportTxt){
     nadd++;
   });
   var payload='let D='+JSON.stringify(D);
-  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n,mode:(appended?'agregó':'rellenó'),nadd:nadd};
+  return {html:H.slice(0,a-6)+payload+H.slice(e),newlbl:newlbl,nrt:nrt,npoly:npoly,weeks:D.weeks.length,stores:pr.n,mode:(appended?'agregó':'actualizó'),nadd:nadd,ndrop:ndrop};
 }
 
 // ---------- Perú: actualiza PEDATA por (marca, distrito) ----------
@@ -252,7 +261,8 @@ async function publicarCO(){
     log('› Aplicando semana nueva…');
     var pr=parseReport(CO_TXT);
     var res=applyCO(H,CO_TXT);
-    log('  🇨🇴 '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos'+(res.nadd?(' · '+res.nadd+' tiendas nuevas (Envigado)'):'')+' · total '+res.weeks+' semanas');
+    if(res.ndrop)log('  🧹 '+res.ndrop+' semana(s) futura(s) saneada(s)');
+    log('  🇨🇴 '+(res.mode||'')+' semana '+res.newlbl+' · '+res.nrt+' cocinas con RTWT · '+res.npoly+' polígonos'+(res.nadd?(' · '+res.nadd+' tiendas nuevas'):'')+' · total '+res.weeks+' semanas');
     var peRes=applyPE(res.html,pr.pe,res.newlbl);
     log('  🇵🇪 semana '+res.newlbl+' · '+peRes.nrt+' cocinas con RTWT'+(peRes.nnew?(' · '+peRes.nnew+' nuevas'):'')+' · total '+peRes.weeks+' semanas PE');
     log('› Publicando (commit al repo + venta del warehouse)…');
