@@ -116,14 +116,14 @@ table.dense .pill{font-size:9.5px;padding:1px 6px}
 #distDetail{display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px}
 #distDetail .ddh{font-size:12.5px;font-weight:600;color:var(--primary);margin-bottom:8px}
 #distDetail .ddh button{float:right;background:none;border:0;cursor:pointer;color:var(--mut);font-size:14px}
-#modalBg{position:fixed;inset:0;background:rgba(9,14,62,.55);z-index:90;display:none;align-items:flex-start;justify-content:center;padding:70px 16px 30px}
-#modalBg.open{display:flex}
-#modal{background:#fff;border-radius:14px;width:960px;max-width:96vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(9,14,62,.5)}
-#modal .mh{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--bd)}
-#modal .mh h3{font-size:15px;color:var(--primary);flex:1}
-#modal .mh button{background:none;border:0;font-size:20px;cursor:pointer;color:var(--mut)}
-#modal .msum{padding:10px 20px;font-size:12.5px;color:var(--mut);background:#f2f6fa;border-bottom:1px solid var(--bd)}
-#modal .mbody{overflow:auto;padding:10px 20px 18px}
+#modalBg,#oppModalBg{position:fixed;inset:0;background:rgba(9,14,62,.55);z-index:90;display:none;align-items:flex-start;justify-content:center;padding:70px 16px 30px}
+#modalBg.open,#oppModalBg.open{display:flex}
+#modal,#oppModal{background:#fff;border-radius:14px;width:960px;max-width:96vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(9,14,62,.5)}
+#modal .mh,#oppModal .mh{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--bd)}
+#modal .mh h3,#oppModal .mh h3{font-size:15px;color:var(--primary);flex:1}
+#modal .mh button,#oppModal .mh button.xbtn{background:none;border:0;font-size:20px;cursor:pointer;color:var(--mut)}
+#modal .msum,#oppModal .msum{padding:10px 20px;font-size:12.5px;color:var(--mut);background:#f2f6fa;border-bottom:1px solid var(--bd)}
+#modal .mbody,#oppModal .mbody{overflow:auto;padding:10px 20px 18px}
 #modal #mTable td,#modal #mTable th{white-space:nowrap}
 
 .vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
@@ -196,10 +196,9 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 
 <div class="grid" id="tendencias">
   <div class="card"><h2>Avg RTWT semanal</h2><div class="hint">Promedio de RTWT por semana. Estados (sobre el promedio móvil de 4 semanas): <span style="color:#1e8e5a;font-weight:700">🟢 ≤2</span> · <span style="color:#d99a1b;font-weight:700">🟡 2–3</span> · <span style="color:#e67e22;font-weight:700">🟠 3–6</span> · <span style="color:#c0392b;font-weight:700">🔴 ≥6 (crítica)</span>.</div><div class="chartbox" style="min-height:280px"><canvas id="chRtwt"></canvas></div></div>
-  <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Promedio del polígono vs. el ideal de 3.0 km (100%).</div><div class="chartbox" style="min-height:280px"><canvas id="chCov"></canvas></div></div>
+  <div class="card"><h2>% Cobertura semanal</h2><div class="hint">Promedio del polígono vs. el ideal de 3.0 km (100%). Clic en la barra de <b>$ perdido</b> → detalle de oportunidad.</div><div class="chartbox" style="min-height:280px"><canvas id="chCov"></canvas></div></div>
 </div>
-<div class="grid" id="opp-grid" style="grid-template-columns:1.05fr .95fr">
-<div class="card" id="oportunidad"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">💸 Oportunidad por cobertura (dinero no vendido)</h2><button class="dlbtn" onclick="dlLostRev()">⬇ Excel</button></div><div class="hint">Estimado de ventas que se dejan de capturar por polígonos &lt; 3.0 km. Modelo <b>lineal</b> (potencial = GMV ÷ cobertura; las ventas escalan con el radio de entrega); base = GMV promedio de las <b>últimas 4 semanas</b>. Respeta el filtro de ciudad/ops.</div><div class="kpis" id="oppKpis" style="margin-bottom:12px"></div><div class="scroll"><table id="tbLostRev" class="dense"></table></div></div>
+<div class="grid" id="opp-grid" style="grid-template-columns:1fr">
 <div class="card" id="salescard"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0" id="swTitle">🛒 Venta semanal Turbo</h2><div class="tgl"><button id="swGlobalBtn" class="on" onclick="swSet('global')">Global</button><button id="swCityBtn" onclick="swSet('city')">Por ciudad</button><button id="swCocBtn" onclick="swSet('coc')">Por cocina</button></div></div><div class="hint" id="swHint">Barras = <b>monto ($)</b>, línea = <b>cantidad (Q)</b>. Clic en las barras → tendencia de <b>monto por ciudad</b>; clic en la línea → tendencia de <b>Q por ciudad</b>.</div><div id="swMetricTgl" style="display:none;margin-bottom:6px"><span class="tgl"><button id="swGmvBtn" class="on" onclick="swMetricSet('gmv')">$ Monto</button><button id="swOrdBtn" onclick="swMetricSet('ord')">Q Cantidad</button></span></div><div class="chartbox" style="height:330px"><canvas id="chSales"></canvas></div></div>
 </div>
 <div class="grid" id="poligonos">
@@ -290,6 +289,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 <div id="co-fdgy" style="display:none"></div>
 
 <div id="modalBg" onclick="if(event.target.id==='modalBg')closeModal()"><div id="modal"><div class="mh"><h3 id="mTitle"></h3><button onclick="closeModal()">✕</button></div><div class="msum" id="mSum"></div><div class="mbody"><table id="mTable"></table></div></div></div>
+<div id="oppModalBg" onclick="if(event.target.id==='oppModalBg')closeOppModal()"><div id="oppModal"><div class="mh"><h3>💸 Oportunidad por cobertura (dinero no vendido)</h3><button class="dlbtn" onclick="dlLostRev()">⬇ Excel</button><button class="xbtn" onclick="closeOppModal()">✕</button></div><div class="msum">Estimado de ventas que se dejan de capturar por polígonos &lt; 3.0 km. Modelo <b>lineal</b> (potencial = GMV ÷ cobertura; las ventas escalan con el radio de entrega); base = GMV promedio de las <b>últimas 4 semanas</b>. Respeta el filtro de ciudad/ops.</div><div class="mbody"><div class="kpis" id="oppKpis" style="margin-bottom:12px"></div><table id="tbLostRev" class="dense"></table></div></div></div>
 <div class="foot" id="notas"><b>Notas metodológicas:</b> Se descartaron valores de RTWT &gt; 30 min (errores de captura tipo "46.361"). La semana del 11 may reportó tamaños redondeados en km (1/2/3), aproximados a 1.0 / 2.4 / 3.0 km — su cobertura es estimada. La cocina se derivó del nombre de la tienda según el listado oficial de 18 cocinas; Envigado, Engativá y Plaza Claro existen en la data pero se excluyen de las vistas por cocina a solicitud (sus tiendas sí cuentan en los totales); "Otra" agrupa tiendas sin cocina identificable. Las tiendas marcadas como CHURNEADO en el nombre se excluyen de todo el análisis.</div>
 </div>
 
@@ -424,7 +424,10 @@ const chR=new Chart(chRtwt,{type:'line',data:{labels:W,datasets:[{data:[],border
 const chC=new Chart(chCov,{type:'bar',data:{labels:W,datasets:[
  {type:'line',label:'Cobertura',data:[],borderColor:'#153D64',backgroundColor:'rgba(21,61,100,.15)',cubicInterpolationMode:'monotone',tension:.35,fill:true,pointRadius:2.5,pointBackgroundColor:'#153D64',yAxisID:'y',order:0},
  {type:'bar',label:'$ perdido/sem',data:[],backgroundColor:'rgba(150,96,125,.45)',borderColor:'#96607D',borderWidth:1,yAxisID:'y1',order:1,datalabels:{display:false}}]},
- options:{maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:10}},datalabels:{...lineDL,formatter:(v,ctx)=>ctx.dataset.type==='line'?(v==null?'':(+v).toFixed(1)+'%'):''}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{min:50,max:100,position:'left',ticks:{callback:v=>v+'%',font:{size:10}}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>'$'+(v/1e6).toFixed(0)+'M',font:{size:10}}}}}});
+ options:{maintainAspectRatio:false,layout:{padding:{top:18}},
+ onClick:(e,els)=>{ if(!els||!els.length)return; const hit=els.find(x=>{const d=chC.data.datasets[x.datasetIndex];return d&&d.yAxisID==='y1';}); if(hit) openOppModal(); },
+ onHover:(e,els)=>{ const over=(els||[]).some(x=>{const d=chC.data.datasets[x.datasetIndex];return d&&d.yAxisID==='y1';}); if(e&&e.native&&e.native.target) e.native.target.style.cursor=over?'pointer':'default'; },
+ plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:10}},datalabels:{...lineDL,formatter:(v,ctx)=>ctx.dataset.type==='line'?(v==null?'':(+v).toFixed(1)+'%'):''}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{min:50,max:100,position:'left',ticks:{callback:v=>v+'%',font:{size:10}}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>'$'+(v/1e6).toFixed(0)+'M',font:{size:10}}}}}});
 
 let DIST={d:[],tot:[]};
 const chD=new Chart(chDist,{type:'bar',
@@ -847,7 +850,9 @@ window.dlLostRev=function(){
   XLSX.writeFile(wb,'oportunidad_cobertura_'+scope.replace(/[^\w]+/g,'_')+'.xlsx');
 };
 function closeModal(){document.getElementById('modalBg').classList.remove('open')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+window.openOppModal=function(){ try{renderOpp();}catch(e){} document.getElementById('oppModalBg').classList.add('open'); };
+window.closeOppModal=function(){ document.getElementById('oppModalBg').classList.remove('open'); };
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeOppModal();}});
 
 
 (function(){
