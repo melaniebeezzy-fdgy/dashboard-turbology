@@ -116,14 +116,15 @@ table.dense .pill{font-size:9.5px;padding:1px 6px}
 #distDetail{display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px}
 #distDetail .ddh{font-size:12.5px;font-weight:600;color:var(--primary);margin-bottom:8px}
 #distDetail .ddh button{float:right;background:none;border:0;cursor:pointer;color:var(--mut);font-size:14px}
-#modalBg,#oppModalBg{position:fixed;inset:0;background:rgba(9,14,62,.55);z-index:90;display:none;align-items:flex-start;justify-content:center;padding:70px 16px 30px}
-#modalBg.open,#oppModalBg.open{display:flex}
-#modal,#oppModal{background:#fff;border-radius:14px;width:960px;max-width:96vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(9,14,62,.5)}
-#modal .mh,#oppModal .mh{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--bd)}
-#modal .mh h3,#oppModal .mh h3{font-size:15px;color:var(--primary);flex:1}
-#modal .mh button,#oppModal .mh button.xbtn{background:none;border:0;font-size:20px;cursor:pointer;color:var(--mut)}
-#modal .msum,#oppModal .msum{padding:10px 20px;font-size:12.5px;color:var(--mut);background:#f2f6fa;border-bottom:1px solid var(--bd)}
-#modal .mbody,#oppModal .mbody{overflow:auto;padding:10px 20px 18px}
+#modalBg,#oppModalBg,#distModalBg{position:fixed;inset:0;background:rgba(9,14,62,.55);z-index:90;display:none;align-items:flex-start;justify-content:center;padding:70px 16px 30px}
+#modalBg.open,#oppModalBg.open,#distModalBg.open{display:flex}
+#modalBg{z-index:96}
+#modal,#oppModal,#distModal{background:#fff;border-radius:14px;width:960px;max-width:96vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(9,14,62,.5)}
+#modal .mh,#oppModal .mh,#distModal .mh{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--bd)}
+#modal .mh h3,#oppModal .mh h3,#distModal .mh h3{font-size:15px;color:var(--primary);flex:1}
+#modal .mh button,#oppModal .mh button.xbtn,#distModal .mh button.xbtn{background:none;border:0;font-size:20px;cursor:pointer;color:var(--mut)}
+#modal .msum,#oppModal .msum,#distModal .msum{padding:10px 20px;font-size:12.5px;color:var(--mut);background:#f2f6fa;border-bottom:1px solid var(--bd)}
+#modal .mbody,#oppModal .mbody,#distModal .mbody{overflow:auto;padding:10px 20px 18px}
 #modal #mTable td,#modal #mTable th{white-space:nowrap}
 
 .vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
@@ -201,8 +202,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 <div class="grid" id="opp-grid" style="grid-template-columns:1fr">
 <div class="card" id="salescard"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0" id="swTitle">🛒 Venta semanal Turbo</h2><div class="tgl"><button id="swGlobalBtn" class="on" onclick="swSet('global')">Global</button><button id="swCityBtn" onclick="swSet('city')">Por ciudad</button><button id="swCocBtn" onclick="swSet('coc')">Por cocina</button></div></div><div class="hint" id="swHint">Barras = <b>monto ($)</b>, línea = <b>cantidad (Q)</b>. Clic en las barras → tendencia de <b>monto por ciudad</b>; clic en la línea → tendencia de <b>Q por ciudad</b>.</div><div id="swMetricTgl" style="display:none;margin-bottom:6px"><span class="tgl"><button id="swGmvBtn" class="on" onclick="swMetricSet('gmv')">$ Monto</button><button id="swOrdBtn" onclick="swMetricSet('ord')">Q Cantidad</button></span></div><div class="chartbox" style="height:330px"><canvas id="chSales"></canvas></div></div>
 </div>
-<div class="grid" id="poligonos">
-  <div class="card"><h2>Distribución de polígonos por semana</h2><div class="hint"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div></div>
+<div class="grid" id="poligonos" style="grid-template-columns:1fr">
   <div class="card" id="cocinas"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 id="combTitle" style="margin:0">Cocinas — promedio móvil 4 semanas</h2><div class="tgl"><button id="tgCoc" class="on" onclick="coSetComb('cocina')">Cocinas</button><button id="tgCity" onclick="coSetComb('city')">Ciudades</button></div></div><div class="hint" id="combHint">RTWT promedio móvil de 4 semanas (16 ago–6 sep), estado (🟢🟡🟠🔴) y cobertura efectiva (🔴 crítica si RTWT &gt; 6 min). Clic en encabezados para ordenar, en la cobertura para el detalle, y en el <b>nombre</b> para desglosar por cocina/marca.</div><div id="combBC" style="margin:2px 0 6px"></div><div class="scroll" style="max-height:400px;overflow-y:auto"><table id="tbComb"></table></div></div>
 </div>
 <div id="distDetail"></div>
@@ -290,6 +290,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 
 <div id="modalBg" onclick="if(event.target.id==='modalBg')closeModal()"><div id="modal"><div class="mh"><h3 id="mTitle"></h3><button onclick="closeModal()">✕</button></div><div class="msum" id="mSum"></div><div class="mbody"><table id="mTable"></table></div></div></div>
 <div id="oppModalBg" onclick="if(event.target.id==='oppModalBg')closeOppModal()"><div id="oppModal"><div class="mh"><h3>💸 Oportunidad por cobertura (dinero no vendido)</h3><button class="dlbtn" onclick="dlLostRev()">⬇ Excel</button><button class="xbtn" onclick="closeOppModal()">✕</button></div><div class="msum">Estimado de ventas que se dejan de capturar por polígonos &lt; 3.0 km. Modelo <b>lineal</b> (potencial = GMV ÷ cobertura; las ventas escalan con el radio de entrega); base = GMV promedio de las <b>últimas 4 semanas</b>. Respeta el filtro de ciudad/ops.</div><div class="mbody"><div class="kpis" id="oppKpis" style="margin-bottom:12px"></div><table id="tbLostRev" class="dense"></table></div></div></div>
+<div id="distModalBg" onclick="if(event.target.id==='distModalBg')closeDistModal()"><div id="distModal"><div class="mh"><h3>Distribución de polígonos por semana</h3><button class="xbtn" onclick="closeDistModal()">✕</button></div><div class="msum"># de <b>marcas</b> por tamaño de polígono (km). Clic en un segmento para ver el detalle.</div><div class="mbody"><div class="chartbox" style="height:430px"><canvas id="chDist"></canvas></div></div></div></div>
 <div class="foot" id="notas"><b>Notas metodológicas:</b> Se descartaron valores de RTWT &gt; 30 min (errores de captura tipo "46.361"). La semana del 11 may reportó tamaños redondeados en km (1/2/3), aproximados a 1.0 / 2.4 / 3.0 km — su cobertura es estimada. La cocina se derivó del nombre de la tienda según el listado oficial de 18 cocinas; Envigado, Engativá y Plaza Claro existen en la data pero se excluyen de las vistas por cocina a solicitud (sus tiendas sí cuentan en los totales); "Otra" agrupa tiendas sin cocina identificable. Las tiendas marcadas como CHURNEADO en el nombre se excluyen de todo el análisis.</div>
 </div>
 
@@ -662,7 +663,7 @@ function update(){
  const pink=x=>`<span style="color:var(--plum)">${x}</span>`;
  document.getElementById('kpis').innerHTML=[
   {l:CTRY==='CO'?'Avg RTWT (4 sem. móviles)':'RTWT (última semana)', v:A.rtwt==null?'–':`<span style="white-space:nowrap">${A.rtwt.toFixed(2)} min <span class="sdot" style="width:14px;height:14px;vertical-align:middle;background:radial-gradient(circle at 35% 30%, #ffffff66, transparent 45%), ${stcol(A.rtwt)}"></span></span>`, d:`<span style="color:${stcol(A.rtwt)}">${stlabel(A.rtwt)}</span>`},
-  {l:'Cobertura efectiva vs máximo por zona', v:fmt(covRes,1)+'%', d:delta(1, (covRes!=null&&o.cov[LI-1]!=null)?+(covRes-o.cov[LI-1]).toFixed(1):null, false)+' pts vs sem. pasada'},
+  {l:'Cobertura efectiva vs máximo por zona', v:fmt(covRes,1)+'%', d:delta(1, (covRes!=null&&o.cov[LI-1]!=null)?+(covRes-o.cov[LI-1]).toFixed(1):null, false)+' pts vs sem. pasada', click:'openDistModal()', title:'Ver distribución de polígonos por semana'},
   {l:'Marcas en 3.0 km (ideal)', v:nCC(3000)+' / '+cctot, d:pct(3000)+kdiff(nCC(3000),nCCp(3000),true), click:'showPoly(3000)'},
   {l:'Marcas en 2.7 km', v:nCC(2700)+' / '+cctot, d:pct(2700)+kdiff(nCC(2700),nCCp(2700),true), click:'showPoly(2700)'},
   {l:'Marcas en 2.4 km', v:nCC(2400)+' / '+cctot, d:pct(2400)+kdiff(nCC(2400),nCCp(2400),true), click:'showPoly(2400)'},
@@ -672,7 +673,7 @@ function update(){
     ? [ {l:'Tiendas críticas (&gt; 6 min)', v:pink(A.lose), d:'<span class="warnc">marca–cocina con RTWT 4 sem &gt; 6 min (riesgo)</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'},
         {l:'Marcas penalizadas (1 km)', v:pink(nPen1k), d:'<span class="warnc">Cobertura reducida a 1 km por la plataforma</span>', click:'showPenal()'} ]
     : [ {l:'Tiendas por encima de 6 min', v:pink(A.lose), d:'<span class="warnc">RTWT promedio 4 sem &gt; 6 min</span>'+kdiff(A.lose,losePrev,false), click:'showLost()'} ]),
- ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
+ ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="${k.title||'Ver tiendas'}"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
 
  var _NW=15, _wl=W.slice(-_NW);   // solo las últimas 15 semanas en estas dos gráficas
  chR.data.labels=_wl; chR.data.datasets[0].data=(o.rtwt||[]).slice(-_NW); chR.update();
@@ -852,7 +853,9 @@ window.dlLostRev=function(){
 function closeModal(){document.getElementById('modalBg').classList.remove('open')}
 window.openOppModal=function(){ try{renderOpp();}catch(e){} document.getElementById('oppModalBg').classList.add('open'); };
 window.closeOppModal=function(){ document.getElementById('oppModalBg').classList.remove('open'); };
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeOppModal();}});
+window.openDistModal=function(){ document.getElementById('distModalBg').classList.add('open'); try{ setTimeout(function(){ if(typeof chD!=='undefined'){ chD.resize(); chD.update(); } },30); }catch(e){} };
+window.closeDistModal=function(){ document.getElementById('distModalBg').classList.remove('open'); };
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeOppModal();closeDistModal();}});
 
 
 (function(){
@@ -929,7 +932,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeO
      {l:'Marcas activas',v:M.n_brands,d:'con ventas en la semana'},
      {l:'Peso del Top 5',v:(M.top5_share||0)+'%',d:'de las órdenes'},
      {l:'Marcas para el 80%',v:n80,d:'según Pareto'},
-   ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="Ver tiendas"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
+   ].map(k=>`<div class="kpi${k.click?' clickable':''}"${k.click?` onclick="${k.click}" title="${k.title||'Ver tiendas'}"`:''}><div class="l">${k.l}</div><div class="v">${k.v}</div><div class="d">${k.d}</div></div>`).join('');
    // Pareto
    const P=D.pareto, top=new Set(D.top5);
    if(chPar){chPar.destroy();chPar=null;}
