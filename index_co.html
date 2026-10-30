@@ -126,14 +126,15 @@ table.dense .pill{font-size:9.5px;padding:1px 6px}
 #modal .msum,#oppModal .msum,#distModal .msum{padding:10px 20px;font-size:12.5px;color:var(--mut);background:#f2f6fa;border-bottom:1px solid var(--bd)}
 #modal .mbody,#oppModal .mbody,#distModal .mbody{overflow:auto;padding:10px 20px 18px}
 #modal #mTable td,#modal #mTable th{white-space:nowrap}
-.airesumen{background:linear-gradient(135deg,#f3f7fc,#eef2fb);border:1px solid var(--bd);border-left:4px solid var(--ind);border-radius:12px;padding:13px 18px;margin:0 0 16px}
-.airesumen .airh{font-size:13px;color:var(--primary);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.airesumen .aibadge{background:var(--ind);color:#fff;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:.2px}
-.airesumen .aiscope{color:var(--mut);font-size:11.5px}
-.airesumen .aihead{font-size:12.5px;color:var(--mut);margin-bottom:8px;font-weight:600}
-.airesumen .ailist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
-.airesumen .ailist li{font-size:12.5px;color:#243447;line-height:1.45;display:flex;gap:7px;align-items:flex-start}
-.airesumen .aifoot{margin-top:9px;font-size:10.5px;color:var(--mut);font-style:italic}
+.airesumen{background:linear-gradient(135deg,#f3f7fc,#eef2fb);border:1px solid var(--bd);border-left:4px solid var(--ind);border-radius:12px;padding:10px 15px;margin:0 0 16px;color:var(--primary)}
+.airesumen .airh{font-size:11.5px;color:var(--primary);margin-bottom:5px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.airesumen .aibadge{background:var(--ind);color:#fff;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.2px}
+.airesumen .aiscope{color:var(--primary);font-size:10px;opacity:.8}
+.airesumen .aihead{font-size:10.5px;color:var(--primary);margin-bottom:7px;font-weight:600;opacity:.85}
+.airesumen .ailist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.airesumen .ailist li{font-size:10.5px;color:var(--primary);line-height:1.4;display:flex;gap:6px;align-items:flex-start}
+.airesumen .ailist li .aiic{flex:none;font-size:9px;line-height:1.5}
+.airesumen .aifoot{margin-top:8px;font-size:9px;color:var(--primary);opacity:.6;font-style:italic}
 
 .vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .vcard{border:1px solid var(--line,#e4e8ef);border-radius:12px;padding:12px 14px;background:#fff}
@@ -1345,7 +1346,7 @@ function fd2Render(cc){
     if(inP){ accK(byKp,kn,r); accK(byKBp,kbk,r); }
   }
   var cocinas=Object.keys(byK).map(function(k){return {k:k,d:byK[k],rtwt:fd2avgRt(byK[k]),rtwtP:fd2avgRt(byKp[k])};}).sort(function(a,b){return b.d.n-a.d.n;});
-  try{ fd2Resumen(cocinas); }catch(e){}
+  try{ fd2Resumen(cocinas, byKB); }catch(e){}
 
   // KPIs
   try{
@@ -1559,51 +1560,73 @@ function resBox(titulo, R){
   var sevCol={alta:'#c0392b',media:'#d99a1b',ok:'#1e8e5a'}, icon={alta:'🔴',media:'🟡',ok:'🟢'};
   return '<div class="airh"><span class="aibadge">✨ Resumen</span> <b>'+titulo+'</b> <span class="aiscope">· '+R.scope+'</span></div>'
     +'<div class="aihead">'+R.head+'</div>'
-    +'<ul class="ailist">'+R.items.map(function(it){return '<li><span>'+(icon[it.sev]||'•')+'</span><span style="color:'+(sevCol[it.sev]||'#243447')+(it.sev==='ok'?'':';font-weight:600')+'">'+it.t+'</span></li>';}).join('')+'</ul>'
+    +'<ul class="ailist">'+R.items.map(function(it){return '<li><span class="aiic" style="color:'+(sevCol[it.sev]||'#888')+'">'+(icon[it.sev]||'•')+'</span><span>'+it.t+'</span></li>';}).join('')+'</ul>'
     +'<div class="aifoot">Generado automáticamente a partir de los datos filtrados · se actualiza con los filtros.</div>';
 }
 function resumenSnap(periodo){
   var st=F(); var A=agg4(st);
   var covRes=covWeekAtPen(st,LI), covPrev=covWeekAtPen(st,LI-1);
   var dcov=(covRes!=null&&covPrev!=null)?+(covRes-covPrev).toFixed(1):null;
-  var crit=st.map(function(s){return {s:s,a:avg4(s)};}).filter(function(x){return x.a!=null&&x.a>6;}).sort(function(a,b){return b.a-a.a;});
+  var ifp=ifPct(st);
+  var items=[];
+  // Camino 1: cocinas críticas (RTWT 4 sem > 6)
+  var byKit={}; st.forEach(function(s){(byKit[s.k]=byKit[s.k]||[]).push(s);});
+  var kitCrit=Object.keys(byKit).map(function(k){var g=byKit[k];var a=agg4(g);return {k:k,rt:a.rtwt};}).filter(function(x){return x.rt!=null&&x.rt>6;}).sort(function(a,b){return b.rt-a.rt;});
+  // Camino 2: marca–cocina (ordenadas por RTWT)
+  var brAll=st.map(function(s){return {s:s,a:avg4(s)};}).filter(function(x){return x.a!=null;}).sort(function(a,b){return b.a-a.a;});
+  var brCrit=brAll.filter(function(x){return x.a>6;});
+  // Camino 3: InFull por marca–cocina (dónde está el SKU crítico)
+  var ifBr=st.filter(function(s){return (s.ifn||0)>=20;}).map(function(s){return {s:s,p:100*((s.ifn-s.ifq)/s.ifn),q:s.ifq};}).filter(function(x){return x.p<97;}).sort(function(a,b){return a.p-b.p;});
   var pen=st.filter(function(s){return penal(s);});
   var opp=st.map(function(s){return {s:s,l:lostOf(s)};}).filter(function(x){return x.l>0;}).sort(function(a,b){return b.l-a.l;});
   var sumL=opp.reduce(function(t,x){return t+x.l;},0);
-  var ifp=ifPct(st);
-  var items=[];
-  if(crit.length){ var top=crit.slice(0,3).map(function(x){return x.s.b+' ('+x.s.k+') '+x.a.toFixed(1)+'m';}).join(', ');
-    items.push({sev:'alta',t:crit.length+' marca(s)–cocina en rojo (RTWT 4 sem > 6 min). Prioriza: '+top+'. Revisa tiempos de cocina y de RT.'}); }
+  // Cascada de criticidad
+  if(kitCrit.length){
+    items.push({sev:'alta',t:kitCrit.length+' cocina(s) crítica(s) (RTWT 4 sem > 6 min): '+kitCrit.slice(0,3).map(function(x){return x.k+' '+x.rt.toFixed(1)+'m';}).join(', ')+'.'});
+    var ins=brAll.filter(function(x){return x.s.k===kitCrit[0].k&&x.a>6;})[0]||brAll.filter(function(x){return x.s.k===kitCrit[0].k;})[0];
+    if(ins) items.push({sev:'alta',t:'Peor marca en '+kitCrit[0].k+': '+ins.s.b+' ('+ins.a.toFixed(1)+' min). Revisa cocina y RT.'});
+  } else if(brCrit.length){
+    items.push({sev:'alta',t:'Sin cocinas críticas, pero '+brCrit.length+' marca(s)–cocina en rojo (RTWT > 6 min): '+brCrit.slice(0,3).map(function(x){return x.s.b+' ('+x.s.k+') '+x.a.toFixed(1)+'m';}).join(', ')+'.'});
+  } else if(brAll.length && brAll[0].a>3){
+    items.push({sev:'media',t:'Sin críticos; la marca–cocina más alta a vigilar: '+brAll[0].s.b+' ('+brAll[0].s.k+') '+brAll[0].a.toFixed(1)+' min.'});
+  }
   if(pen.length){ var pp=pen.slice(0,3).map(function(s){return s.b+' ('+s.k+')';}).join(', ');
-    items.push({sev:'alta',t:pen.length+' marca(s) penalizada(s) a 1 km'+(pen.length>3?' (ej.: '+pp+')':': '+pp)+'. Recuperar cobertura es lo de mayor impacto.'}); }
-  if(sumL>0){ var o0=opp[0]; items.push({sev:'media',t:'$'+(sumL/1e6).toFixed(1)+' M/sem de venta potencial no capturada por cobertura < 3 km. Mayor oportunidad: '+o0.s.b+' ('+o0.s.k+') ~$'+Math.round(o0.l/1e3)+'k/sem.'}); }
-  if(dcov!=null&&dcov<-0.5){ items.push({sev:'media',t:'La cobertura efectiva bajó '+Math.abs(dcov).toFixed(1)+' pts vs la semana pasada ('+(covRes!=null?covRes.toFixed(1):'–')+'%). Revisa qué polígonos se redujeron.'}); }
-  if(ifp!=null&&ifp<97){ items.push({sev:'media',t:'InFull en '+ifp.toFixed(1)+'% (bajo 97%). Revisa quejas por producto/entrega.'}); }
-  if(!items.length){ items.push({sev:'ok',t:'Sin alertas críticas en este alcance. RTWT y cobertura dentro de rango.'}); }
+    items.push({sev:'alta',t:pen.length+' marca(s) penalizada(s) a 1 km'+(pen.length>3?' (ej.: '+pp+')':': '+pp)+'. Recuperar cobertura = mayor impacto.'}); }
+  if(ifBr.length){ var w=ifBr[0]; items.push({sev:'media',t:'Posible SKU crítico: revisa '+w.s.b+' ('+w.s.k+') — InFull '+w.p.toFixed(0)+'% ('+w.q+' quejas).'}); }
+  if(sumL>0){ var o0=opp[0]; items.push({sev:'media',t:'$'+(sumL/1e6).toFixed(1)+' M/sem de venta potencial por cobertura < 3 km. Mayor: '+o0.s.b+' ('+o0.s.k+') ~$'+Math.round(o0.l/1e3)+'k/sem.'}); }
+  if(dcov!=null&&dcov<-0.5){ items.push({sev:'media',t:'Cobertura efectiva bajó '+Math.abs(dcov).toFixed(1)+' pts vs semana pasada ('+(covRes!=null?covRes.toFixed(1):'–')+'%).'}); }
+  if(!items.length){ items.push({sev:'ok',t:'Sin alertas en este alcance. RTWT, cobertura e InFull dentro de rango.'}); }
+  items=items.slice(0,5);
   var head='RTWT '+(periodo==='mes'?'(4 sem) ':'')+ (A.rtwt!=null?A.rtwt.toFixed(2)+' min':'–')
-    +' · Cobertura efectiva '+(covRes!=null?covRes.toFixed(1)+'%':'–')+(dcov!=null?(' ('+(dcov>=0?'+':'')+dcov+' pts)'):'')
+    +' · Cobertura '+(covRes!=null?covRes.toFixed(1)+'%':'–')+(dcov!=null?(' ('+(dcov>=0?'+':'')+dcov+' pts)'):'')
     +(ifp!=null?(' · InFull '+ifp.toFixed(1)+'%'):'')+' · '+st.length+' marca–cocina';
   return {head:head, items:items, scope:resScope()};
 }
 function renderResumenW(){ var el=document.getElementById('resW'); if(!el)return; try{ el.innerHTML=resBox('Qué revisar · Semanal', resumenSnap('semana')); }catch(e){ el.innerHTML=''; } }
 function renderResumenM(){ var el=document.getElementById('resM'); if(!el)return; try{ el.innerHTML=resBox('Qué revisar · Mensual', resumenSnap('mes')); }catch(e){ el.innerHTML=''; } }
-function fd2Resumen(cocinas){
+function fd2Resumen(cocinas, byKB){
   var host=document.getElementById('co-fdgy'); if(!host)return;
   var el=document.getElementById('resF');
   if(!el){ el=document.createElement('div'); el.id='resF'; el.className='airesumen'; host.insertBefore(el, host.firstChild); }
   try{
-    var rows=(cocinas||[]).map(function(c){var d=c.d,tot=d.r7+d.r79+d.r9;return {k:c.k,n:d.n,rtwt:c.rtwt,cook:tot?d.cs/tot:null,pct9:tot?d.r9/tot:0,ifp:d.n?100*(1-d.nq/d.n):null};});
+    var rows=(cocinas||[]).map(function(c){var d=c.d,tot=d.r7+d.r79+d.r9;return {k:c.k,n:d.n,rtwt:c.rtwt,cook:tot?d.cs/tot:null,ifp:d.n?100*(1-d.nq/d.n):null};});
     var totN=rows.reduce(function(t,r){return t+r.n;},0);
     var RS=0,RC=0,NQ=0; (cocinas||[]).forEach(function(x){RS+=x.d.rtsum;RC+=x.d.rtcnt;NQ+=x.d.nq;});
     var rtAll=RC>0?RS/RC:null, ifAll=totN?100*(1-NQ/totN):null;
+    var brRows=[]; if(byKB){ Object.keys(byKB).forEach(function(key){var d=byKB[key];var tot=d.r7+d.r79+d.r9;var parts=key.split('||');brRows.push({k:parts[0],b:parts[1],n:d.n,rtwt:d.rtcnt?d.rtsum/d.rtcnt:null,cook:tot?d.cs/tot:null,ifp:d.n?100*(1-d.nq/d.n):null});}); }
     var critRt=rows.filter(function(r){return r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
     var critCook=rows.filter(function(r){return r.cook!=null&&r.cook>9;}).sort(function(a,b){return b.cook-a.cook;});
-    var worstIf=rows.filter(function(r){return r.ifp!=null&&r.n>=20;}).sort(function(a,b){return a.ifp-b.ifp;});
+    var brCrit=brRows.filter(function(r){return r.n>=20&&r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
+    var brCook=brRows.filter(function(r){return r.n>=20&&r.cook!=null&&r.cook>9;}).sort(function(a,b){return b.cook-a.cook;});
+    var brIf=brRows.filter(function(r){return r.n>=30&&r.ifp!=null&&r.ifp<97;}).sort(function(a,b){return a.ifp-b.ifp;});
     var items=[];
-    if(critRt.length) items.push({sev:'alta',t:critRt.length+' cocina(s) con RTWT > 6 min: '+critRt.slice(0,3).map(function(r){return r.k+' '+r.rtwt.toFixed(1)+'m';}).join(', ')+'. Revisa asignación de RT y picos.'});
-    if(critCook.length) items.push({sev:'alta',t:critCook.length+' cocina(s) con cocción > 9 min: '+critCook.slice(0,3).map(function(r){return r.k+' '+r.cook.toFixed(1)+'m';}).join(', ')+'. Revisa operación en cocina.'});
-    if(ifAll!=null&&ifAll<97&&worstIf.length) items.push({sev:'media',t:'InFull global '+ifAll.toFixed(1)+'%. Peores: '+worstIf.slice(0,3).map(function(r){return r.k+' '+r.ifp.toFixed(0)+'%';}).join(', ')+'.'});
-    if(!items.length) items.push({sev:'ok',t:'Sin cocinas críticas por RTWT ni cocción en este alcance.'});
+    if(critRt.length){ items.push({sev:'alta',t:critRt.length+' cocina(s) con RTWT > 6 min: '+critRt.slice(0,3).map(function(r){return r.k+' '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
+    else if(brCrit.length){ items.push({sev:'alta',t:'Sin cocinas críticas, pero '+brCrit.length+' marca(s) con RTWT > 6 min: '+brCrit.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
+    if(critCook.length){ items.push({sev:'alta',t:critCook.length+' cocina(s) con cocción > 9 min: '+critCook.slice(0,3).map(function(r){return r.k+' '+r.cook.toFixed(1)+'m';}).join(', ')+'.'}); }
+    else if(brCook.length){ items.push({sev:'alta',t:brCook.length+' marca(s) con cocción > 9 min: '+brCook.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.cook.toFixed(1)+'m';}).join(', ')+'.'}); }
+    if(brIf.length){ var w=brIf[0]; items.push({sev:'media',t:'Posible SKU crítico: revisa '+w.b+' ('+w.k+') — InFull '+w.ifp.toFixed(0)+'% ('+w.n+' órdenes).'}); }
+    if(!items.length) items.push({sev:'ok',t:'Sin cocinas ni marcas críticas por RTWT o cocción en este alcance.'});
+    items=items.slice(0,5);
     var head='RTWT '+(rtAll!=null?rtAll.toFixed(2)+' min':'–')+(ifAll!=null?(' · InFull '+ifAll.toFixed(1)+'%'):'')+' · '+totN.toLocaleString('es')+' órdenes · '+rows.length+' cocinas';
     el.innerHTML=resBox('Qué revisar · Fdgy (tiempos)', {head:head, items:items, scope:resScope()});
   }catch(e){ el.innerHTML=''; }
