@@ -1678,11 +1678,9 @@ function _trClass(ser,key,umbral,md){
   var startWi=null; for(var j=0;j<vals.length;j++){ if(vals[j].v>bM+md){ startWi=vals[j].wi; break; } }
   var vol=vmean(recent), recentBad=rM>=umbral, baseBad=bM>=umbral, estado='Estable', det=false, early=false;
   if(baseBad&&recentBad&&Math.abs(delta)<md){ estado='Problema histórico'; det=true; }
-  else if(baseBad&&delta<=-md){ estado='Recuperación'; }
-  else if(delta>=md&&consec>=3){ estado='Deterioro sostenido'; det=true; }
-  else if(delta>=md&&consec>=2){ estado='Deterioro reciente'; det=true; }
-  else if(delta<=-md){ estado='Mejora reciente'; }
-  if(det&&!recentBad) early=true;        // deteriora pero aún en meta = alerta temprana
+  else if(delta<=-md){ estado=baseBad?'Recuperación':'Mejora reciente'; }
+  else if(delta>=md){ det=true; estado=(consec>=2)?'Deterioro sostenido':'Deterioro reciente'; }
+  if(det&&estado!=='Problema histórico'&&!recentBad) early=true;   // empeora pero aún en meta
   if(det&&vol<40) det=false;             // ignorar entidades de muy bajo volumen
   return {rM:rM,bM:bM,delta:delta,consec:consec,startWi:startWi,estado:estado,det:det,early:early,vol:vol,recentBad:recentBad};
 }
