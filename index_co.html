@@ -1627,8 +1627,8 @@ function fd2Resumen(cc, cocinas, byKB, dayAgg, byKp){
     var rtB=brRows.filter(function(r){return r.n>=20&&r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
     var qB=brRows.filter(function(r){return r.n>=30&&r.q!=null;}).sort(function(a,b){return b.q-a.q;});
     var items=[];
-    var worse=[]; if(dCk!=null&&dCk>0.2)worse.push('cocción +'+dCk.toFixed(1)+'m'); if(dRt!=null&&dRt>0.2)worse.push('RTWT +'+dRt.toFixed(1)+'m'); if(dQ!=null&&dQ>0.15)worse.push('quejas +'+dQ.toFixed(1)+'/100');
-    var bett=[]; if(dCk!=null&&dCk<-0.2)bett.push('cocción '+dCk.toFixed(1)+'m'); if(dRt!=null&&dRt<-0.2)bett.push('RTWT '+dRt.toFixed(1)+'m'); if(dQ!=null&&dQ<-0.15)bett.push('quejas '+dQ.toFixed(1)+'/100');
+    var worse=[]; if(dCk!=null&&dCk>0.2)worse.push('cocción +'+dCk.toFixed(1)+'m'); if(dRt!=null&&dRt>0.2)worse.push('RTWT +'+dRt.toFixed(1)+'m'); if(dQ!=null&&dQ>0.15)worse.push('no IF +'+dQ.toFixed(1)+' pts');
+    var bett=[]; if(dCk!=null&&dCk<-0.2)bett.push('cocción '+dCk.toFixed(1)+'m'); if(dRt!=null&&dRt<-0.2)bett.push('RTWT '+dRt.toFixed(1)+'m'); if(dQ!=null&&dQ<-0.15)bett.push('no IF '+dQ.toFixed(1)+' pts');
     if(worse.length) items.push({sev:'alta',t:'Se deteriora vs 4 sem previas: '+worse.join(', ')+'.'});
     else if(bett.length) items.push({sev:'ok',t:'Mejora vs 4 sem previas: '+bett.join(', ')+'.'});
     if(ckK.length){ items.push({sev:'alta',t:ckK.length+' cocina(s) con cocción > 9 min: '+ckK.slice(0,3).map(function(r){return r.k+' '+r.cook.toFixed(1)+'m';}).join(', ')+(slow!=null?(' · '+slow.toFixed(0)+'% de pedidos >9 min'):'')+'.'}); }
@@ -1636,7 +1636,7 @@ function fd2Resumen(cc, cocinas, byKB, dayAgg, byKp){
     if(rtK.length){ items.push({sev:'alta',t:rtK.length+' cocina(s) con RTWT > 6 min: '+rtK.slice(0,3).map(function(r){return r.k+' '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
     else if(rtB.length){ items.push({sev:'alta',t:rtB.length+' marca(s) con RTWT > 6 min: '+rtB.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
     if(demCoc!=null){ var lado=demCoc>=55?('la cocina ('+demCoc.toFixed(0)+'% de la espera)'):(demCoc<=45?('el rider ('+(100-demCoc).toFixed(0)+'% de la espera)'):'mitad cocina / mitad rider'); items.push({sev:'media',t:'La demora se concentra en '+lado+'.'}); }
-    if(qx!=null){ var qt='Quejas '+qx.toFixed(1)+'/100 pedidos'+(dQ!=null?(' ('+(dQ>=0?'+':'')+dQ.toFixed(1)+' vs previo)'):'')+'.'; if(qB.length&&qB[0].q>qx) qt+=' Peor: '+qB[0].b+' ('+qB[0].k+') '+qB[0].q.toFixed(1)+'/100 — revisa sus SKUs.'; items.push({sev:qx>3?'alta':'media',t:qt}); }
+    if(qx!=null){ var qt='% órdenes no IF (con queja): '+qx.toFixed(1)+'%'+(dQ!=null?(' ('+(dQ>=0?'+':'')+dQ.toFixed(1)+' pts vs previo)'):'')+'.'; if(qB.length&&qB[0].q>qx) qt+=' Peor: '+qB[0].b+' ('+qB[0].k+') '+qB[0].q.toFixed(1)+'% — revisa sus SKUs.'; items.push({sev:qx>3?'alta':'media',t:qt}); }
     try{
       var tparts=[], DW=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
       if(dayAgg){ var dr=Object.keys(dayAgg).map(function(off){var d=dayAgg[off];var dt=new Date((typeof fd2msDate==='function'?fd2msDate(+off):'2026-01-01')+'T12:00:00');return {rt:d.rc?d.rs/d.rc:null,n:d.rc,dw:DW[dt.getDay()]||('d'+off)};}).filter(function(x){return x.rt!=null&&x.n>=15;}).sort(function(a,b){return b.rt-a.rt;});
@@ -1657,7 +1657,7 @@ function fd2Resumen(cc, cocinas, byKB, dayAgg, byKp){
     if(!items.length) items.push({sev:'ok',t:'Sin alertas por cocción, RTWT ni quejas en este alcance.'});
     var ar=function(d){return d==null?'':(d>0?' ▲':(d<0?' ▼':''));};
     var head='RTWT '+(rtwt!=null?rtwt.toFixed(2)+'m':'–')+ar(dRt)+' · Cocción '+(cook!=null?cook.toFixed(2)+'m':'–')+ar(dCk)
-      +' · Quejas '+(qx!=null?qx.toFixed(1)+'/100':'–')+ar(dQ)+(ifAll!=null?(' · InFull '+ifAll.toFixed(1)+'%'):'')
+      +' · No IF '+(qx!=null?qx.toFixed(1)+'%':'–')+ar(dQ)
       +' · '+cur.n.toLocaleString('es')+' órdenes · '+kRows.length+' cocinas';
     el.innerHTML=resBox('Diagnóstico · Fdgy (tiempos y quejas)', {head:head, items:items, scope:resScope()});
   }catch(e){ el.innerHTML=''; }
@@ -1683,7 +1683,7 @@ function _trClass(ser,key,umbral,md){
   return {rM:rM,bM:bM,delta:delta,consec:consec,startWi:startWi,estado:estado,det:det,early:early,vol:vol,recentBad:recentBad};
 }
 function fd2TrendAnalyze(d){
-  var METR=[{k:'cook',l:'Cocción',u:9,md:1.0,unit:'m'},{k:'rtwt',l:'RTWT',u:6,md:0.7,unit:'m'},{k:'qx',l:'Quejas',u:3,md:0.6,unit:'/100'}];
+  var METR=[{k:'cook',l:'Cocción',u:9,md:1.0,unit:'m'},{k:'rtwt',l:'RTWT',u:6,md:0.7,unit:'m'},{k:'qx',l:'% no IF',u:3,md:0.6,unit:'%'}];
   var out=[];
   function scan(G,R,tipo){ for(var gi=0;gi<G.length;gi++){ var ser=_trSeries(R,gi);
     METR.forEach(function(M){ var c=_trClass(ser,M.k,M.u,M.md); if(!c||!c.det)return;
