@@ -1346,8 +1346,7 @@ function fd2Render(cc){
     if(inP){ accK(byKp,kn,r); accK(byKBp,kbk,r); }
   }
   var cocinas=Object.keys(byK).map(function(k){return {k:k,d:byK[k],rtwt:fd2avgRt(byK[k]),rtwtP:fd2avgRt(byKp[k])};}).sort(function(a,b){return b.d.n-a.d.n;});
-  try{ fd2Resumen(cocinas, byKB, dayAgg, byKp, byKBp); }catch(e){}
-  try{ fd2TrendRender(cc); }catch(e){}
+  try{ fd2Resumen(cc, cocinas, byKB, dayAgg, byKp); }catch(e){}
 
   // KPIs
   try{
@@ -1605,10 +1604,11 @@ function resumenSnap(periodo){
 }
 function renderResumenW(){ var el=document.getElementById('resW'); if(!el)return; try{ el.innerHTML=resBox('Qué revisar · Semanal', resumenSnap('semana')); }catch(e){ el.innerHTML=''; } }
 function renderResumenM(){ var el=document.getElementById('resM'); if(!el)return; try{ el.innerHTML=resBox('Qué revisar · Mensual', resumenSnap('mes')); }catch(e){ el.innerHTML=''; } }
-function fd2Resumen(cocinas, byKB, dayAgg, byKp){
+function fd2Resumen(cc, cocinas, byKB, dayAgg, byKp){
   var host=document.getElementById('co-fdgy'); if(!host)return;
   var el=document.getElementById('resF');
   if(!el){ el=document.createElement('div'); el.id='resF'; el.className='airesumen'; host.insertBefore(el, host.firstChild); }
+  _fd2Last={cc:cc,cocinas:cocinas,byKB:byKB,dayAgg:dayAgg,byKp:byKp};
   try{
     // Totales del período (actual y previo) para tendencia WoW
     function tot(src){var t={n:0,ck:0,cn:0,c9:0,rs:0,rc:0,kw:0,rw:0,nq:0};
@@ -1655,8 +1655,14 @@ function fd2Resumen(cocinas, byKB, dayAgg, byKp){
         if(hr.length) tparts.push('hora '+hr[0].h+'h ('+hr[0].rt.toFixed(1)+'m)'); }
       if(tparts.length) items.push({sev:'media',t:'Momento más crítico por RTWT: '+tparts.join(' · ')+'.'});
     }catch(e){}
+    // 7) Deterioros 12 sem (§12) — respetan el filtro: solo cocinas/marcas del alcance actual
+    items=items.slice(0,4);
+    var scopeK={}; (cocinas||[]).forEach(function(c){scopeK[c.k]=1;});
+    var scopeB={}; brRows.forEach(function(r){scopeB[r.b]=1;});
+    var det=fd2DetItems(cc, scopeK, scopeB);
+    if(det===null){ fd2EnsureTrend(cc); }
+    else { det.slice(0,3).forEach(function(it){ items.push(it); }); }
     if(!items.length) items.push({sev:'ok',t:'Sin alertas por cocción, RTWT ni quejas en este alcance.'});
-    items=items.slice(0,6);
     var ar=function(d){return d==null?'':(d>0?' ▲':(d<0?' ▼':''));};
     var head='RTWT '+(rtwt!=null?rtwt.toFixed(2)+'m':'–')+ar(dRt)+' · Cocción '+(cook!=null?cook.toFixed(2)+'m':'–')+ar(dCk)
       +' · Quejas '+(qx!=null?qx.toFixed(1)+'/100':'–')+ar(dQ)+(ifAll!=null?(' · InFull '+ifAll.toFixed(1)+'%'):'')
@@ -1665,7 +1671,7 @@ function fd2Resumen(cocinas, byKB, dayAgg, byKp){
   }catch(e){ el.innerHTML=''; }
 }
 // ============ §12 · TENDENCIAS E HISTÓRICO (deterioros / alertas tempranas, 12 sem) ============
-var _fd2Trend={};
+var _fd2Trend={}, _fd2Last=null, _fd2TrendLoading={};
 function _trSeries(R,gi){ var a=R.filter(function(x){return x[0]===gi;}).sort(function(p,q){return p[1]-q[1];});
   return a.map(function(x){return {wi:x[1],n:x[2],cook:x[3],rtwt:x[4],qx:(x[2]?100*x[5]/x[2]:null),slow9:x[6]};}); }
 function _trClass(ser,key,umbral,md){
@@ -1695,30 +1701,29 @@ function fd2TrendAnalyze(d){
   out.sort(function(a,b){return b.score-a.score;});
   return out;
 }
-function fd2TrendHTML(d){
-  var CN={COL:'Colombia',MEX:'México',PER:'Perú'};
-  var rows=fd2TrendAnalyze(d), early=rows.filter(function(r){return r.early;}).length, top=rows.slice(0,10);
-  var wlab=function(wi){var w=d.weeks[wi];if(!w)return'—';var p=w.split('-');return p[2]+'/'+p[1];};
-  var crit=function(r){ if(r.recentBad&&(r.estado==='Deterioro sostenido'||r.estado==='Problema histórico'))return'CRÍTICO'; if(r.recentBad||r.estado==='Deterioro sostenido'||r.early)return'ALTO'; return'MEDIO'; };
-  var head='<div class="airh"><span class="aibadge">📈 Tendencias 12 sem</span> <b>Deterioros y alertas tempranas</b> <span class="aiscope">· '+(CN[d.country]||d.country)+' · toda la operación</span></div>';
-  if(!top.length) return head+'<div class="aihead">Sin deterioros relevantes en las últimas semanas.</div>';
-  var sub='<div class="aihead">'+rows.length+' deterioro(s)'+(early?' · '+early+' alerta(s) temprana(s) aún en meta':'')+'. Ranking por impacto (magnitud × volumen). Histórico = ~5 sem previas; Reciente = últimas 3 sem.</div>';
-  var tbl='<div style="overflow-x:auto"><table class="dense" style="font-size:10px;width:100%"><tr><th>#</th><th>Entidad</th><th>Tipo</th><th>Indicador</th><th class="num">Hist→Reciente</th><th class="num">Δ</th><th class="num">Sem↑</th><th class="num">Inicio</th><th>Estado</th><th>Criticidad</th></tr>'+
-    top.map(function(r,i){var cc=crit(r),col=cc==='CRÍTICO'?'#c0392b':(cc==='ALTO'?'#d99a1b':'#555');
-      return '<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td>'+r.tipo+'</td><td>'+r.ind+'</td><td class="num">'+r.bM.toFixed(1)+'→'+r.rM.toFixed(1)+r.unit+'</td><td class="num" style="color:'+(r.delta>0?'#c0392b':'#1e8e5a')+';font-weight:700">'+(r.delta>0?'+':'')+r.delta.toFixed(1)+'</td><td class="num">'+r.consec+'</td><td class="num">'+wlab(r.startWi)+'</td><td>'+r.estado+'</td><td style="color:'+col+';font-weight:700">'+cc+'</td></tr>';
-    }).join('')+'</table></div>';
-  return head+sub+tbl;
+// Deterioros filtrados al alcance actual (cocinas/marcas visibles). Devuelve items para el resumen,
+// o null si la serie histórica aún no está cargada (dispara la carga).
+function fd2DetItems(cc, scopeK, scopeB){
+  var short=(typeof FD2CC!=='undefined'&&FD2CC[cc])?FD2CC[cc]:cc, d=_fd2Trend[short];
+  if(!d) return null;
+  var rows=fd2TrendAnalyze(d).filter(function(r){ return r.tipo==='Cocina'? !!scopeK[r.name] : !!scopeB[r.name]; });
+  return rows.map(function(r){
+    var sev=r.recentBad?'alta':'media';
+    var et=r.early?' (aún en meta)':'';
+    var ent=(r.tipo==='Marca')?(r.name):(r.name);
+    return {sev:sev, t:'↘ '+r.estado+': '+ent+' · '+r.ind+' '+r.bM.toFixed(1)+'→'+r.rM.toFixed(1)+r.unit+et+'.'};
+  });
 }
-function fd2TrendRender(cc){
-  var host=document.getElementById('co-fdgy'); if(!host)return;
-  var el=document.getElementById('resTrend');
-  if(!el){ el=document.createElement('div'); el.id='resTrend'; el.className='airesumen'; var rf=document.getElementById('resF'); if(rf){host.insertBefore(el,rf.nextSibling);}else{host.insertBefore(el,host.firstChild);} }
+function fd2EnsureTrend(cc){
   var short=(typeof FD2CC!=='undefined'&&FD2CC[cc])?FD2CC[cc]:cc;
-  if(_fd2Trend[short]){ try{el.innerHTML=fd2TrendHTML(_fd2Trend[short]);}catch(e){el.innerHTML='';} return; }
-  el.innerHTML='<div class="airh"><span class="aibadge">📈 Tendencias 12 sem</span> <b>Analizando histórico…</b></div>';
-  var to=(typeof FDGY2!=='undefined'&&FDGY2.maxDate)?FDGY2.maxDate:null; if(!to){el.innerHTML='';return;}
+  if(_fd2Trend[short]||_fd2TrendLoading[short]) return;
+  var to=(typeof FDGY2!=='undefined'&&FDGY2.maxDate)?FDGY2.maxDate:null; if(!to) return;
   var dt=new Date(to+'T00:00:00Z'), fromD=new Date(dt.getTime()-83*86400000), from=fromD.toISOString().slice(0,10);
-  fetch('/api/trend?country='+encodeURIComponent(short)+'&from='+from+'&to='+to).then(function(r){return r.json();}).then(function(dd){ if(!dd||!dd.weeks){el.innerHTML='';return;} _fd2Trend[short]=dd; try{el.innerHTML=fd2TrendHTML(dd);}catch(e){el.innerHTML='';} }).catch(function(){ el.innerHTML=''; });
+  _fd2TrendLoading[short]=1;
+  fetch('/api/trend?country='+encodeURIComponent(short)+'&from='+from+'&to='+to).then(function(r){return r.json();}).then(function(dd){
+    _fd2TrendLoading[short]=0; if(!dd||!dd.weeks) return; _fd2Trend[short]=dd;
+    if(_fd2Last&&_fd2Last.cc===cc){ try{ fd2Resumen(_fd2Last.cc,_fd2Last.cocinas,_fd2Last.byKB,_fd2Last.dayAgg,_fd2Last.byKp); }catch(e){} }
+  }).catch(function(){ _fd2TrendLoading[short]=0; });
 }
 if(typeof update==='function'){var _ur=update; update=function(){_ur.apply(this,arguments); try{renderResumenW();}catch(e){}};}
 try{ renderResumenW(); }catch(e){}
