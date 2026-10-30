@@ -1347,6 +1347,7 @@ function fd2Render(cc){
   }
   var cocinas=Object.keys(byK).map(function(k){return {k:k,d:byK[k],rtwt:fd2avgRt(byK[k]),rtwtP:fd2avgRt(byKp[k])};}).sort(function(a,b){return b.d.n-a.d.n;});
   try{ fd2Resumen(cocinas, byKB, dayAgg, byKp, byKBp); }catch(e){}
+  try{ fd2TrendRender(cc); }catch(e){}
 
   // KPIs
   try{
@@ -1654,6 +1655,63 @@ function fd2Resumen(cocinas, byKB, dayAgg, byKp){
       +' · '+cur.n.toLocaleString('es')+' órdenes · '+kRows.length+' cocinas';
     el.innerHTML=resBox('Diagnóstico · Fdgy (tiempos y quejas)', {head:head, items:items, scope:resScope()});
   }catch(e){ el.innerHTML=''; }
+}
+// ============ §12 · TENDENCIAS E HISTÓRICO (deterioros / alertas tempranas, 12 sem) ============
+var _fd2Trend={};
+function _trSeries(R,gi){ var a=R.filter(function(x){return x[0]===gi;}).sort(function(p,q){return p[1]-q[1];});
+  return a.map(function(x){return {wi:x[1],n:x[2],cook:x[3],rtwt:x[4],qx:(x[2]?100*x[5]/x[2]:null),slow9:x[6]};}); }
+function _trClass(ser,key,umbral,md){
+  var vals=ser.map(function(s){return {v:s[key],n:s.n,wi:s.wi};}).filter(function(x){return x.v!=null&&x.n>=20;});
+  if(vals.length<5) return null;
+  var L=vals.length, recent=vals.slice(L-3), base=vals.slice(Math.max(0,L-8),L-3); if(!base.length)base=vals.slice(0,L-3);
+  var mean=function(a){return a.reduce(function(t,x){return t+x.v;},0)/a.length;}, vmean=function(a){return a.reduce(function(t,x){return t+x.n;},0)/a.length;};
+  var rM=mean(recent), bM=mean(base), delta=rM-bM;
+  var consec=0; for(var i=vals.length-1;i>0;i--){ if(vals[i].v>vals[i-1].v)consec++; else break; }
+  var startWi=null; for(var j=0;j<vals.length;j++){ if(vals[j].v>bM+md){ startWi=vals[j].wi; break; } }
+  var recentBad=rM>=umbral, baseBad=bM>=umbral, estado, det=false, early=false;
+  if(baseBad&&recentBad&&Math.abs(delta)<md){ estado='Problema histórico'; det=true; }
+  else if(baseBad&&delta<=-md){ estado='Recuperación'; }
+  else if(delta>=md&&consec>=3){ estado='Deterioro sostenido'; det=true; early=!recentBad; }
+  else if(delta>=md){ estado='Deterioro reciente'; det=true; early=!recentBad; }
+  else if(delta<=-md){ estado='Mejora reciente'; }
+  else estado='Estable';
+  return {rM:rM,bM:bM,delta:delta,consec:consec,startWi:startWi,estado:estado,det:det,early:early,vol:vmean(recent),recentBad:recentBad};
+}
+function fd2TrendAnalyze(d){
+  var METR=[{k:'cook',l:'Cocción',u:9,md:0.8,unit:'m'},{k:'rtwt',l:'RTWT',u:6,md:0.5,unit:'m'},{k:'qx',l:'Quejas',u:3,md:0.5,unit:'/100'}];
+  var out=[];
+  function scan(G,R,tipo){ for(var gi=0;gi<G.length;gi++){ var ser=_trSeries(R,gi);
+    METR.forEach(function(M){ var c=_trClass(ser,M.k,M.u,M.md); if(!c||!c.det)return;
+      var score=(c.delta/M.md)*Math.log(10+c.vol)*(c.recentBad?1.6:1);
+      out.push({tipo:tipo,name:G[gi],ind:M.l,unit:M.unit,bM:c.bM,rM:c.rM,delta:c.delta,consec:c.consec,startWi:c.startWi,estado:c.estado,early:c.early,recentBad:c.recentBad,score:score}); }); } }
+  scan(d.K,d.KR,'Cocina'); scan(d.B,d.BR,'Marca');
+  out.sort(function(a,b){return b.score-a.score;});
+  return out;
+}
+function fd2TrendHTML(d){
+  var CN={COL:'Colombia',MEX:'México',PER:'Perú'};
+  var rows=fd2TrendAnalyze(d), early=rows.filter(function(r){return r.early;}).length, top=rows.slice(0,10);
+  var wlab=function(wi){var w=d.weeks[wi];if(!w)return'—';var p=w.split('-');return p[2]+'/'+p[1];};
+  var crit=function(r){ if(r.recentBad&&(r.estado==='Deterioro sostenido'||r.estado==='Problema histórico'))return'CRÍTICO'; if(r.recentBad||r.estado==='Deterioro sostenido'||r.early)return'ALTO'; return'MEDIO'; };
+  var head='<div class="airh"><span class="aibadge">📈 Tendencias 12 sem</span> <b>Deterioros y alertas tempranas</b> <span class="aiscope">· '+(CN[d.country]||d.country)+' · toda la operación</span></div>';
+  if(!top.length) return head+'<div class="aihead">Sin deterioros relevantes en las últimas semanas.</div>';
+  var sub='<div class="aihead">'+rows.length+' deterioro(s)'+(early?' · '+early+' alerta(s) temprana(s) aún en meta':'')+'. Ranking por impacto (magnitud × volumen). Histórico = ~5 sem previas; Reciente = últimas 3 sem.</div>';
+  var tbl='<div style="overflow-x:auto"><table class="dense" style="font-size:10px;width:100%"><tr><th>#</th><th>Entidad</th><th>Tipo</th><th>Indicador</th><th class="num">Hist→Reciente</th><th class="num">Δ</th><th class="num">Sem↑</th><th class="num">Inicio</th><th>Estado</th><th>Criticidad</th></tr>'+
+    top.map(function(r,i){var cc=crit(r),col=cc==='CRÍTICO'?'#c0392b':(cc==='ALTO'?'#d99a1b':'#555');
+      return '<tr><td>'+(i+1)+'</td><td>'+r.name+'</td><td>'+r.tipo+'</td><td>'+r.ind+'</td><td class="num">'+r.bM.toFixed(1)+'→'+r.rM.toFixed(1)+r.unit+'</td><td class="num" style="color:'+(r.delta>0?'#c0392b':'#1e8e5a')+';font-weight:700">'+(r.delta>0?'+':'')+r.delta.toFixed(1)+'</td><td class="num">'+r.consec+'</td><td class="num">'+wlab(r.startWi)+'</td><td>'+r.estado+'</td><td style="color:'+col+';font-weight:700">'+cc+'</td></tr>';
+    }).join('')+'</table></div>';
+  return head+sub+tbl;
+}
+function fd2TrendRender(cc){
+  var host=document.getElementById('co-fdgy'); if(!host)return;
+  var el=document.getElementById('resTrend');
+  if(!el){ el=document.createElement('div'); el.id='resTrend'; el.className='airesumen'; var rf=document.getElementById('resF'); if(rf){host.insertBefore(el,rf.nextSibling);}else{host.insertBefore(el,host.firstChild);} }
+  var short=(typeof FD2CC!=='undefined'&&FD2CC[cc])?FD2CC[cc]:cc;
+  if(_fd2Trend[short]){ try{el.innerHTML=fd2TrendHTML(_fd2Trend[short]);}catch(e){el.innerHTML='';} return; }
+  el.innerHTML='<div class="airh"><span class="aibadge">📈 Tendencias 12 sem</span> <b>Analizando histórico…</b></div>';
+  var to=(typeof FDGY2!=='undefined'&&FDGY2.maxDate)?FDGY2.maxDate:null; if(!to){el.innerHTML='';return;}
+  var dt=new Date(to+'T00:00:00Z'), fromD=new Date(dt.getTime()-83*86400000), from=fromD.toISOString().slice(0,10);
+  fetch('/api/trend?country='+encodeURIComponent(short)+'&from='+from+'&to='+to).then(function(r){return r.json();}).then(function(dd){ if(!dd||!dd.weeks){el.innerHTML='';return;} _fd2Trend[short]=dd; try{el.innerHTML=fd2TrendHTML(dd);}catch(e){el.innerHTML='';} }).catch(function(){ el.innerHTML=''; });
 }
 if(typeof update==='function'){var _ur=update; update=function(){_ur.apply(this,arguments); try{renderResumenW();}catch(e){}};}
 try{ renderResumenW(); }catch(e){}
