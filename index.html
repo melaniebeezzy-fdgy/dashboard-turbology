@@ -1676,17 +1676,18 @@ function _trClass(ser,key,umbral,md){
   var rM=mean(recent), bM=mean(base), delta=rM-bM;
   var consec=0; for(var i=vals.length-1;i>0;i--){ if(vals[i].v>vals[i-1].v)consec++; else break; }
   var startWi=null; for(var j=0;j<vals.length;j++){ if(vals[j].v>bM+md){ startWi=vals[j].wi; break; } }
-  var recentBad=rM>=umbral, baseBad=bM>=umbral, estado, det=false, early=false;
+  var vol=vmean(recent), recentBad=rM>=umbral, baseBad=bM>=umbral, estado='Estable', det=false, early=false;
   if(baseBad&&recentBad&&Math.abs(delta)<md){ estado='Problema histórico'; det=true; }
   else if(baseBad&&delta<=-md){ estado='Recuperación'; }
-  else if(delta>=md&&consec>=3){ estado='Deterioro sostenido'; det=true; early=!recentBad; }
-  else if(delta>=md){ estado='Deterioro reciente'; det=true; early=!recentBad; }
+  else if(delta>=md&&consec>=3){ estado='Deterioro sostenido'; det=true; }
+  else if(delta>=md&&consec>=2){ estado='Deterioro reciente'; det=true; }
   else if(delta<=-md){ estado='Mejora reciente'; }
-  else estado='Estable';
-  return {rM:rM,bM:bM,delta:delta,consec:consec,startWi:startWi,estado:estado,det:det,early:early,vol:vmean(recent),recentBad:recentBad};
+  if(det&&!recentBad) early=true;        // deteriora pero aún en meta = alerta temprana
+  if(det&&vol<40) det=false;             // ignorar entidades de muy bajo volumen
+  return {rM:rM,bM:bM,delta:delta,consec:consec,startWi:startWi,estado:estado,det:det,early:early,vol:vol,recentBad:recentBad};
 }
 function fd2TrendAnalyze(d){
-  var METR=[{k:'cook',l:'Cocción',u:9,md:0.8,unit:'m'},{k:'rtwt',l:'RTWT',u:6,md:0.5,unit:'m'},{k:'qx',l:'Quejas',u:3,md:0.5,unit:'/100'}];
+  var METR=[{k:'cook',l:'Cocción',u:9,md:1.0,unit:'m'},{k:'rtwt',l:'RTWT',u:6,md:0.7,unit:'m'},{k:'qx',l:'Quejas',u:3,md:0.6,unit:'/100'}];
   var out=[];
   function scan(G,R,tipo){ for(var gi=0;gi<G.length;gi++){ var ser=_trSeries(R,gi);
     METR.forEach(function(M){ var c=_trClass(ser,M.k,M.u,M.md); if(!c||!c.det)return;
