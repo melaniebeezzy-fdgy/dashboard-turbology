@@ -1346,7 +1346,7 @@ function fd2Render(cc){
     if(inP){ accK(byKp,kn,r); accK(byKBp,kbk,r); }
   }
   var cocinas=Object.keys(byK).map(function(k){return {k:k,d:byK[k],rtwt:fd2avgRt(byK[k]),rtwtP:fd2avgRt(byKp[k])};}).sort(function(a,b){return b.d.n-a.d.n;});
-  try{ fd2Resumen(cocinas, byKB, dayAgg); }catch(e){}
+  try{ fd2Resumen(cocinas, byKB, dayAgg, byKp, byKBp); }catch(e){}
 
   // KPIs
   try{
@@ -1604,42 +1604,55 @@ function resumenSnap(periodo){
 }
 function renderResumenW(){ var el=document.getElementById('resW'); if(!el)return; try{ el.innerHTML=resBox('Qué revisar · Semanal', resumenSnap('semana')); }catch(e){ el.innerHTML=''; } }
 function renderResumenM(){ var el=document.getElementById('resM'); if(!el)return; try{ el.innerHTML=resBox('Qué revisar · Mensual', resumenSnap('mes')); }catch(e){ el.innerHTML=''; } }
-function fd2Resumen(cocinas, byKB, dayAgg){
+function fd2Resumen(cocinas, byKB, dayAgg, byKp){
   var host=document.getElementById('co-fdgy'); if(!host)return;
   var el=document.getElementById('resF');
   if(!el){ el=document.createElement('div'); el.id='resF'; el.className='airesumen'; host.insertBefore(el, host.firstChild); }
   try{
-    var rows=(cocinas||[]).map(function(c){var d=c.d,tot=d.r7+d.r79+d.r9;return {k:c.k,n:d.n,rtwt:c.rtwt,cook:tot?d.cs/tot:null,ifp:d.n?100*(1-d.nq/d.n):null};});
-    var totN=rows.reduce(function(t,r){return t+r.n;},0);
-    var RS=0,RC=0,NQ=0; (cocinas||[]).forEach(function(x){RS+=x.d.rtsum;RC+=x.d.rtcnt;NQ+=x.d.nq;});
-    var rtAll=RC>0?RS/RC:null, ifAll=totN?100*(1-NQ/totN):null;
-    var brRows=[]; if(byKB){ Object.keys(byKB).forEach(function(key){var d=byKB[key];var tot=d.r7+d.r79+d.r9;var parts=key.split('||');brRows.push({k:parts[0],b:parts[1],n:d.n,rtwt:d.rtcnt?d.rtsum/d.rtcnt:null,cook:tot?d.cs/tot:null,ifp:d.n?100*(1-d.nq/d.n):null});}); }
-    var critRt=rows.filter(function(r){return r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
-    var critCook=rows.filter(function(r){return r.cook!=null&&r.cook>9;}).sort(function(a,b){return b.cook-a.cook;});
-    var brCrit=brRows.filter(function(r){return r.n>=20&&r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
-    var brCook=brRows.filter(function(r){return r.n>=20&&r.cook!=null&&r.cook>9;}).sort(function(a,b){return b.cook-a.cook;});
-    var brIf=brRows.filter(function(r){return r.n>=30&&r.ifp!=null&&r.ifp<97;}).sort(function(a,b){return a.ifp-b.ifp;});
+    function tot(src){var t={n:0,ck:0,cn:0,c9:0,rs:0,rc:0,kw:0,rw:0,nq:0};
+      var arr=Array.isArray(src)?src.map(function(c){return c.d;}):Object.keys(src||{}).map(function(k){return src[k];});
+      arr.forEach(function(d){if(!d)return;var cn=(d.r7+d.r79+d.r9);t.n+=d.n;t.ck+=(d.cs||0);t.cn+=cn;t.c9+=d.r9;t.rs+=(d.rtsum||0);t.rc+=(d.rtcnt||0);t.kw+=(d.kw||0);t.rw+=(d.rw||0);t.nq+=(d.nq||0);});return t;}
+    var cur=tot(cocinas), prev=tot(byKp||{});
+    var mRt=function(t){return t.rc?t.rs/t.rc:null;}, mCk=function(t){return t.cn?t.ck/t.cn:null;}, mQ=function(t){return t.n?100*t.nq/t.n:null;};
+    var rtwt=mRt(cur), cook=mCk(cur), qx=mQ(cur), slow=cur.cn?100*cur.c9/cur.cn:null;
+    var dRt=(prev.rc&&rtwt!=null)?rtwt-mRt(prev):null, dCk=(prev.cn&&cook!=null)?cook-mCk(prev):null, dQ=(prev.n&&qx!=null)?qx-mQ(prev):null;
+    var ifAll=cur.n?100*(1-cur.nq/cur.n):null;
+    var demCoc=(cur.kw+cur.rw)?100*cur.kw/(cur.kw+cur.rw):null;
+    var kRows=(cocinas||[]).map(function(c){var d=c.d,cn=d.r7+d.r79+d.r9;return {k:c.k,n:d.n,rtwt:c.rtwt,cook:cn?d.cs/cn:null};});
+    var brRows=[]; if(byKB){ Object.keys(byKB).forEach(function(key){var d=byKB[key];var cn=d.r7+d.r79+d.r9;var p=key.split('||');brRows.push({k:p[0],b:p[1],n:d.n,rtwt:d.rtcnt?d.rtsum/d.rtcnt:null,cook:cn?d.cs/cn:null,q:d.n?100*d.nq/d.n:null});}); }
+    var ckK=kRows.filter(function(r){return r.cook!=null&&r.cook>9;}).sort(function(a,b){return b.cook-a.cook;});
+    var ckB=brRows.filter(function(r){return r.n>=20&&r.cook!=null&&r.cook>9;}).sort(function(a,b){return b.cook-a.cook;});
+    var rtK=kRows.filter(function(r){return r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
+    var rtB=brRows.filter(function(r){return r.n>=20&&r.rtwt!=null&&r.rtwt>6;}).sort(function(a,b){return b.rtwt-a.rtwt;});
+    var qB=brRows.filter(function(r){return r.n>=30&&r.q!=null;}).sort(function(a,b){return b.q-a.q;});
     var items=[];
-    if(critRt.length){ items.push({sev:'alta',t:critRt.length+' cocina(s) con RTWT > 6 min: '+critRt.slice(0,3).map(function(r){return r.k+' '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
-    else if(brCrit.length){ items.push({sev:'alta',t:'Sin cocinas críticas, pero '+brCrit.length+' marca(s) con RTWT > 6 min: '+brCrit.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
-    if(critCook.length){ items.push({sev:'alta',t:critCook.length+' cocina(s) con cocción > 9 min: '+critCook.slice(0,3).map(function(r){return r.k+' '+r.cook.toFixed(1)+'m';}).join(', ')+'.'}); }
-    else if(brCook.length){ items.push({sev:'alta',t:brCook.length+' marca(s) con cocción > 9 min: '+brCook.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.cook.toFixed(1)+'m';}).join(', ')+'.'}); }
-    if(brIf.length){ var w=brIf[0]; items.push({sev:'media',t:'Posible SKU crítico: revisa '+w.b+' ('+w.k+') — InFull '+w.ifp.toFixed(0)+'% ('+w.n+' órdenes).'}); }
-    // Día / hora más crítica por RTWT (día desde agregado; hora desde el detalle orden-por-orden)
+    var worse=[]; if(dCk!=null&&dCk>0.2)worse.push('cocción +'+dCk.toFixed(1)+'m'); if(dRt!=null&&dRt>0.2)worse.push('RTWT +'+dRt.toFixed(1)+'m'); if(dQ!=null&&dQ>0.15)worse.push('quejas +'+dQ.toFixed(1)+'/100');
+    var bett=[]; if(dCk!=null&&dCk<-0.2)bett.push('cocción '+dCk.toFixed(1)+'m'); if(dRt!=null&&dRt<-0.2)bett.push('RTWT '+dRt.toFixed(1)+'m'); if(dQ!=null&&dQ<-0.15)bett.push('quejas '+dQ.toFixed(1)+'/100');
+    if(worse.length) items.push({sev:'alta',t:'Se deteriora vs 4 sem previas: '+worse.join(', ')+'.'});
+    else if(bett.length) items.push({sev:'ok',t:'Mejora vs 4 sem previas: '+bett.join(', ')+'.'});
+    if(ckK.length){ items.push({sev:'alta',t:ckK.length+' cocina(s) con cocción > 9 min: '+ckK.slice(0,3).map(function(r){return r.k+' '+r.cook.toFixed(1)+'m';}).join(', ')+(slow!=null?(' · '+slow.toFixed(0)+'% de pedidos >9 min'):'')+'.'}); }
+    else if(ckB.length){ items.push({sev:'alta',t:ckB.length+' marca(s) con cocción > 9 min: '+ckB.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.cook.toFixed(1)+'m';}).join(', ')+'.'}); }
+    if(rtK.length){ items.push({sev:'alta',t:rtK.length+' cocina(s) con RTWT > 6 min: '+rtK.slice(0,3).map(function(r){return r.k+' '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
+    else if(rtB.length){ items.push({sev:'alta',t:rtB.length+' marca(s) con RTWT > 6 min: '+rtB.slice(0,3).map(function(r){return r.b+' ('+r.k+') '+r.rtwt.toFixed(1)+'m';}).join(', ')+'.'}); }
+    if(demCoc!=null){ var lado=demCoc>=55?('la cocina ('+demCoc.toFixed(0)+'% de la espera)'):(demCoc<=45?('el rider ('+(100-demCoc).toFixed(0)+'% de la espera)'):'mitad cocina / mitad rider'); items.push({sev:'media',t:'La demora se concentra en '+lado+'.'}); }
+    if(qx!=null){ var qt='Quejas '+qx.toFixed(1)+'/100 pedidos'+(dQ!=null?(' ('+(dQ>=0?'+':'')+dQ.toFixed(1)+' vs previo)'):'')+'.'; if(qB.length&&qB[0].q>qx) qt+=' Peor: '+qB[0].b+' ('+qB[0].k+') '+qB[0].q.toFixed(1)+'/100 — revisa sus SKUs.'; items.push({sev:qx>3?'alta':'media',t:qt}); }
     try{
       var tparts=[], DW=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
       if(dayAgg){ var dr=Object.keys(dayAgg).map(function(off){var d=dayAgg[off];var dt=new Date((typeof fd2msDate==='function'?fd2msDate(+off):'2026-01-01')+'T12:00:00');return {rt:d.rc?d.rs/d.rc:null,n:d.rc,dw:DW[dt.getDay()]||('d'+off)};}).filter(function(x){return x.rt!=null&&x.n>=15;}).sort(function(a,b){return b.rt-a.rt;});
-        if(dr.length) tparts.push('día '+dr[0].dw+' ('+dr[0].rt.toFixed(1)+' min)'); }
+        if(dr.length) tparts.push('día '+dr[0].dw+' ('+dr[0].rt.toFixed(1)+'m)'); }
       var det=(typeof FDGY2ST!=='undefined'&&FDGY2ST.detOrders)?FDGY2ST.detOrders:[];
       if(det.length){ var byHr={}; det.forEach(function(o){ if(o.rt!=null&&o.hr!=null)(byHr[o.hr]=byHr[o.hr]||[]).push(o.rt); });
         var hr=Object.keys(byHr).map(function(h){var v=byHr[h];return {h:+h,n:v.length,rt:v.reduce(function(a,b){return a+b;},0)/v.length};}).filter(function(x){return x.n>=15;}).sort(function(a,b){return b.rt-a.rt;});
-        if(hr.length) tparts.push('hora '+hr[0].h+'h ('+hr[0].rt.toFixed(1)+' min)'); }
-      if(tparts.length) items.splice(Math.min(1,items.length),0,{sev:'media',t:'Momento más crítico por RTWT: '+tparts.join(' · ')+'.'});
+        if(hr.length) tparts.push('hora '+hr[0].h+'h ('+hr[0].rt.toFixed(1)+'m)'); }
+      if(tparts.length) items.push({sev:'media',t:'Momento más crítico por RTWT: '+tparts.join(' · ')+'.'});
     }catch(e){}
-    if(!items.length) items.push({sev:'ok',t:'Sin cocinas ni marcas críticas por RTWT o cocción en este alcance.'});
-    items=items.slice(0,5);
-    var head='RTWT '+(rtAll!=null?rtAll.toFixed(2)+' min':'–')+(ifAll!=null?(' · InFull '+ifAll.toFixed(1)+'%'):'')+' · '+totN.toLocaleString('es')+' órdenes · '+rows.length+' cocinas';
-    el.innerHTML=resBox('Qué revisar · Fdgy (tiempos)', {head:head, items:items, scope:resScope()});
+    if(!items.length) items.push({sev:'ok',t:'Sin alertas por cocción, RTWT ni quejas en este alcance.'});
+    items=items.slice(0,6);
+    var ar=function(d){return d==null?'':(d>0?' ▲':(d<0?' ▼':''));};
+    var head='RTWT '+(rtwt!=null?rtwt.toFixed(2)+'m':'–')+ar(dRt)+' · Cocción '+(cook!=null?cook.toFixed(2)+'m':'–')+ar(dCk)
+      +' · Quejas '+(qx!=null?qx.toFixed(1)+'/100':'–')+ar(dQ)+(ifAll!=null?(' · InFull '+ifAll.toFixed(1)+'%'):'')
+      +' · '+cur.n.toLocaleString('es')+' órdenes · '+kRows.length+' cocinas';
+    el.innerHTML=resBox('Diagnóstico · Fdgy (tiempos y quejas)', {head:head, items:items, scope:resScope()});
   }catch(e){ el.innerHTML=''; }
 }
 if(typeof update==='function'){var _ur=update; update=function(){_ur.apply(this,arguments); try{renderResumenW();}catch(e){}};}
