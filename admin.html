@@ -30,6 +30,7 @@ button.ghost{background:#fff;border:1px solid var(--bd);color:#334155}
 .preview{background:#f8fafc;border:1px dashed var(--bd);border-radius:9px;padding:10px 12px;font-size:12.5px;margin-top:12px;display:none}
 a.link{color:var(--ind);font-size:12px;text-decoration:none}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -77,10 +78,15 @@ a.link{color:var(--ind);font-size:12px;text-decoration:none}
       </div>
     </div>
 
-    <div class="card disabled">
-      <h2>🇲🇽 México <span class="badge b-soon">Próximamente</span></h2>
-      <div class="h">Reporte Unificado (.xlsx). Por ahora se carga vía script; el botón se habilitará en la próxima iteración.</div>
-      <input type="file" accept=".xlsx" disabled>
+    <div class="card">
+      <h2>🇲🇽 México <span class="badge b-ok">Activo</span></h2>
+      <div class="h">Sube el <b>Reporte Unificado (.xlsx)</b> de México. RTWT se lee de la hoja <b>Detalle por Store</b> y la cobertura de <b>Current Size</b> (hoja Polígonos). Las semanas faltantes entre el corte anterior y esta semana quedan <b>fijas</b> (congeladas con el último valor).</div>
+      <input type="file" id="mxFile" accept=".xlsx" onchange="analizarMX()">
+      <div class="preview" id="mxPrev"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="mxPub" onclick="publicarMX()" disabled>Publicar México</button>
+        <span id="mxState" style="font-size:12px;color:var(--mut)"></span>
+      </div>
     </div>
 
     <div class="card">
@@ -273,6 +279,91 @@ async function publicarCO(){
     var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:'CO',week:res.newlbl,html:peRes.html})});
     var j=await p.json();
     if(!p.ok)throw new Error(j.error||('HTTP '+p.status));
+    if(j.detail&&j.detail.length)j.detail.forEach(function(d){log('  '+d);});
+    log('✅ '+(j.message||'Publicado.'));
+    stt.textContent='✅ Publicado — refresca el dashboard en ~1 min.';
+  }catch(err){ log('❌ '+err.message); stt.textContent='❌ '+err.message; btn.disabled=false; }
+}
+
+// ---------- México: Reporte Unificado (.xlsx) ----------
+function mxFindHeader(rows, mustHave){ for(var i=0;i<Math.min(rows.length,12);i++){ var r=rows[i]||[]; var ok=mustHave.every(function(h){return r.some(function(c){return String(c).trim()===h;});}); if(ok)return i; } return -1; }
+function parseMXExcel(wb){
+  var shD=wb.Sheets['Detalle por Store']; if(!shD)throw new Error('No encuentro la hoja "Detalle por Store".');
+  var rowsD=XLSX.utils.sheet_to_json(shD,{header:1,raw:true});
+  var hD=mxFindHeader(rowsD,['Store ID']); if(hD<0)throw new Error('No encuentro el encabezado en "Detalle por Store".');
+  var head=rowsD[hD].map(function(c){return String(c).trim();});
+  var ciSid=head.indexOf('Store ID'), ciRt=head.indexOf('RTWT (min/ord)');
+  if(ciRt<0)throw new Error('No encuentro la columna "RTWT (min/ord)".');
+  var sunCol=head.find(function(c){return /^Sun\s+\d{2}-\d{2}/.test(c);});
+  var weekLabel=null; if(sunCol){ var mm=sunCol.match(/(\d{2})-(\d{2})/); if(mm)weekLabel=MONTHS[(+mm[1])-1]+' '+(+mm[2]); }
+  if(!weekLabel)throw new Error('No pude determinar la semana (falta la columna "Sun MM-DD").');
+  var rt={}, nrt=0;
+  for(var i=hD+1;i<rowsD.length;i++){ var r=rowsD[i]; if(!r||r[ciSid]==null)continue; var sid=String(r[ciSid]).replace(/\.0$/,''); var v=r[ciRt]; if(typeof v==='number'){ rt[sid]=Math.round(v*100)/100; nrt++; } }
+  var shP=wb.Sheets['Polígonos']||wb.Sheets['Poligonos']; var cov={}, ncov=0;
+  if(shP){ var rowsP=XLSX.utils.sheet_to_json(shP,{header:1,raw:true}); var hP=mxFindHeader(rowsP,['Store ID','Current Size']);
+    if(hP>=0){ var hh=rowsP[hP].map(function(c){return String(c).trim();}); var pSid=hh.indexOf('Store ID'), pCs=hh.indexOf('Current Size');
+      for(var j=hP+1;j<rowsP.length;j++){ var rp=rowsP[j]; if(!rp||rp[pSid]==null)continue; var s=String(rp[pSid]).replace(/^MX/,'').replace(/\.0$/,''); var cs=rp[pCs]; if(typeof cs==='number'){ cov[s]=Math.round(cs); ncov++; } } } }
+  return {rt:rt, cov:cov, weekLabel:weekLabel, nrt:nrt, ncov:ncov};
+}
+function applyMX(H, parsed){
+  var tag='const MXDATA=', start=H.indexOf(tag); if(start<0)throw new Error('No encontré const MXDATA= en el index.');
+  var a=start+tag.length, i=a,d=0,st=false,e=-1; for(;i<H.length;i++){var c=H[i];if(c==='{'){d++;st=true;}else if(c==='}'){d--;if(st&&d===0){e=i+1;break;}}}
+  var MX=JSON.parse(H.slice(a,e)); var D=MX.D; var oldLen=D.weeks.length;
+  function sunOf(lbl){var m=String(lbl).match(/([A-Za-z]{3})\s*(\d{1,2})/);if(!m||MI[m[1]]==null)return null;return Date.UTC(2026,MI[m[1]],+m[2]);}
+  function lblOf(ms){var dt=new Date(ms);return MONTHS[dt.getUTCMonth()]+' '+dt.getUTCDate();}
+  var target=parsed.weekLabel, tIx=D.weeks.indexOf(target), appended=[], nfreeze=0;
+  if(tIx<0){
+    var lastSun=sunOf(D.weeks[oldLen-1]), tSun=sunOf(target);
+    if(lastSun==null||tSun==null)throw new Error('No pude ubicar las semanas para rellenar el hueco.');
+    if(tSun<=lastSun)throw new Error('La semana '+target+' es anterior o igual a la última cargada ('+D.weeks[oldLen-1]+').');
+    var cur=lastSun+7*86400000; while(cur<=tSun){ appended.push(lblOf(cur)); cur+=7*86400000; }
+    D.stores.forEach(function(s){ ['fin','rt','gw','ow'].forEach(function(k){s[k]=s[k]||[];while(s[k].length<oldLen)s[k].push(k==='fin'||k==='rt'?null:0);}); });
+    appended.forEach(function(lbl){ var isT=(lbl===target);
+      D.stores.forEach(function(s){ var cR=s.rt.length?s.rt[s.rt.length-1]:null; var cF=s.fin.length?s.fin[s.fin.length-1]:(s.cc||3000); var sid=String(s.sid);
+        if(isT){ var rv=(parsed.rt[sid]!=null)?parsed.rt[sid]:cR; var cv=(parsed.cov[sid]!=null)?parsed.cov[sid]:cF; if(parsed.cov[sid]!=null)s.cc=parsed.cov[sid]; s.rt.push(rv); s.fin.push(cv); }
+        else { s.rt.push(cR); s.fin.push(cF); }   // semana de hueco → congelada (fija)
+        s.gw.push(0); s.ow.push(0);
+      });
+      D.weeks.push(lbl);
+    });
+    nfreeze=appended.length-1;
+  } else {
+    D.stores.forEach(function(s){ var sid=String(s.sid); if(parsed.rt[sid]!=null)s.rt[tIx]=parsed.rt[sid]; if(parsed.cov[sid]!=null){s.fin[tIx]=parsed.cov[sid];s.cc=parsed.cov[sid];} });
+  }
+  var li=D.weeks.indexOf(target), nrt=0, ncov=0;
+  D.stores.forEach(function(s){ var sid=String(s.sid); if(parsed.rt[sid]!=null&&(s.rt||[])[li]!=null)nrt++; if(parsed.cov[sid]!=null)ncov++; });
+  MX.D=D;
+  return {html:H.slice(0,a)+JSON.stringify(MX)+H.slice(e), newlbl:target, nrt:nrt, ncov:ncov, weeks:D.weeks.length, nfreeze:nfreeze, mode:(tIx<0?'agregó':'actualizó')};
+}
+var MX_PARSED=null;
+function analizarMX(){
+  var f=document.getElementById('mxFile').files[0]; var prev=document.getElementById('mxPrev');
+  document.getElementById('mxPub').disabled=true; MX_PARSED=null; if(!f)return;
+  if(typeof XLSX==='undefined'){prev.style.display='block';prev.innerHTML='⚠️ No cargó la librería de Excel (XLSX). Revisa conexión y recarga.';return;}
+  var fr=new FileReader();
+  fr.onload=function(){ try{
+    var wb=XLSX.read(new Uint8Array(fr.result),{type:'array'});
+    var pr=parseMXExcel(wb); MX_PARSED=pr;
+    prev.style.display='block';
+    prev.innerHTML='✔️ Excel leído · semana <b>'+pr.weekLabel+'</b>:<br>🇲🇽 RTWT en <b>'+pr.nrt+'</b> tiendas · cobertura (Current Size) en <b>'+pr.ncov+'</b>. Listo para publicar.';
+    document.getElementById('mxPub').disabled=false;
+  }catch(err){ prev.style.display='block'; prev.innerHTML='⚠️ '+err.message; } };
+  fr.readAsArrayBuffer(f);
+}
+async function publicarMX(){
+  if(!MX_PARSED){alert('Primero sube el Excel');return;}
+  var btn=document.getElementById('mxPub');btn.disabled=true;
+  var stt=document.getElementById('mxState');stt.textContent='Procesando…';
+  try{
+    log('› Descargando dashboard actual…');
+    var r=await fetch('/index.html?_='+Date.now()); if(!r.ok)throw new Error('No pude leer el index actual ('+r.status+')');
+    var H=await r.text(); log('  index actual: '+(H.length/1e6).toFixed(2)+' MB');
+    log('› Aplicando semana MEX '+MX_PARSED.weekLabel+'…');
+    var res=applyMX(H, MX_PARSED);
+    log('  🇲🇽 '+res.mode+' semana '+res.newlbl+' · '+res.nrt+' tiendas con RTWT · '+res.ncov+' con cobertura'+(res.nfreeze?(' · '+res.nfreeze+' semana(s) de hueco congelada(s)'):'')+' · total '+res.weeks+' semanas MX');
+    log('› Publicando (commit al repo)…');
+    var p=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:PW,country:'MX',week:res.newlbl,html:res.html})});
+    var j=await p.json(); if(!p.ok)throw new Error(j.error||('HTTP '+p.status));
     if(j.detail&&j.detail.length)j.detail.forEach(function(d){log('  '+d);});
     log('✅ '+(j.message||'Publicado.'));
     stt.textContent='✅ Publicado — refresca el dashboard en ~1 min.';
