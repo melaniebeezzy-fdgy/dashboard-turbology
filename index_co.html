@@ -679,7 +679,7 @@ function gBar(id,labels,data,colors){ var el=document.getElementById(id); if(!el
     options:{maintainAspectRatio:false,plugins:{legend:{display:false},
       datalabels:{anchor:'end',align:'end',color:'#243447',font:{weight:'700',size:12},formatter:function(v){return v==null?'–':v+'%';}},
       tooltip:{callbacks:{label:function(c){return (c.parsed.y==null?'–':c.parsed.y+'% InFull');}}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}},y:{min:80,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}}}); }
+      scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}},y:{min:80,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}}}}); }
 function _gWeekSeries(cc){ var dd=ALLDATA[cc]&&ALLDATA[cc].D; if(!dd)return null;
   var Wc=trimW(dd.weeks), rt={}, cov={};
   Wc.forEach(function(lbl,wi){ var rs=0,rn=0,cp=[];
