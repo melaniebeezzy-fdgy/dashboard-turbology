@@ -180,6 +180,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
     <button class="ctab on" data-c="CO" onclick="setCountry('CO')">🇨🇴 Colombia</button>
     <button class="ctab" data-c="MX" onclick="setCountry('MX')">🇲🇽 México</button>
     <button class="ctab" data-c="PE" onclick="setCountry('PE')">🇵🇪 Perú</button>
+    <button class="ctab" data-c="GLOBAL" onclick="setCountry('GLOBAL')">🌐 Global</button>
   </div>
 </div>
 
@@ -295,6 +296,16 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 <!--INCR_END-->
 </div><!--/co-monthly-->
 <div id="co-fdgy" style="display:none"></div>
+
+<div id="co-global" style="display:none">
+<h1>Comparativo <span>global</span> <span style="font-size:14px;color:var(--mut)">· CO · MX · PE</span></h1>
+<div class="sub">Comparación de los tres países Turbo. RTWT y cobertura efectiva por semana (últimas 15), e InFull actual por país (últimas 4 semanas, en vivo). Cada país es consistente con su propia vista.</div>
+<div class="grid">
+  <div class="card"><h2>RTWT semanal por país</h2><div class="hint">Promedio de RTWT por semana. Umbral crítico: <b>6 min</b>.</div><div class="chartbox" style="min-height:300px"><canvas id="chGRtwt"></canvas></div></div>
+  <div class="card"><h2>% Cobertura semanal por país</h2><div class="hint">Cobertura efectiva promedio del polígono (vs. 3.0 km = 100%).</div><div class="chartbox" style="min-height:300px"><canvas id="chGCov"></canvas></div></div>
+</div>
+<div class="card" style="margin-bottom:14px"><h2>% InFull por país</h2><div class="hint">Órdenes sin queja sobre el total (últimas 4 semanas, warehouse en vivo). Barra = % InFull por país.</div><div class="chartbox" style="height:300px"><canvas id="chGIf"></canvas></div></div>
+</div>
 
 <div id="modalBg" onclick="if(event.target.id==='modalBg')closeModal()"><div id="modal"><div class="mh"><h3 id="mTitle"></h3><button onclick="closeModal()">✕</button></div><div class="msum" id="mSum"></div><div class="mbody"><table id="mTable"></table></div></div></div>
 <div id="oppModalBg" onclick="if(event.target.id==='oppModalBg')closeOppModal()"><div id="oppModal"><div class="mh"><h3>💸 Oportunidad por cobertura (dinero no vendido)</h3><button class="dlbtn" onclick="dlLostRev()">⬇ Excel</button><button class="xbtn" onclick="closeOppModal()">✕</button></div><div class="msum">Estimado de ventas que se dejan de capturar por polígonos &lt; 3.0 km. Modelo <b>lineal</b> (potencial = GMV ÷ cobertura; las ventas escalan con el radio de entrega); base = GMV promedio de las <b>últimas 4 semanas</b>. Respeta el filtro de ciudad/ops.</div><div class="mbody"><div class="kpis" id="oppKpis" style="margin-bottom:12px"></div><table id="tbLostRev" class="dense"></table></div></div></div>
@@ -633,7 +644,18 @@ function ctryHeader(){
   }
 }
 window.setCountry=function(cc){
-  if(!ALLDATA[cc])return; CTRY=cc; D=ALLDATA[cc].D; MO=ALLDATA[cc].MO;
+  if(cc==='GLOBAL'){
+    document.getElementById('stickybar').style.display='none';
+    ['co-weekly','co-monthly','co-fdgy'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+    var g=document.getElementById('co-global'); if(g)g.style.display='';
+    document.querySelectorAll('.ctab').forEach(function(t){t.classList.toggle('on', t.dataset.c==='GLOBAL');});
+    try{ renderGlobal(); }catch(e){console.error(e);}
+    return;
+  }
+  if(!ALLDATA[cc])return;
+  var fromGlobal=(document.getElementById('co-global')&&document.getElementById('co-global').style.display!=='none');
+  if(fromGlobal){ document.getElementById('co-global').style.display='none'; document.getElementById('stickybar').style.display=''; try{coView('w');}catch(e){} }
+  CTRY=cc; D=ALLDATA[cc].D; MO=ALLDATA[cc].MO;
   W=trimW(D.weeks); LI=W.length-1; N4=D.n4||4; W4=(function(){const a=[];for(let i=Math.max(0,W.length-N4);i<W.length;i++)a.push(i);return a;})();
   CITY='ALL'; OPS='ALL'; CM='ALL'; KIT='ALL'; BRAND='ALL'; rebuildSelects();
   document.querySelectorAll('.ctab').forEach(t=>t.classList.toggle('on', t.dataset.c===cc));
@@ -644,6 +666,44 @@ window.setCountry=function(cc){
   if(document.getElementById('co-fdgy').style.display!=='none') window.__fdgyRender(CTRY3[cc],'co-fdgy');
   ctryHeader();
 };
+// ---------- Vista Global (comparativo 3 países) ----------
+var _gCharts={};
+function _gDestroy(id){ if(_gCharts[id]){try{_gCharts[id].destroy();}catch(e){} delete _gCharts[id];} }
+function gLine(id,labels,datasets,opts){ var el=document.getElementById(id); if(!el)return; _gDestroy(id);
+  _gCharts[id]=new Chart(el,{type:'line',data:{labels:labels,datasets:datasets.map(function(d){d.fill=false;d.borderWidth=2;d.pointRadius=2;d.tension=.3;d.spanGaps=true;return d;})},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:12,font:{size:11}}},datalabels:{display:false},
+      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.parsed.y==null?'–':c.parsed.y+((opts&&opts.unit)||''));}}}},
+      scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:Object.assign({ticks:{font:{size:10}}},(opts&&opts.y)||{})}}}); }
+function gBar(id,labels,data,colors){ var el=document.getElementById(id); if(!el)return; _gDestroy(id);
+  _gCharts[id]=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderRadius:6,maxBarThickness:90}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false},
+      datalabels:{anchor:'end',align:'end',color:'#243447',font:{weight:'700',size:12},formatter:function(v){return v==null?'–':v+'%';}},
+      tooltip:{callbacks:{label:function(c){return (c.parsed.y==null?'–':c.parsed.y+'% InFull');}}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}},y:{min:80,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}}}); }
+function _gWeekSeries(cc){ var dd=ALLDATA[cc]&&ALLDATA[cc].D; if(!dd)return null;
+  var Wc=trimW(dd.weeks), rt={}, cov={};
+  Wc.forEach(function(lbl,wi){ var rs=0,rn=0,cp=[];
+    dd.stores.forEach(function(s){ var v=(s.rt||[])[wi]; if(v!=null){rs+=v;rn++;} var f=(s.fin||[])[wi]; if(f!=null)cp.push(100*Math.min(f,3000)/3000); });
+    rt[lbl]=rn?rs/rn:null; cov[lbl]=cp.length?cp.reduce(function(a,b){return a+b;},0)/cp.length:null; });
+  return {weeks:Wc, rt:rt, cov:cov}; }
+function renderGlobal(){
+  var CCS=['CO','MX','PE'], COL={CO:'#156082',MX:'#1e8e5a',PE:'#e67e22'}, NAME={CO:'Colombia',MX:'México',PE:'Perú'};
+  var ser={}, lab={};
+  CCS.forEach(function(cc){ var s=_gWeekSeries(cc); if(s){ser[cc]=s; s.weeks.forEach(function(l){lab[l]=1;});} });
+  var labels=Object.keys(lab).sort(function(a,b){var da=wkEndDate(a),db=wkEndDate(b);return (da?da.getTime():0)-(db?db.getTime():0);}).slice(-15);
+  function mk(metric,fix){ return CCS.filter(function(cc){return ser[cc];}).map(function(cc){ return {label:NAME[cc],borderColor:COL[cc],backgroundColor:COL[cc],data:labels.map(function(l){var v=ser[cc][metric][l];return v==null?null:+v.toFixed(fix);})}; }); }
+  gLine('chGRtwt',labels,mk('rt',2),{unit:' min',y:{beginAtZero:true,ticks:{font:{size:10}}}});
+  gLine('chGCov',labels,mk('cov',1),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}});
+  renderGlobalIF();
+}
+function renderGlobalIF(){
+  var CCS=['CO','MX','PE'], NAME={CO:'Colombia',MX:'México',PE:'Perú'}, COL={CO:'#156082',MX:'#1e8e5a',PE:'#e67e22'};
+  var to=new Date(); to.setUTCDate(to.getUTCDate()-1); var from=new Date(to.getTime()-27*86400000);
+  var t=to.toISOString().slice(0,10), f=from.toISOString().slice(0,10);
+  gBar('chGIf',CCS.map(function(c){return NAME[c];}),CCS.map(function(){return null;}),CCS.map(function(c){return COL[c];}));
+  Promise.all(CCS.map(function(cc){ return fetch('/api/infull?country='+cc+'&from='+f+'&to='+t).then(function(r){return r.json();}).then(function(d){var n=0,q=0;(d.rows||[]).forEach(function(r){n+=r[1];q+=r[2];});return n?100*(n-q)/n:null;}).catch(function(){return null;}); }))
+  .then(function(vals){ gBar('chGIf',CCS.map(function(c){return NAME[c];}),vals.map(function(v){return v==null?null:+v.toFixed(1);}),CCS.map(function(c){return COL[c];})); });
+}
 
 function update(){
  const st=F();
