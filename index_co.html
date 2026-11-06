@@ -299,7 +299,8 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 
 <div id="co-global" style="display:none">
 <h1>Comparativo <span>global</span> <span style="font-size:14px;color:var(--mut)">· CO · MX · PE</span></h1>
-<div class="sub">Comparación de los tres países Turbo. RTWT y cobertura efectiva <b>por mes</b> (últimos 8), e InFull actual por país (últimas 4 semanas, en vivo). El último mes puede ser parcial.</div>
+<div class="sub">Comparación de los tres países Turbo. RTWT y cobertura efectiva <b>por mes</b> (últimos 8), e InFull actual por país (últimas 4 semanas, en vivo). El último mes puede ser parcial. Puntos <span style="color:#1e8e5a;font-weight:700">verde</span>/<span style="color:#c0392b;font-weight:700">rojo</span> = cumple/no cumple el objetivo de 2 min.</div>
+<div style="margin:0 0 12px"><button id="gTopBtn" onclick="gToggleTop()" title="Solo las marcas que acumulan el 80% de la venta (Pareto), por país" style="font-size:12px;padding:4px 12px;border:1px solid #156082;border-radius:6px;background:#fff;color:#156082;cursor:pointer;font-weight:600">⭐ Top marcas (80%)</button></div>
 <div class="grid">
   <div class="card"><h2>RTWT mensual por país</h2><div class="hint">Promedio de RTWT por mes. Línea verde = <b>objetivo 2 min</b>. Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGRtwt"></canvas></div></div>
   <div class="card"><h2>% Cobertura mensual por país</h2><div class="hint">Cobertura efectiva promedio del polígono (vs. 3.0 km = 100%). Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGCov"></canvas></div></div>
@@ -669,8 +670,15 @@ window.setCountry=function(cc){
 // ---------- Vista Global (comparativo 3 países) ----------
 var _gCharts={};
 function _gDestroy(id){ if(_gCharts[id]){try{_gCharts[id].destroy();}catch(e){} delete _gCharts[id];} }
-var GCOL={CO:'#153D64',MX:'#0F9ED5',PE:'#96607D'}, GNAME={CO:'Colombia',MX:'México',PE:'Perú'};
+var GCOL={CO:'#153D64',MX:'#0F9ED5',PE:'#96607D'}, GNAME={CO:'Colombia',MX:'México',PE:'Perú'}, GTOP=false;
+var G_OK='#1e8e5a', G_BAD='#c0392b';
 function _gLastIdx(data){ for(var i=data.length-1;i>=0;i--){ if(data[i]!=null) return i; } return -1; }
+function _gPareto(cc){ var dd=ALLDATA[cc]&&ALLDATA[cc].D, byB={}; (dd?dd.stores:[]).forEach(function(s){var b=brKey(s.b); if(!b)return; byB[b]=(byB[b]||0)+(s.g||0);});
+  var arr=Object.keys(byB).map(function(b){return [b,byB[b]];}).sort(function(x,y){return y[1]-x[1];});
+  var tot=arr.reduce(function(a,x){return a+x[1];},0)||1, cum=0, set=new Set();
+  for(var i=0;i<arr.length;i++){ if(arr[i][1]<=0)break; set.add(arr[i][0]); cum+=arr[i][1]; if(cum>=0.8*tot)break; } return set; }
+function _gTopSids(cc){ var top=_gPareto(cc), dd=ALLDATA[cc]&&ALLDATA[cc].D, set={}; (dd?dd.stores:[]).forEach(function(s){ if(top.has(brKey(s.b))) set[String(s.sid)]=1; }); return set; }
+window.gToggleTop=function(){ GTOP=!GTOP; var b=document.getElementById('gTopBtn'); if(b){ b.classList.toggle('on',GTOP); b.style.background=GTOP?'#156082':'#fff'; b.style.color=GTOP?'#fff':'#156082'; } renderGlobal(); };
 function gLine(id,labels,datasets,opts){ var el=document.getElementById(id); if(!el)return; _gDestroy(id);
   var unit=(opts&&opts.unit)||'';
   _gCharts[id]=new Chart(el,{type:'line',data:{labels:labels,datasets:datasets.map(function(d){ if(d.fill===undefined)d.fill=false; if(d.borderWidth===undefined)d.borderWidth=2.5; if(d.pointRadius===undefined)d.pointRadius=3; if(d.tension===undefined)d.tension=.3; d.spanGaps=true; return d;})},
@@ -688,9 +696,10 @@ function gBar(id,labels,data,colors){ var el=document.getElementById(id); if(!el
       scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'600'}}},y:{min:80,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}}}}); }
 function _gMonthSeries(cc){ var dd=ALLDATA[cc]&&ALLDATA[cc].D; if(!dd)return null;
   var MES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var top=GTOP?_gPareto(cc):null;
   var Wc=trimW(dd.weeks), byM={}, order=[];
   Wc.forEach(function(lbl,wi){ var d=wkEndDate(lbl); if(!d)return; var mk=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);
-    var rs=0,rn=0,cp=[]; dd.stores.forEach(function(s){ var v=(s.rt||[])[wi]; if(v!=null){rs+=v;rn++;} var f=(s.fin||[])[wi]; if(f!=null)cp.push(100*Math.min(f,3000)/3000); });
+    var rs=0,rn=0,cp=[]; dd.stores.forEach(function(s){ if(top&&!top.has(brKey(s.b)))return; var v=(s.rt||[])[wi]; if(v!=null){rs+=v;rn++;} var f=(s.fin||[])[wi]; if(f!=null)cp.push(100*Math.min(f,3000)/3000); });
     if(!byM[mk]){ byM[mk]={lbl:MES[d.getMonth()],rt:[],cov:[]}; order.push(mk); }
     if(rn)byM[mk].rt.push(rs/rn); if(cp.length)byM[mk].cov.push(cp.reduce(function(a,b){return a+b;},0)/cp.length);
   });
@@ -704,8 +713,9 @@ function renderGlobal(){
   CCS.forEach(function(cc){ var s=_gMonthSeries(cc); if(s){ser[cc]=s; s.keys.forEach(function(k){kset[k]=1; lblOf[k]=s.labelOf[k];});} });
   var keys=Object.keys(kset).sort().slice(-8);
   var labels=keys.map(function(k){return lblOf[k];});
-  function mk(metric,fix){ return CCS.filter(function(cc){return ser[cc];}).map(function(cc){ return {label:GNAME[cc],borderColor:GCOL[cc],backgroundColor:GCOL[cc],data:keys.map(function(k){var v=ser[cc][metric][k];return v==null?null:+v.toFixed(fix);})}; }); }
-  var rtDs=mk('rt',2);
+  function mk(metric,fix,pcf){ return CCS.filter(function(cc){return ser[cc];}).map(function(cc){ var ds={label:GNAME[cc],borderColor:GCOL[cc],backgroundColor:GCOL[cc],data:keys.map(function(k){var v=ser[cc][metric][k];return v==null?null:+v.toFixed(fix);})}; if(pcf){ds.pointBackgroundColor=pcf;ds.pointBorderColor=pcf;ds.pointRadius=4;} return ds; }); }
+  var rtPass=function(ctx){ var v=ctx.raw; return v==null?'#999':(v<=2?G_OK:G_BAD); };
+  var rtDs=mk('rt',2,rtPass);
   rtDs.push({label:'Objetivo 2 min',data:keys.map(function(){return 2;}),borderColor:'#1e8e5a',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false,noLabel:true});
   gLine('chGRtwt',labels,rtDs,{unit:' min',y:{beginAtZero:true,ticks:{font:{size:10}}}});
   gLine('chGCov',labels,mk('cov',1),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}});
@@ -716,7 +726,7 @@ function renderGlobalIF(){
   var to=new Date(); to.setUTCDate(to.getUTCDate()-1); var from=new Date(to.getTime()-27*86400000);
   var t=to.toISOString().slice(0,10), f=from.toISOString().slice(0,10);
   gBar('chGIf',CCS.map(function(c){return GNAME[c];}),CCS.map(function(){return null;}),CCS.map(function(c){return GCOL[c];}));
-  Promise.all(CCS.map(function(cc){ return fetch('/api/infull?country='+cc+'&from='+f+'&to='+t).then(function(r){return r.json();}).then(function(d){var n=0,q=0;(d.rows||[]).forEach(function(r){n+=r[1];q+=r[2];});return n?100*(n-q)/n:null;}).catch(function(){return null;}); }))
+  Promise.all(CCS.map(function(cc){ var top=GTOP?_gTopSids(cc):null; return fetch('/api/infull?country='+cc+'&from='+f+'&to='+t).then(function(r){return r.json();}).then(function(d){var n=0,q=0;(d.rows||[]).forEach(function(r){ if(top&&!top[String(r[0])])return; n+=r[1];q+=r[2];});return n?100*(n-q)/n:null;}).catch(function(){return null;}); }))
   .then(function(vals){ gBar('chGIf',CCS.map(function(c){return GNAME[c];}),vals.map(function(v){return v==null?null:+v.toFixed(1);}),CCS.map(function(c){return GCOL[c];})); });
 }
 
