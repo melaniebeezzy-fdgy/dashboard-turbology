@@ -299,13 +299,13 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 
 <div id="co-global" style="display:none">
 <h1>Comparativo <span>global</span> <span style="font-size:14px;color:var(--mut)">· CO · MX · PE</span></h1>
-<div class="sub">Comparación de los tres países Turbo. RTWT y cobertura efectiva <b>por mes</b> (últimos 8), e InFull actual por país (últimas 4 semanas, en vivo). El último mes puede ser parcial. Puntos <span style="color:#1e8e5a;font-weight:700">verde</span>/<span style="color:#c0392b;font-weight:700">rojo</span> = cumple/no cumple el objetivo de 2 min.</div>
+<div class="sub">Comparación de los tres países Turbo. RTWT y cobertura efectiva <b>por mes</b> hasta el <b>último mes cerrado</b> (excluye el mes en curso), e InFull de ese mes por país. Puntos <span style="color:#1e8e5a;font-weight:700">verde</span>/<span style="color:#c0392b;font-weight:700">rojo</span> = cumple/no cumple el objetivo de 2 min.</div>
 <div style="margin:0 0 12px"><button id="gTopBtn" onclick="gToggleTop()" title="Solo las marcas que acumulan el 80% de la venta (Pareto), por país" style="font-size:12px;padding:4px 12px;border:1px solid #156082;border-radius:6px;background:#fff;color:#156082;cursor:pointer;font-weight:600">⭐ Top marcas (80%)</button></div>
 <div class="grid">
   <div class="card"><h2>RTWT mensual por país</h2><div class="hint">Promedio de RTWT por mes. Línea verde = <b>objetivo 2 min</b>. Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGRtwt"></canvas></div></div>
   <div class="card"><h2>% Cobertura mensual por país</h2><div class="hint">Líneas = cobertura efectiva (vs. 3.0 km = 100%). Barras = <b>órdenes/mes</b> por país (eje derecho). Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGCov"></canvas></div></div>
 </div>
-<div class="card" style="margin-bottom:14px"><h2>% InFull por país</h2><div class="hint">Órdenes sin queja sobre el total (últimas 4 semanas, warehouse en vivo). Barra = % InFull por país.</div><div class="chartbox" style="height:300px"><canvas id="chGIf"></canvas></div></div>
+<div class="card" style="margin-bottom:14px"><h2>% InFull por país</h2><div class="hint">Órdenes sin queja sobre el total, del <b>último mes cerrado</b> (warehouse en vivo). Barra = % InFull por país.</div><div class="chartbox" style="height:300px"><canvas id="chGIf"></canvas></div></div>
 </div>
 
 <div id="modalBg" onclick="if(event.target.id==='modalBg')closeModal()"><div id="modal"><div class="mh"><h3 id="mTitle"></h3><button onclick="closeModal()">✕</button></div><div class="msum" id="mSum"></div><div class="mbody"><table id="mTable"></table></div></div></div>
@@ -714,7 +714,8 @@ function renderGlobal(){
   var CCS=['CO','MX','PE'];
   var ser={}, kset={}, lblOf={};
   CCS.forEach(function(cc){ var s=_gMonthSeries(cc); if(s){ser[cc]=s; s.keys.forEach(function(k){kset[k]=1; lblOf[k]=s.labelOf[k];});} });
-  var keys=Object.keys(kset).sort().slice(-8);           // últimos 8 meses
+  var curMonth=(function(){var d=new Date();return d.getUTCFullYear()+'-'+('0'+(d.getUTCMonth()+1)).slice(-2);})();
+  var keys=Object.keys(kset).filter(function(k){return k<curMonth;}).sort().slice(-8);   // hasta el último mes cerrado (excluye el mes en curso)
   var labels=keys.map(function(k){return lblOf[k];});
   function mk(metric,fix,pcf){ return CCS.filter(function(cc){return ser[cc];}).map(function(cc){ var ds={label:GNAME[cc],borderColor:GCOL[cc],backgroundColor:GCOL[cc],data:keys.map(function(k){var v=ser[cc][metric][k];return v==null?null:+v.toFixed(fix);})}; if(pcf){ds.pointBackgroundColor=pcf;ds.pointBorderColor=GCOL[cc];ds.pointBorderWidth=2;ds.pointRadius=4;} return ds; }); }
   var rtPass=function(ctx){ var v=ctx.raw; return v==null?'#999':(v<=2?G_OK:G_BAD); };
@@ -724,11 +725,11 @@ function renderGlobal(){
   var covDs=mk('cov',1);
   gLine('chGCov',labels,covDs.slice(),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}});
   renderGlobalCovSales(keys,labels,covDs);
-  renderGlobalIF();
+  renderGlobalIF(keys[keys.length-1]);
 }
 function renderGlobalCovSales(keys,labels,covDs){
   var CCS=['CO','MX','PE']; if(!keys.length)return;
-  var from=keys[0]+'-01'; var toD=new Date(); toD.setUTCDate(toD.getUTCDate()-1); var to=toD.toISOString().slice(0,10);
+  var from=keys[0]+'-01'; var lastK=keys[keys.length-1]; var lp=lastK.split('-'); var lastD=new Date(Date.UTC(+lp[0],+lp[1],0)).getUTCDate(); var to=lastK+'-'+('0'+lastD).slice(-2);
   var grp=GTOP?'brand':'city';
   Promise.all(CCS.map(function(cc){ var top=GTOP?_gPareto(cc):null;
     return fetch('/api/sales?country='+cc+'&from='+from+'&to='+to+'&group='+grp+'&period=month').then(function(r){return r.json();}).then(function(d){
@@ -742,10 +743,10 @@ function renderGlobalCovSales(keys,labels,covDs){
     gLine('chGCov',labels,covDs.concat(barDs),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}},y1:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return v>=1000?(v/1000).toFixed(0)+'k':v;}}}});
   });
 }
-function renderGlobalIF(){
-  var CCS=['CO','MX','PE'];
-  var to=new Date(); to.setUTCDate(to.getUTCDate()-1); var from=new Date(to.getTime()-27*86400000);
-  var t=to.toISOString().slice(0,10), f=from.toISOString().slice(0,10);
+function renderGlobalIF(monthKey){
+  var CCS=['CO','MX','PE'], f, t;
+  if(monthKey){ var p=monthKey.split('-'); f=monthKey+'-01'; var last=new Date(Date.UTC(+p[0],+p[1],0)).getUTCDate(); t=monthKey+'-'+('0'+last).slice(-2); }
+  else { var toD=new Date(); toD.setUTCDate(toD.getUTCDate()-1); t=toD.toISOString().slice(0,10); f=new Date(toD.getTime()-27*86400000).toISOString().slice(0,10); }
   gBar('chGIf',CCS.map(function(c){return GNAME[c];}),CCS.map(function(){return null;}),CCS.map(function(c){return GCOL[c];}));
   Promise.all(CCS.map(function(cc){ var top=GTOP?_gTopSids(cc):null; return fetch('/api/infull?country='+cc+'&from='+f+'&to='+t).then(function(r){return r.json();}).then(function(d){var n=0,q=0;(d.rows||[]).forEach(function(r){ if(top&&!top[String(r[0])])return; n+=r[1];q+=r[2];});return n?100*(n-q)/n:null;}).catch(function(){return null;}); }))
   .then(function(vals){ gBar('chGIf',CCS.map(function(c){return GNAME[c];}),vals.map(function(v){return v==null?null:+v.toFixed(1);}),CCS.map(function(c){return GCOL[c];})); });
