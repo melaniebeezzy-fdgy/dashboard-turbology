@@ -12,12 +12,13 @@
  --primary:#090e3e; --navy:#0E2841; --navy2:#242F42; --navy3:#153D64; --ind:#6366f1;
  --blue:#156082; --blue2:#0B769F; --sky:#0F9ED5; --slate:#345964; --teal:#467886;
  --mauve:#C19EB1; --plum:#96607D;
- --bg:#ffffff; --card:#ffffff; --tx:#242F42; --mut:#5d6b80; --bd:#d5dae3;
+ --bg:#E8E8E8; --card:#ffffff; --tx:#242F42; --mut:#5d6b80; --bd:#d5dae3;
  --good:#156082; --bad:#96607D;
  --topbar:56px; --side:220px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:'Poppins',system-ui,sans-serif;font-size:13px}
+body.globalview{background:#ffffff}
 #login{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
  background:linear-gradient(rgba(9,14,62,.55),rgba(9,14,62,.75)),url('https://images.squarespace-cdn.com/content/v1/5e711db98f62f46196625761/1651616585662-7L3JLXHY0UMDJBU9KFFB/Banner-03-02.png?format=2500w') center/cover no-repeat}
 .loginCard{background:rgba(255,255,255,.97);border-radius:16px;padding:40px 44px;width:360px;max-width:92vw;box-shadow:0 20px 60px rgba(9,14,62,.45);text-align:center}
@@ -649,11 +650,13 @@ window.setCountry=function(cc){
     document.getElementById('stickybar').style.display='none';
     ['co-weekly','co-monthly','co-fdgy'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
     var g=document.getElementById('co-global'); if(g)g.style.display='';
+    document.body.classList.add('globalview');
     document.querySelectorAll('.ctab').forEach(function(t){t.classList.toggle('on', t.dataset.c==='GLOBAL');});
     try{ renderGlobal(); }catch(e){console.error(e);}
     return;
   }
   if(!ALLDATA[cc])return;
+  document.body.classList.remove('globalview');
   var fromGlobal=(document.getElementById('co-global')&&document.getElementById('co-global').style.display!=='none');
   if(fromGlobal){ document.getElementById('co-global').style.display='none'; document.getElementById('stickybar').style.display=''; try{coView('w');}catch(e){} }
   CTRY=cc; D=ALLDATA[cc].D; MO=ALLDATA[cc].MO;
