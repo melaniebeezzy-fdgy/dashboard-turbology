@@ -303,7 +303,7 @@ table:not(.hm) th[data-sd="-1"]::after{content:" ↓";font-size:9px;opacity:.8}
 <div style="margin:0 0 12px"><button id="gTopBtn" onclick="gToggleTop()" title="Solo las marcas que acumulan el 80% de la venta (Pareto), por país" style="font-size:12px;padding:4px 12px;border:1px solid #156082;border-radius:6px;background:#fff;color:#156082;cursor:pointer;font-weight:600">⭐ Top marcas (80%)</button></div>
 <div class="grid">
   <div class="card"><h2>RTWT mensual por país</h2><div class="hint">Promedio de RTWT por mes. Línea verde = <b>objetivo 2 min</b>. Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGRtwt"></canvas></div></div>
-  <div class="card"><h2>% Cobertura mensual por país</h2><div class="hint">Cobertura efectiva promedio del polígono (vs. 3.0 km = 100%). Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGCov"></canvas></div></div>
+  <div class="card"><h2>% Cobertura mensual por país</h2><div class="hint">Líneas = cobertura efectiva (vs. 3.0 km = 100%). Barras = <b>órdenes/mes</b> por país (eje derecho). Etiqueta = valor del último mes.</div><div class="chartbox" style="min-height:300px"><canvas id="chGCov"></canvas></div></div>
 </div>
 <div class="card" style="margin-bottom:14px"><h2>% InFull por país</h2><div class="hint">Órdenes sin queja sobre el total (últimas 4 semanas, warehouse en vivo). Barra = % InFull por país.</div><div class="chartbox" style="height:300px"><canvas id="chGIf"></canvas></div></div>
 </div>
@@ -681,13 +681,15 @@ function _gTopSids(cc){ var top=_gPareto(cc), dd=ALLDATA[cc]&&ALLDATA[cc].D, set
 window.gToggleTop=function(){ GTOP=!GTOP; var b=document.getElementById('gTopBtn'); if(b){ b.classList.toggle('on',GTOP); b.style.background=GTOP?'#156082':'#fff'; b.style.color=GTOP?'#fff':'#156082'; } renderGlobal(); };
 function gLine(id,labels,datasets,opts){ var el=document.getElementById(id); if(!el)return; _gDestroy(id);
   var unit=(opts&&opts.unit)||'';
-  _gCharts[id]=new Chart(el,{type:'line',data:{labels:labels,datasets:datasets.map(function(d){ if(d.fill===undefined)d.fill=false; if(d.borderWidth===undefined)d.borderWidth=2.5; if(d.pointRadius===undefined)d.pointRadius=3; if(d.tension===undefined)d.tension=.3; d.spanGaps=true; return d;})},
+  var scales={x:{ticks:{font:{size:10}},grid:{display:false}},y:Object.assign({ticks:{font:{size:10}}},(opts&&opts.y)||{})};
+  if(opts&&opts.y1) scales.y1=Object.assign({position:'right',grid:{display:false}},opts.y1);
+  _gCharts[id]=new Chart(el,{type:'line',data:{labels:labels,datasets:datasets.map(function(d){ if(d.type==='bar'){ if(d.borderWidth===undefined)d.borderWidth=0; return d; } if(d.fill===undefined)d.fill=false; if(d.borderWidth===undefined)d.borderWidth=2.5; if(d.pointRadius===undefined)d.pointRadius=3; if(d.tension===undefined)d.tension=.3; d.spanGaps=true; return d;})},
     options:{maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:12,font:{size:11}}},
-      datalabels:{display:function(ctx){ if(ctx.dataset.noLabel)return false; return ctx.dataIndex===_gLastIdx(ctx.dataset.data); },
+      datalabels:{display:function(ctx){ if(ctx.dataset.noLabel||ctx.dataset.type==='bar')return false; return ctx.dataIndex===_gLastIdx(ctx.dataset.data); },
         align:'top',anchor:'end',color:function(ctx){return ctx.dataset.borderColor;},font:{weight:'700',size:11},
         formatter:function(v){return v==null?'':v+unit;}},
-      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.parsed.y==null?'–':c.parsed.y+unit);}}}},
-      scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:Object.assign({ticks:{font:{size:10}}},(opts&&opts.y)||{})}}}); }
+      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.parsed.y==null?'–':c.parsed.y+(c.dataset.type==='bar'?'':unit));}}}},
+      scales:scales}}); }
 function gBar(id,labels,data,colors){ var el=document.getElementById(id); if(!el)return; _gDestroy(id);
   _gCharts[id]=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderRadius:6,maxBarThickness:90}]},
     options:{maintainAspectRatio:false,plugins:{legend:{display:false},
@@ -713,13 +715,31 @@ function renderGlobal(){
   CCS.forEach(function(cc){ var s=_gMonthSeries(cc); if(s){ser[cc]=s; s.keys.forEach(function(k){kset[k]=1; lblOf[k]=s.labelOf[k];});} });
   var keys=Object.keys(kset).sort().slice(-8);
   var labels=keys.map(function(k){return lblOf[k];});
-  function mk(metric,fix,pcf){ return CCS.filter(function(cc){return ser[cc];}).map(function(cc){ var ds={label:GNAME[cc],borderColor:GCOL[cc],backgroundColor:GCOL[cc],data:keys.map(function(k){var v=ser[cc][metric][k];return v==null?null:+v.toFixed(fix);})}; if(pcf){ds.pointBackgroundColor=pcf;ds.pointBorderColor=pcf;ds.pointRadius=4;} return ds; }); }
+  function mk(metric,fix,pcf){ return CCS.filter(function(cc){return ser[cc];}).map(function(cc){ var ds={label:GNAME[cc],borderColor:GCOL[cc],backgroundColor:GCOL[cc],data:keys.map(function(k){var v=ser[cc][metric][k];return v==null?null:+v.toFixed(fix);})}; if(pcf){ds.pointBackgroundColor=pcf;ds.pointBorderColor=GCOL[cc];ds.pointBorderWidth=2;ds.pointRadius=4;} return ds; }); }
   var rtPass=function(ctx){ var v=ctx.raw; return v==null?'#999':(v<=2?G_OK:G_BAD); };
   var rtDs=mk('rt',2,rtPass);
   rtDs.push({label:'Objetivo 2 min',data:keys.map(function(){return 2;}),borderColor:'#1e8e5a',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false,noLabel:true});
   gLine('chGRtwt',labels,rtDs,{unit:' min',y:{beginAtZero:true,ticks:{font:{size:10}}}});
-  gLine('chGCov',labels,mk('cov',1),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}});
+  var covDs=mk('cov',1);
+  gLine('chGCov',labels,covDs.slice(),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}}});
+  renderGlobalCovSales(keys,labels,covDs);
   renderGlobalIF();
+}
+function renderGlobalCovSales(keys,labels,covDs){
+  var CCS=['CO','MX','PE']; if(!keys.length)return;
+  var from=keys[0]+'-01'; var toD=new Date(); toD.setUTCDate(toD.getUTCDate()-1); var to=toD.toISOString().slice(0,10);
+  var grp=GTOP?'brand':'city';
+  Promise.all(CCS.map(function(cc){ var top=GTOP?_gPareto(cc):null;
+    return fetch('/api/sales?country='+cc+'&from='+from+'&to='+to+'&group='+grp+'&period=month').then(function(r){return r.json();}).then(function(d){
+      var m={}, G=d.G||[], P=d.P||[];
+      (d.rows||[]).forEach(function(r){ if(top&&!top.has(brKey(G[r[0]])))return; var pk=String(P[r[1]]).slice(0,7); m[pk]=(m[pk]||0)+(r[2]||0); });
+      return {cc:cc,m:m};
+    }).catch(function(){return {cc:cc,m:{}};});
+  })).then(function(res){
+    var byCc={}; res.forEach(function(x){byCc[x.cc]=x.m;});
+    var barDs=CCS.map(function(cc){ return {type:'bar',label:'Órd '+GNAME[cc],data:keys.map(function(k){return byCc[cc][k]!=null?byCc[cc][k]:null;}),backgroundColor:GCOL[cc]+'33',borderColor:GCOL[cc],yAxisID:'y1',order:10,noLabel:true}; });
+    gLine('chGCov',labels,covDs.concat(barDs),{unit:'%',y:{min:50,max:100,ticks:{callback:function(v){return v+'%';},font:{size:10}}},y1:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return v>=1000?(v/1000).toFixed(0)+'k':v;}}}});
+  });
 }
 function renderGlobalIF(){
   var CCS=['CO','MX','PE'];
