@@ -38,6 +38,7 @@ export default async function handler(req, res) {
       -- InicioPenalizacion = MAX(order_date_local+5min, domiciliary_in_store) (igual que RTWT; in_store NULL -> solo recv+5).
       -- Kitchen_Wait = MAX(order_state_waiting_for_delivery - InicioPenalizacion, 0)
       -- RT_Wait      = MAX(domiciliary_did_take - order_state_waiting_for_delivery, 0)
+      -- Umbral: una espera solo "cuenta" si supera 50 segundos; por debajo se ignora (evita que diferencias de segundos marquen MIXTO).
       -- Los NULL se tratan explícitamente (no se convierten a 0): sin waiting -> SIN DATOS;
       -- waiting pero sin NINGÚN evento del RT (in_store y did_take null) -> SIN TRACKING (no hay cómo asignar responsabilidad);
       -- waiting, RT llegó a tienda (in_store) pero no tomó (did_take null) -> LISTO_SIN_TOMA_RT.
@@ -45,10 +46,10 @@ export default async function handler(req, res) {
         WHEN o.order_state_waiting_for_delivery IS NULL THEN 'SIN DATOS'
         WHEN o.domiciliary_did_take IS NULL AND o.domiciliary_in_store IS NULL THEN 'SIN TRACKING'
         WHEN o.domiciliary_did_take IS NULL THEN 'LISTO_SIN_TOMA_RT'
-        WHEN GREATEST(0, EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store)))/60.0) > 0
-         AND GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0) > 0 THEN 'MIXTO'
-        WHEN GREATEST(0, EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store)))/60.0) > 0 THEN 'COCINA'
-        WHEN GREATEST(0, EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery))/60.0) > 0 THEN 'RT'
+        WHEN EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store))) > 50
+         AND EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery)) > 50 THEN 'MIXTO'
+        WHEN EXTRACT(EPOCH FROM (o.order_state_waiting_for_delivery - GREATEST(o.order_date_local + interval '5 minute', o.domiciliary_in_store))) > 50 THEN 'COCINA'
+        WHEN EXTRACT(EPOCH FROM (o.domiciliary_did_take - o.order_state_waiting_for_delivery)) > 50 THEN 'RT'
         ELSE 'SIN ESPERA' END AS resp,
       CASE WHEN o.is_complaint=1 THEN 1 ELSE 0 END AS q   -- 1 = la orden tuvo queja (InFull)
     FROM fdgy_views.orders_consolidado o
