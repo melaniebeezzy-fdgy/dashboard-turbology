@@ -113,14 +113,41 @@ function wkEndLocalMs(lbl){var m=String(lbl).match(/([A-Za-z]{3})\s*(\d{1,2})/);
 // Etiqueta del último domingo COMPLETO según la fecha real (nunca una semana futura).
 function lastCompleteSundayLabel(){var now=new Date();var d=new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59);while(!(d.getDay()===0&&d.getTime()<=now.getTime()))d.setDate(d.getDate()-1);return MONTHS[d.getMonth()]+' '+d.getDate();}
 function parseReport(txt){
-  var rx=/"country": "(.*?)", "brand": "(.*?)", "storeId": "([^"]+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": ([0-9.]+|null), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)/g;
-  var co={},pe=[],m,nco=0,npe=0;
-  while((m=rx.exec(txt))){
-    var cov=(m[5]==='null'?null:Math.min(+m[5],3000));
-    var w4=(m[6]==='null'?null:+(+m[6]).toFixed(6));
-    if(/colomb/i.test(m[1])){ co[m[3]]={cov:cov,w4:w4,brand:m[2],sname:m[4]}; nco++; }
-    else if(/per/i.test(m[1])){ pe.push({brand:m[2],sname:m[4],cov:cov,w4:w4}); npe++; }
+  var co={},pe=[],nco=0,npe=0;
+  function addRec(ctry,brand,sname,covRaw,w4Raw,sid){
+    var cov=(covRaw==null||covRaw==='null')?null:Math.min(+covRaw,3000);
+    var w4=(w4Raw==null||w4Raw==='null')?null:+(+w4Raw).toFixed(6);
+    if(/per/i.test(ctry)){ pe.push({brand:brand||'',sname:sname||'',cov:cov,w4:w4}); npe++; }
+    else if(/colomb/i.test(ctry)||ctry===''){ if(sid){ co[String(sid)]={cov:cov,w4:w4,brand:brand||'',sname:sname||''}; nco++; } }
   }
+  // --- Formato nuevo: const DASHBOARD_DATA = {"stores":[{brand,storeId,storeName,coverageCurrent,...,w4}, ...]} ---
+  // (los registros ya no traen "country"; es el reporte de Colombia). Se parsea el JSON directo: rápido y sin regex que cuelgue.
+  var ti=txt.indexOf('DASHBOARD_DATA');
+  if(ti>=0){
+    try{
+      var a=txt.indexOf('{',txt.indexOf('=',ti));
+      if(a>=0){
+        var i=a,d=0,st=false,e=-1,inStr=false,esc=false;
+        for(;i<txt.length;i++){var c=txt[i];
+          if(inStr){ if(esc){esc=false;} else if(c==='\\'){esc=true;} else if(c==='"'){inStr=false;} continue; }
+          if(c==='"'){inStr=true;continue;}
+          if(c==='{'){d++;st=true;} else if(c==='}'){d--; if(st&&d===0){e=i+1;break;}}
+        }
+        if(e>0){
+          var obj=JSON.parse(txt.slice(a,e));
+          var arr=obj.stores||obj.data||[];
+          if(arr.length){
+            arr.forEach(function(s){ addRec((s.country||s.pais||'').toString(), s.brand, s.storeName, s.coverageCurrent, s.w4, s.storeId); });
+            return {rep:co,n:nco,co:co,pe:pe,nco:nco,npe:npe};
+          }
+        }
+      }
+    }catch(err){ /* si falla el JSON, caemos al formato viejo */ }
+  }
+  // --- Formato viejo: registros de una línea con "country": "..." por tienda ---
+  var rx=/"country": "(.*?)", "brand": "(.*?)", "storeId": "([^"]+)", "storeName": "(.*?)", "avg4w": (?:[0-9.]+|null), "weeksData": \d+, "coverageCurrent": ([0-9.]+|null), "coverageResult"[\s\S]*?"w4": ([0-9.]+|null)/g;
+  var m;
+  while((m=rx.exec(txt))){ addRec(m[1],m[2],m[4],m[5],m[6],m[3]); }
   return {rep:co,n:nco,co:co,pe:pe,nco:nco,npe:npe};
 }
 function applyCO(H,reportTxt){
@@ -226,7 +253,7 @@ function analizarCO(){
       var nn=0;for(var k in pr.rep)if(pr.rep[k].w4!=null)nn++;
       var penn=0;pr.pe.forEach(function(r){if(r.w4!=null)penn++;});
       prev.style.display='block';
-      prev.innerHTML='✔️ Reporte leído:<br>🇨🇴 CO: <b>'+pr.nco+'</b> tiendas, <b>'+nn+'</b> con RTWT.<br>🇵🇪 PE: <b>'+pr.npe+'</b> tiendas, <b>'+penn+'</b> con RTWT. Listo para publicar.';
+      prev.innerHTML='✔️ Reporte leído:<br>🇨🇴 CO: <b>'+pr.nco+'</b> tiendas, <b>'+nn+'</b> con RTWT.'+(pr.npe>0?('<br>🇵🇪 PE: <b>'+pr.npe+'</b> tiendas, <b>'+penn+'</b> con RTWT.'):'')+' Listo para publicar.';
       document.getElementById('coPub').disabled=false;
     }catch(err){prev.style.display='block';prev.innerHTML='⚠️ '+err.message;}
   };
