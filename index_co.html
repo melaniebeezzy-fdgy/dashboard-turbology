@@ -1391,7 +1391,8 @@ function fd2HTML(short){
   return '<h1>Turbo <span>· tiempos de cocción &amp; RTWT</span></h1>'
    +'<div class="sub"><b>100% warehouse.</b> Cooking time (hasta empacado) y <b>RTWT</b> por orden (recibido → llegada RT → entrega, arranque a 5 min), promediado en el rango. Filtra por <b>cocina, marca y fecha</b>; respeta ciudad y ops. Datos '+fd2esc(wk)+'.</div>'
    +filters
-   +'<div class="grid4" id="fd2kpis" style="margin-bottom:14px"></div>'
+   +'<div id="fd2ordcard" style="margin-bottom:12px"></div>'
+   +'<div id="fd2kpis" style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:14px"></div>'
    +'<div class="fd2row">'
      +'<div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina (min) en el rango filtrado.</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
      +'<div class="card fd2c2"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div>'
@@ -1464,17 +1465,35 @@ function fd2Render(cc){
     var TN=0,T7=0,T9=0,TR=0,RS=0,RC=0;
     cocinas.forEach(function(c){TN+=c.d.n;T7+=c.d.r7;T9+=c.d.r9;TR+=c.d.r7+c.d.r79+c.d.r9;RS+=c.d.rtsum;RC+=c.d.rtcnt;});
     var avgRt=RC>0?RS/RC:null;
+    var p7=TR?Math.round(100*T7/TR):null, p9=TR?Math.round(100*T9/TR):null;
+    var _bag='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a2340" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+    var _watch='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2340" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>';
+    var oc=document.getElementById('fd2ordcard');
+    if(oc){
+      oc.innerHTML='<div style="background:#fff;border:1px solid var(--bd);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:22px;box-shadow:0 1px 3px rgba(16,24,64,.05)">'
+        +'<div style="display:flex;align-items:center;gap:14px;flex:0 0 auto">'
+          +'<div style="width:46px;height:46px;border-radius:12px;background:#e6f0fb;display:flex;align-items:center;justify-content:center">'+_bag+'</div>'
+          +'<div><div style="font-size:14px;color:var(--mut);font-weight:600;line-height:1">Órdenes</div><div style="font-size:30px;font-weight:800;color:#1a2340;line-height:1.1;margin-top:3px">'+TN.toLocaleString('es')+'</div></div>'
+        +'</div>'
+        +'<div style="width:1px;align-self:stretch;background:var(--bd);margin:2px 4px"></div>'
+        +'<div style="flex:1;min-width:0">'
+          +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><div style="width:28px;height:28px;border-radius:8px;background:#e6f0fb;display:flex;align-items:center;justify-content:center">'+_watch+'</div><span style="font-size:14px;font-weight:700;color:#1a2340">% Cooking Time de las órdenes</span></div>'
+          +'<div style="display:flex;height:34px;border-radius:9px;overflow:hidden;background:#eef2f6">'
+            +(p7!=null&&p7>0?'<div title="≤ 7 min: '+p7+'%" style="width:'+p7+'%;background:#167d93;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;overflow:hidden">'+(p7>=8?p7+'%':'')+'</div>':'')
+            +(p9!=null&&p9>0?'<div title="&gt; 9 min: '+p9+'%" style="width:'+p9+'%;background:#f9c6da;display:flex;align-items:center;justify-content:center;color:#d1457e;font-weight:800;font-size:15px;overflow:hidden">'+(p9>=8?p9+'%':'')+'</div>':'')
+          +'</div>'
+          +'<div style="display:flex;gap:24px;margin-top:9px;font-size:12.5px;color:var(--mut);font-weight:600">'
+            +'<span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#167d93;vertical-align:middle;margin-right:6px"></span>≤ 7 min</span>'
+            +'<span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#f4b7d1;vertical-align:middle;margin-right:6px"></span>&gt; 9 min</span>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    }
     var kpi=document.getElementById('fd2kpis');
     if(kpi){
-      var p7=TR?Math.round(100*T7/TR):null, p9=TR?Math.round(100*T9/TR):null;
-      var ordTile='<div class="k2"><div class="k2l">Órdenes</div><div class="k2v">'+TN.toLocaleString('es')+'</div>'
-        +'<div style="display:flex;gap:14px;margin-top:6px;font-size:10.5px;color:var(--mut)">'
-        +'<span>≤ 7 min <b style="color:'+FD2C.navy+'">'+(p7==null?'—':p7+'%')+'</b></span>'
-        +'<span>&gt; 9 min <b style="color:'+FD2C.pink+'">'+(p9==null?'—':p9+'%')+'</b></span>'
-        +'</div></div>';
       var rtTile=fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);
-      var batTile='<div class="k2" style="grid-column:span 2"><div class="k2l">🛵 Batching RT</div><div id="fd2BatchMain" style="margin-top:6px"></div></div>';
-      kpi.innerHTML=ordTile+rtTile+batTile;
+      var batTile='<div class="k2"><div class="k2l">🛵 Batching RT</div><div id="fd2BatchMain" style="margin-top:6px"></div></div>';
+      kpi.innerHTML=rtTile+batTile;
     }
   }catch(e){console.error('fd2 kpis',e);}
   try{ fd2Batching(cc); }catch(e){}
