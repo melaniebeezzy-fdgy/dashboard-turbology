@@ -1393,7 +1393,6 @@ function fd2HTML(short){
    +'<div class="sub"><b>100% warehouse.</b> Cooking time (hasta empacado) y <b>RTWT</b> por orden (recibido → llegada RT → entrega, arranque a 5 min), promediado en el rango. Filtra por <b>cocina, marca y fecha</b>; respeta ciudad y ops. Datos '+fd2esc(wk)+'.</div>'
    +filters
    +'<div class="grid4" id="fd2kpis" style="margin-bottom:14px"></div>'
-   +'<div class="card" style="margin-bottom:14px"><h2>🛵 Batching de RT</h2><div class="hint">Comandas que un mismo repartidor recoge en lote (misma cocina, en ≤15 min). Barra = % de órdenes en lote, por tamaño. <b>Clic en la barra → detalle por cocina.</b> Solo órdenes con RT identificado (~53% del total), así que es un piso. Respeta el rango de fecha.</div><div id="fd2BatchMain"></div><div id="fd2BatchByCoc" style="display:none"></div></div>'
    +'<div class="fd2row">'
      +'<div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina (min) en el rango filtrado.</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
      +'<div class="card fd2c2"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div>'
@@ -1460,7 +1459,6 @@ function fd2Render(cc){
   var cocinas=Object.keys(byK).map(function(k){return {k:k,d:byK[k],rtwt:fd2avgRt(byK[k]),rtwtP:fd2avgRt(byKp[k])};}).sort(function(a,b){return b.d.n-a.d.n;});
   try{ fd2Resumen(cc, cocinas, byKB, dayAgg, byKp); }catch(e){}
   try{ fd2TrendChart(cc); }catch(e){}
-  try{ fd2Batching(cc); }catch(e){}
 
   // KPIs
   try{
@@ -1468,12 +1466,19 @@ function fd2Render(cc){
     cocinas.forEach(function(c){TN+=c.d.n;T7+=c.d.r7;T9+=c.d.r9;TR+=c.d.r7+c.d.r79+c.d.r9;RS+=c.d.rtsum;RC+=c.d.rtcnt;});
     var avgRt=RC>0?RS/RC:null;
     var kpi=document.getElementById('fd2kpis');
-    if(kpi)kpi.innerHTML=
-      fd2kpi('Órdenes',TN.toLocaleString('es'),'')
-     +fd2kpi('≤ 7 min',TR?Math.round(100*T7/TR)+'%':'—','color:'+FD2C.navy)
-     +fd2kpi('> 9 min',TR?Math.round(100*T9/TR)+'%':'—','color:'+FD2C.pink)
-     +fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);
+    if(kpi){
+      var p7=TR?Math.round(100*T7/TR):null, p9=TR?Math.round(100*T9/TR):null;
+      var ordTile='<div class="k2"><div class="k2l">Órdenes</div><div class="k2v">'+TN.toLocaleString('es')+'</div>'
+        +'<div style="display:flex;gap:14px;margin-top:6px;font-size:10.5px;color:var(--mut)">'
+        +'<span>≤ 7 min <b style="color:'+FD2C.navy+'">'+(p7==null?'—':p7+'%')+'</b></span>'
+        +'<span>&gt; 9 min <b style="color:'+FD2C.pink+'">'+(p9==null?'—':p9+'%')+'</b></span>'
+        +'</div></div>';
+      var rtTile=fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);
+      var batTile='<div class="k2" style="grid-column:span 2"><div class="k2l">🛵 Batching RT</div><div id="fd2BatchMain" style="margin-top:6px"></div></div>';
+      kpi.innerHTML=ordTile+rtTile+batTile;
+    }
   }catch(e){console.error('fd2 kpis',e);}
+  try{ fd2Batching(cc); }catch(e){}
 
   var top=cocinas.slice(0,24);
   // Chart 1
@@ -1873,21 +1878,36 @@ function _fd2BatchBar(n1,n2,n3,n4,total,h){
 function fd2BatchDraw(d){
   var el=document.getElementById('fd2BatchMain'); if(!el)return; _fd2BatchLast=d;
   var T=0,N1=0,N2=0,N3=0,N4=0; (d.rows||[]).forEach(function(r){T+=r[1];N1+=r[2];N2+=r[3];N3+=r[4];N4+=r[5];});
-  if(!T){ el.innerHTML='<div class="hint">Sin órdenes con RT identificado en el rango.</div>'; return; }
-  var batched=N2+N3+N4, pct=100*batched/T, pc=function(v){return (100*v/T).toFixed(1);};
-  var lg=function(col,lbl,v){return '<span><span style="display:inline-block;width:10px;height:10px;background:'+col+';border-radius:2px;vertical-align:middle"></span> '+lbl+': <b>'+pc(v)+'%</b></span>';};
-  el.innerHTML='<div style="cursor:pointer" onclick="fd2BatchToggle()" title="Clic para ver el detalle por cocina">'+_fd2BatchBar(N1,N2,N3,N4,T,26)+'</div>'
-    +'<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;margin-top:8px;color:var(--primary)"><span><b>'+pct.toFixed(1)+'%</b> en lote ('+batched.toLocaleString("es")+' de '+T.toLocaleString("es")+')</span>'+lg('#9ccbe0','Lote 2',N2)+lg('#0F9ED5','Lote 3',N3)+lg('#153D64','Lote 4+',N4)+'</div>'
-    +'<div style="font-size:10.5px;color:var(--mut);margin-top:4px">Clic en la barra → detalle por cocina.</div>';
+  if(!T){ el.innerHTML='<div style="font-size:10.5px;color:var(--mut)">Sin órdenes con RT en el rango.</div>'; return; }
+  var batched=N2+N3+N4, pct=100*batched/T;
+  var seg=function(v,col,txtcol){ var p=100*v/T; if(p<=0)return '';
+    var lbl=p>=8?('<span style="font-size:9.5px;font-weight:700;color:'+txtcol+'">'+p.toFixed(0)+'%</span>'):'';
+    return '<div title="'+v.toLocaleString("es")+' ('+p.toFixed(1)+'%)" style="width:'+p+'%;background:'+col+';height:22px;display:flex;align-items:center;justify-content:center;overflow:hidden">'+lbl+'</div>'; };
+  var leg=function(col,lbl,v){return '<span><span style="display:inline-block;width:8px;height:8px;background:'+col+';border-radius:2px"></span> '+lbl+' '+(100*v/T).toFixed(1)+'%</span>';};
+  el.innerHTML='<div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="fd2BatchToggle()" title="Clic → detalle por cocina">'
+      +'<div style="flex:1;display:flex;border-radius:5px;overflow:hidden;background:#eef2f6">'
+        +seg(N1,'#e2e8f0','#64748b')+seg(N2,'#9ccbe0','#0b3a52')+seg(N3,'#0F9ED5','#fff')+seg(N4,'#153D64','#fff')
+      +'</div>'
+      +'<div style="font-weight:700;color:var(--primary);font-size:15px;white-space:nowrap">'+pct.toFixed(1)+'%</div>'
+    +'</div>'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:9.5px;color:var(--mut);margin-top:5px">'
+      +leg('#9ccbe0','L2',N2)+leg('#0F9ED5','L3',N3)+leg('#153D64','L4+',N4)
+      +'<span style="color:#94a3b8">· clic → por cocina</span>'
+    +'</div>';
 }
 window.fd2BatchToggle=function(){
-  var det=document.getElementById('fd2BatchByCoc'); if(!det)return;
-  if(det.style.display!=='none'&&det.innerHTML){ det.style.display='none'; return; }
   var d=_fd2BatchLast; if(!d)return;
   var rows=(d.rows||[]).filter(function(r){return r[1]>=20;}).map(function(r){var total=r[1],b=r[3]+r[4]+r[5];return {k:r[0],total:total,n1:r[2],n2:r[3],n3:r[4],n4:r[5],pct:total?100*b/total:0};}).sort(function(a,b){return b.pct-a.pct;});
-  var h='<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"><div style="font-size:11px;color:var(--mut);margin-bottom:8px">Por cocina (≥20 órdenes con RT), ordenado por % en lote:</div>';
-  rows.forEach(function(x){ h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:130px;font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+x.k+'">'+x.k+'</div><div style="flex:1">'+_fd2BatchBar(x.n1,x.n2,x.n3,x.n4,x.total,14)+'</div><div style="width:48px;text-align:right;font-size:11px;font-weight:700;color:var(--primary)">'+x.pct.toFixed(1)+'%</div></div>'; });
-  h+='</div>'; det.innerHTML=h; det.style.display='';
+  var T=0,B=0;(d.rows||[]).forEach(function(r){T+=r[1];B+=r[3]+r[4]+r[5];});
+  var mt=document.getElementById('mTitle'), ms=document.getElementById('mSum'), tb=document.getElementById('mTable');
+  if(mt)mt.textContent='🛵 Batching de RT por cocina';
+  if(ms)ms.innerHTML='Comandas que un mismo repartidor recoge en lote (misma cocina, en ≤15 min). Total: <b>'+(T?100*B/T:0).toFixed(1)+'%</b> en lote ('+B.toLocaleString("es")+' de '+T.toLocaleString("es")+'). Solo órdenes con RT identificado (~53% del total → es un piso). Cocinas con ≥20 órdenes, ordenadas por % en lote.';
+  if(tb){
+    var h='<thead><tr><th style="text-align:left">Cocina</th><th>Distribución por tamaño de lote</th><th style="text-align:right">% en lote</th></tr></thead><tbody>';
+    rows.forEach(function(x){ h+='<tr><td style="font-weight:600;white-space:nowrap">'+x.k+'</td><td style="min-width:180px">'+_fd2BatchBar(x.n1,x.n2,x.n3,x.n4,x.total,14)+'</td><td style="text-align:right;font-weight:700">'+x.pct.toFixed(1)+'%</td></tr>'; });
+    h+='</tbody>'; tb.innerHTML=h;
+  }
+  document.getElementById('modalBg').classList.add('open');
 }
 function fd2Batching(cc){
   var el=document.getElementById('fd2BatchMain'); if(!el)return;
