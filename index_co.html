@@ -1392,6 +1392,7 @@ function fd2HTML(short){
    +'<div class="sub"><b>100% warehouse.</b> Cooking time (hasta empacado) y <b>RTWT</b> por orden (recibido → llegada RT → entrega, arranque a 5 min), promediado en el rango. Filtra por <b>cocina, marca y fecha</b>; respeta ciudad y ops. Datos '+fd2esc(wk)+'.</div>'
    +filters
    +'<div class="grid4" id="fd2kpis" style="margin-bottom:14px"></div>'
+   +'<div class="card" style="margin-bottom:14px"><h2>🛵 Batching de RT</h2><div class="hint">Comandas que un mismo repartidor recoge en lote (misma cocina, en ≤15 min). Barra = % de órdenes en lote, por tamaño. <b>Clic en la barra → detalle por cocina.</b> Solo órdenes con RT identificado (~53% del total), así que es un piso. Respeta el rango de fecha.</div><div id="fd2BatchMain"></div><div id="fd2BatchByCoc" style="display:none"></div></div>'
    +'<div class="fd2row">'
      +'<div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina (min) en el rango filtrado.</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
      +'<div class="card fd2c2"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div>'
@@ -1458,6 +1459,7 @@ function fd2Render(cc){
   var cocinas=Object.keys(byK).map(function(k){return {k:k,d:byK[k],rtwt:fd2avgRt(byK[k]),rtwtP:fd2avgRt(byKp[k])};}).sort(function(a,b){return b.d.n-a.d.n;});
   try{ fd2Resumen(cc, cocinas, byKB, dayAgg, byKp); }catch(e){}
   try{ fd2TrendChart(cc); }catch(e){}
+  try{ fd2Batching(cc); }catch(e){}
 
   // KPIs
   try{
@@ -1861,6 +1863,42 @@ function fd2TrendChart(cc){
       scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}}});
 }
 var _fd2TrChart=null;
+// ---- Batching de RT (barra % en lote por tamaño + detalle por cocina) ----
+var _fd2Batch={}, _fd2BatchLast=null;
+function _fd2BatchBar(n1,n2,n3,n4,total,h){
+  var seg=function(v,col,lbl){ var p=total?100*v/total:0; return p>0?'<div title="'+lbl+': '+v.toLocaleString("es")+' ('+p.toFixed(1)+'%)" style="width:'+p+'%;background:'+col+';height:'+h+'px"></div>':''; };
+  return '<div style="display:flex;width:100%;border-radius:6px;overflow:hidden;background:#eef2f6">'+seg(n1,'#e2e8f0','Sin lote')+seg(n2,'#9ccbe0','Lote 2')+seg(n3,'#0F9ED5','Lote 3')+seg(n4,'#153D64','Lote 4+')+'</div>';
+}
+function fd2BatchDraw(d){
+  var el=document.getElementById('fd2BatchMain'); if(!el)return; _fd2BatchLast=d;
+  var T=0,N1=0,N2=0,N3=0,N4=0; (d.rows||[]).forEach(function(r){T+=r[1];N1+=r[2];N2+=r[3];N3+=r[4];N4+=r[5];});
+  if(!T){ el.innerHTML='<div class="hint">Sin órdenes con RT identificado en el rango.</div>'; return; }
+  var batched=N2+N3+N4, pct=100*batched/T, pc=function(v){return (100*v/T).toFixed(1);};
+  var lg=function(col,lbl,v){return '<span><span style="display:inline-block;width:10px;height:10px;background:'+col+';border-radius:2px;vertical-align:middle"></span> '+lbl+': <b>'+pc(v)+'%</b></span>';};
+  el.innerHTML='<div style="cursor:pointer" onclick="fd2BatchToggle()" title="Clic para ver el detalle por cocina">'+_fd2BatchBar(N1,N2,N3,N4,T,26)+'</div>'
+    +'<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;margin-top:8px;color:var(--primary)"><span><b>'+pct.toFixed(1)+'%</b> en lote ('+batched.toLocaleString("es")+' de '+T.toLocaleString("es")+')</span>'+lg('#9ccbe0','Lote 2',N2)+lg('#0F9ED5','Lote 3',N3)+lg('#153D64','Lote 4+',N4)+'</div>'
+    +'<div style="font-size:10.5px;color:var(--mut);margin-top:4px">Clic en la barra → detalle por cocina.</div>';
+}
+window.fd2BatchToggle=function(){
+  var det=document.getElementById('fd2BatchByCoc'); if(!det)return;
+  if(det.style.display!=='none'&&det.innerHTML){ det.style.display='none'; return; }
+  var d=_fd2BatchLast; if(!d)return;
+  var rows=(d.rows||[]).filter(function(r){return r[1]>=20;}).map(function(r){var total=r[1],b=r[3]+r[4]+r[5];return {k:r[0],total:total,n1:r[2],n2:r[3],n3:r[4],n4:r[5],pct:total?100*b/total:0};}).sort(function(a,b){return b.pct-a.pct;});
+  var h='<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"><div style="font-size:11px;color:var(--mut);margin-bottom:8px">Por cocina (≥20 órdenes con RT), ordenado por % en lote:</div>';
+  rows.forEach(function(x){ h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:130px;font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+x.k+'">'+x.k+'</div><div style="flex:1">'+_fd2BatchBar(x.n1,x.n2,x.n3,x.n4,x.total,14)+'</div><div style="width:48px;text-align:right;font-size:11px;font-weight:700;color:var(--primary)">'+x.pct.toFixed(1)+'%</div></div>'; });
+  h+='</div>'; det.innerHTML=h; det.style.display='';
+}
+function fd2Batching(cc){
+  var el=document.getElementById('fd2BatchMain'); if(!el)return;
+  var short=(typeof FD2CC!=='undefined'&&FD2CC[cc])?FD2CC[cc]:cc;
+  var fEl=document.getElementById('fd2from'), tEl=document.getElementById('fd2to');
+  var from=fEl?fEl.value:null, to=tEl?tEl.value:null; if(!from||!to){el.innerHTML='';return;}
+  var key=short+'|'+from+'|'+to;
+  var det=document.getElementById('fd2BatchByCoc'); if(det){det.style.display='none';det.innerHTML='';}
+  if(_fd2Batch[key]){ fd2BatchDraw(_fd2Batch[key]); return; }
+  el.innerHTML='<div class="hint">Calculando batching…</div>';
+  fetch('/api/batching?country='+encodeURIComponent(short)+'&from='+from+'&to='+to).then(function(r){return r.json();}).then(function(d){ if(!d||!d.rows){el.innerHTML='<div class="hint">Sin datos.</div>';return;} _fd2Batch[key]=d; fd2BatchDraw(d); }).catch(function(){ el.innerHTML='<div class="hint">No se pudo calcular el batching.</div>'; });
+}
 if(typeof update==='function'){var _ur=update; update=function(){_ur.apply(this,arguments); try{renderResumenW();}catch(e){}};}
 try{ renderResumenW(); }catch(e){}
 
