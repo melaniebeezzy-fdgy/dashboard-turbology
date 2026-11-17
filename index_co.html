@@ -1392,7 +1392,8 @@ function fd2HTML(short){
   return '<h1>Turbo <span>· tiempos de cocción &amp; RTWT</span></h1>'
    +'<div class="sub"><b>100% warehouse.</b> Cooking time (hasta empacado) y <b>RTWT</b> por orden (recibido → llegada RT → entrega, arranque a 5 min), promediado en el rango. Filtra por <b>cocina, marca y fecha</b>; respeta ciudad y ops. Datos '+fd2esc(wk)+'.</div>'
    +filters
-   +'<div id="fd2kpis" style="display:grid;grid-template-columns:1.6fr 0.7fr 1.3fr;gap:12px;margin-bottom:14px"></div>'
+   +'<div id="fd2kpis" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px"></div>'
+   +'<div id="fd2kpis2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px"></div>'
    +'<div class="fd2row">'
      +'<div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina (min) en el rango filtrado.</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
      +'<div class="card fd2c2"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div>'
@@ -1488,9 +1489,12 @@ function fd2Render(cc){
         +'</div>'
       +'</div>';
       var rtTile=fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);
-      var batTile='<div class="k2"><div class="k2l">🛵 Batching RT</div><div id="fd2BatchMain" style="margin-top:6px"></div></div>';
-      kpi.innerHTML=ordTile+rtTile+batTile;
+      kpi.innerHTML=ordTile+rtTile;
     }
+    var k2=document.getElementById('fd2kpis2');
+    if(k2) k2.innerHTML=
+        '<div class="k2"><div class="k2l">🛵 Batching RT <span style="font-weight:500;color:#94a3b8">· &gt; 1 min</span></div><div id="fd2BatchMain" style="margin-top:6px"></div></div>'
+       +'<div class="k2"><div class="k2l">📦 Bundle RT <span style="font-weight:500;color:#94a3b8">· ≤ 1 min</span></div><div id="fd2BundleMain" style="margin-top:6px"></div></div>';
   }catch(e){console.error('fd2 kpis',e);}
   try{ fd2Batching(cc); }catch(e){}
 
@@ -1883,58 +1887,61 @@ function fd2TrendChart(cc){
       scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:10}}}}}});
 }
 var _fd2TrChart=null;
-// ---- Batching de RT (barra % en lote por tamaño + detalle por cocina) ----
+// ---- Agrupamiento de RT: Bundle (≤1 min entre órdenes) vs Batching (>1 min), por tamaño de lote ----
 var _fd2Batch={}, _fd2BatchLast=null;
-function _fd2BatchBar(n1,n2,n3,n4,total,h){
-  var b=n2+n3+n4;
-  var seg=function(v,col,lbl){ var p=b?100*v/b:0; return p>0?'<div title="'+lbl+': '+v.toLocaleString("es")+' ('+(total?100*v/total:0).toFixed(1)+'% del total · '+p.toFixed(1)+'% del batching)" style="width:'+p+'%;background:'+col+';height:'+h+'px"></div>':''; };
-  return '<div style="display:flex;width:100%;border-radius:6px;overflow:hidden;background:#eef2f6">'+seg(n2,'#9ccbe0','Lote 2')+seg(n3,'#0F9ED5','Lote 3')+seg(n4,'#153D64','Lote 4+')+'</div>';
-}
-function fd2BatchDraw(d){
-  var el=document.getElementById('fd2BatchMain'); if(!el)return; _fd2BatchLast=d;
-  var T=0,N1=0,N2=0,N3=0,N4=0; (d.rows||[]).forEach(function(r){T+=r[1];N1+=r[2];N2+=r[3];N3+=r[4];N4+=r[5];});
-  if(!T){ el.innerHTML='<div style="font-size:10.5px;color:var(--mut)">Sin órdenes con RT en el rango.</div>'; return; }
-  var batched=N2+N3+N4, pct=100*batched/T;
-  if(!batched){ el.innerHTML='<div style="font-size:10.5px;color:var(--mut)">0% en lote en el rango.</div>'; return; }
-  var seg=function(v,col,txtcol){ var p=100*v/batched; if(p<=0)return '';
-    var lbl=p>=10?('<span style="font-size:10px;font-weight:700;color:'+txtcol+'">'+(100*v/T).toFixed(1)+'%</span>'):'';
+// Barra que se llena al 100% con su composición (L2/L3/L4+); etiquetas dentro y en leyenda = % del total;
+// a la derecha el % total del grupo y el conteo de órdenes.
+function _fd2GrpBar(el,s2,s3,s4,T){
+  if(!el)return; var sum=s2+s3+s4, pct=T?100*sum/T:0;
+  if(!sum){ el.innerHTML='<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:22px;border-radius:5px;background:#eef2f6"></div><div style="font-weight:700;color:var(--primary);font-size:15px">0%</div></div><div style="font-size:9.5px;color:var(--mut);margin-top:5px">0 órdenes</div>'; return; }
+  var seg=function(v,col,txt){ var p=100*v/sum; if(p<=0)return '';
+    var lbl=p>=10?('<span style="font-size:10px;font-weight:700;color:'+txt+'">'+(100*v/T).toFixed(1)+'%</span>'):'';
     return '<div title="'+v.toLocaleString("es")+' ('+(100*v/T).toFixed(1)+'% del total)" style="width:'+p+'%;background:'+col+';height:22px;display:flex;align-items:center;justify-content:center;overflow:hidden">'+lbl+'</div>'; };
   var leg=function(col,lbl,v){return '<span><span style="display:inline-block;width:8px;height:8px;background:'+col+';border-radius:2px"></span> '+lbl+' '+(100*v/T).toFixed(1)+'%</span>';};
   el.innerHTML='<div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="fd2BatchToggle()" title="Clic → detalle por cocina">'
-      +'<div style="flex:1;display:flex;border-radius:5px;overflow:hidden;background:#eef2f6">'
-        +seg(N2,'#9ccbe0','#0b3a52')+seg(N3,'#0F9ED5','#fff')+seg(N4,'#153D64','#fff')
-      +'</div>'
+      +'<div style="flex:1;display:flex;border-radius:5px;overflow:hidden;background:#eef2f6">'+seg(s2,'#9ccbe0','#0b3a52')+seg(s3,'#0F9ED5','#fff')+seg(s4,'#153D64','#fff')+'</div>'
       +'<div style="font-weight:700;color:var(--primary);font-size:15px;white-space:nowrap">'+pct.toFixed(1)+'%</div>'
     +'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:9.5px;color:var(--mut);margin-top:5px">'
-      +leg('#9ccbe0','L2',N2)+leg('#0F9ED5','L3',N3)+leg('#153D64','L4+',N4)
-      +'<span style="color:#94a3b8">· % del total · clic → por cocina</span>'
+      +leg('#9ccbe0','L2',s2)+leg('#0F9ED5','L3',s3)+leg('#153D64','L4+',s4)
+      +'<span style="color:#94a3b8">· '+sum.toLocaleString('es')+' órdenes · clic → por cocina</span>'
     +'</div>';
+}
+// rows: [kitchen, total, b2,b3,b4 (bundle por tamaño), t2,t3,t4 (batching por tamaño)]
+function fd2BatchDraw(d){
+  _fd2BatchLast=d;
+  var T=0,B2=0,B3=0,B4=0,T2=0,T3=0,T4=0;
+  (d.rows||[]).forEach(function(r){T+=r[1];B2+=r[2];B3+=r[3];B4+=r[4];T2+=r[5];T3+=r[6];T4+=r[7];});
+  var eb=document.getElementById('fd2BatchMain'), eu=document.getElementById('fd2BundleMain');
+  if(eb){ if(!T)eb.innerHTML='<div style="font-size:10.5px;color:var(--mut)">Sin órdenes con RT en el rango.</div>'; else _fd2GrpBar(eb,T2,T3,T4,T); }
+  if(eu){ if(!T)eu.innerHTML='<div style="font-size:10.5px;color:var(--mut)">Sin órdenes con RT en el rango.</div>'; else _fd2GrpBar(eu,B2,B3,B4,T); }
 }
 window.fd2BatchToggle=function(){
   var d=_fd2BatchLast; if(!d)return;
-  var rows=(d.rows||[]).filter(function(r){return r[1]>=20;}).map(function(r){var total=r[1],b=r[3]+r[4]+r[5];return {k:r[0],total:total,n1:r[2],n2:r[3],n3:r[4],n4:r[5],pct:total?100*b/total:0};}).sort(function(a,b){return b.pct-a.pct;});
-  var T=0,B=0;(d.rows||[]).forEach(function(r){T+=r[1];B+=r[3]+r[4]+r[5];});
+  var rows=(d.rows||[]).filter(function(r){return r[1]>=20;}).map(function(r){
+    var tot=r[1],bu=r[2]+r[3]+r[4],ba=r[5]+r[6]+r[7];
+    return {k:r[0],tot:tot,bu:bu,ba:ba,bup:tot?100*bu/tot:0,bap:tot?100*ba/tot:0,agp:tot?100*(bu+ba)/tot:0};
+  }).sort(function(a,b){return b.agp-a.agp;});
+  var T=0,BU=0,BA=0;(d.rows||[]).forEach(function(r){T+=r[1];BU+=r[2]+r[3]+r[4];BA+=r[5]+r[6]+r[7];});
   var mt=document.getElementById('mTitle'), ms=document.getElementById('mSum'), tb=document.getElementById('mTable');
-  if(mt)mt.textContent='🛵 Batching de RT por cocina';
-  if(ms)ms.innerHTML='Comandas que un mismo repartidor recoge en lote (misma cocina, en ≤15 min). Total: <b>'+(T?100*B/T:0).toFixed(1)+'%</b> en lote ('+B.toLocaleString("es")+' de '+T.toLocaleString("es")+'). Solo órdenes con RT identificado (~53% del total → es un piso). Cocinas con ≥20 órdenes, ordenadas por % en lote.';
+  if(mt)mt.textContent='🛵 Agrupamiento de RT por cocina';
+  if(ms)ms.innerHTML='Órdenes que un mismo repartidor recoge juntas (misma cocina, en ≤15 min). <b>Bundle</b> = recibidas con ≤1 min entre sí; <b>Batching</b> = más de 1 min. Total: Bundle <b>'+(T?100*BU/T:0).toFixed(1)+'%</b> ('+BU.toLocaleString('es')+'), Batching <b>'+(T?100*BA/T:0).toFixed(1)+'%</b> ('+BA.toLocaleString('es')+') de '+T.toLocaleString('es')+' órdenes con RT (~53% del total → piso). Cocinas con ≥20 órdenes.';
   if(tb){
-    var h='<thead><tr><th style="text-align:left">Cocina</th><th>Distribución por tamaño de lote</th><th style="text-align:right">% en lote</th></tr></thead><tbody>';
-    rows.forEach(function(x){ h+='<tr><td style="font-weight:600;white-space:nowrap">'+x.k+'</td><td style="min-width:180px">'+_fd2BatchBar(x.n1,x.n2,x.n3,x.n4,x.total,14)+'</td><td style="text-align:right;font-weight:700">'+x.pct.toFixed(1)+'%</td></tr>'; });
+    var h='<thead><tr><th>Cocina</th><th class="num">Órdenes</th><th class="num">Bundle</th><th class="num">Batching</th><th class="num">Agrupado</th></tr></thead><tbody>';
+    rows.forEach(function(x){ h+='<tr><td style="font-weight:600;white-space:nowrap">'+x.k+'</td><td class="num">'+x.tot.toLocaleString('es')+'</td><td class="num">'+x.bu.toLocaleString('es')+' · '+x.bup.toFixed(1)+'%</td><td class="num">'+x.ba.toLocaleString('es')+' · '+x.bap.toFixed(1)+'%</td><td class="num">'+x.agp.toFixed(1)+'%</td></tr>'; });
     h+='</tbody>'; tb.innerHTML=h;
   }
   document.getElementById('modalBg').classList.add('open');
 }
 function fd2Batching(cc){
-  var el=document.getElementById('fd2BatchMain'); if(!el)return;
+  var eb=document.getElementById('fd2BatchMain'), eu=document.getElementById('fd2BundleMain'); if(!eb&&!eu)return;
   var short=(typeof FD2CC!=='undefined'&&FD2CC[cc])?FD2CC[cc]:cc;
   var fEl=document.getElementById('fd2from'), tEl=document.getElementById('fd2to');
-  var from=fEl?fEl.value:null, to=tEl?tEl.value:null; if(!from||!to){el.innerHTML='';return;}
+  var from=fEl?fEl.value:null, to=tEl?tEl.value:null; if(!from||!to){if(eb)eb.innerHTML='';if(eu)eu.innerHTML='';return;}
   var key=short+'|'+from+'|'+to;
-  var det=document.getElementById('fd2BatchByCoc'); if(det){det.style.display='none';det.innerHTML='';}
   if(_fd2Batch[key]){ fd2BatchDraw(_fd2Batch[key]); return; }
-  el.innerHTML='<div class="hint">Calculando batching…</div>';
-  fetch('/api/batching?country='+encodeURIComponent(short)+'&from='+from+'&to='+to).then(function(r){return r.json();}).then(function(d){ if(!d||!d.rows){el.innerHTML='<div class="hint">Sin datos.</div>';return;} _fd2Batch[key]=d; fd2BatchDraw(d); }).catch(function(){ el.innerHTML='<div class="hint">No se pudo calcular el batching.</div>'; });
+  if(eb)eb.innerHTML='<div class="hint">Calculando…</div>'; if(eu)eu.innerHTML='<div class="hint">Calculando…</div>';
+  fetch('/api/batching?country='+encodeURIComponent(short)+'&from='+from+'&to='+to).then(function(r){return r.json();}).then(function(d){ if(!d||!d.rows){if(eb)eb.innerHTML='<div class="hint">Sin datos.</div>';if(eu)eu.innerHTML='';return;} _fd2Batch[key]=d; fd2BatchDraw(d); }).catch(function(){ if(eb)eb.innerHTML='<div class="hint">No se pudo calcular.</div>';if(eu)eu.innerHTML=''; });
 }
 if(typeof update==='function'){var _ur=update; update=function(){_ur.apply(this,arguments); try{renderResumenW();}catch(e){}};}
 try{ renderResumenW(); }catch(e){}
