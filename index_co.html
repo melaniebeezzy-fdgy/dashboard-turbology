@@ -1392,8 +1392,7 @@ function fd2HTML(short){
   return '<h1>Turbo <span>· tiempos de cocción &amp; RTWT</span></h1>'
    +'<div class="sub"><b>100% warehouse.</b> Cooking time (hasta empacado) y <b>RTWT</b> por orden (recibido → llegada RT → entrega, arranque a 5 min), promediado en el rango. Filtra por <b>cocina, marca y fecha</b>; respeta ciudad y ops. Datos '+fd2esc(wk)+'.</div>'
    +filters
-   +'<div id="fd2kpis" style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px"></div>'
-   +'<div id="fd2kpis2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px"></div>'
+   +'<div id="fd2kpis" style="display:grid;grid-template-columns:1.7fr 0.8fr 1.25fr 1.25fr;gap:12px;margin-bottom:14px"></div>'
    +'<div class="fd2row">'
      +'<div class="card fd2c1"><h2>⏱️ Rango Turbo por cocina & Avg RTWT</h2><div class="hint">Barras apiladas: <b>órdenes</b> por cocina (altura = volumen) segmentadas por rango de cocción; etiquetas = % del rango. Línea: <b>RTWT promedio</b> de la cocina (min) en el rango filtrado.</div><div class="chartbox" style="height:560px"><canvas id="fd2Range"></canvas></div></div>'
      +'<div class="card fd2c2"><h2># de órdenes por cocina y rango</h2><div class="hint">Volumen de órdenes por cocina (barras horizontales), apilado por rango de cocción.</div><div class="chartbox" id="fd2CountBox" style="height:560px"><canvas id="fd2Count"></canvas></div></div>'
@@ -1489,12 +1488,10 @@ function fd2Render(cc){
         +'</div>'
       +'</div>';
       var rtTile=fd2kpi('Avg RTWT',avgRt==null?'—':avgRt.toFixed(2)+' min','color:'+FD2C.navy);
-      kpi.innerHTML=ordTile+rtTile;
+      var batchTile='<div class="k2"><div class="k2l">🛵 Batching RT <span style="font-weight:500;color:#94a3b8">· &gt; 1 min</span></div><div id="fd2BatchMain" style="margin-top:6px"></div></div>';
+      var bundleTile='<div class="k2"><div class="k2l">📦 Bundle RT <span style="font-weight:500;color:#94a3b8">· ≤ 1 min</span></div><div id="fd2BundleMain" style="margin-top:6px"></div></div>';
+      kpi.innerHTML=ordTile+rtTile+batchTile+bundleTile;
     }
-    var k2=document.getElementById('fd2kpis2');
-    if(k2) k2.innerHTML=
-        '<div class="k2"><div class="k2l">🛵 Batching RT <span style="font-weight:500;color:#94a3b8">· &gt; 1 min</span></div><div id="fd2BatchMain" style="margin-top:6px"></div></div>'
-       +'<div class="k2"><div class="k2l">📦 Bundle RT <span style="font-weight:500;color:#94a3b8">· ≤ 1 min</span></div><div id="fd2BundleMain" style="margin-top:6px"></div></div>';
   }catch(e){console.error('fd2 kpis',e);}
   try{ fd2Batching(cc); }catch(e){}
 
